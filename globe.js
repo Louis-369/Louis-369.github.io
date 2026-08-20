@@ -179,14 +179,17 @@ export class PlanetGlobe {
 
       this.isContinent[i] = isLand ? 1 : 0;
 
-      // Particle styling: Crisp non-overlapping micro-dots
+      // Particle styling: True micro-dots with strict anti-overlap spacing
+      // Distance between adjacent particles on sphere (R=2.85, N=6400) is ~0.12 units.
+      // Continent dot diameter: ~0.048 units (leaves ~0.072 units space between dots)
+      // Ocean dot diameter: ~0.024 units (leaves ~0.096 units space between dots)
       if (isLand) {
-        this.sizes[i] = (Math.random() * 0.7 + 1.2) * (this.isMobile ? 1.2 : 1.0);
+        this.sizes[i] = (Math.random() * 0.012 + 0.044) * (this.isMobile ? 1.15 : 1.0);
         this.colors[i * 3] = this.colorContinent.r;
         this.colors[i * 3 + 1] = this.colorContinent.g;
         this.colors[i * 3 + 2] = this.colorContinent.b;
       } else {
-        this.sizes[i] = (Math.random() * 0.35 + 0.65) * (this.isMobile ? 1.1 : 1.0);
+        this.sizes[i] = (Math.random() * 0.006 + 0.020) * (this.isMobile ? 1.1 : 1.0);
         this.colors[i * 3] = this.colorOcean.r;
         this.colors[i * 3 + 1] = this.colorOcean.g;
         this.colors[i * 3 + 2] = this.colorOcean.b;
@@ -197,38 +200,43 @@ export class PlanetGlobe {
     this.geometry.setAttribute('size', new THREE.BufferAttribute(this.sizes, 1));
     this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
 
-    // Custom circular particle texture shader-like material
-    const particleTexture = this.generateDotTexture();
+    // Custom ShaderMaterial: Vector-crisp anti-aliased circular micro-dots
+    this.material = new THREE.ShaderMaterial({
+      uniforms: {
+        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) }
+      },
+      vertexShader: `
+        attribute float size;
+        attribute vec3 color;
+        varying vec3 vColor;
+        uniform float uPixelRatio;
 
-    this.material = new THREE.PointsMaterial({
-      size: 0.55,
-      vertexColors: true,
-      map: particleTexture,
+        void main() {
+          vColor = color;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          // Scale size inversely with distance to camera (perspective attenuation)
+          gl_PointSize = size * (800.0 / -mvPosition.z) * uPixelRatio;
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+
+        void main() {
+          vec2 coord = gl_PointCoord - vec2(0.5);
+          float dist = length(coord);
+          if (dist > 0.5) discard;
+          // Smooth anti-aliased circular dot edge
+          float alpha = smoothstep(0.5, 0.38, dist);
+          gl_FragColor = vec4(vColor, alpha * 0.95);
+        }
+      `,
       transparent: true,
-      opacity: 0.9,
-      alphaTest: 0.05,
-      sizeAttenuation: true
+      depthTest: true
     });
 
     this.particles = new THREE.Points(this.geometry, this.material);
     this.scene.add(this.particles);
-  }
-
-  generateDotTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext('2d');
-
-    ctx.clearRect(0, 0, 64, 64);
-    ctx.beginPath();
-    ctx.arc(32, 32, 28, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.fill();
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.minFilter = THREE.LinearFilter;
-    return texture;
   }
 
   bindEvents() {
@@ -286,6 +294,9 @@ export class PlanetGlobe {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
+    if (this.material && this.material.uniforms && this.material.uniforms.uPixelRatio) {
+      this.material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio || 1, 2);
+    }
   }
 
   /**
