@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Louis · Planetary Project Hub</title>
+  <meta name="description" content="Personal portfolio and interactive planetary project hub of Louis (Louis-369).">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+
+  <!-- Google Fonts: Editorial Serif + Clean Sans + Crisp Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- 3D Canvas Background Layer -->
+  <div id="globe-canvas-container">
+    <canvas id="globe-canvas"></canvas>
+  </div>
+
+  <!-- Fixed Ambient Topbar -->
+  <header class="ambient-topbar" id="ambient-topbar">
+    <a href="#" class="monogram-logo" id="logo-anchor" title="Return to Overview">
+      <span>Louis</span>
+      <span class="monogram-dot"></span>
+    </a>
+    <div class="ambient-links">
+      <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="github-icon-link" title="GitHub Profile">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Live Dynamic Coordinate Readout -->
+  <div class="ambient-coords" id="ambient-coords">
+    <span class="coords-pulse"></span>
+    <span id="live-coords">LAT 20.0°N · LON 45.0°E</span>
+  </div>
+
+  <!-- Bottom Sector Navigation Bar -->
+  <nav class="ambient-nav" id="sector-nav" aria-label="Sector Navigation">
+    <!-- Populated dynamically by app.js -->
+  </nav>
+
+  <!-- Landing State Layer -->
+  <main class="landing-layer" id="landing-layer">
+    <div class="landing-content">
+      <div class="landing-badge">
+        <span>EXPLORATION PROTOCOL</span>
+      </div>
+      <h1 class="landing-title">Louis</h1>
+      <p class="landing-tagline">Building tools that think &amp; craft that inspires.</p>
+      <p class="landing-hint">選擇下方板塊探索星際大陸 · 或使用方向鍵導航</p>
+    </div>
+  </main>
+
+  <!-- Sector Details View Layer (70% Staggered Canvas Overlay) -->
+  <section class="sector-layer" id="sector-layer">
+    <div class="sector-inner">
+      <!-- Populated dynamically by app.js -->
+    </div>
+  </section>
+
+  <!-- Main Application ES Module -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
