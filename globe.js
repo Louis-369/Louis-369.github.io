@@ -52,11 +52,11 @@ export class PlanetGlobe {
 
     // Kinetic stage offsets (in normalized screen space / 3D translation)
     this.currentOffsetX = 0;
-    this.currentOffsetY = 0;
-    this.currentScale = 1;
+    this.currentOffsetY = -0.8;
+    this.currentScale = 0.95;
     this.targetOffsetX = 0;
-    this.targetOffsetY = 0;
-    this.targetScale = 1;
+    this.targetOffsetY = -0.8;
+    this.targetScale = 0.95;
 
     // Parallax mouse tilt
     this.mouseNormX = 0;
@@ -200,19 +200,15 @@ export class PlanetGlobe {
     this.geometry.setAttribute('size', new THREE.BufferAttribute(this.sizes, 1));
     this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
 
-    // Custom ShaderMaterial: Vector-crisp anti-aliased circular micro-dots with Radial Text Occlusion Mask
-    const aspect = this.canvas.clientWidth / this.canvas.clientHeight;
+    // Custom ShaderMaterial: Vector-crisp anti-aliased circular micro-dots
     this.material = new THREE.ShaderMaterial({
       uniforms: {
-        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
-        uMaskRadius: { value: 0.34 }, // Radius of clean reading zone in screen space
-        uAspect: { value: aspect }
+        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) }
       },
       vertexShader: `
         attribute float size;
         attribute vec3 color;
         varying vec3 vColor;
-        varying vec4 vScreenPos;
         uniform float uPixelRatio;
 
         void main() {
@@ -220,28 +216,19 @@ export class PlanetGlobe {
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = size * (800.0 / -mvPosition.z) * uPixelRatio;
           gl_Position = projectionMatrix * mvPosition;
-          vScreenPos = gl_Position;
         }
       `,
       fragmentShader: `
         varying vec3 vColor;
-        varying vec4 vScreenPos;
-        uniform float uMaskRadius;
-        uniform float uAspect;
 
         void main() {
           vec2 coord = gl_PointCoord - vec2(0.5);
           float dist = length(coord);
           if (dist > 0.5) discard;
 
-          // Smooth radial text occlusion mask: clears particles directly under central text
-          vec2 ndc = vScreenPos.xy / vScreenPos.w;
-          float textDist = length(vec2(ndc.x * uAspect, ndc.y * 1.6));
-          float textMask = smoothstep(uMaskRadius * 0.55, uMaskRadius, textDist);
-
           // Smooth anti-aliased circular dot edge
           float alpha = smoothstep(0.5, 0.38, dist);
-          gl_FragColor = vec4(vColor, alpha * textMask * 0.95);
+          gl_FragColor = vec4(vColor, alpha * 0.95);
         }
       `,
       transparent: true,
@@ -345,13 +332,12 @@ export class PlanetGlobe {
   }
 
   /**
-   * Return to central resting auto-spin
+   * Return to central resting auto-spin (orbital lower staging)
    */
   resetToResting() {
     this.isResting = true;
     this.targetRotX = 0.15;
-    this.setStageOffset(0, 0, 1.0);
-    this.setTextMaskRadius(0.34);
+    this.setStageOffset(0, this.isMobile ? 120 : 160, 0.95);
   }
 
   /**
