@@ -15,11 +15,11 @@ export const siteConfig = {
 
 export const sectors = [
   {
-    id: "ai",
-    label: "AI & 認知板塊",
-    englishLabel: "Cognitive & AI Sector",
+    id: "flagship",
+    label: "核心旗艦創作",
+    englishLabel: "Flagship Creations & Tools",
     coordinateCode: "LAT 25.0°N · LON 105.0°E",
-    tagline: "探索思維脈絡、知識圖譜與智慧輔助工具的實驗場。",
+    tagline: "探索思維視覺化、圖像轉換與即時互動體驗的代表性作品群。",
     globeCoords: { lat: 25.0, lon: 105.0 },
     stageOffset: { x: -260, y: -120, scale: 0.82 },
     hueShift: {
@@ -39,24 +39,7 @@ export const sectors = [
         url: "/mind-sync/",
         isExternal: false,
         status: "Online"
-      }
-    ]
-  },
-  {
-    id: "creative",
-    label: "創意媒體群島",
-    englishLabel: "Creative Media Archipelago",
-    coordinateCode: "LAT 20.0°S · LON 175.0°E",
-    tagline: "流暢的動態影像轉換、自訂貼圖與視覺創作工具群。",
-    globeCoords: { lat: -20.0, lon: 175.0 },
-    stageOffset: { x: 260, y: -120, scale: 0.82 },
-    hueShift: {
-      bg: "#FAF6F1",
-      accent: "#D97706",
-      dotAccent: "#F59E0B",
-      border: "rgba(217, 119, 6, 0.12)"
-    },
-    projects: [
+      },
       {
         id: "sticker-to-gif",
         title: "Sticker to GIF",
@@ -77,7 +60,7 @@ export const sectors = [
     coordinateCode: "LAT 48.0°N · LON 42.0°W",
     tagline: "效率工具、底層系統整合與現代化開源實驗。",
     globeCoords: { lat: 48.0, lon: -42.0 },
-    stageOffset: { x: -240, y: 130, scale: 0.82 },
+    stageOffset: { x: 260, y: -120, scale: 0.82 },
     hueShift: {
       bg: "#F5F8F6",
       accent: "#0D9488",
@@ -95,6 +78,34 @@ export const sectors = [
         url: "https://github.com/Louis-369/FitStepSync",
         isExternal: true,
         status: "Open Source"
+      }
+    ]
+  },
+  {
+    id: "uncharted",
+    label: "🚧 未知領域 / 施工中",
+    englishLabel: "Uncharted Sector (In Development)",
+    coordinateCode: "LAT 15.0°S · LON 160.0°W",
+    tagline: "正在孵化中的全新實驗專案與新世代 AI 產品矩陣。",
+    globeCoords: { lat: -15.0, lon: -160.0 },
+    stageOffset: { x: -240, y: 130, scale: 0.82 },
+    hueShift: {
+      bg: "#FAF6F0",
+      accent: "#D97706",
+      dotAccent: "#F59E0B",
+      border: "rgba(217, 119, 6, 0.14)"
+    },
+    projects: [
+      {
+        id: "next-gen-tool",
+        title: "Next Innovation Matrix",
+        subtitle: "次世代智慧工具 (Coming Soon)",
+        desc: "結合本地端模型推理與全自動工作流的全新工具正在嚴密構建中，敬請期待！",
+        tags: ["In Development", "AI Agent", "WIP"],
+        icon: "🚧",
+        url: "#",
+        isExternal: false,
+        status: "WIP / 施工中"
       }
     ]
   },

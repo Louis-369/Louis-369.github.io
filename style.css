@@ -440,6 +440,30 @@ html, body {
   background: #10B981;
 }
 
+.card-status-dot.wip {
+  background: #F59E0B;
+  animation: pulseWip 2s infinite ease-in-out;
+}
+
+.card-status-text.wip-text {
+  color: #D97706;
+  font-weight: 500;
+}
+
+@keyframes pulseWip {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+
+.project-card.wip-card {
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.project-card.wip-card:hover {
+  border-color: #F59E0B;
+}
+
 .card-body {
   display: flex;
   flex-direction: column;

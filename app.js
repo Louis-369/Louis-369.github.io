@@ -89,13 +89,15 @@ class App {
   }
 
   renderSectorContent(sector) {
-    const projectsHtml = sector.projects.map(p => `
-      <a href="${p.url}" ${p.isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="project-card">
+    const projectsHtml = sector.projects.map(p => {
+      const isWip = p.status && (p.status.includes('WIP') || p.status.includes('施工'));
+      return `
+      <a href="${p.url}" ${p.isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="project-card ${isWip ? 'wip-card' : ''}">
         <div class="card-header">
           <div class="card-icon-box">${p.icon}</div>
           <div class="card-meta">
-            <span class="card-status-dot"></span>
-            <span class="card-status-text">${p.status}</span>
+            <span class="card-status-dot ${isWip ? 'wip' : ''}"></span>
+            <span class="card-status-text ${isWip ? 'wip-text' : ''}">${p.status}</span>
           </div>
         </div>
         <div class="card-body">
@@ -115,7 +117,8 @@ class App {
           </div>
         </div>
       </a>
-    `).join('');
+    `;
+    }).join('');
 
     this.sectorContainer.innerHTML = `
       <div class="sector-inner">
