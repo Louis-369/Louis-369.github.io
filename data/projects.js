@@ -21,7 +21,7 @@ export const sectors = [
     coordinateCode: "LAT 25.0°N · LON 105.0°E",
     tagline: "探索思維視覺化、圖像轉換與即時互動體驗的代表性作品群。",
     globeCoords: { lat: 25.0, lon: 105.0 },
-    stageOffset: { x: -260, y: -120, scale: 0.82 },
+    stageOffset: { x: -260, y: -120, scale: 0.52 },
     hueShift: {
       bg: "#FAF7FB",
       accent: "#7C3AED",
@@ -60,7 +60,7 @@ export const sectors = [
     coordinateCode: "LAT 48.0°N · LON 42.0°W",
     tagline: "效率工具、底層系統整合與現代化開源實驗。",
     globeCoords: { lat: 48.0, lon: -42.0 },
-    stageOffset: { x: 260, y: -120, scale: 0.82 },
+    stageOffset: { x: 260, y: -120, scale: 0.52 },
     hueShift: {
       bg: "#F5F8F6",
       accent: "#0D9488",
@@ -88,7 +88,7 @@ export const sectors = [
     coordinateCode: "LAT 15.0°S · LON 160.0°W",
     tagline: "正在孵化中的全新實驗專案與新世代 AI 產品矩陣。",
     globeCoords: { lat: -15.0, lon: -160.0 },
-    stageOffset: { x: -240, y: 130, scale: 0.82 },
+    stageOffset: { x: -240, y: 130, scale: 0.52 },
     hueShift: {
       bg: "#FAF6F0",
       accent: "#D97706",
@@ -116,7 +116,7 @@ export const sectors = [
     coordinateCode: "LAT 32.0°S · LON 120.0°W",
     tagline: "關於 Louis、個人技術背景與全域中轉通道。",
     globeCoords: { lat: -32.0, lon: -120.0 },
-    stageOffset: { x: 240, y: 130, scale: 0.82 },
+    stageOffset: { x: 240, y: 130, scale: 0.52 },
     hueShift: {
       bg: "#F5F7FA",
       accent: "#2563EB",

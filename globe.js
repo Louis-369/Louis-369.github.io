@@ -23,7 +23,7 @@ export class PlanetGlobe {
     this.isLowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || this.isMobile;
     this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    this.particleCount = this.isLowPower ? 2400 : 6400;
+    this.particleCount = this.isLowPower ? 4800 : 14000;
     this.sphereRadius = 2.85;
 
     this.scene = null;
@@ -52,11 +52,11 @@ export class PlanetGlobe {
 
     // Kinetic stage offsets (in normalized screen space / 3D translation)
     this.currentOffsetX = 0;
-    this.currentOffsetY = -0.8;
-    this.currentScale = 0.95;
+    this.currentOffsetY = 0;
+    this.currentScale = 1.0;
     this.targetOffsetX = 0;
-    this.targetOffsetY = -0.8;
-    this.targetScale = 0.95;
+    this.targetOffsetY = 0;
+    this.targetScale = 1.0;
 
     // Parallax mouse tilt
     this.mouseNormX = 0;
@@ -179,17 +179,17 @@ export class PlanetGlobe {
 
       this.isContinent[i] = isLand ? 1 : 0;
 
-      // Particle styling: True micro-dots with strict anti-overlap spacing
-      // Distance between adjacent particles on sphere (R=2.85, N=6400) is ~0.12 units.
-      // Continent dot diameter: ~0.048 units (leaves ~0.072 units space between dots)
-      // Ocean dot diameter: ~0.024 units (leaves ~0.096 units space between dots)
+      // Particle styling: High-density 14,000 micro-dots with strict anti-overlap spacing
+      // Distance between adjacent particles on sphere (R=2.85, N=14000) is ~0.085 units.
+      // Continent dot diameter: ~0.028 units (leaves ample breathing space between dots)
+      // Ocean dot diameter: ~0.015 units (fine stardust texture)
       if (isLand) {
-        this.sizes[i] = (Math.random() * 0.012 + 0.044) * (this.isMobile ? 1.15 : 1.0);
+        this.sizes[i] = (Math.random() * 0.006 + 0.026) * (this.isMobile ? 1.15 : 1.0);
         this.colors[i * 3] = this.colorContinent.r;
         this.colors[i * 3 + 1] = this.colorContinent.g;
         this.colors[i * 3 + 2] = this.colorContinent.b;
       } else {
-        this.sizes[i] = (Math.random() * 0.006 + 0.020) * (this.isMobile ? 1.1 : 1.0);
+        this.sizes[i] = (Math.random() * 0.003 + 0.013) * (this.isMobile ? 1.1 : 1.0);
         this.colors[i * 3] = this.colorOcean.r;
         this.colors[i * 3 + 1] = this.colorOcean.g;
         this.colors[i * 3 + 2] = this.colorOcean.b;
@@ -332,27 +332,25 @@ export class PlanetGlobe {
   }
 
   /**
-   * Return to central resting auto-spin (orbital lower staging)
+   * Return to central resting auto-spin (centered full globe)
    */
   resetToResting() {
     this.isResting = true;
     this.targetRotX = 0.15;
-    this.setStageOffset(0, this.isMobile ? 120 : 160, 0.95);
+    this.setStageOffset(0, 0, 1.0);
   }
 
   /**
-   * Set 3D staging offset and scale (supports infinite sector dynamic fallback)
+   * Set 3D staging offset and scale (15% mini globe in sector view)
    */
-  setStageOffset(offsetX, offsetY, scale = 1.0, sectorIndex = 0) {
+  setStageOffset(offsetX, offsetY, scale = 0.52, sectorIndex = 0) {
     if (offsetX === undefined || offsetY === undefined) {
-      // Infinite sector algorithm: alternate between left-top, right-top, left-bottom, right-bottom
+      // Infinite sector algorithm: alternate corner positions
       const defaultOffsets = [
-        { x: -260, y: -120 },
-        { x: 260, y: -120 },
-        { x: -240, y: 130 },
-        { x: 240, y: 130 },
-        { x: 0, y: -180 },
-        { x: 0, y: 180 }
+        { x: -380, y: -150 },
+        { x: 380, y: -150 },
+        { x: -380, y: 150 },
+        { x: 380, y: 150 }
       ];
       const selected = defaultOffsets[sectorIndex % defaultOffsets.length];
       offsetX = selected.x;
