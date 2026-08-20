@@ -23,8 +23,8 @@ export class PlanetGlobe {
     this.isLowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || this.isMobile;
     this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    this.particleCount = this.isLowPower ? 1800 : 4200;
-    this.sphereRadius = 3.2;
+    this.particleCount = this.isLowPower ? 2400 : 6400;
+    this.sphereRadius = 2.85;
 
     this.scene = null;
     this.camera = null;
@@ -41,7 +41,7 @@ export class PlanetGlobe {
     this.isContinent = null;
 
     // Movement & Rotation State
-    this.autoRotateSpeed = this.prefersReducedMotion ? 0 : 0.0018;
+    this.autoRotateSpeed = this.prefersReducedMotion ? 0 : 0.0016;
     this.isResting = true;
     
     // Rotations in radians
@@ -64,9 +64,9 @@ export class PlanetGlobe {
     this.cursorHitPoint = new THREE.Vector3(999, 999, 999);
     this.hasCursorIntersection = false;
 
-    // Color palettes (Default warm ivory theme)
-    this.colorContinent = new THREE.Color(0x2d3139); // Charcoal ink
-    this.colorOcean = new THREE.Color(0xb8b0a2);     // Soft warm taupe
+    // Color palettes (High-contrast charcoal & soft stardust ocean)
+    this.colorContinent = new THREE.Color(0x23272e); // Crisp charcoal ink
+    this.colorOcean = new THREE.Color(0xc8c1b4);     // Soft stardust taupe
     this.colorAccent = new THREE.Color(0x7c3aed);    // Dynamic accent
 
     this.raycaster = new THREE.Raycaster();
@@ -82,7 +82,7 @@ export class PlanetGlobe {
     this.scene = new THREE.Scene();
     const aspect = this.canvas.clientWidth / this.canvas.clientHeight;
     this.camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
-    this.camera.position.z = 9.5;
+    this.camera.position.z = 10.2;
 
     // 2. Renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -149,14 +149,14 @@ export class PlanetGlobe {
         const dist = unitVec.distanceTo(sVec.vec);
         if (dist < minDistance) minDistance = dist;
         // Continent cluster radius
-        if (dist < 0.68) {
+        if (dist < 0.65) {
           isLand = true;
         }
       }
 
       // Add pseudo-organic archipelago noise
-      const noise = (Math.sin(x * 6) + Math.cos(y * 6) + Math.sin(z * 6)) * 0.15;
-      if (minDistance < 0.85 + noise && Math.random() > 0.35) {
+      const noise = (Math.sin(x * 6) + Math.cos(y * 6) + Math.sin(z * 6)) * 0.12;
+      if (minDistance < 0.82 + noise && Math.random() > 0.38) {
         isLand = true;
       }
 
@@ -179,14 +179,14 @@ export class PlanetGlobe {
 
       this.isContinent[i] = isLand ? 1 : 0;
 
-      // Particle styling: Continents have textured varied dot sizes
+      // Particle styling: Crisp non-overlapping micro-dots
       if (isLand) {
-        this.sizes[i] = (Math.random() * 2.2 + 2.0) * (this.isMobile ? 1.4 : 1.0);
+        this.sizes[i] = (Math.random() * 0.7 + 1.2) * (this.isMobile ? 1.2 : 1.0);
         this.colors[i * 3] = this.colorContinent.r;
         this.colors[i * 3 + 1] = this.colorContinent.g;
         this.colors[i * 3 + 2] = this.colorContinent.b;
       } else {
-        this.sizes[i] = (Math.random() * 0.8 + 1.1) * (this.isMobile ? 1.3 : 1.0);
+        this.sizes[i] = (Math.random() * 0.35 + 0.65) * (this.isMobile ? 1.1 : 1.0);
         this.colors[i * 3] = this.colorOcean.r;
         this.colors[i * 3 + 1] = this.colorOcean.g;
         this.colors[i * 3 + 2] = this.colorOcean.b;
@@ -201,11 +201,11 @@ export class PlanetGlobe {
     const particleTexture = this.generateDotTexture();
 
     this.material = new THREE.PointsMaterial({
-      size: 1.0,
+      size: 0.55,
       vertexColors: true,
       map: particleTexture,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.9,
       alphaTest: 0.05,
       sizeAttenuation: true
     });
