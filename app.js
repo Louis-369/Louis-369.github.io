@@ -14,14 +14,6 @@ class Application {
     this.projects = featuredProjects;
     this.choreographer = null;
     this.ambientParticles = null;
-    this.cursor = {
-      el: null,
-      dot: null,
-      x: 0,
-      y: 0,
-      targetX: 0,
-      targetY: 0
-    };
     
     this.init();
   }
@@ -29,14 +21,11 @@ class Application {
   init() {
     // 1. Render dynamic projects list (bymonolog paper-cut cards)
     this.renderProjects();
-    
-    // 2. Setup magnetic custom cursor (desktop only)
-    this.initCustomCursor();
 
-    // 3. Initialize background particles
+    // 2. Initialize background particles
     this.ambientParticles = new AmbientParticles('ambient-canvas');
 
-    // 4. Initialize Choreographer & play opening reveal (s0 rhythm)
+    // 3. Initialize Choreographer & play opening reveal (s0 rhythm)
     this.choreographer = new Choreographer({
       onRevealComplete: () => {
         document.body.classList.remove('is-loading');
@@ -53,7 +42,7 @@ class Application {
       });
     }
 
-    // 5. Global interaction bindings
+    // 4. Global interaction bindings
     this.bindInteractions();
   }
 
@@ -141,46 +130,7 @@ class Application {
     }).join('');
   }
 
-  initCustomCursor() {
-    if (window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches) {
-      return; // Disable on touch/mobile
-    }
 
-    const cursor = document.getElementById('custom-cursor');
-    const cursorText = document.getElementById('cursor-text');
-    if (!cursor) return;
-
-    window.addEventListener('mousemove', (e) => {
-      this.cursor.targetX = e.clientX;
-      this.cursor.targetY = e.clientY;
-    });
-
-    const updateCursor = () => {
-      this.cursor.x += (this.cursor.targetX - this.cursor.x) * 0.18;
-      this.cursor.y += (this.cursor.targetY - this.cursor.y) * 0.18;
-
-      cursor.style.transform = `translate3d(${this.cursor.x}px, ${this.cursor.y}px, 0)`;
-      requestAnimationFrame(updateCursor);
-    };
-    requestAnimationFrame(updateCursor);
-
-    // Magnetic and expansion hover handlers
-    document.querySelectorAll('a, button, [data-cursor-text]').forEach((el) => {
-      el.addEventListener('mouseenter', () => {
-        cursor.classList.add('is-hovering');
-        const customText = el.getAttribute('data-cursor-text');
-        if (customText && cursorText) {
-          cursorText.textContent = customText;
-          cursor.classList.add('has-text');
-        }
-      });
-
-      el.addEventListener('mouseleave', () => {
-        cursor.classList.remove('is-hovering', 'has-text');
-        if (cursorText) cursorText.textContent = '';
-      });
-    });
-  }
 
   bindInteractions() {
     // Smooth navigation anchor links

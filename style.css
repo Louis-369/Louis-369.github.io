@@ -88,64 +88,14 @@ html.lenis, html.lenis body {
 }
 
 /* ==========================================================================
-   Magnetic Custom Cursor (Desktop)
-   ========================================================================== */
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 24px;
-  height: 24px;
-  margin-left: -12px;
-  margin-top: -12px;
-  border: 1.5px solid var(--ink-primary);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), margin 0.3s var(--ease-out), background-color 0.25s ease, border-color 0.25s ease;
-  will-change: transform;
-}
-
-.custom-cursor .cursor-text {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--bg-canvas);
-  letter-spacing: 0.08em;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.custom-cursor.is-hovering {
-  width: 52px;
-  height: 52px;
-  margin-left: -26px;
-  margin-top: -26px;
-  background-color: var(--ink-primary);
-  border-color: var(--ink-primary);
-}
-
-.custom-cursor.has-text .cursor-text {
-  opacity: 1;
-}
-
-@media (max-width: 768px) {
-  .custom-cursor { display: none !important; }
-}
-
-/* ==========================================================================
-   Navigation Bar
+   Navigation Bar & bymonolog Hover Micro-Interactions
    ========================================================================== */
 .site-nav {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1.75rem 4vw;
+  padding: 1.5rem 4vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -155,30 +105,121 @@ html.lenis, html.lenis body {
 
 .nav-brand {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--ink-primary);
   text-decoration: none;
   letter-spacing: -0.02em;
+  position: relative;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 2.25rem;
 }
 
-.nav-link-item {
+/* Monolog Nav Link (Left-to-Right Wipe Underline) */
+.monolog-nav-link {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--ink-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-primary);
   text-decoration: none;
   letter-spacing: 0.04em;
-  transition: color 0.2s ease;
+  position: relative;
+  padding: 0.25rem 0;
+  display: inline-block;
 }
 
-.nav-link-item:hover {
-  color: var(--ink-primary);
+.monolog-nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: var(--ink-primary);
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform 0.6s cubic-bezier(0.2, 1, 0.36, 1);
+}
+
+.monolog-nav-link:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+/* Monolog Action Button (Rolling Text Marquee & Flying 45° Arrow) */
+.monolog-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  background: var(--ink-primary);
+  color: var(--bg-canvas);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.48, 1.68, 0.64, 1), background-color 0.25s ease;
+}
+
+.monolog-btn:hover {
+  transform: scale(1.04);
+  background-color: #000000;
+}
+
+.monolog-btn:active {
+  transform: scale(0.95);
+}
+
+/* Rolling Text */
+.btn-text-roll {
+  display: inline-block;
+  line-height: 1.1;
+  text-shadow: 0px 1.25em 0px var(--bg-canvas);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
+}
+
+.monolog-btn:hover .btn-text-roll {
+  transform: translateY(-1.25em);
+}
+
+/* Flying 45° Arrow */
+.btn-arrow-box {
+  width: 14px;
+  height: 14px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
+}
+
+.btn-svg.is-duplicate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-100%, 100%);
+}
+
+.monolog-btn:hover .btn-svg:not(.is-duplicate) {
+  transform: translate(100%, -100%);
+}
+
+.monolog-btn:hover .btn-svg.is-duplicate {
+  transform: translate(0, 0);
 }
 
 /* ==========================================================================

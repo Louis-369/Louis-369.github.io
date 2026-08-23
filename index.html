@@ -32,18 +32,31 @@
   <!-- Ambient Background Canvas -->
   <canvas id="ambient-canvas" aria-hidden="true"></canvas>
 
-  <!-- Magnetic Custom Cursor (Desktop) -->
-  <div id="custom-cursor" class="custom-cursor" aria-hidden="true">
-    <span id="cursor-text" class="cursor-text"></span>
-  </div>
-
   <!-- Persistent Site Navigation -->
   <header class="site-nav">
-    <a href="#" class="nav-brand" data-cursor-text="HOME">Louis.</a>
+    <a href="#" class="nav-brand">
+      <span class="nav-brand-text">Louis.</span>
+    </a>
     <nav class="nav-links">
-      <a href="#works" class="nav-link-item" data-cursor-text="VIEW">Works</a>
-      <a href="#about" class="nav-link-item" data-cursor-text="ABOUT">About</a>
-      <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="nav-link-item" data-cursor-text="GITHUB">GitHub ↗</a>
+      <a href="#works" class="monolog-nav-link">
+        <span class="nav-link-text">Works</span>
+      </a>
+      <a href="#about" class="monolog-nav-link">
+        <span class="nav-link-text">About</span>
+      </a>
+      <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="monolog-btn">
+        <span class="btn-text-roll">GitHub</span>
+        <span class="btn-arrow-box">
+          <svg class="btn-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+          <svg class="btn-svg is-duplicate" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </span>
+      </a>
     </nav>
   </header>
 
