@@ -121,106 +121,114 @@ html.lenis .lenis.lenis-stopped {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.85rem;
 }
 
-/* Monolog Nav Link (Solid Rectangular Block with Left-to-Right Wipe & Text Invert) */
-.monolog-nav-link {
+/* ==========================================================================
+   bymonolog.com 1:1 Interactive Pill Buttons (g_btn_main)
+   ========================================================================== */
+.monolog-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-paper);
+  color: var(--ink-primary);
+  text-decoration: none;
   font-family: var(--font-mono);
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--ink-primary);
-  text-decoration: none;
-  letter-spacing: 0.04em;
-  position: relative;
-  padding: 0.45rem 0.95rem;
-  border-radius: 4px; /* Pure crisp rectangular block */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  letter-spacing: 0.03em;
   overflow: hidden;
-  transition: color 0.35s cubic-bezier(0.2, 1, 0.36, 1);
+  position: relative;
+  box-shadow: 0 2px 6px rgba(18, 19, 22, 0.03);
+  transition: transform 0.35s cubic-bezier(0.48, 1.68, 0.64, 1), background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  will-change: transform;
 }
 
-.monolog-nav-link::before {
-  content: '';
+.monolog-pill-btn:hover {
+  transform: scale(1.04);
+  border-color: rgba(18, 19, 22, 0.2);
+}
+
+.monolog-pill-btn:active {
+  transform: scale(0.95);
+}
+
+/* Rolling Text Marquee Container */
+.btn-text-contain {
+  display: block;
+  overflow: hidden;
+  height: 1.15em;
+  line-height: 1.15em;
+}
+
+.btn-text-roll {
+  display: block;
+  text-shadow: 0px 1.25em 0px var(--ink-primary);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
+}
+
+.monolog-pill-btn:hover .btn-text-roll {
+  transform: translateY(-1.25em);
+}
+
+/* CTA Variant (Pure Black with White Text & Cat Paw Aside) */
+.monolog-pill-btn.is-cta {
+  background: var(--ink-primary);
+  color: var(--bg-canvas);
+  border-color: var(--ink-primary);
+  padding: 0.45rem 0.55rem 0.45rem 1.15rem;
+}
+
+.monolog-pill-btn.is-cta .btn-text-roll {
+  text-shadow: 0px 1.25em 0px var(--bg-canvas);
+}
+
+.monolog-pill-btn.is-cta:hover {
+  background: #000000;
+  border-color: #000000;
+}
+
+/* Aside Pill Box (Monolog aside background badge) */
+.btn-aside-box {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-aside-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 4px; /* Pure rectangular shape */
-  background-color: var(--ink-primary);
-  transform-origin: right;
-  transform: scaleX(0);
-  transition: transform 0.45s cubic-bezier(0.2, 1, 0.36, 1);
-  z-index: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1), background-color 0.25s ease;
 }
 
-.nav-link-text {
+.monolog-pill-btn.is-cta:hover .btn-aside-bg {
+  transform: scale(0.85);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Cat Paw Interactive Icon */
+.paw-icon-wrapper {
   position: relative;
   z-index: 2;
-  transition: color 0.35s ease;
-}
-
-.monolog-nav-link:hover::before {
-  transform-origin: left;
-  transform: scaleX(1);
-}
-
-.monolog-nav-link:hover .nav-link-text {
-  color: var(--bg-canvas);
-}
-
-/* Monolog GitHub Button with Cute Cat Paw Micro-Interaction */
-.monolog-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 1.15rem;
-  border-radius: 9999px;
-  background: var(--ink-primary);
-  color: var(--bg-canvas);
-  text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  overflow: hidden;
-  position: relative;
-  transition: transform 0.35s cubic-bezier(0.48, 1.68, 0.64, 1), background-color 0.25s ease;
-}
-
-.monolog-btn:hover {
-  transform: scale(1.05);
-  background-color: #000000;
-}
-
-.monolog-btn:active {
-  transform: scale(0.95);
-}
-
-/* Rolling Text */
-.btn-text-roll {
-  display: inline-block;
-  line-height: 1.1;
-  text-shadow: 0px 1.25em 0px var(--bg-canvas);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
-}
-
-.monolog-btn:hover .btn-text-roll {
-  transform: translateY(-1.25em);
-}
-
-/* Cat Paw Icon & Gentle Stamp Animation */
-.paw-icon-box {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--bg-canvas);
-  transition: transform 0.4s cubic-bezier(0.48, 1.68, 0.64, 1);
+  transition: transform 0.45s cubic-bezier(0.48, 1.68, 0.64, 1);
 }
 
 .paw-svg {
@@ -228,8 +236,8 @@ html.lenis .lenis.lenis-stopped {
   height: 100%;
 }
 
-.monolog-btn:hover .paw-icon-box {
-  transform: rotate(-15deg) scale(1.22);
+.monolog-pill-btn.is-cta:hover .paw-icon-wrapper {
+  transform: rotate(-16deg) scale(1.18);
 }
 
 /* ==========================================================================
