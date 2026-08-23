@@ -99,7 +99,7 @@ class Application {
 
 
   bindInteractions() {
-    // Smooth navigation anchor links
+    // 1. Smooth navigation anchor links
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener('click', (e) => {
         const targetId = anchor.getAttribute('href');
@@ -111,6 +111,32 @@ class Application {
           }
         }
       });
+    });
+
+    // 2. 1:1 bymonolog.com "On hold..." Tab Visibility Marquee
+    this.initVisibilityTitleMarquee();
+  }
+
+  initVisibilityTitleMarquee() {
+    const originalTitle = document.title || "Louis · Creative Developer & Builder";
+    let holdInterval = null;
+    const holdFrames = ["On hold", "On hold.", "On hold..", "On hold..."];
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        let frameIndex = 0;
+        document.title = holdFrames[0];
+        holdInterval = setInterval(() => {
+          frameIndex = (frameIndex + 1) % holdFrames.length;
+          document.title = holdFrames[frameIndex];
+        }, 550);
+      } else {
+        if (holdInterval) {
+          clearInterval(holdInterval);
+          holdInterval = null;
+        }
+        document.title = originalTitle;
+      }
     });
   }
 }
