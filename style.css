@@ -526,6 +526,29 @@ html.lenis .lenis.lenis-stopped {
   will-change: transform;
 }
 
+/* Full Bleed Monolog Photography Showcase Image */
+.card-portal-media.is-photo-mode {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #121316;
+}
+
+.portal-showcase-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  filter: brightness(0.96) contrast(1.04);
+}
+
+.paper-stack-card:hover .portal-showcase-img {
+  transform: scale(1.05);
+  filter: brightness(1.02) contrast(1.06);
+}
+
 .portal-visual-mockup {
   width: 82%;
   height: 80%;

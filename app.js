@@ -67,25 +67,31 @@ class Application {
             </div>
 
             <div class="card-grid-split">
-              <!-- Left: Paper-Cut Window Portal -->
+              <!-- Left: Paper-Cut Window Portal (High-Res Photography Showcase) -->
               <div class="card-portal-window">
                 <div class="card-portal-frame">
-                  <div class="card-portal-media" style="background: ${project.colorScheme.bgSubtle};">
-                    <div class="portal-visual-mockup">
-                      <div class="mockup-header">
-                        <span class="mockup-dot"></span>
-                        <span class="mockup-dot"></span>
-                        <span class="mockup-dot"></span>
-                        <span class="mockup-title">${project.title.toLowerCase()}.io</span>
-                      </div>
-                      <div class="mockup-canvas-content">
-                        <div class="mockup-center-symbol" style="color: ${project.colorScheme.accent};">
-                          ${idx === 0 ? '🧠' : idx === 1 ? '🎬' : idx === 2 ? '⚡' : '🚧'}
+                  ${project.image ? `
+                    <div class="card-portal-media is-photo-mode">
+                      <img src="${project.image}" alt="${project.title}" class="portal-showcase-img" loading="lazy" />
+                    </div>
+                  ` : `
+                    <div class="card-portal-media" style="background: ${project.colorScheme.bgSubtle};">
+                      <div class="portal-visual-mockup">
+                        <div class="mockup-header">
+                          <span class="mockup-dot"></span>
+                          <span class="mockup-dot"></span>
+                          <span class="mockup-dot"></span>
+                          <span class="mockup-title">${project.title.toLowerCase().replace(/\s+/g, '-')}.io</span>
                         </div>
-                        <span class="mockup-title-text">${project.title}</span>
+                        <div class="mockup-canvas-content">
+                          <div class="mockup-center-symbol" style="color: ${project.colorScheme.accent};">
+                            🚧
+                          </div>
+                          <span class="mockup-title-text">${project.title}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  `}
                 </div>
               </div>
 
