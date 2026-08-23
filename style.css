@@ -95,6 +95,9 @@ html.lenis .lenis.lenis-stopped {
 /* ==========================================================================
    Navigation Bar & bymonolog Hover Micro-Interactions
    ========================================================================== */
+/* ==========================================================================
+   Navigation Bar (1:1 bymonolog.com Header Hierarchy)
+   ========================================================================== */
 .site-nav {
   position: fixed;
   top: 0;
@@ -108,26 +111,44 @@ html.lenis .lenis.lenis-stopped {
   pointer-events: auto;
 }
 
+.navbar-brand-wrap {
+  display: flex;
+  align-items: center;
+}
+
 .nav-brand {
   font-family: var(--font-serif);
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: var(--ink-primary);
   text-decoration: none;
   letter-spacing: -0.02em;
-  position: relative;
 }
 
-.nav-links {
+/* Right Navigation Group: Contiguous Links + Standalone CTA */
+.navbar-right-group {
   display: flex;
   align-items: center;
-  gap: 0px; /* 0px gap so blocks seamlessly touch each other */
+  gap: 2.25rem;
 }
 
-/* ==========================================================================
-   bymonolog.com 1:1 [data-link-hover] Seamless Connected Block Fill
-   ========================================================================== */
-.monolog-link-hover {
+/* 1. Monolog Contiguous Seamless Links List (ul / li) */
+.navbar-links-ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0px;
+}
+
+.navbar-links-li {
+  display: flex;
+  align-items: center;
+}
+
+/* Link Button Item with Pure 0px Sharp Block Fill */
+.navbar-link {
   font-family: var(--font-mono);
   font-size: 0.85rem;
   font-weight: 500;
@@ -135,7 +156,7 @@ html.lenis .lenis.lenis-stopped {
   text-decoration: none;
   letter-spacing: 0.03em;
   position: relative;
-  padding: 0.5rem 1.15rem; /* Monolog exact padding */
+  padding: 0.45rem 1.15rem;
   border-radius: 0px;
   border: none;
   display: inline-flex;
@@ -147,8 +168,8 @@ html.lenis .lenis.lenis-stopped {
   z-index: 1;
 }
 
-/* Background Solid Rectangular Block Wipe (Seamless flush 0px block) */
-.monolog-link-hover::before {
+/* Monolog Exact [data-link-hover]::before Block Wipe */
+.navbar-link::before {
   content: '';
   position: absolute;
   top: 0;
@@ -159,34 +180,38 @@ html.lenis .lenis.lenis-stopped {
   background-color: var(--ink-primary);
   transform-origin: right;
   transform: scaleX(0);
-  transition: transform 550ms cubic-bezier(0.2, 1, 0.36, 1);
+  transition: transform 600ms cubic-bezier(0.2, 1, 0.36, 1);
   z-index: -1;
 }
 
-.link-hover-text {
+.navbar-link-text {
   position: relative;
   z-index: 2;
   transition: color 0.3s cubic-bezier(0.16, 1, 0.35, 1);
 }
 
-.monolog-link-hover:hover::before {
+.navbar-link:hover::before {
   transform-origin: left;
   transform: scaleX(1);
 }
 
-.monolog-link-hover:hover .link-hover-text {
+.navbar-link:hover .navbar-link-text {
   color: var(--bg-canvas);
 }
 
 /* ==========================================================================
-   bymonolog.com 1:1 CTA Button (g_btn_main & aside 45° arrow)
+   2. Monolog Standalone CTA Button (g_btn_main & aside 45° arrow)
    ========================================================================== */
-.monolog-cta-btn {
+.navbar-cta-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.g_btn_main {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.45rem 0.45rem 0.45rem 1.15rem;
-  margin-left: 1.5rem; /* Separate contiguous nav bar from CTA pill */
   border-radius: 9999px;
   background: var(--ink-primary);
   color: var(--bg-canvas);
@@ -202,36 +227,36 @@ html.lenis .lenis.lenis-stopped {
   will-change: transform;
 }
 
-.monolog-cta-btn:hover {
+.g_btn_main:hover {
   transform: scale(1.04);
   background-color: #000000;
   border-color: #000000;
 }
 
-.monolog-cta-btn:active {
+.g_btn_main:active {
   transform: scale(0.95);
 }
 
 /* Rolling Text Marquee Container */
-.btn-text-contain {
+.g_btn_text_contain {
   display: block;
   overflow: hidden;
   height: 1.15em;
   line-height: 1.15em;
 }
 
-.btn-text-roll {
+.g_btn_text {
   display: block;
   text-shadow: 0px 1.25em 0px var(--bg-canvas);
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
 }
 
-.monolog-cta-btn:hover .btn-text-roll {
+.g_btn_main:hover .g_btn_text {
   transform: translateY(-1.25em);
 }
 
-/* Monolog Aside Circle Background & Arrow Box */
-.btn-aside-wrap {
+/* Aside Circle Background */
+.g_btn_aside_wrap {
   position: relative;
   width: 26px;
   height: 26px;
@@ -242,7 +267,7 @@ html.lenis .lenis.lenis-stopped {
   overflow: hidden;
 }
 
-.btn-aside-bg {
+.g_btn_aside_bg {
   position: absolute;
   top: 0;
   left: 0;
@@ -253,13 +278,13 @@ html.lenis .lenis.lenis-stopped {
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1), background-color 0.25s ease;
 }
 
-.monolog-cta-btn:hover .btn-aside-bg {
+.g_btn_main:hover .g_btn_aside_bg {
   transform: scale(0.85);
   background: rgba(255, 255, 255, 0.28);
 }
 
 /* Flying 45° Vector Arrow */
-.btn-arrow-svg {
+.g_btn_svg {
   position: relative;
   z-index: 2;
   width: 11px;
@@ -268,7 +293,7 @@ html.lenis .lenis.lenis-stopped {
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
 }
 
-.btn-arrow-svg.is-duplicate {
+.g_btn_svg.is-absolute {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -277,11 +302,11 @@ html.lenis .lenis.lenis-stopped {
   transform: translate(-100%, 100%);
 }
 
-.monolog-cta-btn:hover .btn-arrow-svg:not(.is-duplicate) {
+.g_btn_main:hover .g_btn_svg:not(.is-absolute) {
   transform: translate(100%, -100%);
 }
 
-.monolog-cta-btn:hover .btn-arrow-svg.is-duplicate {
+.g_btn_main:hover .g_btn_svg.is-absolute {
   transform: translate(0, 0);
 }
 
