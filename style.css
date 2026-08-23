@@ -125,11 +125,10 @@ html.lenis .lenis.lenis-stopped {
   letter-spacing: -0.02em;
 }
 
-/* Right Navigation Group: Contiguous Links + Standalone CTA */
+/* Right Navigation Group: Single Unified Seamless Bar */
 .navbar-right-group {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
 }
 
 /* 1. Monolog Contiguous Seamless Links List (ul / li) */
@@ -147,7 +146,7 @@ html.lenis .lenis.lenis-stopped {
   align-items: center;
 }
 
-/* Link Button Item with Pure 0px Sharp Block Fill */
+/* Unified Link Item with Pure 0px Sharp Block Fill */
 .navbar-link {
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -162,6 +161,7 @@ html.lenis .lenis.lenis-stopped {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.45rem;
   background: transparent;
   overflow: hidden;
   transition: color 0.3s cubic-bezier(0.16, 1, 0.35, 1);
@@ -199,114 +199,42 @@ html.lenis .lenis.lenis-stopped {
   color: var(--bg-canvas);
 }
 
-/* ==========================================================================
-   2. Monolog Standalone CTA Button (g_btn_main & aside 45° arrow)
-   ========================================================================== */
-.navbar-cta-wrap {
-  display: flex;
-  align-items: center;
-}
-
-.g_btn_main {
+/* GitHub 45° Vector Flying Arrow Inside Unified Bar */
+.navbar-arrow-box {
+  position: relative;
+  width: 10px;
+  height: 10px;
   display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.45rem 0.45rem 0.45rem 1.15rem;
-  border-radius: 9999px;
-  background: var(--ink-primary);
-  color: var(--bg-canvas);
-  border: 1px solid var(--ink-primary);
-  text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  overflow: hidden;
-  position: relative;
-  transition: transform 0.35s cubic-bezier(0.48, 1.68, 0.64, 1), background-color 0.25s ease;
-  will-change: transform;
-}
-
-.g_btn_main:hover {
-  transform: scale(1.04);
-  background-color: #000000;
-  border-color: #000000;
-}
-
-.g_btn_main:active {
-  transform: scale(0.95);
-}
-
-/* Rolling Text Marquee Container */
-.g_btn_text_contain {
-  display: block;
-  overflow: hidden;
-  height: 1.15em;
-  line-height: 1.15em;
-}
-
-.g_btn_text {
-  display: block;
-  text-shadow: 0px 1.25em 0px var(--bg-canvas);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
-}
-
-.g_btn_main:hover .g_btn_text {
-  transform: translateY(-1.25em);
-}
-
-/* Aside Circle Background */
-.g_btn_aside_wrap {
-  position: relative;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  z-index: 2;
 }
 
-.g_btn_aside_bg {
+.navbar-arrow-svg {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  color: var(--ink-primary);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1), color 0.3s ease;
+}
+
+.navbar-arrow-svg.is-duplicate {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1), background-color 0.25s ease;
-}
-
-.g_btn_main:hover .g_btn_aside_bg {
-  transform: scale(0.85);
-  background: rgba(255, 255, 255, 0.28);
-}
-
-/* Flying 45° Vector Arrow */
-.g_btn_svg {
-  position: relative;
-  z-index: 2;
-  width: 11px;
-  height: 11px;
-  color: var(--bg-canvas);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
-}
-
-.g_btn_svg.is-absolute {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -5.5px;
-  margin-left: -5.5px;
   transform: translate(-100%, 100%);
 }
 
-.g_btn_main:hover .g_btn_svg:not(.is-absolute) {
+.navbar-link:hover .navbar-arrow-svg {
+  color: var(--bg-canvas);
+}
+
+.navbar-link:hover .navbar-arrow-svg:not(.is-duplicate) {
   transform: translate(100%, -100%);
 }
 
-.g_btn_main:hover .g_btn_svg.is-absolute {
+.navbar-link:hover .navbar-arrow-svg.is-duplicate {
   transform: translate(0, 0);
 }
 
