@@ -116,38 +116,55 @@ html.lenis, html.lenis body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
+  gap: 1.25rem;
 }
 
-/* Monolog Nav Link (Left-to-Right Wipe Underline) */
+/* Monolog Nav Link (Solid Pill Color Block with Wipe & Text Invert) */
 .monolog-nav-link {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--ink-primary);
   text-decoration: none;
   letter-spacing: 0.04em;
   position: relative;
-  padding: 0.25rem 0;
-  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: color 0.35s cubic-bezier(0.2, 1, 0.36, 1);
 }
 
 .monolog-nav-link::before {
   content: '';
   position: absolute;
-  bottom: 0px;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 1.5px;
+  height: 100%;
+  border-radius: 9999px;
   background-color: var(--ink-primary);
   transform-origin: right;
   transform: scaleX(0);
-  transition: transform 0.6s cubic-bezier(0.2, 1, 0.36, 1);
+  transition: transform 0.45s cubic-bezier(0.2, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.nav-link-text {
+  position: relative;
+  z-index: 2;
+  transition: color 0.35s ease;
 }
 
 .monolog-nav-link:hover::before {
   transform-origin: left;
   transform: scaleX(1);
+}
+
+.monolog-nav-link:hover .nav-link-text {
+  color: var(--bg-canvas);
 }
 
 /* Monolog Action Button (Rolling Text Marquee & Flying 45° Arrow) */
