@@ -1,191 +1,284 @@
 /**
- * choreographer.js - GSAP Dynamic Choreography & Kinetic Timelines
+ * choreographer.js - GSAP Animation Orchestrator & Smooth Scroll Engine
  * 
- * Orchestrates:
- * - Landing Entry Sequence (Globe fade → Signature text → Sector anchors)
- * - Sector Activation Stagger (Globe offset + 70% Cards Layer Stagger + Tonal Drift)
- * - Deactivation & Return Choreography
+ * 1. s0animation-style 1:1 expanding viewport reveal
+ * 2. Lenis Smooth Scroll binding with GSAP ticker
+ * 3. bymonolog-style Stacking Paper-Cut Cards & Parallax Window Portals
+ * 4. Split-line typography entrances
  */
 
-import gsap from 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js';
-
-export class SceneChoreographer {
-  constructor(domElements = {}) {
-    this.dom = domElements;
-    this.currentSectorId = null;
-    this.isTransitioning = false;
+export class Choreographer {
+  constructor(options = {}) {
+    this.lenis = null;
+    this.onRevealComplete = options.onRevealComplete || (() => {});
+    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   /**
-   * Initial Landing Sequence
+   * Initialize Lenis Smooth Scrolling and hook into GSAP ticker
    */
-  playLandingEntry() {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    // Ensure elements are in initial state
-    gsap.set(this.dom.canvas, { opacity: 0, scale: 0.92 });
-    gsap.set(this.dom.landingContainer, { opacity: 0, y: 20 });
-    gsap.set(this.dom.ambientNav, { opacity: 0, y: 15 });
-    gsap.set(this.dom.topbar, { opacity: 0 });
-    gsap.set(this.dom.coordsWidget, { opacity: 0 });
-
-    tl.to(this.dom.canvas, {
-      opacity: 1,
-      scale: 1,
-      duration: 1.6,
-      ease: 'power2.out'
-    })
-    .to(this.dom.topbar, {
-      opacity: 1,
-      duration: 0.8
-    }, '-=1.0')
-    .to(this.dom.coordsWidget, {
-      opacity: 1,
-      duration: 0.8
-    }, '-=0.8')
-    .to(this.dom.landingContainer, {
-      opacity: 1,
-      y: 0,
-      duration: 1.0
-    }, '-=0.6')
-    .to(this.dom.ambientNav, {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      stagger: 0.1
-    }, '-=0.4');
-
-    return tl;
-  }
-
-  /**
-   * Activate a Continental Sector
-   */
-  activateSector(sector, globe) {
-    if (this.isTransitioning || this.currentSectorId === sector.id) return;
-    this.isTransitioning = true;
-    this.currentSectorId = sector.id;
-
-    const isMobile = window.innerWidth <= 768;
-
-    // 1. Tell globe to rotate and shift position
-    globe.rotateTo(sector.globeCoords.lat, sector.globeCoords.lon);
-    
-    if (isMobile) {
-      // On mobile, keep globe centered on upper half
-      globe.setStageOffset(0, -window.innerHeight * 0.12, 0.72);
-    } else {
-      globe.setStageOffset(sector.stageOffset.x, sector.stageOffset.y, sector.stageOffset.scale);
+  initLenis() {
+    if (typeof window.Lenis === 'undefined') {
+      console.warn('Lenis library not loaded, falling back to native scroll.');
+      return;
     }
-    
-    globe.setSectorAccent(sector.hueShift.dotAccent);
 
-    // 2. Global Palette Tonal Drift via GSAP CSS Variables
-    gsap.to(document.documentElement, {
-      '--bg-color': sector.hueShift.bg,
-      '--accent-color': sector.hueShift.accent,
-      '--card-border-accent': sector.hueShift.border,
-      duration: 0.8,
-      ease: 'power2.inOut'
+    this.lenis = new window.Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+      infinite: false
     });
 
-    // 3. Coordinate timeline for UI transitions
-    const tl = gsap.timeline({
-      onComplete: () => {
-        this.isTransitioning = false;
-      }
-    });
+    // Connect Lenis to GSAP ScrollTrigger
+    if (window.gsap && window.ScrollTrigger) {
+      this.lenis.on('scroll', window.ScrollTrigger.update);
 
-    // Fade out landing text
-    tl.to(this.dom.landingContainer, {
-      opacity: 0,
-      y: -15,
-      duration: 0.4,
-      display: 'none'
-    });
+      window.gsap.ticker.add((time) => {
+        this.lenis.raf(time * 1000);
+      });
 
-    // Switch active sector indicator in nav
-    this.dom.navButtons.forEach(btn => {
-      if (btn.dataset.sector === sector.id) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    // Prepare Sector Details Container
-    this.dom.sectorContainer.style.display = 'flex';
-    gsap.set(this.dom.sectorContainer, { opacity: 1 });
-
-    const header = this.dom.sectorContainer.querySelector('.sector-header');
-    const cards = this.dom.sectorContainer.querySelectorAll('.project-card');
-    const backBtn = this.dom.sectorContainer.querySelector('.back-anchor');
-
-    // Hide cards initially for staggered entrance
-    gsap.set([header, backBtn], { opacity: 0, y: 15 });
-    gsap.set(cards, { opacity: 0, y: 30 });
-
-    tl.to([backBtn, header], {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      stagger: 0.08,
-      ease: 'power3.out'
-    }, '-=0.1')
-    .to(cards, {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power3.out'
-    }, '-=0.3');
+      window.gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = (time) => {
+        this.lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+    }
   }
 
   /**
-   * Return from Sector View to Central Landing State
+   * s0animation 1:1 Viewport Reveal Animation Sequence
+   * Concentrated Center Box -> Explosive Clip-Path Expand -> Counter-Scale Zoom -> Typography Stagger
    */
-  deactivateSector(globe) {
-    if (this.isTransitioning || !this.currentSectorId) return;
-    this.isTransitioning = true;
-    this.currentSectorId = null;
+  playOpeningReveal() {
+    const gsap = window.gsap;
+    if (!gsap) {
+      console.warn('GSAP not loaded.');
+      return;
+    }
 
-    // Reset globe
-    globe.resetToResting();
+    if (this.prefersReducedMotion) {
+      gsap.set('.hero-viewport-frame', { clipPath: 'inset(0% 0% 0% 0% round 0px)', scale: 1 });
+      gsap.set('.hero-media-inner', { scale: 1 });
+      gsap.set(['.hero-title-line', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
+      this.initLenis();
+      this.initScrollAnimations();
+      this.onRevealComplete();
+      return;
+    }
 
-    // Reset palette
-    gsap.to(document.documentElement, {
-      '--bg-color': '#FAF8F5',
-      '--accent-color': '#7C3AED',
-      '--card-border-accent': 'rgba(0, 0, 0, 0.07)',
-      duration: 0.8,
-      ease: 'power2.inOut'
+    // Initial state: Central floating paper frame
+    gsap.set('.hero-viewport-frame', {
+      clipPath: 'inset(22% 26% 22% 26% round 24px)',
+      scale: 0.96,
+      opacity: 1
+    });
+    gsap.set('.hero-media-inner', {
+      scale: 1.35
+    });
+    gsap.set('.hero-title-line', {
+      y: '105%',
+      opacity: 0
+    });
+    gsap.set(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt', '.site-nav'], {
+      y: 24,
+      opacity: 0
+    });
+    gsap.set('.preloader-center-badge', {
+      opacity: 1,
+      scale: 1
     });
 
-    // Clear active states in nav
-    this.dom.navButtons.forEach(btn => btn.classList.remove('active'));
-
-    const tl = gsap.timeline({
+    const revealTl = gsap.timeline({
+      delay: 0.2,
       onComplete: () => {
-        this.dom.sectorContainer.style.display = 'none';
-        this.isTransitioning = false;
+        this.initLenis();
+        this.initScrollAnimations();
+        this.onRevealComplete();
       }
     });
 
-    // Fade out sector content
-    tl.to(this.dom.sectorContainer, {
+    // Phase 1: Hold focus on center badge (0.0 - 0.6s)
+    revealTl.to('.preloader-center-badge', {
       opacity: 0,
-      y: 15,
-      duration: 0.35,
-      ease: 'power2.in'
+      scale: 0.9,
+      duration: 0.45,
+      ease: 'power2.inOut',
+      delay: 0.4
     });
 
-    // Fade back in landing text
-    this.dom.landingContainer.style.display = 'flex';
-    tl.to(this.dom.landingContainer, {
-      opacity: 1,
+    // Phase 2: Explosive Viewport Expand & Lens Zoom-Out (0.6 - 1.8s)
+    // Using cubic-bezier(0.83, 0, 0.17, 1) equivalent via power4.inOut
+    revealTl.to('.hero-viewport-frame', {
+      clipPath: 'inset(0% 0% 0% 0% round 0px)',
+      scale: 1.0,
+      duration: 1.45,
+      ease: 'power4.inOut'
+    }, '-=0.15');
+
+    revealTl.to('.hero-media-inner', {
+      scale: 1.0,
+      duration: 1.45,
+      ease: 'power4.inOut'
+    }, '<');
+
+    // Phase 3: Staggered Typography & UI Release (1.3s - 2.2s)
+    revealTl.to('.site-nav', {
       y: 0,
-      duration: 0.6,
+      opacity: 1,
+      duration: 0.9,
       ease: 'power3.out'
-    }, '-=0.1');
+    }, '-=0.65');
+
+    revealTl.to('.hero-title-line', {
+      y: '0%',
+      opacity: 1,
+      stagger: 0.1,
+      duration: 1.1,
+      ease: 'power3.out'
+    }, '-=0.7');
+
+    revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
+      y: 0,
+      opacity: 1,
+      stagger: 0.08,
+      duration: 0.85,
+      ease: 'power3.out'
+    }, '-=0.6');
+  }
+
+  /**
+   * bymonolog-style Paper-Cut Stacking Cards with GSAP ScrollTrigger
+   */
+  initScrollAnimations() {
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) return;
+
+    // 1. Hero scroll out parallax
+    gsap.to('.hero-content-wrap', {
+      scrollTrigger: {
+        trigger: '.hero-section',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.6
+      },
+      y: 120,
+      opacity: 0.3
+    });
+
+    // 2. Section Headings Split Reveal
+    document.querySelectorAll('.section-heading-split').forEach((heading) => {
+      gsap.from(heading, {
+        scrollTrigger: {
+          trigger: heading,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.9,
+        ease: 'power3.out'
+      });
+    });
+
+    // 3. Stacking Paper-Cut Project Cards (Desktop & Tablet)
+    if (window.innerWidth > 768) {
+      const cards = gsap.utils.toArray('.paper-stack-card');
+      
+      cards.forEach((card, index) => {
+        // Pin and scale previous cards as next card enters
+        if (index < cards.length - 1) {
+          gsap.to(card, {
+            scrollTrigger: {
+              trigger: cards[index + 1],
+              start: 'top 80%',
+              end: 'top 20%',
+              scrub: true
+            },
+            scale: 0.93,
+            filter: 'blur(1.5px)',
+            opacity: 0.45,
+            transformOrigin: 'center top',
+            ease: 'none'
+          });
+        }
+
+        // Inner media parallax within paper-cut window
+        const innerMedia = card.querySelector('.card-portal-media');
+        if (innerMedia) {
+          gsap.fromTo(innerMedia, 
+            { y: '-12%' },
+            {
+              y: '12%',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        }
+      });
+    }
+
+    // 4. Interactive 3D Perspective Tilt on Project Cards
+    this.init3DCardTilt();
+  }
+
+  /**
+   * Magnetic 3D Perspective Card Tilt (Desktop only)
+   */
+  init3DCardTilt() {
+    if (window.innerWidth <= 768 || this.prefersReducedMotion) return;
+
+    const cards = document.querySelectorAll('.paper-stack-card');
+    cards.forEach((card) => {
+      const inner = card.querySelector('.card-frame-inner');
+      if (!inner) return;
+
+      let bounds;
+
+      const onMouseEnter = () => {
+        bounds = card.getBoundingClientRect();
+      };
+
+      const onMouseMove = (e) => {
+        if (!bounds) bounds = card.getBoundingClientRect();
+        const mouseX = e.clientX - bounds.left;
+        const mouseY = e.clientY - bounds.top;
+        const normX = (mouseX / bounds.width - 0.5) * 2;
+        const normY = (mouseY / bounds.height - 0.5) * 2;
+
+        window.gsap.to(inner, {
+          rotateY: normX * 4.5,
+          rotateX: -normY * 4.5,
+          transformPerspective: 1000,
+          duration: 0.4,
+          ease: 'power2.out'
+        });
+      };
+
+      const onMouseLeave = () => {
+        window.gsap.to(inner, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.6,
+          ease: 'power3.out'
+        });
+      };
+
+      card.addEventListener('mouseenter', onMouseEnter);
+      card.addEventListener('mousemove', onMouseMove);
+      card.addEventListener('mouseleave', onMouseLeave);
+    });
   }
 }

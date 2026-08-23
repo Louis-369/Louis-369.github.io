@@ -1,237 +1,203 @@
 /**
- * app.js - Main Application Orchestrator & Event Bus
+ * app.js - Main Application Orchestrator
  * 
- * Deep module that coordinates:
- * - Data Manifest (projects.js)
- * - 3D Point-Cloud Globe (globe.js)
- * - GSAP Dynamic Choreography (choreographer.js)
- * - Mobile Touch-Swipe Carousel & Keyboard Accessibility
+ * Sets up the editorial page, renders Monolog-style paper-cut cards,
+ * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, sectors } from './data/projects.js';
-import { PlanetGlobe } from './globe.js';
-import { SceneChoreographer } from './choreographer.js';
+import { siteConfig, featuredProjects } from './data/projects.js';
+import { Choreographer } from './choreographer.js';
+import { AmbientParticles } from './globe.js';
 
-class App {
+class Application {
   constructor() {
-    this.sectors = sectors;
-    this.currentSectorIndex = -1;
-    this.isMobile = window.innerWidth <= 768;
-
-    this.canvas = document.getElementById('globe-canvas');
-    this.coordsDisplay = document.getElementById('live-coords');
-    this.landingContainer = document.getElementById('landing-layer');
-    this.sectorContainer = document.getElementById('sector-layer');
-    this.navContainer = document.getElementById('sector-nav');
-    this.logoAnchor = document.getElementById('logo-anchor');
-    this.topbar = document.getElementById('ambient-topbar');
-    this.coordsWidget = document.getElementById('ambient-coords');
-
-    this.globe = null;
+    this.projects = featuredProjects;
     this.choreographer = null;
-
+    this.ambientParticles = null;
+    this.cursor = {
+      el: null,
+      dot: null,
+      x: 0,
+      y: 0,
+      targetX: 0,
+      targetY: 0
+    };
+    
     this.init();
   }
 
   init() {
-    // 1. Build Sector Navigation Tabs
-    this.renderNavAnchors();
+    // 1. Render dynamic projects list (bymonolog paper-cut cards)
+    this.renderProjects();
+    
+    // 2. Setup magnetic custom cursor (desktop only)
+    this.initCustomCursor();
 
-    // 2. Initialize 3D Globe
-    this.globe = new PlanetGlobe(this.canvas, {
-      sectors: this.sectors,
-      onCoordinateUpdate: (coordText) => {
-        if (this.coordsDisplay) {
-          this.coordsDisplay.textContent = coordText;
-        }
+    // 3. Initialize background particles
+    this.ambientParticles = new AmbientParticles('ambient-canvas');
+
+    // 4. Initialize Choreographer & play opening reveal (s0 rhythm)
+    this.choreographer = new Choreographer({
+      onRevealComplete: () => {
+        document.body.classList.remove('is-loading');
+        document.body.classList.add('is-revealed');
       }
     });
 
-    // 3. Initialize GSAP Choreographer
-    const navButtons = document.querySelectorAll('.sector-anchor');
-    this.choreographer = new SceneChoreographer({
-      canvas: this.canvas,
-      landingContainer: this.landingContainer,
-      sectorContainer: this.sectorContainer,
-      ambientNav: this.navContainer,
-      navButtons: navButtons,
-      topbar: this.topbar,
-      coordsWidget: this.coordsWidget
-    });
-
-    // 4. Bind Global Event Handlers
-    this.bindEvents();
-
-    // 5. Mobile Swipe Carousel Setup
-    this.setupMobileSwipe();
-
-    // 6. Play Landing Entrance
-    setTimeout(() => {
-      this.choreographer.playLandingEntry();
-    }, 150);
-  }
-
-  renderNavAnchors() {
-    this.navContainer.innerHTML = '';
-    this.sectors.forEach((sector, idx) => {
-      const btn = document.createElement('button');
-      btn.className = 'sector-anchor';
-      btn.dataset.sector = sector.id;
-      btn.innerHTML = `
-        <span class="sector-index">0${idx + 1}</span>
-        <span class="sector-text">${sector.label}</span>
-      `;
-      btn.addEventListener('click', () => {
-        this.selectSector(idx);
+    // Run opening reveal
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      this.choreographer.playOpeningReveal();
+    } else {
+      window.addEventListener('DOMContentLoaded', () => {
+        this.choreographer.playOpeningReveal();
       });
-      this.navContainer.appendChild(btn);
-    });
+    }
+
+    // 5. Global interaction bindings
+    this.bindInteractions();
   }
 
-  renderSectorContent(sector) {
-    const projectsHtml = sector.projects.map(p => {
-      const isWip = p.status && (p.status.includes('WIP') || p.status.includes('施工'));
+  renderProjects() {
+    const container = document.getElementById('works-cards-container');
+    if (!container) return;
+
+    container.innerHTML = this.projects.map((project, idx) => {
+      const isExternal = project.isExternal;
+      const targetAttr = isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
+      const isWip = project.tags.includes('WIP');
+
       return `
-      <a href="${p.url}" ${p.isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="project-card ${isWip ? 'wip-card' : ''}">
-        <div class="card-header">
-          <div class="card-icon-box">${p.icon}</div>
-          <div class="card-meta">
-            <span class="card-status-dot ${isWip ? 'wip' : ''}"></span>
-            <span class="card-status-text ${isWip ? 'wip-text' : ''}">${p.status}</span>
+        <article class="paper-stack-card" data-card-index="${idx}">
+          <div class="card-frame-inner">
+            <div class="card-paper-header">
+              <div class="card-header-badge-group">
+                <span class="card-pill-badge">${project.coverBadge}</span>
+                <span class="card-pill-category">${project.category}</span>
+              </div>
+              <span class="card-year-stamp">${project.year}</span>
+            </div>
+
+            <div class="card-grid-split">
+              <!-- Left: Paper-Cut Window Portal -->
+              <div class="card-portal-window">
+                <div class="card-portal-frame">
+                  <div class="card-portal-media" style="background: ${project.colorScheme.bgSubtle};">
+                    <div class="portal-visual-mockup">
+                      <div class="mockup-header">
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-title">${project.title.toLowerCase()}.io</span>
+                      </div>
+                      <div class="mockup-canvas-content">
+                        <div class="mockup-center-symbol" style="color: ${project.colorScheme.accent};">
+                          ${idx === 0 ? '🧠' : idx === 1 ? '🎬' : idx === 2 ? '⚡' : '🚧'}
+                        </div>
+                        <span class="mockup-title-text">${project.title}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Editorial Content Details -->
+              <div class="card-editorial-body">
+                <div class="card-editorial-meta">
+                  <h3 class="card-project-title">${project.title}</h3>
+                  <p class="card-project-summary">${project.summary}</p>
+                </div>
+
+                <p class="card-project-description">${project.desc}</p>
+
+                <!-- Key Metrics -->
+                <div class="card-metrics-grid">
+                  ${project.metrics.map(m => `
+                    <div class="metric-item">
+                      <span class="metric-value">${m.value}</span>
+                      <span class="metric-label">${m.label}</span>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <!-- Tags & CTA Action -->
+                <div class="card-action-row">
+                  <div class="card-tags-list">
+                    ${project.tags.map(t => `<span class="paper-tag">${t}</span>`).join('')}
+                  </div>
+                  
+                  <a href="${project.url}" ${targetAttr} class="card-open-link ${isWip ? 'is-disabled' : ''}" data-cursor-text="OPEN">
+                    <span>${isWip ? 'IN PROGRESS' : 'EXPLORE'}</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">${p.title}</h3>
-          <p class="card-subtitle">${p.subtitle}</p>
-          <p class="card-desc">${p.desc}</p>
-        </div>
-        <div class="card-footer">
-          <div class="card-tags">
-            ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-          </div>
-          <div class="card-arrow">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="7 7 17 7 17 17"></polyline>
-            </svg>
-          </div>
-        </div>
-      </a>
-    `;
+        </article>
+      `;
     }).join('');
-
-    this.sectorContainer.innerHTML = `
-      <div class="sector-inner">
-        <button class="back-anchor" id="back-to-landing">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          <span>返回星球視野 (Overview)</span>
-        </button>
-
-        <div class="sector-header">
-          <div class="sector-badge">
-            <span class="badge-dot"></span>
-            <span>${sector.coordinateCode}</span>
-          </div>
-          <h2 class="sector-title">${sector.label}</h2>
-          <p class="sector-english">${sector.englishLabel}</p>
-          <p class="sector-tagline">${sector.tagline}</p>
-        </div>
-
-        <div class="projects-grid">
-          ${projectsHtml}
-        </div>
-      </div>
-    `;
-
-    // Bind back button
-    const backBtn = this.sectorContainer.querySelector('#back-to-landing');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => this.deselectSector());
-    }
   }
 
-  selectSector(index) {
-    if (index < 0 || index >= this.sectors.length) return;
-    this.currentSectorIndex = index;
-    const sector = this.sectors[index];
-
-    this.renderSectorContent(sector);
-    this.choreographer.activateSector(sector, this.globe);
-  }
-
-  deselectSector() {
-    this.currentSectorIndex = -1;
-    this.choreographer.deactivateSector(this.globe);
-  }
-
-  bindEvents() {
-    // Return to landing when clicking top-left Monogram logo
-    if (this.logoAnchor) {
-      this.logoAnchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.deselectSector();
-      });
+  initCustomCursor() {
+    if (window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches) {
+      return; // Disable on touch/mobile
     }
 
-    // Keyboard Navigation
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        this.deselectSector();
-      } else if (e.key === 'ArrowRight') {
-        const next = (this.currentSectorIndex + 1) % this.sectors.length;
-        this.selectSector(next);
-      } else if (e.key === 'ArrowLeft') {
-        const prev = (this.currentSectorIndex - 1 + this.sectors.length) % this.sectors.length;
-        this.selectSector(prev);
-      }
+    const cursor = document.getElementById('custom-cursor');
+    const cursorText = document.getElementById('cursor-text');
+    if (!cursor) return;
+
+    window.addEventListener('mousemove', (e) => {
+      this.cursor.targetX = e.clientX;
+      this.cursor.targetY = e.clientY;
     });
 
-    // Window Resize
-    window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth <= 768;
-    });
-  }
+    const updateCursor = () => {
+      this.cursor.x += (this.cursor.targetX - this.cursor.x) * 0.18;
+      this.cursor.y += (this.cursor.targetY - this.cursor.y) * 0.18;
 
-  setupMobileSwipe() {
-    let startX = 0;
-    let startY = 0;
-    let isSwiping = false;
+      cursor.style.transform = `translate3d(${this.cursor.x}px, ${this.cursor.y}px, 0)`;
+      requestAnimationFrame(updateCursor);
+    };
+    requestAnimationFrame(updateCursor);
 
-    window.addEventListener('touchstart', (e) => {
-      if (!this.isMobile) return;
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      isSwiping = true;
-    }, { passive: true });
-
-    window.addEventListener('touchend', (e) => {
-      if (!this.isMobile || !isSwiping) return;
-      isSwiping = false;
-      const endX = e.changedTouches[0].clientX;
-      const endY = e.changedTouches[0].clientY;
-      const diffX = endX - startX;
-      const diffY = endY - startY;
-
-      // Ensure horizontal swipe
-      if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
-        if (diffX < 0) {
-          // Swipe Left -> Next Sector
-          const next = (this.currentSectorIndex + 1) % this.sectors.length;
-          this.selectSector(next);
-        } else {
-          // Swipe Right -> Previous Sector
-          const prev = this.currentSectorIndex <= 0 ? this.sectors.length - 1 : this.currentSectorIndex - 1;
-          this.selectSector(prev);
+    // Magnetic and expansion hover handlers
+    document.querySelectorAll('a, button, [data-cursor-text]').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('is-hovering');
+        const customText = el.getAttribute('data-cursor-text');
+        if (customText && cursorText) {
+          cursorText.textContent = customText;
+          cursor.classList.add('has-text');
         }
-      }
-    }, { passive: true });
+      });
+
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('is-hovering', 'has-text');
+        if (cursorText) cursorText.textContent = '';
+      });
+    });
+  }
+
+  bindInteractions() {
+    // Smooth navigation anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', (e) => {
+        const targetId = anchor.getAttribute('href');
+        if (targetId && targetId !== '#') {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl && this.choreographer && this.choreographer.lenis) {
+            e.preventDefault();
+            this.choreographer.lenis.scrollTo(targetEl, { offset: -60, duration: 1.4 });
+          }
+        }
+      });
+    });
   }
 }
 
-// Instantiate on DOM Ready
-document.addEventListener('DOMContentLoaded', () => {
-  new App();
-});
+// Instantiate
+new Application();

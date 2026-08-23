@@ -1,72 +1,139 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Louis · Planetary Project Hub</title>
-  <meta name="description" content="Personal portfolio and interactive planetary project hub of Louis (Louis-369).">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Louis · Creative Developer & Builder. High-craft digital tools and interactive web experiences.">
+  <meta name="author" content="Louis">
+  <title>Louis · Creative Developer & Builder</title>
 
-  <!-- Google Fonts: Editorial Serif + Clean Sans + Crisp Mono -->
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+
+  <!-- Editorial Typography Fonts (Playfair Display + Inter + Geist Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="./style.css">
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Lenis Smooth Scroll CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
-<body>
+<body class="is-loading">
+  <!-- Tactile Paper Grain Texture Overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
 
-  <!-- 3D Canvas Background Layer -->
-  <div id="globe-canvas-container">
-    <canvas id="globe-canvas"></canvas>
+  <!-- Ambient Background Canvas -->
+  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+
+  <!-- Magnetic Custom Cursor (Desktop) -->
+  <div id="custom-cursor" class="custom-cursor" aria-hidden="true">
+    <span id="cursor-text" class="cursor-text"></span>
   </div>
 
-  <!-- Fixed Ambient Topbar -->
-  <header class="ambient-topbar" id="ambient-topbar">
-    <a href="#" class="monogram-logo" id="logo-anchor" title="Return to Overview">
-      <span>Louis</span>
-      <span class="monogram-dot"></span>
-    </a>
-    <div class="ambient-links">
-      <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="github-icon-link" title="GitHub Profile">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-        </svg>
-      </a>
-    </div>
+  <!-- Persistent Site Navigation -->
+  <header class="site-nav">
+    <a href="#" class="nav-brand" data-cursor-text="HOME">Louis.</a>
+    <nav class="nav-links">
+      <a href="#works" class="nav-link-item" data-cursor-text="VIEW">Works</a>
+      <a href="#about" class="nav-link-item" data-cursor-text="ABOUT">About</a>
+      <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="nav-link-item" data-cursor-text="GITHUB">GitHub ↗</a>
+    </nav>
   </header>
 
-  <!-- Live Dynamic Coordinate Readout -->
-  <div class="ambient-coords" id="ambient-coords">
-    <span class="coords-pulse"></span>
-    <span id="live-coords">LAT 20.0°N · LON 45.0°E</span>
-  </div>
+  <!-- Main Application Wrapper -->
+  <main class="main-wrapper">
+    <!-- Hero Section (s0animation 1:1 Expanding Viewport Reveal) -->
+    <section class="hero-section" id="hero">
+      <div class="hero-viewport-frame">
+        <!-- Preloader Centered Monogram Hold -->
+        <div class="preloader-center-badge">
+          <div class="preloader-spin-icon"></div>
+          <span>LOUIS / 2026</span>
+        </div>
 
-  <!-- Bottom Sector Navigation Bar -->
-  <nav class="ambient-nav" id="sector-nav" aria-label="Sector Navigation">
-    <!-- Populated dynamically by app.js -->
-  </nav>
+        <!-- Interior Content Zoom-out Layer -->
+        <div class="hero-media-inner">
+          <div class="hero-content-wrap">
+            <div class="hero-badge">
+              <span class="status-dot"></span>
+              <span>Available for innovative projects · 2026</span>
+            </div>
 
-  <!-- Landing State Layer -->
-  <main class="landing-layer" id="landing-layer">
-    <div class="landing-content">
-      <div class="landing-badge">
-        <span>EXPLORATION PROTOCOL</span>
+            <div class="hero-title-container">
+              <h1 class="hero-title-line">Louis.</h1>
+            </div>
+
+            <p class="hero-tagline">
+              Building digital tools that think & craft that moves people. Combining engineering rigor with award-winning editorial aesthetic.
+            </p>
+
+            <div class="hero-scroll-prompt">
+              <span>EXPLORE WORKS</span>
+              <span class="hero-scroll-arrow">↓</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <h1 class="landing-title">Louis</h1>
-      <p class="landing-tagline">Building tools that think &amp; craft that inspires.</p>
-      <p class="landing-hint">選擇下方板塊探索星際大陸 · 或使用方向鍵導航</p>
-    </div>
+    </section>
+
+    <!-- Selected Works / Stories Section (bymonolog Paper-Cut Stacking Cards) -->
+    <section class="works-section" id="works">
+      <header class="section-header-block">
+        <div class="section-header-left">
+          <div class="section-eyebrow">CASE STUDIES & ARTIFACTS</div>
+          <h2 class="section-title section-heading-split">Featured Works</h2>
+        </div>
+        <div class="section-index-stamp">
+          <span>01 — 04</span>
+        </div>
+      </header>
+
+      <!-- Dynamic Stacking Cards Container -->
+      <div class="works-cards-wrap" id="works-cards-container">
+        <!-- Populated via app.js -->
+      </div>
+    </section>
+
+    <!-- Philosophy & About Section -->
+    <section class="about-section" id="about">
+      <div class="about-content-inner">
+        <div class="section-eyebrow">PHILOSOPHY & ETHOS</div>
+        <blockquote class="about-quote section-heading-split">
+          "The gap between an ordinary digital tool and a memorable experience is relentless craft and intention."
+        </blockquote>
+        <p class="about-details-p">
+          Hi, I'm Louis. I build high-performance web applications, interactive creative media, and seamless digital utility tools. Every project is built from scratch with deep respect for typography, frame-perfect motion, and uncompromising client-side performance.
+        </p>
+      </div>
+    </section>
   </main>
 
-  <!-- Sector Details View Layer (70% Staggered Canvas Overlay) -->
-  <section class="sector-layer" id="sector-layer">
-    <div class="sector-inner">
-      <!-- Populated dynamically by app.js -->
-    </div>
-  </section>
+  <!-- Editorial Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cta-block">
+        <h2 class="footer-big-heading">Let's craft the next breakthrough.</h2>
+        <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="footer-action-btn" data-cursor-text="CONNECT">
+          <span>GitHub Profile</span>
+          <span>→</span>
+        </a>
+      </div>
 
-  <!-- Main Application ES Module -->
-  <script type="module" src="./app.js"></script>
+      <div class="footer-bottom-row">
+        <span>© 2026 LOUIS · ALL RIGHTS RESERVED</span>
+        <span>DESIGNED WITH EDITORIAL CRAFT</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application ESM Entrypoint -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>
