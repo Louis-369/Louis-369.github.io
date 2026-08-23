@@ -16,8 +16,8 @@
   --ink-muted: #8A8D98;          /* Muted coordinate stamp */
   
   --accent-color: #121316;       /* Minimalist high-contrast accent */
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Playfair Display', 'Noto Serif TC', 'Songti TC', Georgia, serif;
+  --font-sans: 'Inter', 'Noto Serif TC', -apple-system, BlinkMacSystemFont, serif;
   --font-mono: 'Geist Mono', 'SF Mono', monospace;
 
   --ease-expo: cubic-bezier(0.83, 0, 0.17, 1);
@@ -32,7 +32,7 @@
 }
 
 html {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   background-color: var(--bg-canvas);
   color: var(--ink-primary);
   text-rendering: optimizeLegibility;
@@ -532,7 +532,7 @@ html.lenis .lenis.lenis-stopped {
 .works-project-title {
   font-family: var(--font-serif);
   font-size: clamp(1.8rem, 2.8vw, 2.4rem);
-  font-weight: 700;
+  font-weight: 700; /* 思源宋體 Bold */
   color: var(--ink-primary);
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -545,9 +545,10 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .works-project-desc {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.95rem;
-  line-height: 1.65;
+  font-weight: 300; /* 思源宋體 Light / 細體 提升長文呼吸感 */
+  line-height: 1.8;
   color: var(--ink-secondary);
   max-width: 440px;
 }
@@ -570,9 +571,10 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .result-label {
-  font-family: var(--font-sans);
-  font-size: 0.88rem;
-  line-height: 1.45;
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 500; /* 思源宋體 Medium / 中黑 強化標籤辨識度 */
+  line-height: 1.5;
   color: var(--ink-muted);
   max-width: 380px;
 }
