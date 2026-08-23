@@ -188,51 +188,30 @@ export class Choreographer {
       });
     });
 
-    // 3. Stacking Paper-Cut Project Cards & 1:1 Monolog Scroll-Driven Parallax Scrub
-    if (window.innerWidth > 768) {
-      const cards = gsap.utils.toArray('.paper-stack-card');
-      
-      cards.forEach((card, index) => {
-        // Stacking / blur / scale down effect on previous card
-        if (index < cards.length - 1) {
-          gsap.to(card, {
+    // 3. 1:1 bymonolog.com Scroll-Driven Image Mask Parallax Scrub
+    const workItems = gsap.utils.toArray('.works-home-item');
+    
+    workItems.forEach((item) => {
+      const showcaseImg = item.querySelector('.works-home-image');
+      if (showcaseImg) {
+        gsap.fromTo(showcaseImg, 
+          {
+            yPercent: -15,
+            scale: 1.15
+          },
+          {
+            yPercent: 15,
+            scale: 1.15,
+            ease: 'none',
             scrollTrigger: {
-              trigger: cards[index + 1],
-              start: 'top 80%',
-              end: 'top 20%',
-              scrub: true
-            },
-            scale: 0.94,
-            filter: 'blur(1px)',
-            opacity: 0.5,
-            transformOrigin: 'center top',
-            ease: 'none'
-          });
-        }
-
-        // 1:1 bymonolog.com Scroll-Driven Image Window Translation
-        // Container clips overflow while inner oversized image (scale 1.18) translates vertically with scroll scrub
-        const showcaseImg = card.querySelector('.portal-showcase-img');
-        if (showcaseImg) {
-          gsap.fromTo(showcaseImg, 
-            {
-              yPercent: -18,
-              scale: 1.18
-            },
-            {
-              yPercent: 18,
-              scale: 1.18,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: card,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 0.8
-              }
+              trigger: item,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.8
             }
-          );
-        }
-      });
-    }
+          }
+        );
+      }
+    });
   }
 }

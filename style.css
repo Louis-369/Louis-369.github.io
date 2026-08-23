@@ -380,28 +380,28 @@ html.lenis .lenis.lenis-stopped {
 }
 
 /* ==========================================================================
-   Works Section & bymonolog Paper-Cut Stacking Cards
+   Works Section & bymonolog 1:1 Open Editorial Grid Layout
    ========================================================================== */
 .works-section {
   position: relative;
   width: 100%;
-  padding: 6rem 4vw 8rem 4vw;
+  padding: 8rem 4vw 10rem 4vw;
   z-index: 20;
 }
 
 .section-header-block {
-  max-width: 1160px;
-  margin: 0 auto 4rem auto;
+  max-width: 1200px;
+  margin: 0 auto 5rem auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-bottom: 1px solid var(--border-paper);
-  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(18, 19, 22, 0.08);
+  padding-bottom: 2rem;
 }
 
 .section-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--ink-muted);
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
@@ -409,7 +409,7 @@ html.lenis .lenis.lenis-stopped {
 
 .section-title {
   font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
   font-weight: 700;
   color: var(--ink-primary);
   letter-spacing: -0.02em;
@@ -421,290 +421,174 @@ html.lenis .lenis.lenis-stopped {
   color: var(--ink-secondary);
 }
 
-/* Cards Stacking Container */
+/* Open-Air List Container (Zero Cards, Continuous Canvas) */
 .works-cards-wrap {
-  max-width: 1160px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 3.5rem;
 }
 
-/* Individual Paper-Cut Stack Card */
-.paper-stack-card {
-  position: relative;
+/* Individual Open Editorial Item */
+.works-home-item {
   width: 100%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-paper);
-  border-radius: 24px;
-  padding: 2.5rem;
-  box-shadow: 0 20px 48px -12px rgba(18, 19, 22, 0.06), 0 2px 6px rgba(18, 19, 22, 0.02);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  will-change: transform;
+  border-bottom: 1px solid rgba(18, 19, 22, 0.08);
+  padding: 4.5rem 0;
 }
 
-.paper-stack-card:hover {
-  box-shadow: 0 28px 60px -12px rgba(18, 19, 22, 0.1);
-  border-color: var(--border-focus);
+.works-home-item:first-child {
+  padding-top: 1rem;
 }
 
-.card-frame-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  transform-style: preserve-3d;
-}
-
-.card-paper-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(18, 19, 22, 0.05);
-  padding-bottom: 1rem;
-}
-
-.card-header-badge-group {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.card-pill-badge {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  background: var(--ink-primary);
-  color: var(--bg-canvas);
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
-}
-
-.card-pill-category {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  color: var(--ink-secondary);
-}
-
-.card-year-stamp {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-muted);
-}
-
-.card-grid-split {
+.works-home-link {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 3rem;
-  align-items: center;
+  grid-template-columns: 7fr 5fr; /* 1:1 Monolog 7:5 Column Ratio */
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: stretch;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Paper-Cut Window Portal (Left) */
-.card-portal-window {
+/* Left: Architecture Visual Window (Columns 1-7, 58%) */
+.works-visual-column {
+  width: 100%;
+}
+
+.works-image-mask {
   width: 100%;
   aspect-ratio: 16 / 10;
-  background: var(--bg-subtle);
-  border-radius: 16px;
-  border: 1px solid var(--border-paper);
+  border-radius: 4px; /* Minimal crisp architectural frame */
   overflow: hidden;
   position: relative;
+  background: #18191D;
 }
 
-.card-portal-frame {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.card-portal-media {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-}
-
-/* Full Bleed Monolog Photography Showcase Image (1:1 Scroll Parallax Window) */
-.card-portal-media.is-photo-mode {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  background: #121316;
-}
-
-.portal-showcase-img {
+.works-home-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
   will-change: transform;
   filter: brightness(0.96) contrast(1.04);
-  transition: filter 0.5s ease;
+  transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.paper-stack-card:hover .portal-showcase-img {
+.works-home-link:hover .works-home-image {
   filter: brightness(1.02) contrast(1.06);
 }
 
-.portal-visual-mockup {
-  width: 82%;
-  height: 80%;
-  background: #FFFFFF;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.mockup-header {
-  height: 28px;
-  background: #F8FAFC;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  display: flex;
-  align-items: center;
-  padding: 0 0.8rem;
-  gap: 5px;
-}
-
-.mockup-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #CBD5E1;
-}
-
-.mockup-title {
-  margin-left: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: #94A3B8;
-}
-
-.mockup-canvas-content {
-  flex: 1;
+.works-placeholder-visual {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
-.mockup-center-symbol {
-  font-size: 2.4rem;
+.placeholder-icon {
+  font-size: 2.2rem;
 }
 
-.mockup-title-text {
+.placeholder-text {
   font-family: var(--font-serif);
   font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--ink-primary);
+  color: var(--ink-secondary);
 }
 
-/* Editorial Body (Right) */
-.card-editorial-body {
+/* Right: Open Editorial Content Details (Columns 8-12, 42%) */
+.works-content-column {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-}
-
-.card-project-title {
-  font-family: var(--font-serif);
-  font-size: 2.2rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--ink-primary);
-}
-
-.card-project-summary {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--ink-secondary);
-  margin-top: 0.25rem;
-}
-
-.card-project-description {
-  font-size: 0.95rem;
-  color: var(--ink-secondary);
-  line-height: 1.6;
-}
-
-.card-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  background: var(--bg-subtle);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-}
-
-.metric-value {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ink-primary);
-  display: block;
-}
-
-.metric-label {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--ink-muted);
-  display: block;
-  margin-top: 0.15rem;
-}
-
-.card-action-row {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-top: 0.5rem;
+  padding: 0.5rem 0 1rem 0;
 }
 
-.card-tags-list {
+.works-content-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  flex-direction: column;
 }
 
-.paper-tag {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-paper);
-  color: var(--ink-secondary);
-}
-
-.card-open-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1.25rem;
-  border-radius: 9999px;
-  background: var(--ink-primary);
-  color: var(--bg-canvas);
-  text-decoration: none;
+/* SS / 01/03 Stamp Badge */
+.works-meta-stamp {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  font-weight: 600;
+  color: var(--ink-secondary);
   letter-spacing: 0.05em;
-  transition: transform 0.25s ease, background-color 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
 }
 
-.card-open-link:hover {
-  transform: translateY(-2px);
-  background-color: #000000;
+.meta-index-pill {
+  border: 1px solid rgba(18, 19, 22, 0.25);
+  border-radius: 3px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.72rem;
 }
 
-.card-open-link.is-disabled {
-  opacity: 0.5;
-  pointer-events: none;
+.works-project-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+  font-weight: 700;
+  color: var(--ink-primary);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.2rem;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
+}
+
+.works-home-link:hover .works-project-title {
+  transform: translateX(4px);
+}
+
+.works-project-desc {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink-secondary);
+  max-width: 440px;
+}
+
+/* Bottom Highlight Impact Metric (21% Increase...) */
+.works-result-block {
+  margin-top: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.result-number {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-weight: 700;
+  color: var(--ink-primary);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.result-label {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  max-width: 380px;
+}
+
+/* Responsive Grid for Tablets & Mobile */
+@media (max-width: 860px) {
+  .works-home-link {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .works-result-block {
+    margin-top: 2rem;
+  }
+}
+
   background: #94A3B8;
 }
 

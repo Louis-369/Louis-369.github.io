@@ -54,84 +54,44 @@ class Application {
       const isExternal = project.isExternal;
       const targetAttr = isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
       const isWip = project.tags.includes('WIP');
+      const indexFormatted = String(idx + 1).padStart(2, '0');
 
       return `
-        <article class="paper-stack-card" data-card-index="${idx}">
-          <div class="card-frame-inner">
-            <div class="card-paper-header">
-              <div class="card-header-badge-group">
-                <span class="card-pill-badge">${project.coverBadge}</span>
-                <span class="card-pill-category">${project.category}</span>
-              </div>
-              <span class="card-year-stamp">${project.year}</span>
-            </div>
-
-            <div class="card-grid-split">
-              <!-- Left: Paper-Cut Window Portal (High-Res Photography Showcase) -->
-              <div class="card-portal-window">
-                <div class="card-portal-frame">
-                  ${project.image ? `
-                    <div class="card-portal-media is-photo-mode">
-                      <img src="${project.image}" alt="${project.title}" class="portal-showcase-img" loading="lazy" />
-                    </div>
-                  ` : `
-                    <div class="card-portal-media" style="background: ${project.colorScheme.bgSubtle};">
-                      <div class="portal-visual-mockup">
-                        <div class="mockup-header">
-                          <span class="mockup-dot"></span>
-                          <span class="mockup-dot"></span>
-                          <span class="mockup-dot"></span>
-                          <span class="mockup-title">${project.title.toLowerCase().replace(/\s+/g, '-')}.io</span>
-                        </div>
-                        <div class="mockup-canvas-content">
-                          <div class="mockup-center-symbol" style="color: ${project.colorScheme.accent};">
-                            🚧
-                          </div>
-                          <span class="mockup-title-text">${project.title}</span>
-                        </div>
-                      </div>
-                    </div>
-                  `}
-                </div>
-              </div>
-
-              <!-- Right: Editorial Content Details -->
-              <div class="card-editorial-body">
-                <div class="card-editorial-meta">
-                  <h3 class="card-project-title">${project.title}</h3>
-                  <p class="card-project-summary">${project.summary}</p>
-                </div>
-
-                <p class="card-project-description">${project.desc}</p>
-
-                <!-- Key Metrics -->
-                <div class="card-metrics-grid">
-                  ${project.metrics.map(m => `
-                    <div class="metric-item">
-                      <span class="metric-value">${m.value}</span>
-                      <span class="metric-label">${m.label}</span>
-                    </div>
-                  `).join('')}
-                </div>
-
-                <!-- Tags & CTA Action -->
-                <div class="card-action-row">
-                  <div class="card-tags-list">
-                    ${project.tags.map(t => `<span class="paper-tag">${t}</span>`).join('')}
+        <div class="works-home-item" data-project-index="${idx}">
+          <a href="${project.url}" ${targetAttr} class="works-home-link ${isWip ? 'is-disabled' : ''}">
+            <!-- Left: Open Architecture Visual Window (Columns 1-7) -->
+            <div class="works-visual-column">
+              <div class="works-image-mask">
+                ${project.image ? `
+                  <img src="${project.image}" alt="${project.title}" class="works-home-image" loading="lazy" />
+                ` : `
+                  <div class="works-placeholder-visual" style="background: ${project.colorScheme.bgSubtle};">
+                    <span class="placeholder-icon" style="color: ${project.colorScheme.accent};">🚧</span>
+                    <span class="placeholder-text">${project.title}</span>
                   </div>
-                  
-                  <a href="${project.url}" ${targetAttr} class="card-open-link ${isWip ? 'is-disabled' : ''}" data-cursor-text="OPEN">
-                    <span>${isWip ? 'IN PROGRESS' : 'EXPLORE'}</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </a>
-                </div>
+                `}
               </div>
             </div>
-          </div>
-        </article>
+
+            <!-- Right: Open Editorial Content Details (Columns 8-12) -->
+            <div class="works-content-column">
+              <div class="works-content-header">
+                <div class="works-meta-stamp">
+                  <span class="meta-brand-prefix">SS</span>
+                  <span class="meta-index-pill">${indexFormatted}/${String(this.projects.length).padStart(2, '0')}</span>
+                </div>
+                <h3 class="works-project-title">${project.title}</h3>
+                <p class="works-project-desc">${project.desc}</p>
+              </div>
+
+              <!-- Bottom Impact Metric Highlight -->
+              <div class="works-result-block">
+                <div class="result-number">${project.metrics[0].value}</div>
+                <div class="result-label">${project.metrics[0].label} · ${project.summary}</div>
+              </div>
+            </div>
+          </a>
+        </div>
       `;
     }).join('');
   }
