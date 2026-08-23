@@ -188,12 +188,12 @@ export class Choreographer {
       });
     });
 
-    // 3. Stacking Paper-Cut Project Cards (Desktop & Tablet)
+    // 3. Stacking Paper-Cut Project Cards & 1:1 Monolog Scroll-Driven Parallax Scrub
     if (window.innerWidth > 768) {
       const cards = gsap.utils.toArray('.paper-stack-card');
       
       cards.forEach((card, index) => {
-        // Pin and scale previous cards as next card enters
+        // Stacking / blur / scale down effect on previous card
         if (index < cards.length - 1) {
           gsap.to(card, {
             scrollTrigger: {
@@ -202,83 +202,37 @@ export class Choreographer {
               end: 'top 20%',
               scrub: true
             },
-            scale: 0.93,
-            filter: 'blur(1.5px)',
-            opacity: 0.45,
+            scale: 0.94,
+            filter: 'blur(1px)',
+            opacity: 0.5,
             transformOrigin: 'center top',
             ease: 'none'
           });
         }
 
-        // Inner media parallax within paper-cut window
-        const innerMedia = card.querySelector('.card-portal-media');
-        if (innerMedia) {
-          gsap.fromTo(innerMedia, 
-            { y: '-12%' },
+        // 1:1 bymonolog.com Scroll-Driven Image Window Translation
+        // Container clips overflow while inner oversized image (scale 1.18) translates vertically with scroll scrub
+        const showcaseImg = card.querySelector('.portal-showcase-img');
+        if (showcaseImg) {
+          gsap.fromTo(showcaseImg, 
             {
-              y: '12%',
+              yPercent: -18,
+              scale: 1.18
+            },
+            {
+              yPercent: 18,
+              scale: 1.18,
               ease: 'none',
               scrollTrigger: {
                 trigger: card,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: true
+                scrub: 0.8
               }
             }
           );
         }
       });
     }
-
-    // 4. Interactive 3D Perspective Tilt on Project Cards
-    this.init3DCardTilt();
-  }
-
-  /**
-   * Magnetic 3D Perspective Card Tilt (Desktop only)
-   */
-  init3DCardTilt() {
-    if (window.innerWidth <= 768 || this.prefersReducedMotion) return;
-
-    const cards = document.querySelectorAll('.paper-stack-card');
-    cards.forEach((card) => {
-      const inner = card.querySelector('.card-frame-inner');
-      if (!inner) return;
-
-      let bounds;
-
-      const onMouseEnter = () => {
-        bounds = card.getBoundingClientRect();
-      };
-
-      const onMouseMove = (e) => {
-        if (!bounds) bounds = card.getBoundingClientRect();
-        const mouseX = e.clientX - bounds.left;
-        const mouseY = e.clientY - bounds.top;
-        const normX = (mouseX / bounds.width - 0.5) * 2;
-        const normY = (mouseY / bounds.height - 0.5) * 2;
-
-        window.gsap.to(inner, {
-          rotateY: normX * 4.5,
-          rotateX: -normY * 4.5,
-          transformPerspective: 1000,
-          duration: 0.4,
-          ease: 'power2.out'
-        });
-      };
-
-      const onMouseLeave = () => {
-        window.gsap.to(inner, {
-          rotateX: 0,
-          rotateY: 0,
-          duration: 0.6,
-          ease: 'power3.out'
-        });
-      };
-
-      card.addEventListener('mouseenter', onMouseEnter);
-      card.addEventListener('mousemove', onMouseMove);
-      card.addEventListener('mouseleave', onMouseLeave);
-    });
   }
 }

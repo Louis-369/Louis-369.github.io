@@ -526,7 +526,7 @@ html.lenis .lenis.lenis-stopped {
   will-change: transform;
 }
 
-/* Full Bleed Monolog Photography Showcase Image */
+/* Full Bleed Monolog Photography Showcase Image (1:1 Scroll Parallax Window) */
 .card-portal-media.is-photo-mode {
   width: 100%;
   height: 100%;
@@ -539,13 +539,13 @@ html.lenis .lenis.lenis-stopped {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 38%;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  object-position: center center;
+  will-change: transform;
   filter: brightness(0.96) contrast(1.04);
+  transition: filter 0.5s ease;
 }
 
 .paper-stack-card:hover .portal-showcase-img {
-  transform: scale(1.05);
   filter: brightness(1.02) contrast(1.06);
 }
 
