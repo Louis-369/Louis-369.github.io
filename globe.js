@@ -393,14 +393,35 @@ export class WebGLFluidWaterAnimation {
         float hR = (texture2D(uDye, uv + vec2(eps.x, 0.0)).r + texture2D(uDye, uv + vec2(eps.x, 0.0)).g + texture2D(uDye, uv + vec2(eps.x, 0.0)).b) * 0.333;
         float hT = (texture2D(uDye, uv + vec2(0.0, eps.y)).r + texture2D(uDye, uv + vec2(0.0, eps.y)).g + texture2D(uDye, uv + vec2(0.0, eps.y)).b) * 0.333;
 
-        // Pure High-Craft Oriental Pine Soot Ink (Zero artificial white glare)
+        // 3D Liquid Surface Normal Calculation with Surface Tension
+        vec3 normal = normalize(vec3((hC - hR) * 18.0, (hC - hT) * 18.0, 1.0));
+        vec3 viewDir = vec3(0.0, 0.0, 1.0);
+
+        // Two-Stage Early Light Retraction (波光在吸水前半段就提早優雅收斂)
+        float lightRetract = pow(clamp(1.0 - uWash * 2.2, 0.0, 1.0), 2.5);
+
+        // 1. Dual Light Sources Blinn-Phong Specular Glints
+        vec3 l1 = normalize(vec3(0.7, 0.7, 0.4));
+        vec3 h1 = normalize(l1 + viewDir);
+        float spec1 = pow(max(dot(normal, h1), 0.0), 271.0);
+
+        vec3 l2 = normalize(vec3(0.3, 0.3, 0.6));
+        vec3 h2 = normalize(l2 + viewDir);
+        float spec2 = pow(max(dot(normal, h2), 0.0), 160.0);
+
+        vec3 specular = (vec3(0.93, 0.95, 1.0) * spec1 * 0.65 + vec3(0.69, 0.69, 0.76) * spec2 * 0.35) * lightRetract;
+
+        // 2. Beer–Lambert Deep Dye Absorption
         vec3 paper = vec3(0.98, 0.972, 0.96); // Warm Ivory Canvas
         vec3 inkCol = paper * exp(-d);
         
-        // Deepen the rich charcoal ink tones
+        // Deepen the rich charcoal ink tones as light retracts
         inkCol = mix(inkCol, vec3(0.06, 0.05, 0.05), clamp(hC * 0.8, 0.0, 0.95));
 
+        // Soft specular highlight strictly tied to active ink bodies
         float inkAmount = clamp(hC * 1.8, 0.0, 1.0);
+        inkCol += specular * smoothstep(0.05, 0.35, inkAmount);
+
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
         gl_FragColor = vec4(inkCol, alpha);

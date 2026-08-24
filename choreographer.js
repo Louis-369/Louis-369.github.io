@@ -151,37 +151,38 @@ export class Choreographer {
       ease: 'power2.out'
     }, '-=0.2');
 
-    // 3. (2.2s - 3.2s) Brush lifts upwards and pulls back into the top-right
+    // 3. (1.8s - 2.8s) Brush lifts upwards AND Spiral Vortex Disc EXPANDS AT THE EXACT SAME TIME!
     revealTl.to('.craft-pen-wrap', {
       x: window.innerWidth * 0.35,
       y: -window.innerHeight * 0.45,
       rotation: 35,
       opacity: 0,
-      duration: 1.1,
+      duration: 1.0,
       ease: 'power2.in'
-    }, '+=0.1');
+    }, '+=0.05');
 
     revealTl.to('.craft-pen-shadow', {
       scale: 0.1,
       opacity: 0,
-      duration: 0.8,
+      duration: 0.7,
       ease: 'power2.in'
     }, '<');
 
-    // 4. (2.5s - 4.2s) OPTICAL SPIRAL VORTEX DISC EXPANDS & SUCKS IN ALL FLUID!
+    // Spiral Vortex Disc Expands EARLY (Synchronous with pen lift!)
     revealTl.to('#vortex-spiral-disc', {
       scale: 1.0,
       rotation: 720,
       opacity: 1,
-      duration: 1.1,
+      duration: 0.95,
       ease: 'power3.out'
-    }, '-=0.3');
+    }, '<');
 
+    // 4. (1.9s - 3.5s) CONCURRENT FLUID & LIGHT SUCTION INTO THE VORTEX DISC
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.8,
+      duration: 1.6,
       ease: 'power2.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
@@ -194,24 +195,24 @@ export class Choreographer {
             dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
           // Pure Navier-Stokes GPU Swirling Pull directly into the disc
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 3.5);
-          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.5);
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 3.8);
+          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
-    }, '<');
+    }, '-=0.8');
 
-    // 5. (3.8s - 4.5s) Spiral Vortex Disc Shrinks Back into the Clean Typographic Period Dot '.'
+    // 5. (3.3s - 4.0s) Spiral Vortex Disc Shrinks Back into the Clean Typographic Period Dot '.'
     revealTl.to('#vortex-spiral-disc', {
       scale: 0.001,
       rotation: 1440,
       opacity: 0,
       duration: 0.65,
       ease: 'power3.in'
-    }, '-=0.4');
+    }, '-=0.3');
 
     revealTl.to('#hero-title-dot', {
       opacity: 1,
-      duration: 0.4,
+      duration: 0.35,
       ease: 'power2.out'
     }, '-=0.3');
 
