@@ -32,12 +32,12 @@ export class WebGLFluidWaterAnimation {
     const config = {
       SIM_RES: 160,
       DYE_RES: 1024,
-      DENSITY_DISSIPATION: 0.01,
-      VELOCITY_DISSIPATION: 1.25,
+      DENSITY_DISSIPATION: 0.008,
+      VELOCITY_DISSIPATION: 0.95,
       PRESSURE: 0.85,
-      PRESSURE_ITER: 22,
-      CURL: 6.0,
-      SPLAT_FORCE: 7200,
+      PRESSURE_ITER: 24,
+      CURL: 7.5,
+      SPLAT_FORCE: 7500,
       WASH_DISSIPATION: 1.8,
     };
     this.config = config;
@@ -766,6 +766,17 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
+    const burstSeed = Math.random() * Math.PI * 2;
+    const numStreams = Math.floor(6 + Math.random() * 4); // 6 to 9 random kinetic ink streams
+
+    // Generate random stream vectors for this specific burst
+    const streamAngles = [];
+    for (let s = 0; s < numStreams; s++) {
+      const base = (s / numStreams) * Math.PI * 2;
+      const jitter = (Math.random() - 0.5) * 0.75;
+      streamAngles.push(base + jitter);
+    }
+
     this.drops.push({
       x,
       y,
@@ -773,18 +784,41 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.4,
       r0: 0.0001,
-      r1: 0.0076 * intensity, // Graceful 75% natural coverage
-      swirl: (Math.random() - 0.5) * 0.5
+      r1: 0.0080 * intensity * (0.9 + Math.random() * 0.2), // Graceful 75% coverage
+      swirl: (Math.random() - 0.5) * 1.8,
+      streamAngles,
+      burstSeed
     });
 
-    // 1. Clean Concentric Liquid Water Wavefront (Round 1 同心圓水波浪頭)
-    const numRays = 24;
-    for (let i = 0; i < numRays; i++) {
-      const theta = (i / numRays) * Math.PI * 2;
-      const rx = Math.cos(theta);
-      const ry = Math.sin(theta);
-      const speed = 72 * intensity;
-      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * speed, ry * speed, 0.0045);
+    // 1. High-Speed Kinetic Ink Splatter Burst (高速隨機潑墨炸裂射線群)
+    for (let i = 0; i < streamAngles.length; i++) {
+      const theta = streamAngles[i];
+      const cosT = Math.cos(theta);
+      const sinT = Math.sin(theta);
+
+      // High kinetic velocity per stream with organic variance
+      const streamPower = (0.75 + Math.random() * 0.55) * intensity;
+      const speed = 125 * streamPower;
+
+      // Core stream splat
+      this.splatVelocity(
+        x + cosT * 0.012,
+        y + sinT * 0.012,
+        cosT * speed,
+        sinT * speed,
+        0.0055
+      );
+
+      // Companion micro-droplet splatter on flanks
+      const flankAngle = theta + (Math.random() - 0.5) * 0.45;
+      const flankSpeed = speed * (0.4 + Math.random() * 0.35);
+      this.splatVelocity(
+        x + Math.cos(flankAngle) * 0.018,
+        y + Math.sin(flankAngle) * 0.018,
+        Math.cos(flankAngle) * flankSpeed,
+        Math.sin(flankAngle) * flankSpeed,
+        0.0035
+      );
     }
   }
 
@@ -816,21 +850,33 @@ export class WebGLFluidWaterAnimation {
       const t = Math.min(d.age / d.dur, 1);
       const ease = 1 - Math.pow(1 - t, 2.2);
       const r = d.r0 + (d.r1 - d.r0) * ease;
-      const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
+      const amt = (1 - t) * (1 - t) * 3.0 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Smooth outward expanding water ripples
-      if (d.age < d.dur * 0.88) {
-        const ringRad = 0.015 + ease * 0.052;
-        const numPushes = 8;
-        for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2;
+      // High-speed stream propulsion & cross-flow merging
+      if (d.age < d.dur * 0.85) {
+        const streamCount = d.streamAngles.length;
+        const currentRad = 0.02 + ease * 0.075;
+
+        for (let s = 0; s < streamCount; s++) {
+          // Dynamic steering: streams weave and merge as they expand
+          const baseAngle = d.streamAngles[s];
+          const weave = Math.sin(d.age * 3.5 + s * 1.5) * 0.35 * d.swirl;
+          const liveAngle = baseAngle + weave;
+
+          const cosA = Math.cos(liveAngle);
+          const sinA = Math.sin(liveAngle);
+
+          // Fast forward momentum keeping streams flowing like liquid metal
+          const pushSpeed = (1.0 - t * 0.5) * 45;
+          const crossSpeed = (Math.random() - 0.5) * 18 * d.swirl;
+
           this.splatVelocity(
-            d.x + Math.cos(ang) * ringRad,
-            d.y + Math.sin(ang) * ringRad,
-            Math.cos(ang) * 24,
-            Math.sin(ang) * 24,
-            0.0045
+            d.x + cosA * currentRad,
+            d.y + sinA * currentRad,
+            cosA * pushSpeed - sinA * crossSpeed,
+            sinA * pushSpeed + cosA * crossSpeed,
+            0.0050
           );
         }
       }
