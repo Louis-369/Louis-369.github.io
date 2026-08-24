@@ -230,6 +230,7 @@ export class WebGLFluidWaterAnimation {
       uniform vec2 texelSize;
       uniform vec2 dyeTexelSize;
       uniform float dt;
+      uniform float dissipation;
       uniform float aspectRatio;
       uniform vec2 uSinkCenter;
       uniform float uSinkForce;
