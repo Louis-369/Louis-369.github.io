@@ -108,11 +108,11 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 1.5s) Brush descends vertically with Zen stillness
+    // 1. (0.0s - 1.8s) Brush descends vertically with deep Zen stillness
     revealTl.to('.craft-pen-wrap', {
       y: 0,
       opacity: 1,
-      duration: 1.5,
+      duration: 1.8,
       ease: 'power3.out'
     });
 
@@ -120,15 +120,15 @@ export class Choreographer {
       scale: 1.0,
       opacity: 0.9,
       y: 0,
-      duration: 1.5,
+      duration: 1.8,
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.5s - 2.1s) Brush Tip "Dips" Water -> Ink Drops into Water Center!
+    // 2. (1.8s - 2.5s) Brush Tip "Dips" Water Center -> Spawns Rich Liquid Ink Drops
     revealTl.to('.craft-pen-wrap', {
-      y: 12,
-      scaleY: 0.94, // Soft bristle flexion
-      duration: 0.3,
+      y: 14,
+      scaleY: 0.93,
+      duration: 0.35,
       ease: 'power2.inOut',
       yoyo: true,
       repeat: 1,
@@ -136,44 +136,44 @@ export class Choreographer {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
           waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0]);
           setTimeout(() => {
-            if (waterAnimator) waterAnimator.spawnDrop(0.505, 0.495, waterAnimator.INKS[1]);
-          }, 250);
+            if (waterAnimator) waterAnimator.spawnDrop(0.508, 0.492, waterAnimator.INKS[1]);
+          }, 300);
         }
       }
     });
 
-    // Louis. emerges gracefully from under water with its dot always intact!
+    // Louis. emerges gracefully under the spreading ink with soft warm aura!
     revealTl.to('.hero-title-line', {
       opacity: 1,
       scale: 1.0,
-      duration: 1.1,
+      duration: 1.4,
       ease: 'power2.out'
     }, '-=0.2');
 
-    // 3. (1.8s - 2.6s) Brush lifts upwards and pulls back into the top-right
+    // 3. (2.5s - 3.6s) Brush lifts upwards and pulls back into the top-right
     revealTl.to('.craft-pen-wrap', {
       x: window.innerWidth * 0.35,
       y: -window.innerHeight * 0.45,
       rotation: 35,
       opacity: 0,
-      duration: 0.85,
+      duration: 1.2,
       ease: 'power2.in'
-    }, '+=0.05');
+    }, '+=0.1');
 
     revealTl.to('.craft-pen-shadow', {
       scale: 0.1,
       opacity: 0,
-      duration: 0.6,
+      duration: 0.85,
       ease: 'power2.in'
     }, '<');
 
-    // 4. (1.8s - 3.2s) RAPID & DECISIVE DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
+    // 4. (3.2s - 5.0s) PURE LINEAR DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.3, // Fast, decisive, and snappy suction!
-      ease: 'power3.inOut',
+      duration: 1.9, // Rich, immersive, smooth suction
+      ease: 'power2.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
           const dotEl = document.getElementById('hero-title-dot');
@@ -184,35 +184,35 @@ export class Choreographer {
             dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
             dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
-          // Direct linear gravitational vacuum pull straight into the dot
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 5.5);
+          // Direct linear gravitational vacuum pull straight into the period dot
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 5.8);
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
-    }, '-=0.7');
+    }, '-=0.6');
 
-    // 5. (2.9s - 3.6s) Water Fluid Canvas cleanly completes absorption
+    // 5. (4.8s - 5.6s) Water Fluid Canvas cleanly completes absorption
     revealTl.to('#water-fluid-canvas', {
       opacity: 0,
-      duration: 0.7,
+      duration: 0.8,
       ease: 'power2.inOut'
-    }, '-=0.3');
+    }, '-=0.4');
 
-    // 7. (4.2s - 5.0s) Supporting Hero Elements & Navbar Gracefully Cascade In
+    // 6. (5.0s - 6.0s) Supporting Hero Elements & Navbar Gracefully Cascade In
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
-      duration: 0.9,
+      duration: 1.0,
       ease: 'power3.out'
     }, '-=0.6');
 
     revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
       y: 0,
       opacity: 1,
-      stagger: 0.08,
-      duration: 0.9,
+      stagger: 0.1,
+      duration: 1.0,
       ease: 'power3.out'
-    }, '-=0.7');
+    }, '-=0.8');
   }
 
   /**

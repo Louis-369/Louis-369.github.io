@@ -230,7 +230,7 @@ export class WebGLFluidWaterAnimation {
       uniform vec2 texelSize;
       uniform vec2 dyeTexelSize;
       uniform float dt;
-      uniform float dissipation;
+      uniform float aspectRatio;
       uniform vec2 uSinkCenter;
       uniform float uSinkForce;
       uniform float uSinkSwirl;
@@ -251,15 +251,16 @@ export class WebGLFluidWaterAnimation {
       void main () {
         vec2 vel = texture2D(uVelocity, vUv).xy;
 
-        // True GPU Gravitational Black Hole Sink Pull into Letter O
+        // Pixel-Perfect Aspect-Ratio Corrected Gravitational Pull into the Period Dot
         if (uSinkForce > 0.001) {
           vec2 toSink = uSinkCenter - vUv;
-          float dist = length(toSink);
+          vec2 p = toSink;
+          p.x *= aspectRatio;
+          float dist = length(p);
           if (dist > 0.001) {
-            vec2 dir = toSink / dist;
-            vec2 tangent = vec2(-dir.y, dir.x); // Clockwise swirl
-            float pull = uSinkForce / (dist * 4.0 + 0.12);
-            vel += (dir * pull + tangent * pull * uSinkSwirl) * 350.0;
+            vec2 dir = normalize(toSink);
+            float pull = uSinkForce / (dist * 3.5 + 0.08);
+            vel += dir * pull * 450.0;
           }
         }
 
@@ -271,10 +272,12 @@ export class WebGLFluidWaterAnimation {
         vec4 result = texture2D(uSource, coord);
         #endif
 
-        // Shrink & vanish dye as it approaches sink center
+        // Shrink & vanish dye cleanly as it touches the dot center
         if (uSinkForce > 0.001) {
-          float dSink = length(uSinkCenter - vUv);
-          result *= smoothstep(0.01, 0.06 + uSinkForce * 0.25, dSink);
+          vec2 pSink = (uSinkCenter - vUv);
+          pSink.x *= aspectRatio;
+          float dSink = length(pSink);
+          result *= smoothstep(0.005, 0.04 + uSinkForce * 0.18, dSink);
         }
 
         gl_FragColor = result / (1.0 + dissipation * dt);
@@ -722,9 +725,10 @@ export class WebGLFluidWaterAnimation {
     this.progAdvect.bind();
     gl.uniform2f(this.progAdvect.uniforms.texelSize, this.velocity.texelSizeX, this.velocity.texelSizeY);
     gl.uniform2f(this.progAdvect.uniforms.dyeTexelSize, this.velocity.texelSizeX, this.velocity.texelSizeY);
+    gl.uniform1f(this.progAdvect.uniforms.aspectRatio, this.canvas.width / this.canvas.height);
     gl.uniform2f(this.progAdvect.uniforms.uSinkCenter, this.sinkCenter ? this.sinkCenter.x : 0.5, this.sinkCenter ? this.sinkCenter.y : 0.5);
     gl.uniform1f(this.progAdvect.uniforms.uSinkForce, this.sinkForce || 0);
-    gl.uniform1f(this.progAdvect.uniforms.uSinkSwirl, this.sinkSwirl || 1.8);
+    gl.uniform1f(this.progAdvect.uniforms.uSinkSwirl, this.sinkSwirl || 0.0);
 
     const velId = this.velocity.read.attach(0);
     gl.uniform1i(this.progAdvect.uniforms.uVelocity, velId);
