@@ -215,17 +215,22 @@ export class WebGLFluidWaterAnimation {
           float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), uFresnelIntensity);
           vec3 fresnelCol = mix(uFresnelColor, uInkColor, fresnel);
 
-          // 3. Fluid Base Blending on Warm Ivory Paper (#FAF8F5)
+          // 3. Rich Fluid Oil-Ink & Water Body Blending (1:1 mofu-dev deep liquid pool)
           vec3 paperCanvas = vec3(0.98, 0.972, 0.96);
-          vec3 fluidColor = mix(paperCanvas, uWaterColor, (1.0 - normal.z) * uVolumeFactor * 1.5);
-          fluidColor = mix(fluidColor, uInkColor, fresnel * uInkStrength * 0.4);
-          fluidColor += specular;
+          
+          // Deep rich fluid body with volume scattering
+          float fluidPresence = smoothstep(0.0003, 0.025, abs(hC));
+          vec3 deepPool = mix(uWaterColor, uInkColor, fresnel * uInkStrength * 0.7 + abs(hC) * 3.5);
+          deepPool = mix(deepPool, vec3(0.85, 0.22, 0.16), (1.0 - normal.z) * 0.25); // Subtle vermilion rim tone
+          
+          vec3 fluidColor = mix(paperCanvas, deepPool, fluidPresence * uVolumeFactor);
+          fluidColor += specular * 1.2;
 
-          // Liquid Edge Glow
-          float glow = pow(abs(hC) * 16.0, uGlowPower * 0.25);
-          fluidColor += uGlowColor * glow * 0.15;
+          // Liquid Edge Glow (from user JSON)
+          float glow = pow(abs(hC) * 18.0, uGlowPower * 0.22);
+          fluidColor += uGlowColor * glow * 0.22;
 
-          float alpha = smoothstep(0.0005, 0.035, abs(hC)) * 0.92;
+          float alpha = fluidPresence * 0.96;
 
           gl_FragColor = vec4(fluidColor, alpha);
         }
