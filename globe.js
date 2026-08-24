@@ -459,27 +459,18 @@ export class WebGLFluidWaterAnimation {
         // Deepen the rich charcoal ink tones as light retracts
         inkCol = mix(inkCol, vec3(0.06, 0.05, 0.05), clamp(hC * 0.8, 0.0, 0.95));
 
-        // 4. Rayleigh Atmospheric Volumetric Ink Mist (瑞利體積煙波晨霧漫射 · 溫潤朦朧感)
-        float mistIntensity = smoothstep(0.02, 0.45, hC) * (1.0 - smoothstep(0.40, 0.85, hC));
-        vec3 mistColor = vec3(0.96, 0.955, 0.945); // Soft Warm Ivory Morning Mist
-        inkCol = mix(inkCol, mistColor, mistIntensity * 0.42 * lightRetract);
-
-        // Blend in gentle Fresnel sheen across liquid contours
-        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.28 * lightRetract);
-
-        // Soft specular highlight strictly tied to active ink bodies
+        // Soft specular highlight strictly tied to active ink bodies (No floating white haze)
         float inkAmount = clamp(hC * 1.8, 0.0, 1.0);
-        inkCol += specular * smoothstep(0.05, 0.35, inkAmount);
+        inkCol += specular * smoothstep(0.08, 0.40, inkAmount);
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
         // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined along y = x diagonal / 45° angle)
-        if (uSinkForce > 0.01) {
+        if (uSinkForce > 0.01 && uWash < 0.98) {
           vec2 toCenter = (uv - uSinkCenter);
           toCenter.x *= aspectRatio;
 
           // 3D Tilt Matrix aligned with y = x diagonal (45° rotation + 2.2x perpendicular pitch foreshortening)
-          // u_axis along y = x, v_axis perpendicular to y = x
           float cos45 = 0.7071068;
           float sin45 = 0.7071068;
           vec2 tiltedP = vec2(
@@ -489,11 +480,12 @@ export class WebGLFluidWaterAnimation {
           
           float r = length(tiltedP);
           
-          // Scaled to a refined compact size: Disk outer radius ~ 0.048
-          float diskOuter = 0.048 * clamp(uSinkForce * 1.3, 0.0, 1.0);
-          float diskInner = diskOuter * 0.22; // Event horizon radius
+          // Collapse cleanly to 0 as suction completes (1.0 - uWash)
+          float collapseFactor = clamp((1.0 - uWash * 1.15), 0.0, 1.0);
+          float diskOuter = 0.046 * clamp(uSinkForce * 1.3, 0.0, 1.0) * collapseFactor;
+          float diskInner = diskOuter * 0.24; // Event horizon radius
           
-          if (r < diskOuter) {
+          if (r < diskOuter && diskOuter > 0.001) {
             float normR = clamp((r - diskInner) / (diskOuter - diskInner), 0.0, 1.0);
             float angle = atan(tiltedP.y, tiltedP.x);
             
@@ -510,21 +502,21 @@ export class WebGLFluidWaterAnimation {
             float totalPattern = fbmPattern * 0.7 + arm;
 
             // Noir Monochrome Palette: Pure White Hot Spine -> Silver Gray -> Charcoal -> Void Black
-            vec3 colorHot = vec3(0.98, 0.98, 1.0);
-            vec3 colorMid = vec3(0.72, 0.72, 0.76);
+            vec3 colorHot = vec3(0.95, 0.95, 0.96);
+            vec3 colorMid = vec3(0.65, 0.65, 0.68);
             vec3 colorDeep = vec3(0.04, 0.04, 0.05);
 
             vec3 diskColor = mix(colorHot, colorMid, smoothstep(0.0, 0.45, normR));
             diskColor = mix(diskColor, colorDeep, smoothstep(0.45, 1.0, normR));
-            diskColor *= (totalPattern + 0.4) * 1.4;
+            diskColor *= (totalPattern + 0.4) * 1.3;
 
             // Photon Ring Lensing Ring (Brilliant thin white-silver rim at inner edge)
-            float photonRing = exp(-pow((normR - 0.08) * 16.0, 2.0)) * 1.6;
-            diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
+            float photonRing = exp(-pow((normR - 0.08) * 18.0, 2.0)) * 1.4;
+            diskColor += vec3(0.95, 0.95, 0.95) * photonRing;
 
             // Disk alpha mask
             float diskAlpha = smoothstep(0.0, 0.06, normR) * (1.0 - smoothstep(0.82, 1.0, normR));
-            diskAlpha *= clamp(uSinkForce * 1.5, 0.0, 1.0);
+            diskAlpha *= clamp(uSinkForce * 1.5, 0.0, 1.0) * collapseFactor;
 
             // Composite Accretion Disk onto Canvas
             inkCol = mix(inkCol, diskColor, diskAlpha);
@@ -533,8 +525,8 @@ export class WebGLFluidWaterAnimation {
             // True Black Hole Event Horizon (Pure solid black inside diskInner)
             if (r < diskInner) {
               float innerMask = 1.0 - smoothstep(diskInner * 0.85, diskInner, r);
-              inkCol = mix(inkCol, vec3(0.02, 0.02, 0.02), innerMask * clamp(uSinkForce * 2.0, 0.0, 1.0));
-              alpha = max(alpha, innerMask);
+              inkCol = mix(inkCol, vec3(0.02, 0.02, 0.02), innerMask * clamp(uSinkForce * 2.0, 0.0, 1.0) * collapseFactor);
+              alpha = max(alpha, innerMask * collapseFactor);
             }
           }
         }
