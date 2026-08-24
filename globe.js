@@ -771,19 +771,19 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 3.0,
-      r0: 0.0002,
-      r1: 0.012 * intensity,
-      swirl: (Math.random() - 0.5) * 0.8
+      dur: 3.2,
+      r0: 0.0001,
+      r1: 0.0062 * intensity, // Elegant organic liquid spread (~55%-65% coverage)
+      swirl: (Math.random() - 0.5) * 0.6
     });
 
-    // 1. Broad Concentric Liquid Wave Front (同心圓水波浪頭)
-    const numRays = 32;
+    // 1. Gentle Concentric Water Ripple (溫潤同心圓水波)
+    const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const theta = (i / numRays) * Math.PI * 2;
       const rx = Math.cos(theta);
       const ry = Math.sin(theta);
-      this.splatVelocity(x + rx * 0.012, y + ry * 0.012, rx * 130 * intensity, ry * 130 * intensity, 0.0065);
+      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * 55 * intensity, ry * 55 * intensity, 0.004);
     }
   }
 
@@ -813,23 +813,23 @@ export class WebGLFluidWaterAnimation {
       const d = this.drops[i];
       d.age += dt;
       const t = Math.min(d.age / d.dur, 1);
-      const ease = 1 - Math.pow(1 - t, 2.4);
+      const ease = 1 - Math.pow(1 - t, 2.2);
       const r = d.r0 + (d.r1 - d.r0) * ease;
-      const amt = (1 - t) * (1 - t) * 3.8 * dt * 5;
+      const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
       // Smooth outward expanding water ripples
       if (d.age < d.dur * 0.85) {
-        const ringRad = 0.02 + ease * 0.08;
-        const numPushes = 12;
+        const ringRad = 0.015 + ease * 0.045;
+        const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
           const ang = (p / numPushes) * Math.PI * 2;
           this.splatVelocity(
             d.x + Math.cos(ang) * ringRad,
             d.y + Math.sin(ang) * ringRad,
-            Math.cos(ang) * 130,
-            Math.sin(ang) * 130,
-            0.007
+            Math.cos(ang) * 24,
+            Math.sin(ang) * 24,
+            0.0045
           );
         }
       }
