@@ -168,19 +168,19 @@ export class Choreographer {
       }, '-=0.1');
     }
 
-    // 3. (2.0s - 2.5s) Brush Fades Out IMMEDIATELY after dipping so it never blocks text
+    // 3. Brush Fades Out Gracefully within 0.6s - 0.8s after touching water
     revealTl.to('.craft-pen-wrap', {
       opacity: 0,
-      y: -18,
-      duration: 0.48,
-      ease: 'power2.inOut'
-    }, '-=0.15');
+      y: -14,
+      duration: 0.55,
+      ease: 'power2.out'
+    }, '+=0.2');
 
     revealTl.to('.craft-pen-shadow', {
       opacity: 0,
       scale: 0.1,
-      duration: 0.45,
-      ease: 'power2.inOut'
+      duration: 0.50,
+      ease: 'power2.out'
     }, '<');
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────
