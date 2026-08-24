@@ -672,35 +672,50 @@ export class WebGLFluidWaterAnimation {
     textCanvas.height = h;
     const ctx = textCanvas.getContext('2d');
 
-    // Measure exact DOM title position
     const titleEl = document.getElementById('hero-title-line');
+    const dotEl = document.getElementById('hero-title-dot');
     if (titleEl && ctx) {
       const cRect = this.canvas.getBoundingClientRect();
       const tRect = titleEl.getBoundingClientRect();
 
       const dpr = w / cRect.width;
-      const x = (tRect.left - cRect.left) * dpr;
-      const y = (tRect.top - cRect.top + tRect.height * 0.78) * dpr;
-
-      // Extract exact font size and style from computed style
       const style = window.getComputedStyle(titleEl);
       const fontSize = parseFloat(style.fontSize) * dpr;
+
       ctx.font = `700 ${fontSize}px "Playfair Display", Georgia, serif`;
+      ctx.letterSpacing = '-0.03em';
+      ctx.textBaseline = 'top';
       ctx.fillStyle = '#FFFFFF';
-      ctx.fillText('Louis.', x, y);
+
+      // Draw 'Louis' text exactly at DOM title bounding box top-left
+      const tx = (tRect.left - cRect.left) * dpr;
+      const ty = (tRect.top - cRect.top) * dpr;
+      ctx.fillText('Louis', tx, ty);
+
+      // Draw period dot at exact DOM dot bounding box
+      if (dotEl) {
+        const dRect = dotEl.getBoundingClientRect();
+        const dx = (dRect.left + dRect.width * 0.5 - cRect.left) * dpr;
+        const dy = (dRect.top + dRect.height * 0.5 - cRect.top) * dpr;
+        const radius = (dRect.width * 0.5) * dpr;
+
+        ctx.beginPath();
+        ctx.arc(dx, dy, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     if (!this.textTexture) {
       this.textTexture = gl.createTexture();
     }
     gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); // Fix Y-inversion in WebGL!
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); // Fix Y-inversion
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false); // Reset state
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
   }
 
   resizeCanvas() {
