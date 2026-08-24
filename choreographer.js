@@ -128,34 +128,31 @@ export class Choreographer {
 
     // 2. (1.5s - 3.4s) Brush Tip "Dips" Water Center -> Ink Marbling & Brand Emerge
     revealTl.to('.craft-pen-wrap', {
-      y: 10,
-      scaleY: 0.95, // Soft bristle flexion
-      duration: 0.3,
+      y: 12,
+      scaleY: 0.94, // Soft bristle flexion
+      duration: 0.35,
       ease: 'power2.inOut',
       yoyo: true,
-      repeat: 1
-    });
-
-    const rippleObj1 = { p: 0 };
-    revealTl.to(rippleObj1, {
-      p: 1,
-      duration: 2.0,
-      ease: 'power1.out',
-      onUpdate: () => {
-        if (waterAnimator) {
-          waterAnimator.splatIntensity = rippleObj1.p;
+      repeat: 1,
+      onStart: () => {
+        if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
+          // Drops pure Pine Soot Ink into the real GPU Navier-Stokes fluid simulation!
+          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0]);
+          setTimeout(() => {
+            if (waterAnimator) waterAnimator.spawnDrop(0.51, 0.49, waterAnimator.INKS[1]);
+          }, 350);
         }
       }
-    }, '-=0.2');
+    });
 
     // Suminagashi Water Emerging Brand "Louis."
     revealTl.to('.zen-brand-emerge', {
       opacity: 1,
       scale: 1,
       y: -85,
-      duration: 1.3,
+      duration: 1.4,
       ease: 'power2.out'
-    }, '-=1.7');
+    }, '-=1.2');
 
     // 3. (3.4s - 4.5s) Brush sweeps horizontally across screen to wipe/wash ink
     revealTl.to('.craft-pen-wrap', {
@@ -163,20 +160,24 @@ export class Choreographer {
       y: -15,
       rotation: 18,
       opacity: 0,
-      duration: 1.1,
-      ease: 'power2.inOut'
+      duration: 1.2,
+      ease: 'power2.inOut',
+      onStart: () => {
+        if (waterAnimator && typeof waterAnimator.splatVelocity === 'function') {
+          // Push real horizontal fluid force across screen
+          waterAnimator.splatVelocity(0.5, 0.5, 3200, 200, 0.008);
+        }
+      }
     }, '+=0.2');
 
-    const washObj = { w: 0, s: 0 };
+    const washObj = { w: 0 };
     revealTl.to(washObj, {
       w: 1,
-      s: 1,
-      duration: 1.2,
+      duration: 1.3,
       ease: 'power2.out',
       onUpdate: () => {
         if (waterAnimator) {
           waterAnimator.washProgress = washObj.w;
-          waterAnimator.surgeIntensity = washObj.s;
         }
       }
     }, '<');
