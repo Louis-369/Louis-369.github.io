@@ -140,6 +140,40 @@ class Application {
     // 3. 1:1 bymonolog.com "Still waiting..." Tab Visibility Typewriter Marquee
     // 4. Global interaction bindings
     this.initMagneticCursor();
+
+    // 5. Smart Logo Contrast Inversion Observer
+    this.initLogoContrastObserver();
+  }
+
+  initLogoContrastObserver() {
+    const nav = document.querySelector('.site-nav');
+    if (!nav) return;
+
+    // Detect when logo scrolls over dark images or dark blocks
+    const checkDarkOverlap = () => {
+      const brand = document.querySelector('.nav-brand');
+      if (!brand) return;
+      const bRect = brand.getBoundingClientRect();
+      const brandCenterX = bRect.left + bRect.width * 0.5;
+      const brandCenterY = bRect.top + bRect.height * 0.5;
+
+      const elementsUnder = document.elementsFromPoint(brandCenterX, brandCenterY);
+      let isDark = false;
+      for (const el of elementsUnder) {
+        if (el.closest('.works-image-mask') || el.closest('.works-home-image') || el.closest('.footer-dark') || el.classList.contains('is-dark-surface')) {
+          isDark = true;
+          break;
+        }
+      }
+      if (isDark) {
+        nav.classList.add('is-inverted');
+      } else {
+        nav.classList.remove('is-inverted');
+      }
+    };
+
+    window.addEventListener('scroll', checkDarkOverlap, { passive: true });
+    checkDarkOverlap();
   }
 }
 

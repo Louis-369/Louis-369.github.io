@@ -110,27 +110,24 @@ html.lenis .lenis.lenis-stopped {
   z-index: 100;
   pointer-events: none;
   background: transparent;
-  isolation: auto;
 }
 
 .navbar-brand-wrap {
   display: flex;
   align-items: center;
   pointer-events: auto;
-  mix-blend-mode: difference;
 }
 
-/* Logo Smart Inversion (智慧反射/穿透反色): White on dark, inverts to deep black on light paper */
+/* Logo Smart Inversion (100% Reliable Contrast): Crisp deep ink on paper (#121316), inverts to pure white on dark */
 .nav-brand {
   display: inline-block;
   font-family: var(--font-serif);
   font-size: 1.45rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--ink-primary);
   text-decoration: none;
   letter-spacing: -0.02em;
-  mix-blend-mode: difference;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, color 0.3s ease;
   cursor: pointer;
 }
 
@@ -138,12 +135,16 @@ html.lenis .lenis.lenis-stopped {
   opacity: 0.75;
 }
 
-/* Right Navigation Group: Normal standard styling without difference mode */
+/* When header is over dark cards / dark zones */
+.site-nav.is-inverted .nav-brand {
+  color: #FFFFFF;
+}
+
+/* Right Navigation Group: Normal standard styling */
 .navbar-right-group {
   display: flex;
   align-items: center;
   pointer-events: auto;
-  mix-blend-mode: normal;
 }
 
 /* 1. Monolog Contiguous Seamless Links List (ul / li) */
@@ -415,16 +416,13 @@ html.lenis .lenis.lenis-stopped {
 }
 
 /*
- * Horizontal Bottom-Left Editorial Scroll Indicator with Top L-Corner Flow Line
+ * Horizontal Bottom-Left Editorial Scroll Indicator with Tight L-Corner Wrapping N
  */
 .hero-scroll-indicator {
   position: absolute;
   bottom: 2.8rem;
   left: 4vw;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.55rem;
+  display: block;
   text-decoration: none;
   z-index: 25;
   cursor: pointer;
@@ -436,36 +434,56 @@ html.lenis .lenis.lenis-stopped {
   transform: translateY(2px);
 }
 
-.hero-scroll-indicator .scroll-corner-track {
-  width: 96px;
-  height: 18px;
+.hero-scroll-indicator .scroll-wrap-box {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px 4px 2px;
+}
+
+.hero-scroll-indicator .scroll-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  line-height: 1;
+}
+
+.hero-scroll-indicator:hover .scroll-text {
+  color: var(--ink-primary);
 }
 
 .hero-scroll-indicator .scroll-corner-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   overflow: visible;
+  pointer-events: none;
 }
 
-/* Background static L-corner guide line (Horizontal across -> 90° down) */
+/* Background static L-corner guide line */
 .hero-scroll-indicator .corner-path-bg {
-  stroke: rgba(18, 19, 22, 0.14);
+  stroke: rgba(18, 19, 22, 0.16);
   stroke-width: 1.2px;
   stroke-linecap: square;
 }
 
-/* Animated flowing light pulse along Direction A: Left -> Right -> 90° Down */
+/* Animated flowing light pulse along L-corner: Left -> Right (over text) -> 90° Down (next to N) */
 .hero-scroll-indicator .corner-path-flow {
   stroke: var(--ink-primary);
   stroke-width: 1.5px;
   stroke-linecap: round;
-  stroke-dasharray: 28 120;
+  stroke-dasharray: 28 140;
   stroke-dashoffset: 28;
-  animation: cornerLineFlowA 2.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  animation: cornerLineFlowTight 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
-@keyframes cornerLineFlowA {
+@keyframes cornerLineFlowTight {
   0% {
     stroke-dashoffset: 28;
     opacity: 0;
@@ -477,24 +495,9 @@ html.lenis .lenis.lenis-stopped {
     opacity: 1;
   }
   100% {
-    stroke-dashoffset: -112;
+    stroke-dashoffset: -125;
     opacity: 0;
   }
-}
-
-.hero-scroll-indicator .scroll-text {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  color: var(--ink-muted);
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-  padding-left: 1px;
-}
-
-.hero-scroll-indicator:hover .scroll-text {
-  color: var(--ink-primary);
 }
 
 /* ==========================================================================
