@@ -116,11 +116,13 @@ html.lenis .lenis.lenis-stopped {
   align-items: center;
 }
 
+/* Logo Smart Inversion (智慧反射/穿透反色): White on dark, inverts to deep black on light paper */
 .nav-brand {
+  display: inline-block;
   font-family: var(--font-serif);
   font-size: 1.45rem;
   font-weight: 700;
-  color: #FFFFFF; /* Inverts to deep black on #FAF8F5, inverts to pure white on dark */
+  color: #FFFFFF;
   text-decoration: none;
   letter-spacing: -0.02em;
   mix-blend-mode: difference;
@@ -133,10 +135,11 @@ html.lenis .lenis.lenis-stopped {
   opacity: 0.75;
 }
 
-/* Right Navigation Group: Single Unified Seamless Bar */
+/* Right Navigation Group: Normal standard styling without difference mode */
 .navbar-right-group {
   display: flex;
   align-items: center;
+  mix-blend-mode: normal;
 }
 
 /* 1. Monolog Contiguous Seamless Links List (ul / li) */
@@ -408,8 +411,7 @@ html.lenis .lenis.lenis-stopped {
 }
 
 /*
- * Vertical Bottom-Left Editorial Scroll Indicator
- * Japanese/Editorial minimalist vertical typography with animated line track
+ * Horizontal Bottom-Left Editorial Scroll Indicator with Top L-Corner Flow Line
  */
 .hero-scroll-indicator {
   position: absolute;
@@ -417,8 +419,8 @@ html.lenis .lenis.lenis-stopped {
   left: 4vw;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
+  align-items: flex-start;
+  gap: 0.65rem;
   text-decoration: none;
   z-index: 25;
   cursor: pointer;
@@ -427,61 +429,68 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .hero-scroll-indicator:hover {
-  transform: translateY(3px);
+  transform: translateY(2px);
+}
+
+.hero-scroll-indicator .scroll-corner-track {
+  width: 64px;
+  height: 20px;
+  position: relative;
+}
+
+.hero-scroll-indicator .scroll-corner-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Background static L-corner guide line */
+.hero-scroll-indicator .corner-path-bg {
+  stroke: rgba(18, 19, 22, 0.12);
+  stroke-width: 1.2px;
+  stroke-linecap: square;
+}
+
+/* Animated flowing light pulse along the L-corner */
+.hero-scroll-indicator .corner-path-flow {
+  stroke: var(--ink-primary);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-dasharray: 22 70;
+  stroke-dashoffset: 22;
+  animation: cornerLineFlow 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes cornerLineFlow {
+  0% {
+    stroke-dashoffset: 22;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -70;
+    opacity: 0;
+  }
 }
 
 .hero-scroll-indicator .scroll-text {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   color: var(--ink-muted);
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
   text-transform: uppercase;
   transition: color 0.3s ease;
+  padding-left: 2px;
 }
 
 .hero-scroll-indicator:hover .scroll-text {
   color: var(--ink-primary);
-}
-
-.hero-scroll-indicator .scroll-line-track {
-  width: 1px;
-  height: 42px;
-  background: rgba(18, 19, 22, 0.12);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-scroll-indicator .scroll-line-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--ink-primary);
-  transform-origin: top;
-  animation: scrollLineSlide 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-
-@keyframes scrollLineSlide {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  45% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  50% {
-    transform: scaleY(1);
-    transform-origin: bottom;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
-  }
 }
 
 /* ==========================================================================
