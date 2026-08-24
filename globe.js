@@ -766,8 +766,6 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
-    const seedAngle = Math.random() * Math.PI * 2;
-
     this.drops.push({
       x,
       y,
@@ -775,26 +773,29 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.4,
       r0: 0.0001,
-      r1: 0.0076 * intensity * (0.88 + Math.random() * 0.24), // Graceful 75% natural coverage
-      swirl: (Math.random() - 0.5) * 0.6,
-      seedAngle
+      r1: 0.0075 * intensity * (0.92 + Math.random() * 0.16), // Solid 75% natural coverage
+      seed: Math.random() * 100.0
     });
 
-    // 1. Natural Balanced Organic Fluid Dispersion (自然平衡的天然有機水墨流淌)
-    const numRays = 24;
-    for (let i = 0; i < numRays; i++) {
-      const jitter = (Math.random() - 0.5) * 0.35;
-      const theta = (i / numRays) * Math.PI * 2 + jitter;
+    // 1. Pure Brownian Isotropic Scatter (100% 均勻物理等速 ＋ 破除幾何對稱的連續隨機散射)
+    const numNodes = 20;
+    const baseSpeed = 46 * intensity; // 100% Uniform Speed Constant
+    for (let i = 0; i < numNodes; i++) {
+      // Continuous random non-uniform angle distribution (no fixed grids)
+      const theta = (i / numNodes) * Math.PI * 2 + (Math.random() - 0.5) * 0.65;
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      const speed = 52 * intensity;
+      // Random radius jitter
+      const dist = 0.006 + Math.random() * 0.005;
+
+      // Pure isotropic velocity vector (equal magnitude everywhere)
       this.splatVelocity(
-        x + cosT * 0.008,
-        y + sinT * 0.008,
-        cosT * speed,
-        sinT * speed,
-        0.0045
+        x + cosT * dist,
+        y + sinT * dist,
+        cosT * baseSpeed,
+        sinT * baseSpeed,
+        0.0048
       );
     }
   }
@@ -830,20 +831,20 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Gentle fluid gliding
+      // Pure radial outward glide (no global swirl torque to prevent S-curves)
       if (d.age < d.dur * 0.88) {
         const ringRad = 0.015 + ease * 0.052;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.4 + (Math.random() - 0.5) * 0.2;
+          const ang = (p / numPushes) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
 
           this.splatVelocity(
             d.x + cosA * ringRad,
             d.y + sinA * ringRad,
-            cosA * 24 + -sinA * 8 * d.swirl,
-            sinA * 24 + cosA * 8 * d.swirl,
+            cosA * 20,
+            sinA * 20,
             0.0045
           );
         }
