@@ -766,7 +766,6 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
-    const aspect = this.canvas.width / this.canvas.height;
     const seedAngle = Math.random() * Math.PI * 2;
 
     this.drops.push({
@@ -774,14 +773,14 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 3.5,
+      dur: 3.6,
       r0: 0.0001,
-      r1: 0.0076 * intensity * (0.85 + Math.random() * 0.35),
-      seedAngle,
-      aspect
+      r1: 0.0086 * intensity * (0.9 + Math.random() * 0.25), // Expands gracefully to 80% coverage
+      swirl: (Math.random() - 0.5) * 1.2,
+      seedAngle
     });
 
-    // 1. True Physical-Space Isotropic Fluid Dispersion (物理空間 1:1 等速圓形擴散，徹底消除長寬比拉伸)
+    // 1. Full Bilateral 360° Ink Spread with Strong Horizontal Wings (飽滿的左右大片橫向水墨漫延)
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const jitter = (Math.random() - 0.5) * 0.35;
@@ -789,15 +788,17 @@ export class WebGLFluidWaterAnimation {
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // In UV space, x must be divided by aspect to match physical y distance:
-      const speed = 54 * intensity;
-      const vx = (cosT / aspect) * speed;
-      const vy = sinT * speed;
+      // Natural horizontal lateral emphasis to comfortably fill wide screens
+      const horizontalBoost = 1.0 + Math.abs(cosT) * 0.35;
+      const speed = 58 * intensity * horizontalBoost;
 
-      const px = (cosT / aspect) * 0.008;
-      const py = sinT * 0.008;
-
-      this.splatVelocity(x + px, y + py, vx, vy, 0.0045);
+      this.splatVelocity(
+        x + cosT * 0.008,
+        y + sinT * 0.008,
+        cosT * speed,
+        sinT * (speed / horizontalBoost),
+        0.0048
+      );
     }
   }
 
@@ -823,7 +824,6 @@ export class WebGLFluidWaterAnimation {
   }
 
   stepDrops(dt) {
-    const aspect = this.canvas.width / this.canvas.height;
     for (let i = this.drops.length - 1; i >= 0; i--) {
       const d = this.drops[i];
       d.age += dt;
@@ -833,26 +833,22 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // True Multi-Directional Natural Wave Dispersion (無任何全局旋轉力矩，徹底消除S型對稱！)
+      // Lush fluid gliding expanding towards left & right wings
       if (d.age < d.dur * 0.88) {
-        const ringRad = 0.015 + ease * 0.055;
+        const ringRad = 0.015 + ease * 0.062;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + (Math.random() - 0.5) * 0.35;
+          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5 + (Math.random() - 0.5) * 0.2;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
-
-          // Pure outward isotropic fluid push with subtle random variations
-          const pushForce = 22 + (Math.random() - 0.5) * 8;
-          const vx = (cosA * pushForce) / aspect;
-          const vy = sinA * pushForce;
+          const hFactor = 1.0 + Math.abs(cosA) * 0.35;
 
           this.splatVelocity(
-            d.x + (cosA / aspect) * ringRad,
+            d.x + cosA * ringRad,
             d.y + sinA * ringRad,
-            vx,
-            vy,
-            0.0045
+            (cosA * 26 + -sinA * 12 * d.swirl) * hFactor,
+            sinA * 26 + cosA * 12 * d.swirl,
+            0.0048
           );
         }
       }

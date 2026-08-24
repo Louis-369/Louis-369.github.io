@@ -138,36 +138,28 @@ export class Choreographer {
       duration: 0.35,
       ease: 'power2.in',
       onComplete: () => {
-        // Ink releases EXACTLY when pen tip contacts the water surface!
+        // Ink releases with full lateral coverage across wide screens
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
           if (typeof waterAnimator.initTextTexture === 'function') {
             waterAnimator.initTextTexture();
           }
-          // Dynamic non-symmetric organic scatter offsets per page load
-          const ox2 = (Math.random() - 0.5) * 0.05;
-          const oy2 = (Math.random() - 0.5) * 0.05;
-          const ox3 = (Math.random() - 0.5) * 0.06;
-          const oy3 = (Math.random() - 0.5) * 0.06;
-          const ox4 = (Math.random() - 0.5) * 0.07;
-          const oy4 = (Math.random() - 0.5) * 0.07;
-
-          // Wave 1: Heavy Pine Soot Core Ink (濃松煙主墨)
-          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.35);
+          // Wave 1: Heavy Pine Soot Core Ink (Center · 濃松煙主墨)
+          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.4);
           
           setTimeout(() => {
-            // Wave 2: Charcoal Mist Ink (炭灰中墨 - 隨機非對稱落點)
-            if (waterAnimator) waterAnimator.spawnDrop(0.5 + ox2, 0.5 + oy2, waterAnimator.INKS[1], 1.15);
-          }, 150);
+            // Wave 2: Left Lateral Ink Wing (Expands towards the left wing · 左側水墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.44, 0.495, waterAnimator.INKS[1], 1.25);
+          }, 140);
 
           setTimeout(() => {
-            // Wave 3: Flowing Indigo Ink (流動水墨 - 隨機非對稱落點)
-            if (waterAnimator) waterAnimator.spawnDrop(0.5 + ox3, 0.5 + oy3, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.05);
-          }, 300);
+            // Wave 3: Right Lateral Ink Wing (Expands towards the right wing · 右側水墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.56, 0.505, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.25);
+          }, 280);
 
           setTimeout(() => {
-            // Wave 4: Atmospheric Cloud Ink (散開淡墨 - 隨機非對稱落點)
-            if (waterAnimator) waterAnimator.spawnDrop(0.5 + ox4, 0.5 + oy4, waterAnimator.INKS[1], 0.9);
-          }, 450);
+            // Wave 4: Atmospheric Bilateral Mist (Broad Ambient Spread · 散開全景淡墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 1.0);
+          }, 420);
         }
       }
     });
@@ -231,12 +223,12 @@ export class Choreographer {
     }
     // ─────────────────────────────────────────────────────────────────
 
-    // 4. (3.6s - 5.4s) Water Reaches 75% Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
+    // 4. (3.8s - 5.7s) Water Reaches 80% Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
     revealTl.to('#hero-title-dot', {
       scale: 1.35,
       duration: 0.8,
       ease: 'power2.out'
-    }, '+=0.4');
+    }, '+=0.65');
 
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
