@@ -313,46 +313,39 @@ html.lenis .lenis.lenis-stopped {
   filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.35));
 }
 
-/* Water Emerging Brand Identity (水底波光浮現的 Louis.) */
-.zen-brand-emerge {
+/* Curtain Exact Hero Mirror (1:1 Pixel-Perfect Alignment) */
+.zen-curtain-hero-mirror {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 640px;
+  pointer-events: none;
   z-index: 5;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  opacity: 0;
-  will-change: transform, opacity;
-  pointer-events: none;
+  justify-content: center;
 }
 
-.zen-brand-text {
-  font-family: var(--font-serif);
-  font-size: clamp(3.4rem, 9vw, 6.8rem); /* 1:1 exact match with .hero-title-line */
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  color: var(--ink-primary);
-  display: inline-block;
+.zen-curtain-hero-mirror .hero-viewport-frame {
+  background: transparent !important;
+}
+
+.zen-opening-title {
+  opacity: 0;
+  will-change: transform, opacity;
   text-shadow: 
-    0 0 20px rgba(250, 247, 239, 0.98),
-    0 0 40px rgba(250, 247, 239, 0.9),
-    0 4px 30px rgba(18, 19, 22, 0.35);
+    0 0 24px rgba(250, 247, 239, 0.98),
+    0 0 48px rgba(250, 247, 239, 0.95),
+    0 4px 32px rgba(18, 19, 22, 0.4);
 }
 
 .letter-o-sink {
   display: inline-block;
   position: relative;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
-
-.zen-brand-tag {
-  font-family: var(--font-mono);
-  font-size: clamp(0.72rem, 1.5vw, 0.82rem);
-  letter-spacing: 0.22em;
   color: var(--ink-secondary);
   font-weight: 600;
   text-shadow: 0 0 12px rgba(250, 247, 239, 0.9);
