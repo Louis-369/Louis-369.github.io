@@ -168,19 +168,19 @@ export class Choreographer {
       }, '-=0.1');
     }
 
-    // 3. (2.5s - 3.6s) Brush Gently Fades Out In-Place with Zen Stillness (原地優雅漸隱消散)
+    // 3. (2.0s - 2.5s) Brush Fades Out IMMEDIATELY after dipping so it never blocks text
     revealTl.to('.craft-pen-wrap', {
       opacity: 0,
-      y: -12,
-      duration: 1.1,
-      ease: 'power2.out'
-    }, '+=0.1');
+      y: -18,
+      duration: 0.48,
+      ease: 'power2.inOut'
+    }, '-=0.15');
 
     revealTl.to('.craft-pen-shadow', {
       opacity: 0,
-      scale: 0.2,
-      duration: 0.9,
-      ease: 'power2.out'
+      scale: 0.1,
+      duration: 0.45,
+      ease: 'power2.inOut'
     }, '<');
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────

@@ -30,14 +30,14 @@ export class WebGLFluidWaterAnimation {
 
   initEngine() {
     const config = {
-      SIM_RES: 144,
+      SIM_RES: 160,
       DYE_RES: 1024,
-      DENSITY_DISSIPATION: 0.04,
-      VELOCITY_DISSIPATION: 0.55,
-      PRESSURE: 0.8,
-      PRESSURE_ITER: 20,
-      CURL: 22,
-      SPLAT_FORCE: 5200,
+      DENSITY_DISSIPATION: 0.01,
+      VELOCITY_DISSIPATION: 1.35,
+      PRESSURE: 0.85,
+      PRESSURE_ITER: 22,
+      CURL: 6.0,
+      SPLAT_FORCE: 7500,
       WASH_DISSIPATION: 1.8,
     };
     this.config = config;
@@ -771,19 +771,19 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 3.2,
-      r0: 0.0001,
-      r1: 0.0072 * intensity,
-      swirl: (Math.random() - 0.5) * 2.4
+      dur: 3.0,
+      r0: 0.0002,
+      r1: 0.012 * intensity,
+      swirl: (Math.random() - 0.5) * 0.8
     });
 
-    // 1. Multi-Directional High-Energy Liquid Splatter Burst
-    const numRays = 24;
+    // 1. Broad Concentric Liquid Wave Front (同心圓水波浪頭)
+    const numRays = 32;
     for (let i = 0; i < numRays; i++) {
       const theta = (i / numRays) * Math.PI * 2;
       const rx = Math.cos(theta);
       const ry = Math.sin(theta);
-      this.splatVelocity(x + rx * 0.01, y + ry * 0.01, rx * 85 * intensity, ry * 85 * intensity, 0.0045);
+      this.splatVelocity(x + rx * 0.012, y + ry * 0.012, rx * 130 * intensity, ry * 130 * intensity, 0.0065);
     }
   }
 
@@ -813,23 +813,23 @@ export class WebGLFluidWaterAnimation {
       const d = this.drops[i];
       d.age += dt;
       const t = Math.min(d.age / d.dur, 1);
-      const ease = 1 - Math.pow(1 - t, 3);
+      const ease = 1 - Math.pow(1 - t, 2.4);
       const r = d.r0 + (d.r1 - d.r0) * ease;
-      const amt = (1 - t) * (1 - t) * 3.2 * dt * 5;
+      const amt = (1 - t) * (1 - t) * 3.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Continuous gentle outward radial expansion & marbling swirl
-      if (d.age < d.dur * 0.9) {
-        const ringRad = 0.015 + ease * 0.035;
-        const numPushes = 8;
+      // Smooth outward expanding water ripples
+      if (d.age < d.dur * 0.85) {
+        const ringRad = 0.02 + ease * 0.08;
+        const numPushes = 12;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl;
+          const ang = (p / numPushes) * Math.PI * 2;
           this.splatVelocity(
             d.x + Math.cos(ang) * ringRad,
             d.y + Math.sin(ang) * ringRad,
-            Math.cos(ang) * 16 + -Math.sin(ang) * 12 * d.swirl,
-            Math.sin(ang) * 16 + Math.cos(ang) * 12 * d.swirl,
-            0.0028
+            Math.cos(ang) * 130,
+            Math.sin(ang) * 130,
+            0.007
           );
         }
       }
