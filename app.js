@@ -7,13 +7,13 @@
 
 import { siteConfig, featuredProjects } from './data/projects.js';
 import { Choreographer } from './choreographer.js';
-import { ZenRippleAnimation } from './globe.js';
+import { WebGLFluidWaterAnimation } from './globe.js';
 
 class Application {
   constructor() {
     this.projects = featuredProjects;
     this.choreographer = null;
-    this.zenAnimator = null;
+    this.waterAnimator = null;
     
     this.init();
   }
@@ -22,10 +22,10 @@ class Application {
     // 1. Render dynamic projects list (bymonolog 12-col open grid)
     this.renderProjects();
 
-    // 2. Initialize Zen Water Ripple Animation
-    this.zenAnimator = new ZenRippleAnimation('zen-ripple-canvas');
+    // 2. Initialize WebGL Physical Water Fluid Ripple Simulation
+    this.waterAnimator = new WebGLFluidWaterAnimation('water-fluid-canvas');
 
-    // 3. Initialize Choreographer & play opening reveal (Leaf Fall -> 1st Ripple -> Sinks -> 2nd Shockwave)
+    // 3. Initialize Choreographer & play opening reveal (3D Leaf Fall -> WebGL Ripples -> Sinks -> Shockwave)
     this.choreographer = new Choreographer({
       onRevealComplete: () => {
         document.body.classList.remove('is-loading');
@@ -35,10 +35,10 @@ class Application {
 
     // Run opening reveal
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      this.choreographer.playOpeningReveal(this.zenAnimator);
+      this.choreographer.playOpeningReveal(this.waterAnimator);
     } else {
       window.addEventListener('DOMContentLoaded', () => {
-        this.choreographer.playOpeningReveal(this.zenAnimator);
+        this.choreographer.playOpeningReveal(this.waterAnimator);
       });
     }
 

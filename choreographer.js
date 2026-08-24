@@ -53,13 +53,13 @@ export class Choreographer {
   }
 
   /**
-   * Zen Leaf & Dual Water Ripples Opening Reveal
-   * 1. Leaf Falls & Sways (0.0s - 0.5s)
-   * 2. Leaf Hits Water -> 1st Concentric Ripples + "Louis." Emerges from water (0.5s - 1.1s)
-   * 3. Leaf Sinks into Depth (1.1s - 1.4s)
-   * 4. 2nd Full-Screen Shockwave Ripple Sweeps & Reveals Homepage (1.4s - 2.0s)
+   * Realistic 3D Leaf Fall & WebGL Fluid Water Surface Opening Reveal
+   * 1. 3D Leaf Falls with organic 3D rotation & shadow expansion (0.0s - 0.6s)
+   * 2. Leaf Hits Water -> WebGL Physical Ripple Shader + "Louis." Wave Distortion (0.6s - 1.2s)
+   * 3. Leaf Sinks into deep water with optical refraction (1.2s - 1.6s)
+   * 4. 2nd Deep Shockwave Ripple sweeps full-screen -> dissolves curtain & reveals homepage (1.6s - 2.2s)
    */
-  playOpeningReveal(zenAnimator = null) {
+  playOpeningReveal(waterAnimator = null) {
     const gsap = window.gsap;
     if (!gsap) {
       console.warn('GSAP not loaded.');
@@ -80,13 +80,20 @@ export class Choreographer {
     gsap.set('.hero-title-line', { y: '105%', opacity: 0 });
     gsap.set(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt', '.site-nav'], { y: 24, opacity: 0 });
     
-    // Leaf starts above the viewport with a gentle 3D tilt
-    gsap.set('.zen-leaf-wrap', {
-      y: -window.innerHeight * 0.6,
-      x: -40,
-      rotation: -35,
-      scale: 1.4,
+    // 3D Leaf starting state: High in the air with strong 3D rotation & floating shadow
+    gsap.set('.zen-leaf-3d-wrap', {
+      y: -window.innerHeight * 0.65,
+      x: -50,
+      rotationX: 45,
+      rotationY: -30,
+      rotationZ: -25,
+      scale: 1.6,
       opacity: 0
+    });
+    gsap.set('.leaf-3d-shadow', {
+      scale: 0.2,
+      opacity: 0,
+      y: 40
     });
     gsap.set('.zen-brand-emerge', {
       scale: 0.85,
@@ -96,7 +103,7 @@ export class Choreographer {
 
     const revealTl = gsap.timeline({
       onComplete: () => {
-        if (zenAnimator) zenAnimator.destroy();
+        if (waterAnimator) waterAnimator.destroy();
         const curtain = document.getElementById('zen-leaf-curtain');
         if (curtain) curtain.remove();
         this.initLenis();
@@ -105,77 +112,94 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 0.55s) Leaf Falls & Sways to the Water Center
-    revealTl.to('.zen-leaf-wrap', {
+    // 1. (0.0s - 0.6s) 3D Leaf Swoops Down with realistic aerodynamics
+    revealTl.to('.zen-leaf-3d-wrap', {
       y: 0,
       x: 0,
-      rotation: 8,
+      rotationX: 0,
+      rotationY: 0,
+      rotationZ: 12,
       scale: 1.0,
       opacity: 1,
-      duration: 0.55,
+      duration: 0.65,
       ease: 'power2.in'
     });
 
-    // 2. (0.55s - 1.1s) Touch Water -> Generates 1st Ripples + "Louis." Emerges
-    const waveObj1 = { p: 0 };
-    revealTl.to(waveObj1, {
-      p: 1,
+    revealTl.to('.leaf-3d-shadow', {
+      scale: 1.0,
+      opacity: 0.85,
+      y: 0,
       duration: 0.65,
+      ease: 'power2.in'
+    }, '<');
+
+    // 2. (0.6s - 1.2s) Leaf Touches Water Surface -> Triggers WebGL Water Ripples
+    const rippleObj1 = { p: 0 };
+    revealTl.to(rippleObj1, {
+      p: 1,
+      duration: 0.75,
       ease: 'power1.out',
       onUpdate: () => {
-        if (zenAnimator) {
-          zenAnimator.touchRippleProgress = waveObj1.p;
-          zenAnimator.render();
+        if (waterAnimator) {
+          waterAnimator.touchRippleIntensity = rippleObj1.p;
         }
       }
     }, '-=0.05');
 
+    // Water Emerging Brand Text Distortion & Reveal
     revealTl.to('.zen-brand-emerge', {
       opacity: 1,
       scale: 1,
-      y: -50, // Float slightly above center
-      duration: 0.55,
+      y: -60,
+      duration: 0.6,
       ease: 'power2.out'
-    }, '-=0.55');
+    }, '-=0.65');
 
-    // 3. (1.1s - 1.4s) Leaf Sinks & Dissolves into Deep Water
-    revealTl.to('.zen-leaf-wrap', {
-      scale: 0.3,
+    // 3. (1.2s - 1.55s) Leaf Sinks into Depth
+    revealTl.to('.zen-leaf-3d-wrap', {
+      scale: 0.25,
       opacity: 0,
-      rotation: 45,
-      duration: 0.4,
+      rotationZ: 50,
+      y: 30,
+      duration: 0.45,
       ease: 'power2.in'
     }, '+=0.1');
 
-    // 4. (1.35s - 2.0s) 2nd Deep Full-Screen Shockwave Ripple Sweeps & Opens Screen
-    const waveObj2 = { p: 0 };
-    revealTl.to(waveObj2, {
+    revealTl.to('.leaf-3d-shadow', {
+      scale: 0.1,
+      opacity: 0,
+      duration: 0.4,
+      ease: 'power2.in'
+    }, '<');
+
+    // 4. (1.5s - 2.2s) 2nd Full-Screen WebGL Shockwave Surge
+    const rippleObj2 = { p: 0 };
+    revealTl.to(rippleObj2, {
       p: 1,
-      duration: 0.75,
+      duration: 0.85,
       ease: 'power2.out',
       onUpdate: () => {
-        if (zenAnimator) {
-          zenAnimator.shockwaveProgress = waveObj2.p;
-          zenAnimator.render();
+        if (waterAnimator) {
+          waterAnimator.shockwaveIntensity = rippleObj2.p;
         }
       }
     }, '-=0.15');
 
-    // Curtain and water title dissolve as wave sweeps outward
+    // Smooth Curtain & Brand Transition
     revealTl.to('.zen-brand-emerge', {
       opacity: 0,
       scale: 1.15,
-      duration: 0.45,
+      duration: 0.5,
       ease: 'power2.out'
     }, '<');
 
     revealTl.to('#zen-leaf-curtain', {
       opacity: 0,
-      duration: 0.5,
+      duration: 0.55,
       ease: 'power2.out'
-    }, '-=0.35');
+    }, '-=0.4');
 
-    // 5. Homepage Typography & Navigation Take Over Smoothly
+    // 5. Clean Editorial Homepage Release
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
