@@ -375,8 +375,7 @@ html.lenis .lenis.lenis-stopped {
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
-  mix-blend-mode: difference;
+  color: var(--ink-primary);
   display: inline-block;
   position: relative;
   z-index: 6;

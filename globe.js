@@ -381,13 +381,14 @@ export class WebGLFluidWaterAnimation {
       }
     `;
 
-    // Master Hybrid Shader: Authentic Navier-Stokes Fluid + 3D Liquid Water Surface + Noir Accretion Disk Black Hole
+    // Master Hybrid Shader: Authentic Navier-Stokes Fluid + In-Shader Text Mask Inversion + Noir Accretion Disk
     const FRAG_DISPLAY = `
       precision highp float;
       precision highp sampler2D;
       varying vec2 vUv;
       uniform sampler2D uDye;
       uniform sampler2D uVelocity;
+      uniform sampler2D uText;
       uniform vec2 uAspect;
       uniform vec2 uRes;
       uniform float uWash;
@@ -434,7 +435,7 @@ export class WebGLFluidWaterAnimation {
         vec3 normal = normalize(vec3((hC - hR) * 18.0, (hC - hT) * 18.0, 1.0));
         vec3 viewDir = vec3(0.0, 0.0, 1.0);
 
-        // Two-Stage Early Light Retraction (波光在吸水前半段就提早優雅收斂)
+        // Two-Stage Early Light Retraction
         float lightRetract = pow(clamp(1.0 - uWash * 2.2, 0.0, 1.0), 2.5);
 
         // 1. Dual Light Sources Blinn-Phong Specular Glints
@@ -448,7 +449,7 @@ export class WebGLFluidWaterAnimation {
 
         vec3 specular = (vec3(0.93, 0.95, 1.0) * spec1 * 0.55 + vec3(0.69, 0.69, 0.76) * spec2 * 0.30) * lightRetract;
 
-        // 2. Fresnel Grazing Liquid Water Sheen (菲涅爾水膜流光)
+        // 2. Fresnel Grazing Liquid Water Sheen
         float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.4);
         vec3 fresnelSheen = mix(vec3(0.95, 0.94, 0.92), vec3(0.82, 0.86, 0.92), fresnel);
 
@@ -456,15 +457,15 @@ export class WebGLFluidWaterAnimation {
         vec3 paper = vec3(0.98, 0.972, 0.96); // Warm Ivory Canvas
         vec3 inkCol = paper * exp(-d);
         
-        // Deepen the rich charcoal ink tones as light retracts
+        // Deepen rich charcoal ink tones
         inkCol = mix(inkCol, vec3(0.06, 0.05, 0.05), clamp(hC * 0.8, 0.0, 0.95));
 
-        // 4. Rayleigh Atmospheric Volumetric Ink Mist (瑞利體積煙波晨霧漫射 · 溫潤朦朧感)
+        // 4. Rayleigh Atmospheric Volumetric Ink Mist
         float mistIntensity = smoothstep(0.02, 0.45, hC) * (1.0 - smoothstep(0.40, 0.85, hC));
-        vec3 mistColor = vec3(0.96, 0.955, 0.945); // Soft Warm Ivory Morning Mist
+        vec3 mistColor = vec3(0.96, 0.955, 0.945);
         inkCol = mix(inkCol, mistColor, mistIntensity * 0.42 * lightRetract);
 
-        // Blend in gentle Fresnel sheen across liquid contours
+        // Blend in gentle Fresnel sheen
         inkCol = mix(inkCol, fresnelSheen, fresnel * 0.28 * lightRetract);
 
         // Soft specular highlight strictly tied to active ink bodies
@@ -473,18 +474,27 @@ export class WebGLFluidWaterAnimation {
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
-        // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined along y = x diagonal / 45° angle)
+        // 5. IN-SHADER DYNAMIC PHYSICAL TEXT MASK INVERSION (方案一：GPU 像素級即時反相)
+        float textAlpha = texture2D(uText, uv).a;
+        if (textAlpha > 0.01) {
+          // Over dark ink: Inverts to brilliant pure ivory white (#FAF8F5)
+          // Over clean paper: Inverts to deep rich black (#121316)
+          vec3 invertedTextCol = mix(vec3(0.12, 0.11, 0.11), vec3(0.98, 0.97, 0.95), clamp(inkAmount * 1.4, 0.0, 1.0));
+          inkCol = mix(inkCol, invertedTextCol, textAlpha * (1.0 - uWash * 0.8));
+          alpha = max(alpha, textAlpha * (1.0 - uWash));
+        }
+
+        // 6. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined along y = x diagonal / 45° angle)
         if (uSinkForce > 0.01) {
           vec2 toCenter = (uv - uSinkCenter);
           toCenter.x *= aspectRatio;
 
           // 3D Tilt Matrix aligned with y = x diagonal (45° rotation + 2.2x perpendicular pitch foreshortening)
-          // u_axis along y = x, v_axis perpendicular to y = x
           float cos45 = 0.7071068;
           float sin45 = 0.7071068;
           vec2 tiltedP = vec2(
-            toCenter.x * cos45 + toCenter.y * sin45,         // Major axis along y = x
-            (-toCenter.x * sin45 + toCenter.y * cos45) * 2.2 // Foreshortened minor axis
+            toCenter.x * cos45 + toCenter.y * sin45,
+            (-toCenter.x * sin45 + toCenter.y * cos45) * 2.2
           );
           
           float r = length(tiltedP);
@@ -497,7 +507,7 @@ export class WebGLFluidWaterAnimation {
             float normR = clamp((r - diskInner) / (diskOuter - diskInner), 0.0, 1.0);
             float angle = atan(tiltedP.y, tiltedP.x);
             
-            // Accretion disk orbital velocity & rotation (Reference Shader Math)
+            // Accretion disk orbital velocity & rotation
             float rotSpeed = 3.5 / (pow(r * 40.0, 1.2) + 0.8);
             float rotAngle = angle - uTime * rotSpeed * 2.8;
             vec2 diskCoord = vec2(r * 28.0, rotAngle * 2.5);
@@ -509,17 +519,17 @@ export class WebGLFluidWaterAnimation {
             float arm = smoothstep(-0.3, 0.7, spiral) * 0.4;
             float totalPattern = fbmPattern * 0.7 + arm;
 
-            // Noir Monochrome Palette: Pure White Hot Spine -> Silver Gray -> Charcoal -> Void Black
-            vec3 colorHot = vec3(0.98, 0.98, 1.0);
-            vec3 colorMid = vec3(0.72, 0.72, 0.76);
-            vec3 colorDeep = vec3(0.04, 0.04, 0.05);
+            // Radiant White Photon Disk during suction
+            vec3 colorHot = vec3(1.0, 1.0, 1.0);
+            vec3 colorMid = vec3(0.85, 0.86, 0.90);
+            vec3 colorDeep = vec3(0.15, 0.15, 0.18);
 
             vec3 diskColor = mix(colorHot, colorMid, smoothstep(0.0, 0.45, normR));
             diskColor = mix(diskColor, colorDeep, smoothstep(0.45, 1.0, normR));
-            diskColor *= (totalPattern + 0.4) * 1.4;
+            diskColor *= (totalPattern + 0.5) * 1.6;
 
-            // Photon Ring Lensing Ring (Brilliant thin white-silver rim at inner edge)
-            float photonRing = exp(-pow((normR - 0.08) * 16.0, 2.0)) * 1.6;
+            // Brilliant White Photon Ring Lensing Ring
+            float photonRing = exp(-pow((normR - 0.08) * 16.0, 2.0)) * 2.2;
             diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
 
             // Disk alpha mask
@@ -530,10 +540,10 @@ export class WebGLFluidWaterAnimation {
             inkCol = mix(inkCol, diskColor, diskAlpha);
             alpha = max(alpha, diskAlpha);
 
-            // True Black Hole Event Horizon (Pure solid black inside diskInner)
+            // Event Horizon: Solid Black Core (becomes deep black dot upon collapse)
             if (r < diskInner) {
               float innerMask = 1.0 - smoothstep(diskInner * 0.85, diskInner, r);
-              inkCol = mix(inkCol, vec3(0.02, 0.02, 0.02), innerMask * clamp(uSinkForce * 2.0, 0.0, 1.0));
+              inkCol = mix(inkCol, vec3(0.06, 0.06, 0.07), innerMask * clamp(uSinkForce * 2.0, 0.0, 1.0));
               alpha = max(alpha, innerMask);
             }
           }
@@ -649,6 +659,45 @@ export class WebGLFluidWaterAnimation {
     this.divergence = this.createFBO(sim.width, sim.height, this.fmtR, this.halfFloatType, this.gl.NEAREST);
     this.curl = this.createFBO(sim.width, sim.height, this.fmtR, this.halfFloatType, this.gl.NEAREST);
     this.pressure = this.createDoubleFBO(sim.width, sim.height, this.fmtR, this.halfFloatType, this.gl.NEAREST);
+    this.initTextTexture();
+  }
+
+  initTextTexture() {
+    const gl = this.gl;
+    const textCanvas = document.createElement('canvas');
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    textCanvas.width = w;
+    textCanvas.height = h;
+    const ctx = textCanvas.getContext('2d');
+
+    // Measure exact DOM title position
+    const titleEl = document.getElementById('hero-title-line');
+    if (titleEl && ctx) {
+      const cRect = this.canvas.getBoundingClientRect();
+      const tRect = titleEl.getBoundingClientRect();
+
+      const dpr = w / cRect.width;
+      const x = (tRect.left - cRect.left) * dpr;
+      const y = (tRect.top - cRect.top + tRect.height * 0.78) * dpr;
+
+      // Extract exact font size and style from computed style
+      const style = window.getComputedStyle(titleEl);
+      const fontSize = parseFloat(style.fontSize) * dpr;
+      ctx.font = `700 ${fontSize}px "Playfair Display", Georgia, serif`;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText('Louis.', x, y);
+    }
+
+    if (!this.textTexture) {
+      this.textTexture = gl.createTexture();
+    }
+    gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
   }
 
   resizeCanvas() {
@@ -864,6 +913,13 @@ export class WebGLFluidWaterAnimation {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     this.progDisplay.bind();
     gl.uniform1i(this.progDisplay.uniforms.uDye, this.dye.read.attach(0));
+    
+    if (this.textTexture) {
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
+      gl.uniform1i(this.progDisplay.uniforms.uText, 1);
+    }
+
     const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
     const m = Math.min(w, h);
     gl.uniform2f(this.progDisplay.uniforms.uAspect, w / m, h / m);

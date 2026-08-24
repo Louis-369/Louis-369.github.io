@@ -134,6 +134,9 @@ export class Choreographer {
       repeat: 1,
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
+          if (typeof waterAnimator.initTextTexture === 'function') {
+            waterAnimator.initTextTexture();
+          }
           // Wave 1: Heavy Pine Soot Core Ink (濃松煙主墨)
           waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.4);
           
@@ -155,7 +158,7 @@ export class Choreographer {
       }
     });
 
-    // Louis. emerges gracefully under the spreading ink with soft warm aura!
+    // Louis. DOM text seamlessly fades in as fluid absorbs into the dot
     revealTl.to('.hero-title-line', {
       opacity: 1,
       scale: 1.0,
