@@ -140,9 +140,18 @@ export class Choreographer {
       repeat: 1,
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
-          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0]);
+          // Calculate exact pen tip location on screen
+          const penEl = document.getElementById('craft-pen-wrap');
+          let tipX = 0.5;
+          let tipY = 0.5;
+          if (penEl) {
+            const rect = penEl.getBoundingClientRect();
+            tipX = (rect.left + rect.width * 0.5) / window.innerWidth;
+            tipY = 1 - (rect.bottom) / window.innerHeight; // WebGL Y is inverted
+          }
+          waterAnimator.spawnDrop(tipX, tipY, waterAnimator.INKS[0]);
           setTimeout(() => {
-            if (waterAnimator) waterAnimator.spawnDrop(0.51, 0.49, waterAnimator.INKS[1]);
+            if (waterAnimator) waterAnimator.spawnDrop(tipX + 0.005, tipY - 0.005, waterAnimator.INKS[1]);
           }, 300);
         }
       }

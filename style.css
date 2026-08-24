@@ -392,14 +392,6 @@ html.lenis .lenis.lenis-stopped {
   padding: 0 4vw;
   z-index: 2;
 }
-  border-top-color: var(--ink-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 
 .hero-content-wrap {
   max-width: 960px;

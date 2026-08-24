@@ -231,6 +231,10 @@ export class WebGLFluidWaterAnimation {
       uniform vec2 dyeTexelSize;
       uniform float dt;
       uniform float dissipation;
+      uniform vec2 uSinkCenter;
+      uniform float uSinkForce;
+      uniform float uSinkSwirl;
+
       #ifdef MANUAL_FILTERING
       vec4 bilerp (sampler2D sam, vec2 uv, vec2 tsize) {
         vec2 st = uv / tsize - 0.5;
@@ -243,14 +247,36 @@ export class WebGLFluidWaterAnimation {
         return mix(mix(a, b, fuv.x), mix(c, d, fuv.x), fuv.y);
       }
       #endif
+
       void main () {
+        vec2 vel = texture2D(uVelocity, vUv).xy;
+
+        // True GPU Gravitational Black Hole Sink Pull into Letter O
+        if (uSinkForce > 0.001) {
+          vec2 toSink = uSinkCenter - vUv;
+          float dist = length(toSink);
+          if (dist > 0.001) {
+            vec2 dir = toSink / dist;
+            vec2 tangent = vec2(-dir.y, dir.x); // Clockwise swirl
+            float pull = uSinkForce / (dist * 4.0 + 0.12);
+            vel += (dir * pull + tangent * pull * uSinkSwirl) * 350.0;
+          }
+        }
+
         #ifdef MANUAL_FILTERING
-        vec2 coord = vUv - dt * bilerp(uVelocity, vUv, texelSize).xy * texelSize;
+        vec2 coord = vUv - dt * (bilerp(uVelocity, vUv, texelSize).xy + vel * 0.1) * texelSize;
         vec4 result = bilerp(uSource, coord, dyeTexelSize);
         #else
-        vec2 coord = vUv - dt * texture2D(uVelocity, vUv).xy * texelSize;
+        vec2 coord = vUv - dt * vel * texelSize;
         vec4 result = texture2D(uSource, coord);
         #endif
+
+        // Shrink & vanish dye as it approaches sink center
+        if (uSinkForce > 0.001) {
+          float dSink = length(uSinkCenter - vUv);
+          result *= smoothstep(0.01, 0.06 + uSinkForce * 0.25, dSink);
+        }
+
         gl_FragColor = result / (1.0 + dissipation * dt);
       }
     `;
@@ -579,18 +605,22 @@ export class WebGLFluidWaterAnimation {
 
   // 2. Second Stage: Letter "O" Centripetal Vortex Black Hole (向心黑洞漩渦吸水力場)
   triggerCentripetalVortexSink(targetX, targetY, power = 1.0) {
+    this.sinkCenter = { x: targetX, y: targetY };
+    this.sinkForce = power;
+    this.sinkSwirl = 2.2;
+
     const numSinkNodes = 12;
     for (let i = 0; i < numSinkNodes; i++) {
       const theta = (i / numSinkNodes) * Math.PI * 2;
-      const radius = 0.04 + Math.random() * 0.18; // Inflow catchment zone
+      const radius = 0.03 + Math.random() * 0.16; // Inflow catchment zone
       const nodeX = targetX + Math.cos(theta) * radius;
       const nodeY = targetY + Math.sin(theta) * radius;
 
       // Inward radial velocity (-direction towards target center) + Tangential swirl velocity (Vortex rotation)
-      const inwardVx = -Math.cos(theta) * 2800 * power;
-      const inwardVy = -Math.sin(theta) * 2800 * power;
-      const swirlVx = -Math.sin(theta) * 3600 * power; // Clockwise spiral
-      const swirlVy = Math.cos(theta) * 3600 * power;
+      const inwardVx = -Math.cos(theta) * 3200 * power;
+      const inwardVy = -Math.sin(theta) * 3200 * power;
+      const swirlVx = -Math.sin(theta) * 4200 * power; // Clockwise spiral
+      const swirlVy = Math.cos(theta) * 4200 * power;
 
       this.splatVelocity(nodeX, nodeY, inwardVx + swirlVx, inwardVy + swirlVy, 0.008);
     }
@@ -693,10 +723,14 @@ export class WebGLFluidWaterAnimation {
     this.blit(this.velocity.write);
     this.velocity.swap();
 
-    // 7. Advection (Velocity & Dye)
+    // 7. Advection (Velocity & Dye) with Black Hole Sink Pull
     this.progAdvect.bind();
     gl.uniform2f(this.progAdvect.uniforms.texelSize, this.velocity.texelSizeX, this.velocity.texelSizeY);
     gl.uniform2f(this.progAdvect.uniforms.dyeTexelSize, this.velocity.texelSizeX, this.velocity.texelSizeY);
+    gl.uniform2f(this.progAdvect.uniforms.uSinkCenter, this.sinkCenter ? this.sinkCenter.x : 0.5, this.sinkCenter ? this.sinkCenter.y : 0.5);
+    gl.uniform1f(this.progAdvect.uniforms.uSinkForce, this.sinkForce || 0);
+    gl.uniform1f(this.progAdvect.uniforms.uSinkSwirl, this.sinkSwirl || 1.8);
+
     const velId = this.velocity.read.attach(0);
     gl.uniform1i(this.progAdvect.uniforms.uVelocity, velId);
     gl.uniform1i(this.progAdvect.uniforms.uSource, velId);
