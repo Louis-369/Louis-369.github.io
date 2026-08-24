@@ -252,16 +252,21 @@ export class WebGLFluidWaterAnimation {
       void main () {
         vec2 vel = texture2D(uVelocity, vUv).xy;
 
-        // Pixel-Perfect Aspect-Ratio Corrected Gravitational Pull into the Period Dot
+        // Pixel-Perfect True-Circular Gravitational Pull into the Period Dot
+        // Both distance AND direction are computed in physical (aspect-corrected) space,
+        // then the direction is converted back to UV space for the velocity splat.
         if (uSinkForce > 0.001) {
           vec2 toSink = uSinkCenter - vUv;
-          vec2 p = toSink;
-          p.x *= aspectRatio;
-          float dist = length(p);
+          // Transform to physical space (square pixels)
+          vec2 pPhys = vec2(toSink.x * aspectRatio, toSink.y);
+          float dist = length(pPhys);
           if (dist > 0.001) {
-            vec2 dir = normalize(toSink);
+            // Direction in physical space
+            vec2 dirPhys = pPhys / dist;
+            // Convert direction back to UV space (undo aspect stretch on x)
+            vec2 dirUV = normalize(vec2(dirPhys.x / aspectRatio, dirPhys.y));
             float pull = uSinkForce / (dist * 3.5 + 0.08);
-            vel += dir * pull * 450.0;
+            vel += dirUV * pull * 450.0;
           }
         }
 

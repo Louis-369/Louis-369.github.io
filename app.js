@@ -39,13 +39,21 @@ class Application {
       }
     });
 
-    // Run opening reveal
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      this.choreographer.playOpeningReveal(this.waterAnimator);
-    } else {
-      window.addEventListener('DOMContentLoaded', () => {
+    // Run opening reveal AFTER fonts are fully loaded (ensures stable layout for dot coordinates)
+    const startReveal = () => {
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          this.choreographer.playOpeningReveal(this.waterAnimator);
+        });
+      } else {
         this.choreographer.playOpeningReveal(this.waterAnimator);
-      });
+      }
+    };
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      startReveal();
+    } else {
+      window.addEventListener('DOMContentLoaded', startReveal);
     }
 
     // 4. Global interaction bindings

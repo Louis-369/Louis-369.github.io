@@ -167,25 +167,60 @@ export class Choreographer {
       ease: 'power2.in'
     }, '<');
 
+    // ─── Canvas-Relative Coordinate Helper ───────────────────────────
+    // Uses canvas.getBoundingClientRect() as the sole reference frame,
+    // NOT window.innerWidth/Height, to eliminate RWD min-height mismatch.
+    const DEBUG_DOT = false; // Set true to show a red verification dot
+    let debugDotEl = null;
+
+    function getDotUV() {
+      const canvas = document.getElementById('water-fluid-canvas');
+      const dotEl = document.getElementById('hero-title-dot');
+      if (!canvas || !dotEl) return { x: 0.5, y: 0.5 };
+
+      const c = canvas.getBoundingClientRect();
+      const r = dotEl.getBoundingClientRect();
+
+      const cx = r.left + r.width * 0.5;
+      const cy = r.top + r.height * 0.5;
+
+      return {
+        x: (cx - c.left) / c.width,
+        y: 1.0 - (cy - c.top) / c.height  // WebGL Y-axis flip relative to canvas
+      };
+    }
+
+    if (DEBUG_DOT) {
+      debugDotEl = document.createElement('div');
+      Object.assign(debugDotEl.style, {
+        position: 'fixed', width: '10px', height: '10px',
+        borderRadius: '50%', background: 'red', zIndex: '99999',
+        pointerEvents: 'none', transform: 'translate(-50%, -50%)'
+      });
+      document.body.appendChild(debugDotEl);
+    }
+    // ─────────────────────────────────────────────────────────────────
+
     // 4. (3.2s - 5.0s) PURE LINEAR DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.9, // Rich, immersive, smooth suction
+      duration: 1.9,
       ease: 'power2.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
-          const dotEl = document.getElementById('hero-title-dot');
-          let dotX = 0.58;
-          let dotY = 0.50;
-          if (dotEl) {
-            const rect = dotEl.getBoundingClientRect();
-            dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
-            dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
+          const uv = getDotUV();
+
+          // Position debug red dot for visual verification
+          if (DEBUG_DOT && debugDotEl) {
+            const c = document.getElementById('water-fluid-canvas').getBoundingClientRect();
+            debugDotEl.style.left = `${c.left + uv.x * c.width}px`;
+            debugDotEl.style.top = `${c.top + (1.0 - uv.y) * c.height}px`;
           }
+
           // Direct linear gravitational vacuum pull straight into the period dot
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 5.8);
+          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, suctionObj.power * 5.8);
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
@@ -195,7 +230,10 @@ export class Choreographer {
     revealTl.to('#water-fluid-canvas', {
       opacity: 0,
       duration: 0.8,
-      ease: 'power2.inOut'
+      ease: 'power2.inOut',
+      onComplete: () => {
+        if (debugDotEl) debugDotEl.remove();
+      }
     }, '-=0.4');
 
     // 6. (5.0s - 6.0s) Supporting Hero Elements & Navbar Gracefully Cascade In

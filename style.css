@@ -379,37 +379,31 @@ html.lenis .lenis.lenis-stopped {
   display: inline-block;
   position: relative;
   z-index: 6;
-}
-
-/* The Authentic Period Dot Itself (Always Present & Integrated) */
-.hero-title-dot {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 0.28em;
-  height: 0.28em;
-  vertical-align: baseline;
-  transform-origin: 50% 50%;
-  opacity: 1;
-  z-index: 7;
-}
-
-/* Warm Paper Diffusion Aura: Ultra-soft, zero-harshness natural paper glow ensuring crystal-clear text */
-.hero-title-line {
-  font-family: var(--font-serif);
-  font-size: clamp(3.4rem, 9vw, 6.8rem);
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  color: var(--ink-primary);
-  display: inline-block;
-  position: relative;
-  z-index: 6;
+  /* Three-layer feathered warm paper diffusion aura for crystal-clear text contrast */
   text-shadow: 
     0 0 16px rgba(250, 248, 245, 0.90),
     0 0 36px rgba(250, 248, 245, 0.75),
     0 0 72px rgba(250, 248, 245, 0.60);
+}
+
+/*
+ * Self-Drawn Period Dot (CSS Circle)
+ * DOM rect center === visual ink dot center, zero baseline offset.
+ * This eliminates the font glyph baseline misalignment that caused
+ * getBoundingClientRect() to return a center point above the visible dot.
+ */
+.hero-title-dot {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  margin-left: 0.04em;
+  margin-bottom: 0.08em;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: baseline;
+  position: relative;
+  opacity: 1;
+  z-index: 7;
 }
 
 .hero-tagline {
