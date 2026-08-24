@@ -108,9 +108,17 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 1.8s) Brush descends vertically with deep Zen stillness
+    // Measure exact DOM title vertical center for 100% optical alignment
+    const titleEl = document.getElementById('hero-title-line');
+    let penLandingY = 0;
+    if (titleEl) {
+      const tRect = titleEl.getBoundingClientRect();
+      penLandingY = (tRect.top + tRect.height * 0.46) - (window.innerHeight * 0.5);
+    }
+
+    // 1. (0.0s - 1.8s) Brush descends vertically to the exact optical center of 'Louis'
     revealTl.to('.craft-pen-wrap', {
-      y: 0,
+      y: penLandingY,
       opacity: 1,
       duration: 1.8,
       ease: 'power3.out'
@@ -119,19 +127,17 @@ export class Choreographer {
     revealTl.to('.craft-pen-shadow', {
       scale: 1.0,
       opacity: 0.9,
-      y: 0,
+      y: penLandingY,
       duration: 1.8,
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.8s - 2.5s) Brush Tip "Dips" Water Center -> Spawns Magnificent 4-Wave Liquid Ink Explosion!
+    // 2. (1.8s - 2.18s) Brush Tip "Dips" Water -> Spawns Liquid Ink Wave
     revealTl.to('.craft-pen-wrap', {
-      y: 16,
-      scaleY: 0.91,
+      y: penLandingY + 12,
+      scaleY: 0.92,
       duration: 0.38,
-      ease: 'power2.inOut',
-      yoyo: true,
-      repeat: 1,
+      ease: 'power2.in',
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
           if (typeof waterAnimator.initTextTexture === 'function') {
@@ -158,23 +164,13 @@ export class Choreographer {
       }
     });
 
-    // In-Shader text only reveals AFTER the brush dips and ink expands!
-    if (waterAnimator) {
-      waterAnimator.textOpacity = 0.0;
-      revealTl.to(waterAnimator, {
-        textOpacity: 1.0,
-        duration: 1.2,
-        ease: 'power2.out'
-      }, '-=0.1');
-    }
-
-    // 3. Brush Fades Out IMMEDIATELY after touching water (零停頓 0.28 秒極速消失)
+    // 3. Brush Fades Out IMMEDIATELY within 0.28s as soon as it touches water! (點完0.28秒立刻透明消失)
     revealTl.to('.craft-pen-wrap', {
       opacity: 0,
-      y: -16,
+      y: penLandingY - 8,
       duration: 0.28,
       ease: 'power2.out'
-    }, '+=0.0');
+    });
 
     revealTl.to('.craft-pen-shadow', {
       opacity: 0,
@@ -182,6 +178,16 @@ export class Choreographer {
       duration: 0.25,
       ease: 'power2.out'
     }, '<');
+
+    // In-Shader text only reveals AFTER the brush dips and ink expands!
+    if (waterAnimator) {
+      waterAnimator.textOpacity = 0.0;
+      revealTl.to(waterAnimator, {
+        textOpacity: 1.0,
+        duration: 1.2,
+        ease: 'power2.out'
+      }, '-=0.2');
+    }
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────
     // Uses canvas.getBoundingClientRect() as the sole reference frame,

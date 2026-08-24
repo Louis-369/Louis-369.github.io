@@ -768,7 +768,6 @@ export class WebGLFluidWaterAnimation {
   spawnDrop(x, y, ink, intensity = 1.0) {
     const aspect = this.canvas.width / this.canvas.height;
     const seedAngle = Math.random() * Math.PI * 2;
-    const randomChaos = Math.random() * 0.4 - 0.2;
 
     this.drops.push({
       x,
@@ -783,25 +782,24 @@ export class WebGLFluidWaterAnimation {
       aspect
     });
 
-    // 1. Pure Organic Random Fluid Dispersion (完全隨機無固定路徑的自然水墨流淌)
+    // 1. Pure Organic Random Fluid Dispersion with +0.42 Corner Boost (兼顧角落速度差與隨機流淌)
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
-      // Random angle jitter per ray so it never forms a geometric pattern
       const jitter = (Math.random() - 0.5) * 0.35;
       const theta = (i / numRays) * Math.PI * 2 + jitter;
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // Mild 0.25 corner speed compensation (not symmetric, purely subtle distance easing)
+      // Goldilocks 0.42 corner speed compensation
       const diagonalFactor = Math.abs(cosT * sinT) * 2.0;
-      const cornerBoost = 1.0 + diagonalFactor * 0.25;
+      const cornerBoost = 1.0 + diagonalFactor * 0.42;
 
       // Pure organic non-repeating flow amplitude
       const randomPower = (0.75 + Math.random() * 0.5) * cornerBoost;
       const rx = cosT * randomPower;
       const ry = sinT * randomPower;
 
-      const speed = 52 * intensity * randomPower;
+      const speed = 54 * intensity * randomPower;
       this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * speed, ry * speed, 0.0045);
     }
   }
@@ -845,7 +843,7 @@ export class WebGLFluidWaterAnimation {
           const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5 + (Math.random() - 0.5) * 0.2;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
-          const diagBoost = 1.0 + Math.abs(cosA * sinA) * 0.25;
+          const diagBoost = 1.0 + Math.abs(cosA * sinA) * 0.42;
 
           this.splatVelocity(
             d.x + cosA * ringRad,
