@@ -247,15 +247,15 @@ html.lenis .lenis.lenis-stopped {
 }
 
 /* ==========================================================================
-   Cinematic Ink-Stamp Opening Reveal (朱砂印章 + 墨水四角匯聚 + 超新星展開)
+   Zen Leaf & Water Ripple Opening Reveal (落葉墜水 + 雙重水波漣漪 + 破幕揭曉)
    ========================================================================== */
-.ink-opening-curtain {
+.zen-leaf-curtain {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #FAF8F5; /* Matches Ivory canvas */
+  background: var(--bg-canvas); /* Warm ivory paper water surface */
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -265,7 +265,7 @@ html.lenis .lenis.lenis-stopped {
   will-change: transform, opacity;
 }
 
-.ink-converge-canvas {
+.zen-ripple-canvas {
   position: absolute;
   top: 0;
   left: 0;
@@ -273,72 +273,60 @@ html.lenis .lenis.lenis-stopped {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  filter: url(#gooey-ink-filter);
-  will-change: transform;
 }
 
-/* Vermilion Red Seal Stamp Box (朱砂印章) */
-.ink-seal-wrapper {
-  position: relative;
+/* Zen Leaf Silhouette (幾何禪意落葉) */
+.zen-leaf-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 72px;
+  margin-top: -36px;
+  margin-left: -36px;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: scale(0.9);
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.zen-leaf-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(18, 19, 22, 0.08));
+}
+
+/* Water Emerging Brand Identity (第一道漣漪自水底浮現的 Louis.) */
+.zen-brand-emerge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
   opacity: 0;
   will-change: transform, opacity;
 }
 
-.ink-seal-box {
-  border: 2px solid #D93829; /* Authentic Vermilion Red */
-  padding: 0.6rem 1.6rem;
-  background: rgba(217, 56, 41, 0.04);
-  box-shadow: inset 0 0 12px rgba(217, 56, 41, 0.12), 0 4px 20px rgba(217, 56, 41, 0.15);
-  border-radius: 2px;
-  position: relative;
-}
-
-.ink-seal-inner-frame {
-  border: 1px solid rgba(217, 56, 41, 0.4);
-  padding: 0.4rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.ink-seal-text {
+.zen-brand-text {
   font-family: var(--font-serif);
-  font-size: 2.2rem;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
   font-weight: 700;
-  color: #D93829;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
+  color: var(--ink-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-.ink-seal-sub {
+.zen-brand-tag {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: #D93829;
-  letter-spacing: 0.2em;
-  opacity: 0.85;
-}
-
-/* Collapsing Vermilion Focal Dot (高能聚焦點) */
-.ink-focal-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 12px;
-  height: 12px;
-  background: #D93829;
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  z-index: 20;
-  box-shadow: 0 0 24px #D93829, 0 0 48px #D93829;
-  pointer-events: none;
-  will-change: transform, opacity;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
 }
 
 /* ==========================================================================

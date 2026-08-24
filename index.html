@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=2.1.4">
+  <link rel="stylesheet" href="style.css?v=2.1.5">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -32,33 +32,28 @@
   <!-- Tactile Paper Grain Texture Overlay -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
-  <!-- SVG Gooey Liquid Filter for Organic Metaball Water Droplets Merge -->
-  <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
-    <defs>
-      <filter id="gooey-ink-filter">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
-        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -9" result="goo" />
-        <feBlend in="SourceGraphic" in2="goo" />
-      </filter>
-    </defs>
-  </svg>
-
-  <!-- Cinematic Ink-Stamp Opening Reveal Overlay (Self-destroying after 1.8s) -->
-  <div class="ink-opening-curtain" id="ink-opening-curtain">
-    <canvas id="ink-converge-canvas" class="ink-converge-canvas"></canvas>
+  <!-- Zen Leaf & Water Ripple Opening Reveal Overlay (Self-destroying after 2s) -->
+  <div class="zen-leaf-curtain" id="zen-leaf-curtain">
+    <canvas id="zen-ripple-canvas" class="zen-ripple-canvas"></canvas>
     
-    <!-- Central Vermilion Red Seal Stamp (朱砂印章) -->
-    <div class="ink-seal-wrapper" id="ink-seal-wrapper">
-      <div class="ink-seal-box">
-        <div class="ink-seal-inner-frame">
-          <span class="ink-seal-text">Louis.</span>
-          <span class="ink-seal-sub">AUTHENTIC / 2026</span>
-        </div>
-      </div>
+    <!-- Zen Fallen Leaf Silhouette -->
+    <div class="zen-leaf-wrap" id="zen-leaf-wrap">
+      <svg class="zen-leaf-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Elegant Bamboo / Ginkgo Silhouette Curve -->
+        <path d="M50 15C50 15 32 38 34 68C36 90 50 95 50 95C50 95 64 90 66 68C68 38 50 15 50 15Z" stroke="#2D3A2F" stroke-width="1.8" fill="rgba(45, 58, 47, 0.08)" />
+        <path d="M50 20V90" stroke="#2D3A2F" stroke-width="1.2" stroke-linecap="round" />
+        <path d="M50 40C44 48 38 52 38 52" stroke="#2D3A2F" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+        <path d="M50 48C56 56 62 60 62 60" stroke="#2D3A2F" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+        <path d="M50 62C44 68 40 72 40 72" stroke="#2D3A2F" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+        <path d="M50 70C56 76 60 80 60 80" stroke="#2D3A2F" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+      </svg>
     </div>
 
-    <!-- Collapsing Vermilion Focal Dot (超新星展開光點) -->
-    <div class="ink-focal-dot" id="ink-focal-dot"></div>
+    <!-- Water Emerging Brand Identity -->
+    <div class="zen-brand-emerge" id="zen-brand-emerge">
+      <span class="zen-brand-text">Louis.</span>
+      <span class="zen-brand-tag">2026 / PORTFOLIO</span>
+    </div>
   </div>
 
   <!-- Persistent Site Navigation (1:1 Monolog Header Architecture) -->
@@ -179,6 +174,6 @@
   </footer>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=2.1.4"></script>
+  <script type="module" src="app.js?v=2.1.5"></script>
 </body>
 </html>
