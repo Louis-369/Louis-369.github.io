@@ -76,9 +76,9 @@ export class Choreographer {
       return;
     }
 
-    // Initial Elements Setup
-    gsap.set('.hero-title-line', { y: '105%', opacity: 0 });
-    gsap.set(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt', '.site-nav'], { y: 24, opacity: 0 });
+    // Initial Elements Setup: Set homepage content visible underneath
+    gsap.set(['.site-nav', '.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], { y: 0, opacity: 1 });
+    gsap.set('.hero-title-line', { y: '0%', opacity: 1 });
     
     // Calligraphy Brush starting state: Poised directly above center
     gsap.set('.craft-pen-wrap', {
@@ -97,6 +97,10 @@ export class Choreographer {
       scale: 0.9,
       y: 20,
       opacity: 0
+    });
+    gsap.set('#zen-leaf-curtain', {
+      clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+      opacity: 1
     });
 
     const revealTl = gsap.timeline({
@@ -136,7 +140,6 @@ export class Choreographer {
       repeat: 1,
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
-          // Injects physical Navier-Stokes drop
           waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0]);
           setTimeout(() => {
             if (waterAnimator) waterAnimator.spawnDrop(0.51, 0.49, waterAnimator.INKS[1]);
@@ -150,94 +153,67 @@ export class Choreographer {
       opacity: 1,
       scale: 1,
       y: -85,
-      duration: 1.5,
+      duration: 1.4,
       ease: 'power2.out'
     }, '-=0.2');
 
     // 3. (2.2s - 3.6s) Brush smoothly lifts and glides to the FAR LEFT edge of the screen
     revealTl.to('.craft-pen-wrap', {
-      x: -window.innerWidth * 0.42, // Glides to leftmost edge
+      x: -window.innerWidth * 0.44, // Glides to leftmost edge
       y: -20,
       rotation: -14, // Tilts inward ready to sweep
       duration: 1.4,
       ease: 'power2.inOut'
-    }, '-=1.0');
+    }, '-=0.8');
 
-    // 4. (3.6s - 5.0s) Brush sweeps from FAR LEFT all the way across to FAR RIGHT
+    // 4. (3.6s - 5.2s) Option A: Brush Nib physically wipes the curtain open via Dynamic Clip-Path
     const sweepProgress = { p: 0 };
     revealTl.to('.craft-pen-wrap', {
-      x: window.innerWidth * 0.48, // Sweeps across to far right
-      y: 12,
-      rotation: 20,
-      opacity: 0,
-      duration: 1.45,
+      x: window.innerWidth * 0.50, // Sweeps across to far right beyond screen edge
+      y: 15,
+      rotation: 22,
+      opacity: 1, // Keep solid until finish!
+      duration: 1.6,
       ease: 'power2.inOut'
     }, '+=0.2');
 
     revealTl.to(sweepProgress, {
       p: 1,
-      duration: 1.45,
+      duration: 1.6,
       ease: 'power2.inOut',
       onUpdate: () => {
+        const p = sweepProgress.p;
+        // Screen percentage from 0% to 100%
+        const cutX = Math.max(0, Math.min(100, p * 105));
+        
+        // Curtain clip-path physically peels away exactly behind the brush nib
+        const curtain = document.getElementById('zen-leaf-curtain');
+        if (curtain) {
+          curtain.style.clipPath = `polygon(${cutX}% 0%, 100% 0%, 100% 100%, ${cutX}% 100%)`;
+        }
+
         if (waterAnimator && typeof waterAnimator.sweepHorizontalFlow === 'function') {
-          // Calculate exact real-time pen tip position on screen (0.08 to 0.92)
-          const currentX = 0.08 + sweepProgress.p * 0.84;
-          const currentY = 0.5 - Math.sin(sweepProgress.p * Math.PI) * 0.04;
-          waterAnimator.sweepHorizontalFlow(currentX, currentY, 1.0 - sweepProgress.p * 0.3);
+          const currentX = 0.05 + p * 0.90;
+          const currentY = 0.5 - Math.sin(p * Math.PI) * 0.05;
+          waterAnimator.sweepHorizontalFlow(currentX, currentY, 1.2);
         }
       }
     }, '<');
 
-    const washObj = { w: 0 };
-    revealTl.to(washObj, {
-      w: 1,
-      duration: 1.45,
-      ease: 'power2.out',
-      onUpdate: () => {
-        if (waterAnimator) {
-          waterAnimator.washProgress = washObj.w;
-        }
-      }
-    }, '<');
-
-    // Brand dissolves smoothly with sweep
+    // Brand is wiped away synchronously as the brush crosses center
     revealTl.to('.zen-brand-emerge', {
       opacity: 0,
-      scale: 1.08,
-      duration: 0.9,
-      ease: 'power2.out'
-    }, '<');
+      scale: 1.05,
+      duration: 0.6,
+      ease: 'power1.out'
+    }, '-=0.9');
 
-    // 5. (5.0s - 6.2s) Curtain opens smoothly into Ivory Homepage
-    revealTl.to('#zen-leaf-curtain', {
+    // Brush fades out only after reaching far right edge
+    revealTl.to('.craft-pen-wrap', {
       opacity: 0,
-      duration: 1.2,
-      ease: 'power2.inOut'
-    }, '-=0.5');
-
-    // Homepage Typography & Navigation Take Over with Pure Grace
-    revealTl.to('.site-nav', {
-      y: 0,
-      opacity: 1,
-      duration: 1.0,
-      ease: 'power3.out'
-    }, '-=0.6');
-
-    revealTl.to('.hero-title-line', {
-      y: '0%',
-      opacity: 1,
-      stagger: 0.1,
-      duration: 1.1,
-      ease: 'power3.out'
-    }, '-=0.8');
-
-    revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
-      y: 0,
-      opacity: 1,
-      stagger: 0.08,
-      duration: 0.9,
-      ease: 'power3.out'
-    }, '-=0.7');
+      duration: 0.3,
+      ease: 'power2.out'
+    }, '-=0.2');
   }
 
   /**
