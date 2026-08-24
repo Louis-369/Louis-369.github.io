@@ -202,9 +202,9 @@ export class Choreographer {
     // ─────────────────────────────────────────────────────────────────
 
     // 4. (3.2s - 5.0s) PURE LINEAR DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
-    // Period Dot Expands as a Black Hole Singularity (Option A: 2.6x expansion)!
+    // Period Dot acts as the Event Horizon Core for the WebGL Noir Accretion Disk!
     revealTl.to('#hero-title-dot', {
-      scale: 2.6,
+      scale: 1.35,
       duration: 0.8,
       ease: 'power2.out'
     }, '-=0.6');
@@ -233,11 +233,11 @@ export class Choreographer {
       }
     }, '<');
 
-    // 5. (4.8s - 5.5s) Black Hole Period Dot Snaps Back to Original Scale!
+    // 5. (4.8s - 5.5s) Black Hole Accretion Disk Collapses back into the crisp Typographic Period Dot!
     revealTl.to('#hero-title-dot', {
       scale: 1.0,
       duration: 0.65,
-      ease: 'back.out(1.5)'
+      ease: 'back.out(1.4)'
     }, '-=0.4');
 
     // Water Fluid Canvas cleanly completes absorption

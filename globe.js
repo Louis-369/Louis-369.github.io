@@ -381,7 +381,7 @@ export class WebGLFluidWaterAnimation {
       }
     `;
 
-    // Master Hybrid Shader: Authentic Navier-Stokes Fluid + 3D Liquid Water Surface (Dual Light Fresnel Specular & Liquid Glow)
+    // Master Hybrid Shader: Authentic Navier-Stokes Fluid + 3D Liquid Water Surface + Noir Accretion Disk Black Hole
     const FRAG_DISPLAY = `
       precision highp float;
       precision highp sampler2D;
@@ -391,6 +391,34 @@ export class WebGLFluidWaterAnimation {
       uniform vec2 uAspect;
       uniform vec2 uRes;
       uniform float uWash;
+      uniform float uTime;
+      uniform float aspectRatio;
+      uniform vec2 uSinkCenter;
+      uniform float uSinkForce;
+
+      float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}
+      
+      float noise(vec2 p){
+        vec2 ip=floor(p);
+        vec2 u=fract(p);
+        u=u*u*(3.0-2.0*u);
+        float res=mix(mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+        return res*res;
+      }
+      
+      float fbm(vec2 p, float timeOffset) {
+        float total=0.0;
+        float amplitude=0.65;
+        for(int i=0;i<4;i++){
+          float timeScale=0.6+0.15*float(i);
+          float noiseVal = noise(p*2.0+vec2(timeOffset*timeScale*0.5,timeOffset*timeScale*0.35));
+          total+=amplitude*noiseVal;
+          p+=vec2(noiseVal*0.2,-noiseVal*0.15);
+          p*=2.1;
+          amplitude*=0.5;
+        }
+        return total;
+      }
 
       void main () {
         vec2 uv = vUv;
@@ -432,7 +460,6 @@ export class WebGLFluidWaterAnimation {
         inkCol = mix(inkCol, vec3(0.06, 0.05, 0.05), clamp(hC * 0.8, 0.0, 0.95));
 
         // 4. Rayleigh Atmospheric Volumetric Ink Mist (瑞利體積煙波晨霧漫射 · 溫潤朦朧感)
-        // Creates the signature ethereal misty halo around spreading ink droplets
         float mistIntensity = smoothstep(0.02, 0.45, hC) * (1.0 - smoothstep(0.40, 0.85, hC));
         vec3 mistColor = vec3(0.96, 0.955, 0.945); // Soft Warm Ivory Morning Mist
         inkCol = mix(inkCol, mistColor, mistIntensity * 0.42 * lightRetract);
@@ -445,6 +472,62 @@ export class WebGLFluidWaterAnimation {
         inkCol += specular * smoothstep(0.05, 0.35, inkAmount);
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
+
+        // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (From User's Reference Code)
+        if (uSinkForce > 0.01) {
+          vec2 toCenter = (uv - uSinkCenter);
+          toCenter.x *= aspectRatio;
+          float r = length(toCenter);
+          
+          // Scaled to a refined compact size: Disk outer radius ~ 0.038 (approx 36px - 44px)
+          float diskOuter = 0.042 * clamp(uSinkForce * 1.3, 0.0, 1.0);
+          float diskInner = diskOuter * 0.22; // Event horizon radius
+          
+          if (r < diskOuter) {
+            float normR = clamp((r - diskInner) / (diskOuter - diskInner), 0.0, 1.0);
+            float angle = atan(toCenter.y, toCenter.x);
+            
+            // Accretion disk orbital velocity & rotation (Reference Shader Math)
+            float rotSpeed = 3.5 / (pow(r * 40.0, 1.2) + 0.8);
+            float rotAngle = angle - uTime * rotSpeed * 2.8;
+            vec2 diskCoord = vec2(r * 28.0, rotAngle * 2.5);
+            
+            float fbmPattern = fbm(diskCoord, uTime * 0.45);
+            
+            // Spiral vortex arm
+            float spiral = sin(rotAngle * 2.0 + r * 140.0 - uTime * 5.0);
+            float arm = smoothstep(-0.3, 0.7, spiral) * 0.4;
+            float totalPattern = fbmPattern * 0.7 + arm;
+
+            // Noir Monochrome Palette: Pure White Hot Spine -> Silver Gray -> Charcoal -> Void Black
+            vec3 colorHot = vec3(0.98, 0.98, 1.0);
+            vec3 colorMid = vec3(0.72, 0.72, 0.76);
+            vec3 colorDeep = vec3(0.04, 0.04, 0.05);
+
+            vec3 diskColor = mix(colorHot, colorMid, smoothstep(0.0, 0.45, normR));
+            diskColor = mix(diskColor, colorDeep, smoothstep(0.45, 1.0, normR));
+            diskColor *= (totalPattern + 0.4) * 1.4;
+
+            // Photon Ring Lensing Ring (Brilliant thin white-silver rim at inner edge)
+            float photonRing = exp(-pow((normR - 0.08) * 16.0, 2.0)) * 1.6;
+            diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
+
+            // Disk alpha mask
+            float diskAlpha = smoothstep(0.0, 0.06, normR) * (1.0 - smoothstep(0.82, 1.0, normR));
+            diskAlpha *= clamp(uSinkForce * 1.5, 0.0, 1.0);
+
+            // Composite Accretion Disk onto Canvas
+            inkCol = mix(inkCol, diskColor, diskAlpha);
+            alpha = max(alpha, diskAlpha);
+
+            // True Black Hole Event Horizon (Pure solid black inside diskInner)
+            if (r < diskInner) {
+              float innerMask = 1.0 - smoothstep(diskInner * 0.85, diskInner, r);
+              inkCol = mix(inkCol, vec3(0.02, 0.02, 0.02), innerMask * clamp(uSinkForce * 2.0, 0.0, 1.0));
+              alpha = max(alpha, innerMask);
+            }
+          }
+        }
 
         gl_FragColor = vec4(inkCol, alpha);
       }
@@ -776,6 +859,10 @@ export class WebGLFluidWaterAnimation {
     gl.uniform2f(this.progDisplay.uniforms.uAspect, w / m, h / m);
     gl.uniform2f(this.progDisplay.uniforms.uRes, w, h);
     gl.uniform1f(this.progDisplay.uniforms.uWash, this.washProgress);
+    gl.uniform1f(this.progDisplay.uniforms.uTime, performance.now() / 1000);
+    gl.uniform1f(this.progDisplay.uniforms.aspectRatio, this.canvas.width / this.canvas.height);
+    gl.uniform2f(this.progDisplay.uniforms.uSinkCenter, this.sinkCenter ? this.sinkCenter.x : 0.5, this.sinkCenter ? this.sinkCenter.y : 0.5);
+    gl.uniform1f(this.progDisplay.uniforms.uSinkForce, this.sinkForce || 0);
     this.blit(null);
   }
 
