@@ -123,7 +123,7 @@ class Application {
       });
     }
 
-    // 2. Smooth navigation anchor links
+    // 2. Smooth navigation anchor links & SCROLL DOWN click
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener('click', (e) => {
         const targetId = anchor.getAttribute('href');
@@ -131,7 +131,8 @@ class Application {
           const targetEl = document.querySelector(targetId);
           if (targetEl && this.choreographer && this.choreographer.lenis) {
             e.preventDefault();
-            this.choreographer.lenis.scrollTo(targetEl, { offset: -60, duration: 1.4 });
+            // Scroll precisely to the top of #works so hero & SCROLL DOWN are 100% past the top edge
+            this.choreographer.lenis.scrollTo(targetEl, { offset: 0, duration: 1.4 });
           }
         }
       });
