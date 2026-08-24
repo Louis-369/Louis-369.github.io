@@ -168,11 +168,11 @@ export class Choreographer {
       ease: 'power2.in'
     }, '<');
 
-    // 4. (2.7s - 4.2s) THE REAL PERIOD DOT '.' EXPANDS DIRECTLY INTO A MASSIVE VORTEX!
-    revealTl.to('#hero-title-dot', {
-      scale: 18,
+    // 4. (2.7s - 4.2s) THE REAL PERIOD DOT '.' EXPANDS INTO A SPIRAL INK VORTEX RING!
+    revealTl.to('#ink-vortex-ring', {
+      scale: 1.25, // Expands into full 260px rotating spiral vortex
       rotation: 360,
-      borderRadius: '50%',
+      opacity: 1,
       duration: 0.9,
       ease: 'power3.out'
     }, '-=0.3');
@@ -181,11 +181,11 @@ export class Choreographer {
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.4,
+      duration: 1.5,
       ease: 'power2.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
-          // Track exact screen coordinates of the real dot
+          // Track exact screen coordinates of the dot center
           const dotEl = document.getElementById('hero-title-dot');
           let dotX = 0.58;
           let dotY = 0.50;
@@ -194,17 +194,18 @@ export class Choreographer {
             dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
             dotY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 4.5);
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 4.8);
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
     }, '<');
 
-    // 5. (3.8s - 4.5s) The Dot Collapses rapidly back to its natural small solid dot '.'
-    revealTl.to('#hero-title-dot', {
-      scale: 1.0,
+    // 5. (3.9s - 4.6s) The Spiral Vortex Ring rapidly collapses back into the dot!
+    revealTl.to('#ink-vortex-ring', {
+      scale: 0.001,
       rotation: 720,
-      duration: 0.7,
+      opacity: 0,
+      duration: 0.65,
       ease: 'power3.in'
     }, '-=0.4');
 

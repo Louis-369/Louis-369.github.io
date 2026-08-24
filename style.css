@@ -322,7 +322,7 @@ html.lenis .lenis.lenis-stopped {
 /* Minimalist Dip Pen Shadow & Glow */
 
 /* ==========================================================================
-   Hero Section & Clean Art Paper Canvas
+   Hero Section & Clean Art Paper Canvas (Layer 30: Unconditionally Above Fluid)
    ========================================================================== */
 .hero-section {
   position: relative;
@@ -332,7 +332,7 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 30; /* Unconditionally above Water Canvas (z-index: 20) */
 }
 
 .hero-viewport-frame {
@@ -343,6 +343,7 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 30;
 }
 
 .hero-media-inner {
@@ -353,7 +354,7 @@ html.lenis .lenis.lenis-stopped {
   align-items: center;
   justify-content: center;
   padding: 0 4vw;
-  z-index: 2;
+  z-index: 30;
 }
 
 .hero-content-wrap {
@@ -364,7 +365,7 @@ html.lenis .lenis.lenis-stopped {
   align-items: center;
   text-align: center;
   gap: 1.5rem;
-  z-index: 10;
+  z-index: 30;
 }
 
 .hero-badge {
@@ -393,7 +394,7 @@ html.lenis .lenis.lenis-stopped {
 .hero-title-container {
   overflow: visible;
   position: relative;
-  z-index: 30; /* Directly above Water Canvas (z-index: 20) */
+  z-index: 35;
 }
 
 .hero-title-line {
@@ -405,16 +406,42 @@ html.lenis .lenis.lenis-stopped {
   color: var(--ink-primary);
   display: inline-block;
   position: relative;
-  z-index: 30;
+  z-index: 35;
 }
 
-/* The Authentic Period Dot Itself (直球動畫本體：就是這顆句點本身進行放大與縮小) */
+/* The Authentic Period Dot Itself */
 .hero-title-dot {
   display: inline-block;
   position: relative;
   transform-origin: 50% 50%;
-  will-change: transform, border-radius, background;
-  z-index: 31;
+  will-change: transform;
+  z-index: 36;
+}
+
+/* Dynamic Spiral Ink Vortex Portal attached directly to the dot */
+.ink-vortex-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  margin-top: -110px;
+  margin-left: -110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.001) rotate(0deg);
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  z-index: 38;
+}
+
+.ink-vortex-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 20px rgba(18, 16, 14, 0.75));
 }
 
 .hero-tagline {
