@@ -418,14 +418,27 @@ export class WebGLFluidWaterAnimation {
         vec3 h2 = normalize(l2 + viewDir);
         float spec2 = pow(max(dot(normal, h2), 0.0), 160.0);
 
-        vec3 specular = (vec3(0.93, 0.95, 1.0) * spec1 * 0.65 + vec3(0.69, 0.69, 0.76) * spec2 * 0.35) * lightRetract;
+        vec3 specular = (vec3(0.93, 0.95, 1.0) * spec1 * 0.55 + vec3(0.69, 0.69, 0.76) * spec2 * 0.30) * lightRetract;
 
-        // 2. Beer–Lambert Deep Dye Absorption
+        // 2. Fresnel Grazing Liquid Water Sheen (菲涅爾水膜流光)
+        float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.4);
+        vec3 fresnelSheen = mix(vec3(0.95, 0.94, 0.92), vec3(0.82, 0.86, 0.92), fresnel);
+
+        // 3. Beer–Lambert Deep Dye Absorption
         vec3 paper = vec3(0.98, 0.972, 0.96); // Warm Ivory Canvas
         vec3 inkCol = paper * exp(-d);
         
         // Deepen the rich charcoal ink tones as light retracts
         inkCol = mix(inkCol, vec3(0.06, 0.05, 0.05), clamp(hC * 0.8, 0.0, 0.95));
+
+        // 4. Rayleigh Atmospheric Volumetric Ink Mist (瑞利體積煙波晨霧漫射 · 溫潤朦朧感)
+        // Creates the signature ethereal misty halo around spreading ink droplets
+        float mistIntensity = smoothstep(0.02, 0.45, hC) * (1.0 - smoothstep(0.40, 0.85, hC));
+        vec3 mistColor = vec3(0.96, 0.955, 0.945); // Soft Warm Ivory Morning Mist
+        inkCol = mix(inkCol, mistColor, mistIntensity * 0.42 * lightRetract);
+
+        // Blend in gentle Fresnel sheen across liquid contours
+        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.28 * lightRetract);
 
         // Soft specular highlight strictly tied to active ink bodies
         float inkAmount = clamp(hC * 1.8, 0.0, 1.0);
