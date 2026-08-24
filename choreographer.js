@@ -223,10 +223,10 @@ export class Choreographer {
     }
     // ─────────────────────────────────────────────────────────────────
 
-    // 4. (3.6s - 5.5s) Water Reaches 75% Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
+    // 4. (3.6s - 5.4s) Pure Linear Gravitational Vacuum Suction INTO the Period Dot
     revealTl.to('#hero-title-dot', {
       scale: 1.35,
-      duration: 0.8,
+      duration: 0.75,
       ease: 'power2.out'
     }, '+=0.45');
 
@@ -234,7 +234,7 @@ export class Choreographer {
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.9,
+      duration: 1.8,
       ease: 'power2.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
@@ -248,52 +248,52 @@ export class Choreographer {
           }
 
           // Direct linear gravitational vacuum pull straight into the period dot
-          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, suctionObj.power * 5.8);
-          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
+          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, suctionObj.power * 6.2);
+          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.3);
         }
       }
     }, '<');
 
-    // 5. (4.8s - 5.5s) Black Hole Accretion Disk Collapses back into the crisp Typographic Period Dot!
+    // 5. (5.4s - 5.9s) Ink 100% Absorbed -> Black Hole Accretion Disk Collapses into the Crisp Typographic Dot!
     revealTl.to('#hero-title-dot', {
       scale: 1.0,
-      duration: 0.65,
-      ease: 'back.out(1.4)'
-    }, '-=0.4');
+      duration: 0.55,
+      ease: 'back.out(1.5)'
+    });
 
-    // Smooth handover: DOM text fades in as WebGL fluid canvas completes absorption
+    // Smooth handover: DOM text fades in as suction completes inside the WebGL shader
     revealTl.to('.hero-title-line', {
       opacity: 1,
       scale: 1.0,
-      duration: 0.8,
+      duration: 0.65,
       ease: 'power2.out'
     }, '<');
 
-    // Water Fluid Canvas cleanly completes absorption
+    // WebGL Canvas is hidden ONLY AFTER ink has been 100% sucked into the black hole!
     revealTl.to('#water-fluid-canvas', {
       opacity: 0,
-      duration: 0.8,
-      ease: 'power2.inOut',
+      duration: 0.25,
+      ease: 'none',
       onComplete: () => {
         if (debugDotEl) debugDotEl.remove();
       }
-    }, '-=0.5');
+    }, '+=0.05');
 
-    // 6. (5.0s - 6.0s) Supporting Hero Elements & Navbar Gracefully Cascade In
+    // 6. (5.6s - 6.4s) Supporting Hero Elements & Navbar Gracefully Cascade In
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
-      duration: 1.0,
+      duration: 0.9,
       ease: 'power3.out'
-    }, '-=0.6');
+    }, '-=0.5');
 
     revealTl.to(['.hero-tagline', '.hero-scroll-indicator'], {
       y: 0,
       opacity: 1,
       stagger: 0.12,
-      duration: 1.0,
+      duration: 0.9,
       ease: 'power3.out'
-    }, '-=0.8');
+    }, '-=0.7');
   }
 
   /**
