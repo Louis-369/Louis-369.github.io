@@ -144,21 +144,21 @@ export class Choreographer {
             waterAnimator.initTextTexture();
           }
           // Wave 1: Heavy Pine Soot Core Ink (Center · 濃松煙主墨)
-          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.4);
+          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.35);
           
           setTimeout(() => {
-            // Wave 2: Left Lateral Ink Wing (Expands towards the left wing · 左側水墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.44, 0.495, waterAnimator.INKS[1], 1.25);
+            // Wave 2: Subtle Organic Left Drift (炭灰中墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.485, 0.495, waterAnimator.INKS[1], 1.15);
           }, 140);
 
           setTimeout(() => {
-            // Wave 3: Right Lateral Ink Wing (Expands towards the right wing · 右側水墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.56, 0.505, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.25);
+            // Wave 3: Subtle Organic Right Drift (流動水墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.515, 0.505, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.15);
           }, 280);
 
           setTimeout(() => {
-            // Wave 4: Atmospheric Bilateral Mist (Broad Ambient Spread · 散開全景淡墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 1.0);
+            // Wave 4: Ambient Cloud Ink (散開全景淡墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 0.95);
           }, 420);
         }
       }
@@ -223,12 +223,12 @@ export class Choreographer {
     }
     // ─────────────────────────────────────────────────────────────────
 
-    // 4. (3.8s - 5.7s) Water Reaches 80% Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
+    // 4. (3.6s - 5.5s) Water Reaches 75% Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
     revealTl.to('#hero-title-dot', {
       scale: 1.35,
       duration: 0.8,
       ease: 'power2.out'
-    }, '+=0.65');
+    }, '+=0.45');
 
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {

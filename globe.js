@@ -773,14 +773,14 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 3.6,
+      dur: 3.4,
       r0: 0.0001,
-      r1: 0.0086 * intensity * (0.9 + Math.random() * 0.25), // Expands gracefully to 80% coverage
-      swirl: (Math.random() - 0.5) * 1.2,
+      r1: 0.0076 * intensity * (0.88 + Math.random() * 0.24), // Graceful 75% natural coverage
+      swirl: (Math.random() - 0.5) * 0.6,
       seedAngle
     });
 
-    // 1. Full Bilateral 360° Ink Spread with Strong Horizontal Wings (飽滿的左右大片橫向水墨漫延)
+    // 1. Natural Balanced Organic Fluid Dispersion (自然平衡的天然有機水墨流淌)
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const jitter = (Math.random() - 0.5) * 0.35;
@@ -788,16 +788,13 @@ export class WebGLFluidWaterAnimation {
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // Natural horizontal lateral emphasis to comfortably fill wide screens
-      const horizontalBoost = 1.0 + Math.abs(cosT) * 0.35;
-      const speed = 58 * intensity * horizontalBoost;
-
+      const speed = 52 * intensity;
       this.splatVelocity(
         x + cosT * 0.008,
         y + sinT * 0.008,
         cosT * speed,
-        sinT * (speed / horizontalBoost),
-        0.0048
+        sinT * speed,
+        0.0045
       );
     }
   }
@@ -833,22 +830,21 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Lush fluid gliding expanding towards left & right wings
+      // Gentle fluid gliding
       if (d.age < d.dur * 0.88) {
-        const ringRad = 0.015 + ease * 0.062;
+        const ringRad = 0.015 + ease * 0.052;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5 + (Math.random() - 0.5) * 0.2;
+          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.4 + (Math.random() - 0.5) * 0.2;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
-          const hFactor = 1.0 + Math.abs(cosA) * 0.35;
 
           this.splatVelocity(
             d.x + cosA * ringRad,
             d.y + sinA * ringRad,
-            (cosA * 26 + -sinA * 12 * d.swirl) * hFactor,
-            sinA * 26 + cosA * 12 * d.swirl,
-            0.0048
+            cosA * 24 + -sinA * 8 * d.swirl,
+            sinA * 24 + cosA * 8 * d.swirl,
+            0.0045
           );
         }
       }
