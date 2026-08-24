@@ -255,7 +255,7 @@ html.lenis .lenis.lenis-stopped {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #111418; /* Deep Obsidian Slate Water Basin for Prussian Ink */
+  background: #FAF7EF; /* Warm Authentic Washi Paper Canvas */
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -332,17 +332,17 @@ html.lenis .lenis.lenis-stopped {
   font-family: var(--font-serif);
   font-size: clamp(2.6rem, 5.5vw, 4.0rem);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #2B2620; /* Deep Pine Soot Ink */
   letter-spacing: -0.02em;
   line-height: 1;
-  text-shadow: 0 4px 24px rgba(22, 42, 69, 0.8), 0 0 12px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 2px 18px rgba(35, 67, 107, 0.25);
 }
 
 .zen-brand-tag {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.22em;
-  color: #94A3B8;
+  color: #6E6354; /* Washi Muted Clay */
 }
 
 /* ==========================================================================
