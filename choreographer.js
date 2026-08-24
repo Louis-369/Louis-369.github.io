@@ -101,8 +101,10 @@ export class Choreographer {
     const revealTl = gsap.timeline({
       onComplete: () => {
         if (waterAnimator) waterAnimator.destroy();
-        const curtain = document.getElementById('zen-leaf-curtain');
-        if (curtain) curtain.remove();
+        const canvas = document.getElementById('water-fluid-canvas');
+        if (canvas) canvas.style.display = 'none';
+        const pen = document.getElementById('craft-pen-wrap');
+        if (pen) pen.remove();
         this.initLenis();
         this.initScrollAnimations();
         this.onRevealComplete();
@@ -209,8 +211,8 @@ export class Choreographer {
       ease: 'power3.in'
     }, '-=0.4');
 
-    // 6. (4.0s - 4.8s) Curtain fades out cleanly
-    revealTl.to('#zen-leaf-curtain', {
+    // 6. (4.0s - 4.8s) Water Fluid Canvas fades out cleanly
+    revealTl.to('#water-fluid-canvas', {
       opacity: 0,
       duration: 0.8,
       ease: 'power2.inOut'

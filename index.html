@@ -32,57 +32,6 @@
   <!-- Tactile Paper Grain Texture Overlay -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
-  <!-- Calligraphy Brush & Suminagashi Water Fluid Opening Reveal (5.0s Masterpiece Sequence) -->
-  <div class="zen-leaf-curtain" id="zen-leaf-curtain">
-    <canvas id="water-fluid-canvas" class="water-fluid-canvas"></canvas>
-    
-    <!-- Elegant Calligraphy Brush (東方書法毛筆) -->
-    <div class="craft-pen-wrap" id="craft-pen-wrap">
-      <div class="craft-pen-shadow"></div>
-      <svg class="craft-pen-svg" viewBox="0 0 160 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- Bamboo / Rosewood Brush Shaft Gradient -->
-          <linearGradient id="brushShaftGrad" x1="40" y1="0" x2="120" y2="300" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#2D241E" />
-            <stop offset="50%" stop-color="#1A1512" />
-            <stop offset="100%" stop-color="#0D0A08" />
-          </linearGradient>
-
-          <!-- Brass Ferrule Gradient (黃銅筆箍) -->
-          <linearGradient id="ferruleGrad" x1="60" y1="290" x2="100" y2="320" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#D4AF37" />
-            <stop offset="40%" stop-color="#AA820A" />
-            <stop offset="100%" stop-color="#5B4502" />
-          </linearGradient>
-
-          <!-- White Goat/Wolf Hair Brush Tip with Wet Ink Dipped Gradient -->
-          <linearGradient id="brushHairGrad" x1="60" y1="315" x2="100" y2="410" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#E2DCD0" /> <!-- Creamy white hair base -->
-            <stop offset="45%" stop-color="#A89F91" />
-            <stop offset="75%" stop-color="#2B2620" /> <!-- Deep pine soot ink -->
-            <stop offset="100%" stop-color="#12100E" /> <!-- Pitch black wet tip -->
-          </linearGradient>
-
-          <!-- Ambient Shaft Highlight -->
-          <linearGradient id="shaftSheen" x1="75" y1="0" x2="85" y2="300" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35" />
-            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.02" />
-          </linearGradient>
-        </defs>
-
-        <!-- Brush Shaft (修長紫檀木筆桿) -->
-        <path d="M74 0H86L84 300H76L74 0Z" fill="url(#brushShaftGrad)" />
-        <path d="M78 0H82L81 300H79L78 0Z" fill="url(#shaftSheen)" />
-
-        <!-- Brass Ferrule (筆箍) -->
-        <path d="M75 295H85L87 318H73L75 295Z" fill="url(#ferruleGrad)" stroke="#3A2C04" stroke-width="0.5" />
-
-        <!-- Soft Organic Tapered Hair Bristles (柔軟兼毫筆鋒) -->
-        <path d="M73 318C73 318 68 355 76 395C78 405 80 412 80 412C80 412 82 405 84 395C92 355 87 318 87 318H73Z" fill="url(#brushHairGrad)" />
-      </svg>
-    </div>
-  </div>
-
   <!-- Persistent Site Navigation (1:1 Monolog Header Architecture) -->
   <header class="site-nav">
     <div class="navbar-brand-wrap">
@@ -123,52 +72,88 @@
 
   <!-- Main Application Wrapper -->
   <main class="main-wrapper">
-    <!-- Hero Section (Clean Direct Ivory Art Paper Canvas) -->
+    <!-- Hero Section (Unified Single-Container Architecture) -->
     <section class="hero-section" id="hero">
-      <div class="hero-viewport-frame">
-        <div class="hero-media-inner">
-          <div class="hero-content-wrap">
-            <div class="hero-badge">
-              <span class="status-dot"></span>
-              <span>Available for innovative projects · 2026</span>
-            </div>
+      <!-- Layer 1: Warm Paper Canvas Base Background -->
+      <div class="hero-paper-bg"></div>
 
-            <div class="hero-title-container">
-              <h1 class="hero-title-line" id="hero-title-line">
-                Louis<span class="hero-title-dot" id="hero-title-dot">.<span class="ink-vortex-ring" id="ink-vortex-ring">
-                  <svg class="ink-vortex-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="100" cy="100" r="92" stroke="rgba(24, 20, 16, 0.45)" stroke-width="1.5" stroke-dasharray="4 6" />
-                    <!-- 3-Arm Golden Spiral Ink Streams (向心三臂旋渦墨絲) -->
-                    <path d="M100 100 C120 70, 160 80, 185 100 C195 120, 180 160, 150 180 C110 200, 40 180, 20 130 C0 80, 30 20, 90 12 C140 5, 185 45, 188 95" stroke="url(#vortexGrad1)" stroke-width="3" stroke-linecap="round" />
-                    <path d="M100 100 C80 130, 40 120, 15 100 C5 80, 20 40, 50 20 C90 0, 160 20, 180 70 C200 120, 170 180, 110 188 C60 195, 15 155, 12 105" stroke="url(#vortexGrad2)" stroke-width="2.2" stroke-linecap="round" />
-                    <path d="M100 100 C115 125, 145 130, 165 115 C185 95, 175 60, 150 40 C115 15, 60 30, 35 70 C10 115, 35 170, 80 185 C125 200, 180 165, 188 120" stroke="url(#vortexGrad1)" stroke-width="1.8" stroke-linecap="round" />
-                    <defs>
-                      <linearGradient id="vortexGrad1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#12100E" stop-opacity="0.95" />
-                        <stop offset="50%" stop-color="#2B241E" stop-opacity="0.75" />
-                        <stop offset="100%" stop-color="#5A4E40" stop-opacity="0.1" />
-                      </linearGradient>
-                      <linearGradient id="vortexGrad2" x1="200" y1="0" x2="0" y2="200" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
-                        <stop offset="50%" stop-color="#0F172A" stop-opacity="0.6" />
-                        <stop offset="100%" stop-color="#FAF7EF" stop-opacity="0" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </span></span>
-              </h1>
-            </div>
+      <!-- Layer 2: WebGL Navier-Stokes Physical Fluid Canvas (Middle Layer) -->
+      <canvas id="water-fluid-canvas" class="hero-fluid-canvas"></canvas>
 
-            <p class="hero-tagline">
-              Building digital tools that think & craft that moves people. Combining engineering rigor with award-winning editorial aesthetic.
-            </p>
-
-            <div class="hero-scroll-prompt">
-              <span>EXPLORE WORKS</span>
-              <span class="hero-scroll-arrow">↓</span>
-            </div>
-          </div>
+      <!-- Layer 3: Hero Content (Louis. Title & Dot Vortex on Top of Fluid) -->
+      <div class="hero-content-wrap">
+        <div class="hero-badge">
+          <span class="status-dot"></span>
+          <span>Available for innovative projects · 2026</span>
         </div>
+
+        <div class="hero-title-container">
+          <h1 class="hero-title-line" id="hero-title-line">
+            Louis<span class="hero-title-dot" id="hero-title-dot">.<span class="ink-vortex-ring" id="ink-vortex-ring">
+              <svg class="ink-vortex-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="92" stroke="rgba(24, 20, 16, 0.45)" stroke-width="1.5" stroke-dasharray="4 6" />
+                <!-- 3-Arm Golden Spiral Ink Streams (向心三臂旋渦墨絲) -->
+                <path d="M100 100 C120 70, 160 80, 185 100 C195 120, 180 160, 150 180 C110 200, 40 180, 20 130 C0 80, 30 20, 90 12 C140 5, 185 45, 188 95" stroke="url(#vortexGrad1)" stroke-width="3" stroke-linecap="round" />
+                <path d="M100 100 C80 130, 40 120, 15 100 C5 80, 20 40, 50 20 C90 0, 160 20, 180 70 C200 120, 170 180, 110 188 C60 195, 15 155, 12 105" stroke="url(#vortexGrad2)" stroke-width="2.2" stroke-linecap="round" />
+                <path d="M100 100 C115 125, 145 130, 165 115 C185 95, 175 60, 150 40 C115 15, 60 30, 35 70 C10 115, 35 170, 80 185 C125 200, 180 165, 188 120" stroke="url(#vortexGrad1)" stroke-width="1.8" stroke-linecap="round" />
+                <defs>
+                  <linearGradient id="vortexGrad1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#12100E" stop-opacity="0.95" />
+                    <stop offset="50%" stop-color="#2B241E" stop-opacity="0.75" />
+                    <stop offset="100%" stop-color="#5A4E40" stop-opacity="0.1" />
+                  </linearGradient>
+                  <linearGradient id="vortexGrad2" x1="200" y1="0" x2="0" y2="200" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+                    <stop offset="50%" stop-color="#0F172A" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#FAF7EF" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span></span>
+          </h1>
+        </div>
+
+        <p class="hero-tagline">
+          Building digital tools that think & craft that moves people. Combining engineering rigor with award-winning editorial aesthetic.
+        </p>
+
+        <div class="hero-scroll-prompt">
+          <span>EXPLORE WORKS</span>
+          <span class="hero-scroll-arrow">↓</span>
+        </div>
+      </div>
+
+      <!-- Layer 4: Calligraphy Brush (Poised directly over the canvas) -->
+      <div class="craft-pen-wrap" id="craft-pen-wrap">
+        <div class="craft-pen-shadow"></div>
+        <svg class="craft-pen-svg" viewBox="0 0 160 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="brushShaftGrad" x1="40" y1="0" x2="120" y2="300" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#2D241E" />
+              <stop offset="50%" stop-color="#1A1512" />
+              <stop offset="100%" stop-color="#0D0A08" />
+            </linearGradient>
+            <linearGradient id="ferruleGrad" x1="60" y1="290" x2="100" y2="320" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#D4AF37" />
+              <stop offset="40%" stop-color="#AA820A" />
+              <stop offset="100%" stop-color="#5B4502" />
+            </linearGradient>
+            <linearGradient id="brushHairGrad" x1="60" y1="315" x2="100" y2="410" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#E2DCD0" />
+              <stop offset="45%" stop-color="#A89F91" />
+              <stop offset="75%" stop-color="#2B2620" />
+              <stop offset="100%" stop-color="#12100E" />
+            </linearGradient>
+            <linearGradient id="shaftSheen" x1="75" y1="0" x2="85" y2="300" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.02" />
+            </linearGradient>
+          </defs>
+          <path d="M74 0H86L84 300H76L74 0Z" fill="url(#brushShaftGrad)" />
+          <path d="M78 0H82L81 300H79L78 0Z" fill="url(#shaftSheen)" />
+          <path d="M75 295H85L87 318H73L75 295Z" fill="url(#ferruleGrad)" stroke="#3A2C04" stroke-width="0.5" />
+          <path d="M73 318C73 318 68 355 76 395C78 405 80 412 80 412C80 412 82 405 84 395C92 355 87 318 87 318H73Z" fill="url(#brushHairGrad)" />
+        </svg>
       </div>
     </section>
 

@@ -247,38 +247,45 @@ html.lenis .lenis.lenis-stopped {
 }
 
 /* ==========================================================================
-   Minimalist Bauhaus Metal Dip Pen & Fluid Ripple Reveal
+   Hero Section & Clean Art Paper Canvas (Unified Single-Container Architecture)
    Stacking Hierarchy:
-   - Base Content & Hero: z-index: 10
-   - Hero Dot Vortex:     z-index: 15
-   - Opening Fluid Canvas: z-index: 20
-   - Calligraphy Pen:      z-index: 25
-   - Navigation Header:    z-index: 50
+   - Layer 1: .hero-paper-bg      (z-index: 1)  - Base Warm Paper
+   - Layer 2: .hero-fluid-canvas  (z-index: 2)  - Physical WebGL Fluid
+   - Layer 3: .hero-content-wrap  (z-index: 5)  - Louis. Title & Dot Vortex
+   - Layer 4: .craft-pen-wrap     (z-index: 10) - Calligraphy Pen Above
+   - Layer 5: .site-nav           (z-index: 50) - Header Navigation
    ========================================================================== */
-.zen-leaf-curtain {
-  position: fixed;
-  top: 0;
-  left: 0;
+.hero-section {
+  position: relative;
   width: 100vw;
   height: 100vh;
-  background: transparent; /* Pure transparent - reveals underlying Hero canvas */
-  z-index: 20;
+  min-height: 640px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  pointer-events: none; /* Let pointer events pass cleanly */
-  will-change: opacity;
+  background: var(--bg-canvas);
 }
 
-.water-fluid-canvas {
+.hero-paper-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-canvas);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-fluid-canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 21;
+  z-index: 2;
 }
 
 /* Minimalist Bauhaus Metal Dip Pen (工藝金屬沾水筆) */
@@ -290,13 +297,14 @@ html.lenis .lenis.lenis-stopped {
   height: 240px;
   margin-top: -240px; /* Pivots exactly from the nib tip */
   margin-left: -55px;
-  z-index: 25;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   transform-origin: 50% 100%; /* Pivot from tip */
   transform-style: preserve-3d;
   will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .craft-pen-shadow {
@@ -319,45 +327,8 @@ html.lenis .lenis.lenis-stopped {
   filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.35));
 }
 
-/* Minimalist Dip Pen Shadow & Glow */
-
-/* ==========================================================================
-   Hero Section & Clean Art Paper Canvas (Layer 30: Unconditionally Above Fluid)
-   ========================================================================== */
-.hero-section {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  min-height: 640px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30; /* Unconditionally above Water Canvas (z-index: 20) */
-}
-
-.hero-viewport-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: var(--bg-canvas);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30;
-}
-
-.hero-media-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4vw;
-  z-index: 30;
-}
-
 .hero-content-wrap {
+  position: relative;
   max-width: 960px;
   width: 100%;
   display: flex;
@@ -365,7 +336,8 @@ html.lenis .lenis.lenis-stopped {
   align-items: center;
   text-align: center;
   gap: 1.5rem;
-  z-index: 30;
+  padding: 0 4vw;
+  z-index: 5;
 }
 
 .hero-badge {
@@ -394,7 +366,7 @@ html.lenis .lenis.lenis-stopped {
 .hero-title-container {
   overflow: visible;
   position: relative;
-  z-index: 35;
+  z-index: 6;
 }
 
 .hero-title-line {
@@ -406,7 +378,7 @@ html.lenis .lenis.lenis-stopped {
   color: var(--ink-primary);
   display: inline-block;
   position: relative;
-  z-index: 35;
+  z-index: 6;
 }
 
 /* The Authentic Period Dot Itself */
@@ -415,7 +387,7 @@ html.lenis .lenis.lenis-stopped {
   position: relative;
   transform-origin: 50% 50%;
   will-change: transform;
-  z-index: 36;
+  z-index: 7;
 }
 
 /* Dynamic Spiral Ink Vortex Portal attached directly to the dot */
@@ -435,7 +407,13 @@ html.lenis .lenis.lenis-stopped {
   transform: scale(0.001) rotate(0deg);
   transform-origin: 50% 50%;
   will-change: transform, opacity;
-  z-index: 38;
+  z-index: 8;
+}
+
+.ink-vortex-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 20px rgba(18, 16, 14, 0.75));
 }
 
 .ink-vortex-svg {
