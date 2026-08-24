@@ -463,7 +463,7 @@ export class WebGLFluidWaterAnimation {
 
         // 4. Enhanced Rayleigh Atmospheric Volumetric Ink Mist (煙波晨霧瀰漫 · 溫潤朦朧意境)
         float mistIntensity = smoothstep(0.015, 0.50, hC) * (1.0 - smoothstep(0.35, 0.90, hC));
-        vec3 mistColor = vec3(0.97, 0.965, 0.955);
+        vec3 mistColor = vec3(0.45, 0.45, 0.48);
         inkCol = mix(inkCol, mistColor, mistIntensity * 0.75 * lightRetract);
 
         // Blend in glossy Fresnel liquid sheen
