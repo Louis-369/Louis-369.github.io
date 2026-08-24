@@ -32,12 +32,12 @@ export class WebGLFluidWaterAnimation {
     const config = {
       SIM_RES: 160,
       DYE_RES: 1024,
-      DENSITY_DISSIPATION: 0.01,
-      VELOCITY_DISSIPATION: 1.35,
+      DENSITY_DISSIPATION: 0.012,
+      VELOCITY_DISSIPATION: 1.15,
       PRESSURE: 0.85,
       PRESSURE_ITER: 22,
-      CURL: 6.0,
-      SPLAT_FORCE: 7500,
+      CURL: 10.5,
+      SPLAT_FORCE: 6800,
       WASH_DISSIPATION: 1.8,
     };
     this.config = config;
@@ -432,46 +432,46 @@ export class WebGLFluidWaterAnimation {
         float hR = (texture2D(uDye, uv + vec2(eps.x, 0.0)).r + texture2D(uDye, uv + vec2(eps.x, 0.0)).g + texture2D(uDye, uv + vec2(eps.x, 0.0)).b) * 0.333;
         float hT = (texture2D(uDye, uv + vec2(0.0, eps.y)).r + texture2D(uDye, uv + vec2(0.0, eps.y)).g + texture2D(uDye, uv + vec2(0.0, eps.y)).b) * 0.333;
 
-        // 3D Liquid Surface Normal Calculation with Surface Tension
-        vec3 normal = normalize(vec3((hC - hR) * 18.0, (hC - hT) * 18.0, 1.0));
+        // 3D Liquid Surface Normal Calculation with High-Gloss Surface Tension
+        vec3 normal = normalize(vec3((hC - hR) * 26.0, (hC - hT) * 26.0, 1.0));
         vec3 viewDir = vec3(0.0, 0.0, 1.0);
 
         // Two-Stage Early Light Retraction
         float lightRetract = pow(clamp(1.0 - uWash * 2.2, 0.0, 1.0), 2.5);
 
-        // 1. Dual Light Sources Blinn-Phong Specular Glints
+        // 1. Dual Light Sources Blinn-Phong Specular Glints (Rich Liquid Glaze)
         vec3 l1 = normalize(vec3(0.7, 0.7, 0.4));
         vec3 h1 = normalize(l1 + viewDir);
-        float spec1 = pow(max(dot(normal, h1), 0.0), 271.0);
+        float spec1 = pow(max(dot(normal, h1), 0.0), 230.0);
 
         vec3 l2 = normalize(vec3(0.3, 0.3, 0.6));
         vec3 h2 = normalize(l2 + viewDir);
-        float spec2 = pow(max(dot(normal, h2), 0.0), 160.0);
+        float spec2 = pow(max(dot(normal, h2), 0.0), 140.0);
 
-        vec3 specular = (vec3(0.93, 0.95, 1.0) * spec1 * 0.55 + vec3(0.69, 0.69, 0.76) * spec2 * 0.30) * lightRetract;
+        vec3 specular = (vec3(0.96, 0.97, 1.0) * spec1 * 0.82 + vec3(0.75, 0.76, 0.84) * spec2 * 0.42) * lightRetract;
 
-        // 2. Fresnel Grazing Liquid Water Sheen
-        float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.4);
-        vec3 fresnelSheen = mix(vec3(0.95, 0.94, 0.92), vec3(0.82, 0.86, 0.92), fresnel);
+        // 2. Fresnel Grazing Liquid Water Sheen (強烈水感反光邊緣)
+        float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.1);
+        vec3 fresnelSheen = mix(vec3(0.96, 0.95, 0.93), vec3(0.85, 0.89, 0.96), fresnel);
 
         // 3. Beer–Lambert Deep Dye Absorption
         vec3 paper = vec3(0.98, 0.972, 0.96); // Warm Ivory Canvas
         vec3 inkCol = paper * exp(-d);
         
-        // Deepen rich charcoal ink tones
-        inkCol = mix(inkCol, vec3(0.06, 0.05, 0.05), clamp(hC * 0.8, 0.0, 0.95));
+        // Deepen rich charcoal ink tones with rich gradient
+        inkCol = mix(inkCol, vec3(0.05, 0.045, 0.045), clamp(hC * 0.85, 0.0, 0.96));
 
-        // 4. Rayleigh Atmospheric Volumetric Ink Mist
-        float mistIntensity = smoothstep(0.02, 0.45, hC) * (1.0 - smoothstep(0.40, 0.85, hC));
-        vec3 mistColor = vec3(0.96, 0.955, 0.945);
-        inkCol = mix(inkCol, mistColor, mistIntensity * 0.42 * lightRetract);
+        // 4. Enhanced Rayleigh Atmospheric Volumetric Ink Mist (煙波晨霧瀰漫 · 溫潤朦朧意境)
+        float mistIntensity = smoothstep(0.015, 0.50, hC) * (1.0 - smoothstep(0.35, 0.90, hC));
+        vec3 mistColor = vec3(0.97, 0.965, 0.955);
+        inkCol = mix(inkCol, mistColor, mistIntensity * 0.75 * lightRetract);
 
-        // Blend in gentle Fresnel sheen
-        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.28 * lightRetract);
+        // Blend in glossy Fresnel liquid sheen
+        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.45 * lightRetract);
 
-        // Soft specular highlight strictly tied to active ink bodies
+        // Rich specular highlight strictly tied to active liquid ink bodies
         float inkAmount = clamp(hC * 1.8, 0.0, 1.0);
-        inkCol += specular * smoothstep(0.05, 0.35, inkAmount);
+        inkCol += specular * smoothstep(0.04, 0.30, inkAmount);
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
@@ -766,6 +766,10 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
+    // Generate unique organic seed for non-repeating natural ink flow
+    const seedAngle = Math.random() * Math.PI * 2;
+    const asymmetry = 0.7 + Math.random() * 0.6;
+
     this.drops.push({
       x,
       y,
@@ -773,17 +777,19 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.2,
       r0: 0.0001,
-      r1: 0.0062 * intensity, // Elegant organic liquid spread (~55%-65% coverage)
-      swirl: (Math.random() - 0.5) * 0.6
+      r1: 0.0068 * intensity * asymmetry,
+      swirl: (Math.random() - 0.5) * 1.8,
+      seedAngle
     });
 
-    // 1. Gentle Concentric Water Ripple (溫潤同心圓水波)
+    // 1. Organic Asymmetric Liquid Splash Wave
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const theta = (i / numRays) * Math.PI * 2;
-      const rx = Math.cos(theta);
-      const ry = Math.sin(theta);
-      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * 55 * intensity, ry * 55 * intensity, 0.004);
+      const waveMod = Math.sin(theta * 2.0 + seedAngle) * 0.35 + 1.0;
+      const rx = Math.cos(theta) * waveMod;
+      const ry = Math.sin(theta) * waveMod;
+      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * 62 * intensity, ry * 62 * intensity, 0.0045);
     }
   }
 
@@ -815,21 +821,21 @@ export class WebGLFluidWaterAnimation {
       const t = Math.min(d.age / d.dur, 1);
       const ease = 1 - Math.pow(1 - t, 2.2);
       const r = d.r0 + (d.r1 - d.r0) * ease;
-      const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
+      const amt = (1 - t) * (1 - t) * 3.0 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Smooth outward expanding water ripples
-      if (d.age < d.dur * 0.85) {
-        const ringRad = 0.015 + ease * 0.045;
+      // Organic marbling fluid glide
+      if (d.age < d.dur * 0.88) {
+        const ringRad = 0.015 + ease * 0.052;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2;
+          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.6;
           this.splatVelocity(
             d.x + Math.cos(ang) * ringRad,
             d.y + Math.sin(ang) * ringRad,
-            Math.cos(ang) * 24,
-            Math.sin(ang) * 24,
-            0.0045
+            Math.cos(ang) * 26 + -Math.sin(ang) * 14 * d.swirl,
+            Math.sin(ang) * 26 + Math.cos(ang) * 14 * d.swirl,
+            0.005
           );
         }
       }
