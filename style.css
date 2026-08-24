@@ -120,13 +120,13 @@ html.lenis .lenis.lenis-stopped {
   font-family: var(--font-serif);
   font-size: 1.45rem;
   font-weight: 700;
-  color: #000000;
+  color: #FFFFFF; /* Inverts to deep black on #FAF8F5, inverts to pure white on dark */
   text-decoration: none;
   letter-spacing: -0.02em;
   mix-blend-mode: difference;
-  filter: invert(1);
   transition: opacity 0.3s ease;
   cursor: pointer;
+  z-index: 100;
 }
 
 .nav-brand:hover {
@@ -273,6 +273,8 @@ html.lenis .lenis.lenis-stopped {
   height: 100%;
   pointer-events: none;
   z-index: 1;
+  filter: url(#gooey-ink-filter);
+  will-change: transform;
 }
 
 /* Vermilion Red Seal Stamp Box (朱砂印章) */
