@@ -7,13 +7,14 @@
 
 import { siteConfig, featuredProjects } from './data/projects.js';
 import { Choreographer } from './choreographer.js';
-import { AmbientParticles } from './globe.js';
+import { AmbientParticles, HeroWebGLShader } from './globe.js';
 
 class Application {
   constructor() {
     this.projects = featuredProjects;
     this.choreographer = null;
     this.ambientParticles = null;
+    this.heroWebGL = null;
     
     this.init();
   }
@@ -22,8 +23,9 @@ class Application {
     // 1. Render dynamic projects list (bymonolog paper-cut cards)
     this.renderProjects();
 
-    // 2. Initialize background particles
+    // 2. Initialize background particles & 1:1 s0animation WebGL Shader Sculpture
     this.ambientParticles = new AmbientParticles('ambient-canvas');
+    this.heroWebGL = new HeroWebGLShader('hero-webgl-canvas');
 
     // 3. Initialize Choreographer & play opening reveal (s0 rhythm)
     this.choreographer = new Choreographer({
