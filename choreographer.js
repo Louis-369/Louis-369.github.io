@@ -105,6 +105,7 @@ export class Choreographer {
         if (canvas) canvas.style.display = 'none';
         const pen = document.getElementById('craft-pen-wrap');
         if (pen) pen.remove();
+        gsap.set(['.hero-title-line', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
         this.initLenis();
         this.initScrollAnimations();
         this.onRevealComplete();
