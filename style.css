@@ -390,7 +390,7 @@ html.lenis .lenis.lenis-stopped {
   display: inline-block;
   width: 0.16em;
   height: 0.16em;
-  margin-left: 0.04em;
+  margin-left: 0.10em; /* Natural typographic breathing gap from 's' */
   margin-bottom: 0.08em;
   border-radius: 50%;
   background: currentColor;
