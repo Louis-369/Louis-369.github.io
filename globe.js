@@ -397,7 +397,7 @@ export class WebGLFluidWaterAnimation {
         vec3 normal = normalize(vec3((hC - hR) * 18.0, (hC - hT) * 18.0, 1.0));
         vec3 viewDir = vec3(0.0, 0.0, 1.0);
 
-        // 1. Dual Light Sources Blinn-Phong Specular (from User JSON Preset)
+        // 1. Dual Light Sources Blinn-Phong Specular (Tamed for pure organic ink feel)
         vec3 l1 = normalize(vec3(0.7, 0.7, 0.4));
         vec3 h1 = normalize(l1 + viewDir);
         float spec1 = pow(max(dot(normal, h1), 0.0), 271.0);
@@ -406,7 +406,7 @@ export class WebGLFluidWaterAnimation {
         vec3 h2 = normalize(l2 + viewDir);
         float spec2 = pow(max(dot(normal, h2), 0.0), 160.0);
 
-        vec3 specular = vec3(0.93, 0.95, 1.0) * spec1 * 1.6 + vec3(0.69, 0.69, 0.76) * spec2 * 0.9;
+        vec3 specular = (vec3(0.93, 0.95, 1.0) * spec1 * 0.45 + vec3(0.69, 0.69, 0.76) * spec2 * 0.25) * (1.0 - uWash);
 
         // 2. Fresnel Grazing Liquid Reflection
         float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.2);
@@ -417,13 +417,13 @@ export class WebGLFluidWaterAnimation {
         vec3 inkCol = paper * exp(-d);
         inkCol = mix(inkCol, fresnelCol, fresnel * 0.45);
         
-        // Specular highlight only appears on top of physical ink bodies (no floating white haze on empty background)
+        // Specular highlight only appears softly on top of physical ink bodies
         float inkAmount = clamp(hC * 1.6, 0.0, 1.0);
-        inkCol += specular * smoothstep(0.02, 0.25, inkAmount);
+        inkCol += specular * smoothstep(0.05, 0.35, inkAmount);
 
-        // 4. Liquid Glow (from User JSON Preset)
+        // 4. Liquid Glow
         float glow = pow(clamp(hC * 1.2, 0.0, 1.0), 8.3 * 0.25);
-        inkCol += vec3(0.95, 0.95, 0.95) * glow * 0.25 * smoothstep(0.02, 0.25, inkAmount);
+        inkCol += vec3(0.95, 0.95, 0.95) * glow * 0.12 * smoothstep(0.05, 0.35, inkAmount) * (1.0 - uWash);
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 

@@ -169,23 +169,24 @@ export class Choreographer {
     }, '<');
 
     // 4. (2.5s - 4.2s) PURE GPU FLUID VORTEX SINK AT THE DOT POSITION!
-    // Spawns a physical liquid ink core at the dot, and sucks all ripples into it
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.7,
+      duration: 1.8,
       ease: 'power2.inOut',
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
           const dotEl = document.getElementById('hero-title-dot');
+          let dotX = 0.58;
+          let dotY = 0.50;
           if (dotEl) {
             const rect = dotEl.getBoundingClientRect();
-            const dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
-            const dotY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
-            // Spawn intense concentrated ink drop at the dot location
-            waterAnimator.spawnDrop(dotX, dotY, waterAnimator.INKS[0]);
+            dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
+            dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
+          // Spawn physical ink drop precisely at the dot location
+          waterAnimator.spawnDrop(dotX, dotY, waterAnimator.INKS[0]);
         }
       },
       onUpdate: () => {
@@ -196,11 +197,11 @@ export class Choreographer {
           if (dotEl) {
             const rect = dotEl.getBoundingClientRect();
             dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
-            dotY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
+            dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
-          // True Navier-Stokes GPU Swirling Pull
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 5.2);
-          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.6);
+          // Tamed elegant Navier-Stokes GPU Swirling Pull into the dot
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 2.8);
+          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.5);
         }
       }
     }, '-=0.4');
