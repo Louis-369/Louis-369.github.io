@@ -407,24 +407,81 @@ html.lenis .lenis.lenis-stopped {
   font-weight: 400;
 }
 
-.hero-scroll-prompt {
+/*
+ * Vertical Bottom-Left Editorial Scroll Indicator
+ * Japanese/Editorial minimalist vertical typography with animated line track
+ */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2.8rem;
+  left: 4vw;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
+  gap: 1.1rem;
+  text-decoration: none;
+  z-index: 25;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.hero-scroll-indicator:hover {
+  transform: translateY(3px);
+}
+
+.hero-scroll-indicator .scroll-text {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   color: var(--ink-muted);
-  letter-spacing: 0.06em;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
 }
 
-.hero-scroll-arrow {
-  animation: bounceDown 1.8s infinite ease-in-out;
+.hero-scroll-indicator:hover .scroll-text {
+  color: var(--ink-primary);
 }
 
-@keyframes bounceDown {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
+.hero-scroll-indicator .scroll-line-track {
+  width: 1px;
+  height: 42px;
+  background: rgba(18, 19, 22, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-scroll-indicator .scroll-line-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--ink-primary);
+  transform-origin: top;
+  animation: scrollLineSlide 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes scrollLineSlide {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
 }
 
 /* ==========================================================================
