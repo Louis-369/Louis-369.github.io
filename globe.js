@@ -768,39 +768,40 @@ export class WebGLFluidWaterAnimation {
   spawnDrop(x, y, ink, intensity = 1.0) {
     const aspect = this.canvas.width / this.canvas.height;
     const seedAngle = Math.random() * Math.PI * 2;
-    const asymmetry = 0.8 + Math.random() * 0.5;
+    const randomChaos = Math.random() * 0.4 - 0.2;
 
     this.drops.push({
       x,
       y,
       ink,
       age: 0,
-      dur: 3.2,
+      dur: 3.5,
       r0: 0.0001,
-      r1: 0.0062 * intensity * asymmetry,
-      swirl: (Math.random() - 0.5) * 1.6,
+      r1: 0.0076 * intensity * (0.85 + Math.random() * 0.35), // Expands gracefully to ~75% coverage
+      swirl: (Math.random() - 0.5) * 1.5,
       seedAngle,
       aspect
     });
 
-    // 1. Aspect-Aware Corner-Fast Liquid Splash Wave (四角加速、邊緣放緩的自適應非對稱波瀾)
+    // 1. Pure Organic Random Fluid Dispersion (完全隨機無固定路徑的自然水墨流淌)
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
-      const theta = (i / numRays) * Math.PI * 2;
+      // Random angle jitter per ray so it never forms a geometric pattern
+      const jitter = (Math.random() - 0.5) * 0.35;
+      const theta = (i / numRays) * Math.PI * 2 + jitter;
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // Distance to screen edge multiplier: corners are further away (~sqrt(aspect^2 + 1)), edges closer
-      // Diagonal directions (|cos * sin| peaks at 45 deg) get higher speed
-      const diagonalFactor = Math.abs(cosT * sinT) * 2.0; // 0 at pure H/V, 1.0 at 45 deg
-      const cornerBoost = 1.0 + diagonalFactor * 0.55;
+      // Mild 0.25 corner speed compensation (not symmetric, purely subtle distance easing)
+      const diagonalFactor = Math.abs(cosT * sinT) * 2.0;
+      const cornerBoost = 1.0 + diagonalFactor * 0.25;
 
-      // Organic randomized wave perturbation
-      const waveMod = (Math.sin(theta * 3.0 + seedAngle) * 0.25 + 1.0) * cornerBoost;
-      const rx = cosT * waveMod;
-      const ry = sinT * waveMod;
+      // Pure organic non-repeating flow amplitude
+      const randomPower = (0.75 + Math.random() * 0.5) * cornerBoost;
+      const rx = cosT * randomPower;
+      const ry = sinT * randomPower;
 
-      const speed = 58 * intensity * cornerBoost;
+      const speed = 52 * intensity * randomPower;
       this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * speed, ry * speed, 0.0045);
     }
   }
@@ -836,15 +837,15 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Aspect-aware expanding fluid wave
+      // Organic fluid gliding
       if (d.age < d.dur * 0.88) {
-        const ringRad = 0.015 + ease * 0.048;
+        const ringRad = 0.015 + ease * 0.055;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5;
+          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5 + (Math.random() - 0.5) * 0.2;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
-          const diagBoost = 1.0 + Math.abs(cosA * sinA) * 0.45;
+          const diagBoost = 1.0 + Math.abs(cosA * sinA) * 0.25;
 
           this.splatVelocity(
             d.x + cosA * ringRad,

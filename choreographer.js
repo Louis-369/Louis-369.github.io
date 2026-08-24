@@ -168,13 +168,13 @@ export class Choreographer {
       }, '-=0.1');
     }
 
-    // 3. Brush Fades Out IMMEDIATELY within 0.1s after touching water (點完0.1秒消失)
+    // 3. Brush Fades Out IMMEDIATELY after touching water (零停頓 0.28 秒極速消失)
     revealTl.to('.craft-pen-wrap', {
       opacity: 0,
       y: -16,
       duration: 0.28,
       ease: 'power2.out'
-    }, '+=0.08');
+    }, '+=0.0');
 
     revealTl.to('.craft-pen-shadow', {
       opacity: 0,
@@ -217,13 +217,12 @@ export class Choreographer {
     }
     // ─────────────────────────────────────────────────────────────────
 
-    // 4. (3.2s - 5.0s) PURE LINEAR DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
-    // Period Dot acts as the Event Horizon Core for the WebGL Noir Accretion Disk!
+    // 4. (3.6s - 5.4s) Water Reaches 75% Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
     revealTl.to('#hero-title-dot', {
       scale: 1.35,
       duration: 0.8,
       ease: 'power2.out'
-    }, '-=0.6');
+    }, '+=0.4');
 
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
