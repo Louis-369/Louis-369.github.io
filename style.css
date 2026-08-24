@@ -313,43 +313,7 @@ html.lenis .lenis.lenis-stopped {
   filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.35));
 }
 
-/* Curtain Exact Hero Mirror (1:1 Pixel-Perfect Alignment) */
-.zen-curtain-hero-mirror {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  min-height: 640px;
-  pointer-events: none;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.zen-curtain-hero-mirror .hero-viewport-frame {
-  background: transparent !important;
-}
-
-.zen-opening-title {
-  opacity: 0;
-  will-change: transform, opacity;
-  text-shadow: 
-    0 0 24px rgba(250, 247, 239, 0.98),
-    0 0 48px rgba(250, 247, 239, 0.95),
-    0 4px 32px rgba(18, 19, 22, 0.4);
-}
-
-.letter-o-sink {
-  display: inline-block;
-  position: relative;
-  transition: transform 0.3s ease;
-}
-  color: var(--ink-secondary);
-  font-weight: 600;
-  text-shadow: 0 0 12px rgba(250, 247, 239, 0.9);
-}
+/* Minimalist Dip Pen Shadow & Glow */
 
 /* ==========================================================================
    Hero Section & Clean Art Paper Canvas
