@@ -116,22 +116,22 @@ export class Choreographer {
       penLandingY = (tRect.top + tRect.height * 0.46) - (window.innerHeight * 0.5);
     }
 
-    // 1. (0.0s - 1.8s) Brush descends vertically to the exact optical center of 'Louis'
+    // 1. (0.0s - 1.3s) Brush descends vertically to the exact optical center of 'Louis' (明快流暢 1.3s 垂降)
     revealTl.to('.craft-pen-wrap', {
       y: penLandingY,
       opacity: 1,
-      duration: 1.8,
+      duration: 1.3,
       ease: 'power3.out'
     });
 
     revealTl.to('.craft-pen-shadow', {
       scale: 1.0,
       opacity: 0.9,
-      duration: 1.8,
+      duration: 1.3,
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.8s - 2.15s) Brush Tip "Dips" Water -> Strikes water surface and releases ink!
+    // 2. (1.3s - 1.65s) Brush Tip "Dips" Water -> Strikes water surface and releases ink!
     revealTl.to('.craft-pen-wrap', {
       y: penLandingY + 12,
       scaleY: 0.93,
