@@ -776,8 +776,7 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.5,
       r0: 0.0001,
-      r1: 0.0076 * intensity * (0.85 + Math.random() * 0.35), // Expands gracefully to ~75% coverage
-      swirl: (Math.random() - 0.5) * 1.5,
+      r1: 0.0076 * intensity * (0.85 + Math.random() * 0.35),
       seedAngle,
       aspect
     });
@@ -834,17 +833,19 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Physical isotropic fluid gliding
+      // True Multi-Directional Natural Wave Dispersion (無任何全局旋轉力矩，徹底消除S型對稱！)
       if (d.age < d.dur * 0.88) {
         const ringRad = 0.015 + ease * 0.055;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5 + (Math.random() - 0.5) * 0.2;
+          const ang = (p / numPushes) * Math.PI * 2 + (Math.random() - 0.5) * 0.35;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
 
-          const vx = (cosA * 24 + -sinA * 12 * d.swirl) / aspect;
-          const vy = sinA * 24 + cosA * 12 * d.swirl;
+          // Pure outward isotropic fluid push with subtle random variations
+          const pushForce = 22 + (Math.random() - 0.5) * 8;
+          const vx = (cosA * pushForce) / aspect;
+          const vy = sinA * pushForce;
 
           this.splatVelocity(
             d.x + (cosA / aspect) * ringRad,

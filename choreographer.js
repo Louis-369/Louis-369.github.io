@@ -143,23 +143,31 @@ export class Choreographer {
           if (typeof waterAnimator.initTextTexture === 'function') {
             waterAnimator.initTextTexture();
           }
+          // Dynamic non-symmetric organic scatter offsets per page load
+          const ox2 = (Math.random() - 0.5) * 0.05;
+          const oy2 = (Math.random() - 0.5) * 0.05;
+          const ox3 = (Math.random() - 0.5) * 0.06;
+          const oy3 = (Math.random() - 0.5) * 0.06;
+          const ox4 = (Math.random() - 0.5) * 0.07;
+          const oy4 = (Math.random() - 0.5) * 0.07;
+
           // Wave 1: Heavy Pine Soot Core Ink (濃松煙主墨)
-          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.4);
+          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.35);
           
           setTimeout(() => {
-            // Wave 2: Charcoal Mist Ink (炭灰中墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.512, 0.490, waterAnimator.INKS[1], 1.2);
-          }, 140);
+            // Wave 2: Charcoal Mist Ink (炭灰中墨 - 隨機非對稱落點)
+            if (waterAnimator) waterAnimator.spawnDrop(0.5 + ox2, 0.5 + oy2, waterAnimator.INKS[1], 1.15);
+          }, 150);
 
           setTimeout(() => {
-            // Wave 3: Flowing Indigo Ink (流動水墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.488, 0.510, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.1);
-          }, 280);
+            // Wave 3: Flowing Indigo Ink (流動水墨 - 隨機非對稱落點)
+            if (waterAnimator) waterAnimator.spawnDrop(0.5 + ox3, 0.5 + oy3, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.05);
+          }, 300);
 
           setTimeout(() => {
-            // Wave 4: Atmospheric Cloud Ink (散開淡墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.505, 0.495, waterAnimator.INKS[1], 0.9);
-          }, 420);
+            // Wave 4: Atmospheric Cloud Ink (散開淡墨 - 隨機非對稱落點)
+            if (waterAnimator) waterAnimator.spawnDrop(0.5 + ox4, 0.5 + oy4, waterAnimator.INKS[1], 0.9);
+          }, 450);
         }
       }
     });
