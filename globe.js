@@ -665,57 +665,79 @@ export class WebGLFluidWaterAnimation {
 
   initTextTexture() {
     const gl = this.gl;
-    const textCanvas = document.createElement('canvas');
+    const titleEl = document.getElementById('hero-title-line');
+    if (!titleEl) return;
+
     const w = this.canvas.width;
     const h = this.canvas.height;
-    textCanvas.width = w;
-    textCanvas.height = h;
-    const ctx = textCanvas.getContext('2d');
+    const cRect = this.canvas.getBoundingClientRect();
+    const tRect = titleEl.getBoundingClientRect();
 
-    const titleEl = document.getElementById('hero-title-line');
-    const dotEl = document.getElementById('hero-title-dot');
-    if (titleEl && ctx) {
-      const cRect = this.canvas.getBoundingClientRect();
-      const tRect = titleEl.getBoundingClientRect();
+    const dpr = w / cRect.width;
+    const style = window.getComputedStyle(titleEl);
 
-      const dpr = w / cRect.width;
-      const style = window.getComputedStyle(titleEl);
-      const fontSize = parseFloat(style.fontSize) * dpr;
+    // 1:1 SVG ForeignObject DOM Cloning
+    // Embeds the EXACT DOM element and its CSS into SVG, ensuring 100.00% layout and glyph matching
+    const leftPx = tRect.left - cRect.left;
+    const topPx = tRect.top - cRect.top;
+    const widthPx = tRect.width + 10;
+    const heightPx = tRect.height + 10;
 
-      ctx.font = `700 ${fontSize}px "Playfair Display", Georgia, serif`;
-      ctx.letterSpacing = '-0.03em';
-      ctx.textBaseline = 'top';
-      ctx.fillStyle = '#FFFFFF';
+    const svgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${cRect.width}" height="${cRect.height}">
+        <foreignObject x="${leftPx}" y="${topPx}" width="${widthPx}" height="${heightPx}">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="
+            font-family: ${style.fontFamily};
+            font-size: ${style.fontSize};
+            font-weight: ${style.fontWeight};
+            letter-spacing: ${style.letterSpacing};
+            line-height: ${style.lineHeight};
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+          ">
+            Louis<span style="
+              display: inline-block;
+              width: 0.16em;
+              height: 0.16em;
+              margin-left: 0.04em;
+              margin-bottom: 0.08em;
+              border-radius: 50%;
+              background: #FFFFFF;
+              vertical-align: baseline;
+            "></span>
+          </div>
+        </foreignObject>
+      </svg>
+    `;
 
-      // Draw 'Louis' text exactly at DOM title bounding box top-left
-      const tx = (tRect.left - cRect.left) * dpr;
-      const ty = (tRect.top - cRect.top) * dpr;
-      ctx.fillText('Louis', tx, ty);
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const URL = window.URL || window.webkitURL || window;
+    const blobURL = URL.createObjectURL(svgBlob);
 
-      // Draw period dot at exact DOM dot bounding box
-      if (dotEl) {
-        const dRect = dotEl.getBoundingClientRect();
-        const dx = (dRect.left + dRect.width * 0.5 - cRect.left) * dpr;
-        const dy = (dRect.top + dRect.height * 0.5 - cRect.top) * dpr;
-        const radius = (dRect.width * 0.5) * dpr;
+    const img = new Image();
+    img.onload = () => {
+      const textCanvas = document.createElement('canvas');
+      textCanvas.width = w;
+      textCanvas.height = h;
+      const ctx = textCanvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(blobURL);
 
-        ctx.beginPath();
-        ctx.arc(dx, dy, radius, 0, Math.PI * 2);
-        ctx.fill();
+      if (!this.textTexture) {
+        this.textTexture = gl.createTexture();
       }
-    }
-
-    if (!this.textTexture) {
-      this.textTexture = gl.createTexture();
-    }
-    gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); // Fix Y-inversion
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    };
+    img.src = blobURL;
   }
 
   resizeCanvas() {
