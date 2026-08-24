@@ -168,27 +168,21 @@ export class Choreographer {
       ease: 'power2.in'
     }, '<');
 
-    // 4. (2.5s - 4.2s) PURE GPU FLUID VORTEX SINK AT THE DOT POSITION!
+    // 4. (2.5s - 4.2s) OPTICAL SPIRAL VORTEX DISC EXPANDS & SUCKS IN ALL FLUID!
+    revealTl.to('#vortex-spiral-disc', {
+      scale: 1.0,
+      rotation: 720,
+      opacity: 1,
+      duration: 1.1,
+      ease: 'power3.out'
+    }, '-=0.3');
+
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
       duration: 1.8,
       ease: 'power2.inOut',
-      onStart: () => {
-        if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
-          const dotEl = document.getElementById('hero-title-dot');
-          let dotX = 0.58;
-          let dotY = 0.50;
-          if (dotEl) {
-            const rect = dotEl.getBoundingClientRect();
-            dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
-            dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
-          }
-          // Spawn physical ink drop precisely at the dot location
-          waterAnimator.spawnDrop(dotX, dotY, waterAnimator.INKS[0]);
-        }
-      },
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
           const dotEl = document.getElementById('hero-title-dot');
@@ -199,20 +193,27 @@ export class Choreographer {
             dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
             dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
-          // Tamed elegant Navier-Stokes GPU Swirling Pull into the dot
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 2.8);
+          // Pure Navier-Stokes GPU Swirling Pull directly into the disc
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 3.5);
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.5);
         }
       }
+    }, '<');
+
+    // 5. (3.8s - 4.5s) Spiral Vortex Disc Shrinks Back into the Clean Typographic Period Dot '.'
+    revealTl.to('#vortex-spiral-disc', {
+      scale: 0.001,
+      rotation: 1440,
+      opacity: 0,
+      duration: 0.65,
+      ease: 'power3.in'
     }, '-=0.4');
 
-    // 5. (3.8s - 4.5s) Liquid Ink Solidifies into the Typographic Period Dot '.'
     revealTl.to('#hero-title-dot', {
       opacity: 1,
-      scale: 1,
-      duration: 0.6,
+      duration: 0.4,
       ease: 'power2.out'
-    }, '-=0.4');
+    }, '-=0.3');
 
     // 6. (4.0s - 4.8s) Water Fluid Canvas cleanly completes absorption
     revealTl.to('#water-fluid-canvas', {
