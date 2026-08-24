@@ -76,8 +76,8 @@ export class Choreographer {
       return;
     }
 
-    // Initial Elements Setup: Set Hero title in place, hide supporting elements
-    gsap.set('.hero-title-line', { y: '0%', opacity: 1 });
+    // Initial Elements Setup: All Hero elements initially HIDDEN!
+    gsap.set('.hero-title-line', { opacity: 0, scale: 0.96 });
     gsap.set(['.site-nav', '.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], { y: 25, opacity: 0 });
     gsap.set('.vortex-singularity-portal', { scale: 0.01, rotation: 0, opacity: 0 });
     
@@ -109,7 +109,7 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 1.5s) Brush descends vertically with Zen stillness
+    // 1. (0.0s - 1.5s) Brush descends vertically into pure clean water (No text yet!)
     revealTl.to('.craft-pen-wrap', {
       y: 0,
       opacity: 1,
@@ -125,7 +125,7 @@ export class Choreographer {
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.5s - 2.1s) Brush Tip "Dips" Water Center -> Drops Real GPU Fluid Ink
+    // 2. (1.5s - 2.1s) Brush Tip "Dips" Water -> Ink Drops -> Louis. Emerges from Under Water!
     revealTl.to('.craft-pen-wrap', {
       y: 12,
       scaleY: 0.94, // Soft bristle flexion
@@ -143,7 +143,15 @@ export class Choreographer {
       }
     });
 
-    // 3. (2.1s - 3.2s) Brush lifts upwards and pulls back into the top-right
+    // Louis. Emerges gracefully as the ink ripples out!
+    revealTl.to('.hero-title-line', {
+      opacity: 1,
+      scale: 1.0,
+      duration: 1.2,
+      ease: 'power2.out'
+    }, '-=0.2');
+
+    // 3. (2.2s - 3.2s) Brush lifts upwards and pulls back into the top-right
     revealTl.to('.craft-pen-wrap', {
       x: window.innerWidth * 0.35,
       y: -window.innerHeight * 0.45,
