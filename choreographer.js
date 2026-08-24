@@ -78,7 +78,7 @@ export class Choreographer {
 
     // Initial Elements Setup: All Hero elements initially HIDDEN!
     gsap.set('.hero-title-line', { opacity: 0, scale: 0.98 });
-    gsap.set(['.site-nav', '.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], { y: 25, opacity: 0 });
+    gsap.set(['.site-nav', '.hero-tagline', '.hero-scroll-prompt'], { y: 25, opacity: 0 });
     
     // Calligraphy Brush starting state: Poised directly above center
     gsap.set('.craft-pen-wrap', {
@@ -101,7 +101,7 @@ export class Choreographer {
         if (canvas) canvas.style.display = 'none';
         const pen = document.getElementById('craft-pen-wrap');
         if (pen) pen.remove();
-        gsap.set(['.hero-title-line', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
+        gsap.set(['.hero-title-line', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
         this.initLenis();
         this.initScrollAnimations();
         this.onRevealComplete();
@@ -271,7 +271,7 @@ export class Choreographer {
       ease: 'power3.out'
     }, '-=0.6');
 
-    revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
+    revealTl.to(['.hero-tagline', '.hero-scroll-prompt'], {
       y: 0,
       opacity: 1,
       stagger: 0.1,
