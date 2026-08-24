@@ -766,10 +766,9 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
-    // Unique organic asymmetric seed per drop
-    const seedAngle = Math.random() * Math.PI * 2;
-    const randomAsymmetry = 0.8 + Math.random() * 0.45;
     const aspect = this.canvas.width / this.canvas.height;
+    const seedAngle = Math.random() * Math.PI * 2;
+    const asymmetry = 0.8 + Math.random() * 0.5;
 
     this.drops.push({
       x,
@@ -778,29 +777,31 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.2,
       r0: 0.0001,
-      r1: 0.0068 * intensity * randomAsymmetry,
-      swirl: (Math.random() - 0.5) * 1.5,
-      seedAngle
+      r1: 0.0062 * intensity * asymmetry,
+      swirl: (Math.random() - 0.5) * 1.6,
+      seedAngle,
+      aspect
     });
 
-    // 1. Aspect-Aware Velocity Wave (四角長距加速、上下短距放緩、非對稱自然流淌)
-    const numRays = 28;
+    // 1. Aspect-Aware Corner-Fast Liquid Splash Wave (四角加速、邊緣放緩的自適應非對稱波瀾)
+    const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const theta = (i / numRays) * Math.PI * 2;
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // Distance to screen boundary from center along direction (cosT, sinT)
-      // Corners (where |cosT| and |sinT| are both large) get a natural 1.4x-1.6x velocity boost
-      const cornerFactor = Math.sqrt(cosT * cosT * aspect + sinT * sinT) * 1.1;
-      
-      // Asymmetric organic perturbation (每一次開場都有不同方位的狂放湧動)
-      const organicBias = Math.sin(theta * 3.0 + seedAngle) * 0.32 + Math.cos(theta + seedAngle * 1.7) * 0.18 + 1.0;
-      const finalSpeed = 58 * intensity * cornerFactor * organicBias;
+      // Distance to screen edge multiplier: corners are further away (~sqrt(aspect^2 + 1)), edges closer
+      // Diagonal directions (|cos * sin| peaks at 45 deg) get higher speed
+      const diagonalFactor = Math.abs(cosT * sinT) * 2.0; // 0 at pure H/V, 1.0 at 45 deg
+      const cornerBoost = 1.0 + diagonalFactor * 0.55;
 
-      const rx = cosT * 0.008;
-      const ry = sinT * 0.008;
-      this.splatVelocity(x + rx, y + ry, cosT * finalSpeed, sinT * finalSpeed, 0.0048);
+      // Organic randomized wave perturbation
+      const waveMod = (Math.sin(theta * 3.0 + seedAngle) * 0.25 + 1.0) * cornerBoost;
+      const rx = cosT * waveMod;
+      const ry = sinT * waveMod;
+
+      const speed = 58 * intensity * cornerBoost;
+      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * speed, ry * speed, 0.0045);
     }
   }
 
@@ -832,23 +833,25 @@ export class WebGLFluidWaterAnimation {
       const t = Math.min(d.age / d.dur, 1);
       const ease = 1 - Math.pow(1 - t, 2.2);
       const r = d.r0 + (d.r1 - d.r0) * ease;
-      const amt = (1 - t) * (1 - t) * 3.0 * dt * 5;
+      const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Organic marbling fluid glide with corner-aware propagation
+      // Aspect-aware expanding fluid wave
       if (d.age < d.dur * 0.88) {
-        const ringRad = 0.015 + ease * 0.052;
+        const ringRad = 0.015 + ease * 0.048;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
           const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
+          const diagBoost = 1.0 + Math.abs(cosA * sinA) * 0.45;
+
           this.splatVelocity(
             d.x + cosA * ringRad,
             d.y + sinA * ringRad,
-            cosA * 26 + -sinA * 14 * d.swirl,
-            sinA * 26 + cosA * 14 * d.swirl,
-            0.005
+            (cosA * 24 + -sinA * 12 * d.swirl) * diagBoost,
+            (sinA * 24 + cosA * 12 * d.swirl) * diagBoost,
+            0.0045
           );
         }
       }

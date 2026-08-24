@@ -168,19 +168,19 @@ export class Choreographer {
       }, '-=0.1');
     }
 
-    // 3. Brush Fades Out IMMEDIATELY within 0.1s of touching water (0.1秒極速漸隱消失)
+    // 3. Brush Fades Out IMMEDIATELY within 0.1s after touching water (點完0.1秒消失)
     revealTl.to('.craft-pen-wrap', {
       opacity: 0,
-      y: -20,
-      duration: 0.32,
-      ease: 'power2.inOut'
+      y: -16,
+      duration: 0.28,
+      ease: 'power2.out'
     }, '+=0.08');
 
     revealTl.to('.craft-pen-shadow', {
       opacity: 0,
-      scale: 0.05,
-      duration: 0.28,
-      ease: 'power2.inOut'
+      scale: 0.1,
+      duration: 0.25,
+      ease: 'power2.out'
     }, '<');
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────
