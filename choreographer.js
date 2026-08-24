@@ -77,9 +77,9 @@ export class Choreographer {
     }
 
     // Initial Elements Setup: All Hero elements initially HIDDEN!
-    gsap.set('.hero-title-line', { opacity: 0, scale: 0.96 });
+    gsap.set('.hero-title-line', { opacity: 0, scale: 0.98 });
+    gsap.set('#hero-title-dot', { opacity: 0 }); // Dot starts as pure WebGL liquid ink!
     gsap.set(['.site-nav', '.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], { y: 25, opacity: 0 });
-    gsap.set('.vortex-singularity-portal', { scale: 0.01, rotation: 0, opacity: 0 });
     
     // Calligraphy Brush starting state: Poised directly above center
     gsap.set('.craft-pen-wrap', {
@@ -94,9 +94,6 @@ export class Choreographer {
       opacity: 0,
       y: 40
     });
-    gsap.set('#zen-leaf-curtain', {
-      opacity: 1
-    });
 
     const revealTl = gsap.timeline({
       onComplete: () => {
@@ -105,14 +102,14 @@ export class Choreographer {
         if (canvas) canvas.style.display = 'none';
         const pen = document.getElementById('craft-pen-wrap');
         if (pen) pen.remove();
-        gsap.set(['.hero-title-line', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
+        gsap.set(['.hero-title-line', '#hero-title-dot', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
         this.initLenis();
         this.initScrollAnimations();
         this.onRevealComplete();
       }
     });
 
-    // 1. (0.0s - 1.5s) Brush descends vertically into pure clean water (No text yet!)
+    // 1. (0.0s - 1.5s) Brush descends vertically with Zen stillness
     revealTl.to('.craft-pen-wrap', {
       y: 0,
       opacity: 1,
@@ -128,7 +125,7 @@ export class Choreographer {
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.5s - 2.1s) Brush Tip "Dips" Water -> Ink Drops -> Louis. Emerges from Under Water!
+    // 2. (1.5s - 2.1s) Brush Tip "Dips" Water -> Ink Drops into Water Center!
     revealTl.to('.craft-pen-wrap', {
       y: 12,
       scaleY: 0.94, // Soft bristle flexion
@@ -146,7 +143,7 @@ export class Choreographer {
       }
     });
 
-    // Louis. Emerges gracefully as the ink ripples out!
+    // Louis emerges gracefully from under water, while the dot is pure liquid ink!
     revealTl.to('.hero-title-line', {
       opacity: 1,
       scale: 1.0,
@@ -171,24 +168,28 @@ export class Choreographer {
       ease: 'power2.in'
     }, '<');
 
-    // 4. (2.7s - 4.2s) THE REAL PERIOD DOT '.' EXPANDS INTO A SPIRAL INK VORTEX RING!
-    revealTl.to('#ink-vortex-ring', {
-      scale: 1.25, // Expands into full 260px rotating spiral vortex
-      rotation: 360,
-      opacity: 1,
-      duration: 0.9,
-      ease: 'power3.out'
-    }, '-=0.3');
-
+    // 4. (2.5s - 4.2s) PURE GPU FLUID VORTEX SINK AT THE DOT POSITION!
+    // Spawns a physical liquid ink core at the dot, and sucks all ripples into it
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.5,
+      duration: 1.7,
       ease: 'power2.inOut',
+      onStart: () => {
+        if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
+          const dotEl = document.getElementById('hero-title-dot');
+          if (dotEl) {
+            const rect = dotEl.getBoundingClientRect();
+            const dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
+            const dotY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
+            // Spawn intense concentrated ink drop at the dot location
+            waterAnimator.spawnDrop(dotX, dotY, waterAnimator.INKS[0]);
+          }
+        }
+      },
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
-          // Track exact screen coordinates of the dot center
           const dotEl = document.getElementById('hero-title-dot');
           let dotX = 0.58;
           let dotY = 0.50;
@@ -197,29 +198,29 @@ export class Choreographer {
             dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
             dotY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 4.8);
-          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
+          // True Navier-Stokes GPU Swirling Pull
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 5.2);
+          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.6);
         }
       }
-    }, '<');
-
-    // 5. (3.9s - 4.6s) The Spiral Vortex Ring rapidly collapses back into the dot!
-    revealTl.to('#ink-vortex-ring', {
-      scale: 0.001,
-      rotation: 720,
-      opacity: 0,
-      duration: 0.65,
-      ease: 'power3.in'
     }, '-=0.4');
 
-    // 6. (4.0s - 4.8s) Water Fluid Canvas fades out cleanly
+    // 5. (3.8s - 4.5s) Liquid Ink Solidifies into the Typographic Period Dot '.'
+    revealTl.to('#hero-title-dot', {
+      opacity: 1,
+      scale: 1,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, '-=0.4');
+
+    // 6. (4.0s - 4.8s) Water Fluid Canvas cleanly completes absorption
     revealTl.to('#water-fluid-canvas', {
       opacity: 0,
       duration: 0.8,
       ease: 'power2.inOut'
     }, '-=0.5');
 
-    // 7. (4.3s - 5.2s) Supporting Hero Elements & Navbar Gracefully Cascade In
+    // 7. (4.2s - 5.0s) Supporting Hero Elements & Navbar Gracefully Cascade In
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
