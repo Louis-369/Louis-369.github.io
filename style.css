@@ -107,7 +107,7 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
+  z-index: 1000;
   pointer-events: none;
   background: transparent;
 }
@@ -118,26 +118,28 @@ html.lenis .lenis.lenis-stopped {
   pointer-events: auto;
 }
 
-/* Logo Smart Inversion (100% Reliable Contrast): Crisp deep ink on paper (#121316), inverts to pure white on dark */
+/* Logo Smart Inversion (100% Realtime Blend Inversion): Deep black on white paper, pure white on dark cards */
 .nav-brand {
   display: inline-block;
   font-family: var(--font-serif);
   font-size: 1.45rem;
   font-weight: 700;
-  color: var(--ink-primary);
+  color: #FFFFFF;
+  mix-blend-mode: difference;
   text-decoration: none;
   letter-spacing: -0.02em;
-  transition: opacity 0.3s ease, color 0.3s ease;
+  transition: opacity 0.3s ease;
   cursor: pointer;
+  -webkit-font-smoothing: antialiased;
 }
 
 .nav-brand:hover {
   opacity: 0.75;
 }
 
-/* When header is over dark cards / dark zones */
-.site-nav.is-inverted .nav-brand {
-  color: #FFFFFF;
+/* Fallback class for JS observer */
+.nav-brand.is-over-dark {
+  color: #FFFFFF !important;
 }
 
 /* Right Navigation Group: Normal standard styling */
@@ -145,6 +147,7 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   align-items: center;
   pointer-events: auto;
+  mix-blend-mode: normal;
 }
 
 /* 1. Monolog Contiguous Seamless Links List (ul / li) */

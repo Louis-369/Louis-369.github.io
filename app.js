@@ -146,33 +146,46 @@ class Application {
   }
 
   initLogoContrastObserver() {
-    const nav = document.querySelector('.site-nav');
-    if (!nav) return;
+    const brand = document.querySelector('.nav-brand');
+    if (!brand) return;
 
     // Detect when logo scrolls over dark images or dark blocks
     const checkDarkOverlap = () => {
-      const brand = document.querySelector('.nav-brand');
-      if (!brand) return;
       const bRect = brand.getBoundingClientRect();
-      const brandCenterX = bRect.left + bRect.width * 0.5;
-      const brandCenterY = bRect.top + bRect.height * 0.5;
+      // Sample 3 points along the logo: left, center, right
+      const samplePoints = [
+        { x: bRect.left + 5, y: bRect.top + bRect.height * 0.5 },
+        { x: bRect.left + bRect.width * 0.5, y: bRect.top + bRect.height * 0.5 },
+        { x: bRect.right - 5, y: bRect.top + bRect.height * 0.5 }
+      ];
 
-      const elementsUnder = document.elementsFromPoint(brandCenterX, brandCenterY);
-      let isDark = false;
-      for (const el of elementsUnder) {
-        if (el.closest('.works-image-mask') || el.closest('.works-home-image') || el.closest('.footer-dark') || el.classList.contains('is-dark-surface')) {
-          isDark = true;
-          break;
+      let isOverDark = false;
+      for (const pt of samplePoints) {
+        const elementsUnder = document.elementsFromPoint(pt.x, pt.y);
+        for (const el of elementsUnder) {
+          if (
+            el.closest('.works-image-mask') || 
+            el.closest('.works-home-image') || 
+            el.closest('.works-placeholder-visual') || 
+            el.closest('.footer-dark') || 
+            el.classList.contains('is-dark-surface')
+          ) {
+            isOverDark = true;
+            break;
+          }
         }
+        if (isOverDark) break;
       }
-      if (isDark) {
-        nav.classList.add('is-inverted');
+
+      if (isOverDark) {
+        brand.classList.add('is-over-dark');
       } else {
-        nav.classList.remove('is-inverted');
+        brand.classList.remove('is-over-dark');
       }
     };
 
     window.addEventListener('scroll', checkDarkOverlap, { passive: true });
+    window.addEventListener('resize', checkDarkOverlap, { passive: true });
     checkDarkOverlap();
   }
 }
