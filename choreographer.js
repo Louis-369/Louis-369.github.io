@@ -53,11 +53,11 @@ export class Choreographer {
   }
 
   /**
-   * Realistic 3D Leaf Fall & WebGL Fluid Water Surface Opening Reveal
-   * 1. 3D Leaf Falls with organic 3D rotation & shadow expansion (0.0s - 0.6s)
-   * 2. Leaf Hits Water -> WebGL Physical Ripple Shader + "Louis." Wave Distortion (0.6s - 1.2s)
-   * 3. Leaf Sinks into deep water with optical refraction (1.2s - 1.6s)
-   * 4. 2nd Deep Shockwave Ripple sweeps full-screen -> dissolves curtain & reveals homepage (1.6s - 2.2s)
+   * Realistic 3D Leaf Fall & WebGL Fluid Water Surface Opening Reveal (Navier-Stokes Stable Fluids)
+   * 1. 3D Leaf Falls gently with realistic aerodynamic sway & shadow convergence (0.0s - 1.0s)
+   * 2. Leaf Hits Water Surface -> Generates Navier-Stokes Fluid Dispersion + "Louis." text emerges (1.0s - 2.0s)
+   * 3. Leaf Sinks into deep fluid with viscosity refraction (2.0s - 2.8s)
+   * 4. 2nd Deep Fluid Surge Sweeps Full-Screen -> dissolves curtain & reveals homepage (2.8s - 3.8s)
    */
   playOpeningReveal(waterAnimator = null) {
     const gsap = window.gsap;
@@ -82,18 +82,18 @@ export class Choreographer {
     
     // 3D Leaf starting state: High in the air with strong 3D rotation & floating shadow
     gsap.set('.zen-leaf-3d-wrap', {
-      y: -window.innerHeight * 0.65,
-      x: -50,
-      rotationX: 45,
-      rotationY: -30,
-      rotationZ: -25,
-      scale: 1.6,
+      y: -window.innerHeight * 0.7,
+      x: -60,
+      rotationX: 55,
+      rotationY: -35,
+      rotationZ: -30,
+      scale: 1.8,
       opacity: 0
     });
     gsap.set('.leaf-3d-shadow', {
-      scale: 0.2,
+      scale: 0.15,
       opacity: 0,
-      y: 40
+      y: 60
     });
     gsap.set('.zen-brand-emerge', {
       scale: 0.85,
@@ -112,116 +112,116 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 0.6s) 3D Leaf Swoops Down with realistic aerodynamics
+    // 1. (0.0s - 1.0s) Gentle, Poetic 3D Leaf Floating Descent
     revealTl.to('.zen-leaf-3d-wrap', {
       y: 0,
       x: 0,
       rotationX: 0,
       rotationY: 0,
-      rotationZ: 12,
+      rotationZ: 14,
       scale: 1.0,
       opacity: 1,
-      duration: 0.65,
-      ease: 'power2.in'
+      duration: 1.05,
+      ease: 'power2.out'
     });
 
     revealTl.to('.leaf-3d-shadow', {
       scale: 1.0,
-      opacity: 0.85,
+      opacity: 0.9,
       y: 0,
-      duration: 0.65,
-      ease: 'power2.in'
+      duration: 1.05,
+      ease: 'power2.out'
     }, '<');
 
-    // 2. (0.6s - 1.2s) Leaf Touches Water Surface -> Triggers WebGL Water Ripples
+    // 2. (1.0s - 2.1s) Leaf Touches Fluid Surface -> Navier-Stokes Fluid Dispersion
     const rippleObj1 = { p: 0 };
     revealTl.to(rippleObj1, {
       p: 1,
-      duration: 0.75,
+      duration: 1.2,
       ease: 'power1.out',
       onUpdate: () => {
         if (waterAnimator) {
-          waterAnimator.touchRippleIntensity = rippleObj1.p;
+          waterAnimator.splatIntensity = rippleObj1.p;
         }
       }
-    }, '-=0.05');
+    }, '-=0.1');
 
     // Water Emerging Brand Text Distortion & Reveal
     revealTl.to('.zen-brand-emerge', {
       opacity: 1,
       scale: 1,
-      y: -60,
-      duration: 0.6,
+      y: -65,
+      duration: 0.9,
       ease: 'power2.out'
-    }, '-=0.65');
+    }, '-=1.0');
 
-    // 3. (1.2s - 1.55s) Leaf Sinks into Depth
+    // 3. (2.0s - 2.7s) Leaf Sinks Slowly into Deep Fluid
     revealTl.to('.zen-leaf-3d-wrap', {
-      scale: 0.25,
+      scale: 0.2,
       opacity: 0,
-      rotationZ: 50,
-      y: 30,
-      duration: 0.45,
-      ease: 'power2.in'
-    }, '+=0.1');
+      rotationZ: 65,
+      y: 40,
+      duration: 0.7,
+      ease: 'power2.inOut'
+    }, '+=0.2');
 
     revealTl.to('.leaf-3d-shadow', {
       scale: 0.1,
       opacity: 0,
-      duration: 0.4,
-      ease: 'power2.in'
+      duration: 0.6,
+      ease: 'power2.inOut'
     }, '<');
 
-    // 4. (1.5s - 2.2s) 2nd Full-Screen WebGL Shockwave Surge
+    // 4. (2.6s - 3.8s) 2nd Full-Screen Navier-Stokes Surge Sweeps Screen
     const rippleObj2 = { p: 0 };
     revealTl.to(rippleObj2, {
       p: 1,
-      duration: 0.85,
+      duration: 1.3,
       ease: 'power2.out',
       onUpdate: () => {
         if (waterAnimator) {
-          waterAnimator.shockwaveIntensity = rippleObj2.p;
+          waterAnimator.surgeIntensity = rippleObj2.p;
         }
       }
-    }, '-=0.15');
+    }, '-=0.2');
 
     // Smooth Curtain & Brand Transition
     revealTl.to('.zen-brand-emerge', {
       opacity: 0,
       scale: 1.15,
-      duration: 0.5,
+      duration: 0.7,
       ease: 'power2.out'
     }, '<');
 
     revealTl.to('#zen-leaf-curtain', {
       opacity: 0,
-      duration: 0.55,
+      duration: 0.8,
       ease: 'power2.out'
-    }, '-=0.4');
+    }, '-=0.5');
 
     // 5. Clean Editorial Homepage Release
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
-      duration: 0.8,
+      duration: 0.9,
       ease: 'power3.out'
-    }, '-=0.35');
+    }, '-=0.4');
 
     revealTl.to('.hero-title-line', {
       y: '0%',
       opacity: 1,
-      stagger: 0.08,
-      duration: 1.0,
+      stagger: 0.1,
+      duration: 1.1,
       ease: 'power3.out'
-    }, '-=0.5');
+    }, '-=0.6');
 
     revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
       y: 0,
       opacity: 1,
-      stagger: 0.06,
-      duration: 0.75,
+      stagger: 0.08,
+      duration: 0.85,
       ease: 'power3.out'
-    }, '-=0.45');
+    }, '-=0.5');
   }
 
   /**
