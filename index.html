@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=2.3.0">
+  <link rel="stylesheet" href="style.css?v=2.4.0">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -32,65 +32,67 @@
   <!-- Tactile Paper Grain Texture Overlay -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
-  <!-- Realistic Vermilion-Ink Autumn Leaf & Navier-Stokes Fluid Opening Reveal (5.5s Cinematic Sequence) -->
+  <!-- Minimalist Craft Dip Pen & Navier-Stokes Fluid Opening Reveal (6.8s Epic Sequence) -->
   <div class="zen-leaf-curtain" id="zen-leaf-curtain">
     <canvas id="water-fluid-canvas" class="water-fluid-canvas"></canvas>
     
-    <!-- Ultra-Realistic 3D Autumn Leaf with Vermilion Ink Seepage -->
-    <div class="zen-leaf-3d-wrap" id="zen-leaf-wrap">
-      <div class="leaf-3d-shadow"></div>
-      <svg class="leaf-3d-svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Minimalist Bauhaus Metal Dip Pen (工藝金屬沾水筆) -->
+    <div class="craft-pen-wrap" id="craft-pen-wrap">
+      <div class="craft-pen-shadow"></div>
+      <svg class="craft-pen-svg" viewBox="0 0 160 360" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- Deep Autumn Maple / Gilded Gingko Gradient with Vermilion Ink Edge -->
-          <linearGradient id="autumnLeafBody" x1="20" y1="10" x2="120" y2="130" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#C2410C" /> <!-- Crimson Ochre -->
-            <stop offset="35%" stop-color="#B45309" /> <!-- Deep Amber -->
-            <stop offset="70%" stop-color="#78350F" /> <!-- Warm Autumn Russet -->
-            <stop offset="100%" stop-color="#1C1917" /> <!-- Charcoal Tip -->
+          <!-- Matte Charcoal Metal Pen Body Gradient -->
+          <linearGradient id="penBodyGrad" x1="40" y1="0" x2="120" y2="280" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#334155" />
+            <stop offset="50%" stop-color="#1E293B" />
+            <stop offset="100%" stop-color="#0F172A" />
           </linearGradient>
-          
-          <!-- Vermilion Ink Seepage Radial Gradient -->
-          <radialGradient id="vermilionSeepage" cx="70" cy="70" r="60" gradientUnits="userSpaceOnUse">
-            <stop offset="60%" stop-color="#D93829" stop-opacity="0" />
-            <stop offset="92%" stop-color="#D93829" stop-opacity="0.85" />
-            <stop offset="100%" stop-color="#991B1B" stop-opacity="1" />
+
+          <!-- Gilded Metallic Nib Gradient (精緻工藝金屬筆尖) -->
+          <linearGradient id="penNibGrad" x1="60" y1="240" x2="100" y2="350" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FCD34D" />
+            <stop offset="40%" stop-color="#F59E0B" />
+            <stop offset="70%" stop-color="#D97706" />
+            <stop offset="100%" stop-color="#92400E" />
+          </linearGradient>
+
+          <!-- Concentrated Deep Prussian Ink Drop at Tip -->
+          <radialGradient id="inkTipDrop" cx="80" cy="346" r="14" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#162A45" />
+            <stop offset="85%" stop-color="#0B132B" />
+            <stop offset="100%" stop-color="#000000" stop-opacity="0" />
           </radialGradient>
 
-          <!-- Specular Surface Shine -->
-          <linearGradient id="leafSheen" x1="45" y1="20" x2="95" y2="120" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#FED7AA" stop-opacity="0.75" />
-            <stop offset="50%" stop-color="#FB923C" stop-opacity="0.1" />
-            <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
+          <!-- Specular Metallic Highlight Rim -->
+          <linearGradient id="penSpecularRim" x1="75" y1="20" x2="85" y2="340" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+            <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.1" />
+            <stop offset="100%" stop-color="#FDE68A" stop-opacity="0.8" />
           </linearGradient>
-
-          <filter id="leaf3DRealisticShadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="3" dy="16" stdDeviation="12" flood-color="rgba(15, 23, 42, 0.45)" />
-          </filter>
         </defs>
 
-        <!-- Leaf Organic Curvature Silhouette with Realistic Depth -->
-        <g filter="url(#leaf3DRealisticShadow)">
-          <path d="M70 12C70 12 40 40 42 78C44 105 66 122 70 124C74 122 96 105 98 78C100 40 70 12 70 12Z" fill="url(#autumnLeafBody)" />
-          <path d="M70 12C70 12 40 40 42 78C44 105 66 122 70 124C74 122 96 105 98 78C100 40 70 12 70 12Z" fill="url(#vermilionSeepage)" />
-          <path d="M70 12C70 12 40 40 42 78C44 105 66 122 70 124C70 124 70 68 70 12Z" fill="url(#leafSheen)" />
-          
-          <!-- Realistic Primary Leaf Spine -->
-          <path d="M70 18V118" stroke="#FDE68A" stroke-width="2.2" stroke-linecap="round" opacity="0.85" />
-          
-          <!-- Secondary Micro-Vein Structure -->
-          <path d="M70 42C60 50 50 56 50 56" stroke="#FEF08A" stroke-width="1.2" stroke-linecap="round" opacity="0.6" />
-          <path d="M70 54C80 62 90 68 90 68" stroke="#FEF08A" stroke-width="1.2" stroke-linecap="round" opacity="0.6" />
-          <path d="M70 70C58 80 52 86 52 86" stroke="#FEF08A" stroke-width="1.2" stroke-linecap="round" opacity="0.6" />
-          <path d="M70 84C82 94 88 98 88 98" stroke="#FEF08A" stroke-width="1.2" stroke-linecap="round" opacity="0.6" />
-          <path d="M70 98C62 106 58 110 58 110" stroke="#FEF08A" stroke-width="1.0" stroke-linecap="round" opacity="0.5" />
-        </g>
+        <!-- Pen Upper Barrel (工藝筆桿) -->
+        <path d="M72 0H88L85 240H75L72 0Z" fill="url(#penBodyGrad)" />
+        <path d="M78 0H82L80 240H78L78 0Z" fill="url(#penSpecularRim)" opacity="0.6" />
+
+        <!-- Pen Collar & Grip -->
+        <rect x="74" y="235" width="12" height="12" rx="1.5" fill="#475569" stroke="#64748B" stroke-width="0.8" />
+
+        <!-- Gilded Metal Nib Geometry (精密切削鋼筆筆尖) -->
+        <path d="M74 247L80 348L86 247H74Z" fill="url(#penNibGrad)" />
+        <!-- Nib Slit & Breather Hole -->
+        <circle cx="80" cy="285" r="2.2" fill="#0F172A" />
+        <path d="M80 287V348" stroke="#0F172A" stroke-width="0.9" stroke-linecap="round" />
+
+        <!-- Fresh Prussian Ink Bead at Nib Tip -->
+        <circle cx="80" cy="346" r="4.5" fill="url(#inkTipDrop)" />
       </svg>
     </div>
 
-    <!-- Fluid Emerging Brand Identity -->
+    <!-- Fluid Emerging Brand Identity (水底深層浮現的品牌) -->
     <div class="zen-brand-emerge" id="zen-brand-emerge">
       <span class="zen-brand-text">Louis.</span>
-      <span class="zen-brand-tag">2026 / CREATIVE CRAFT</span>
+      <span class="zen-brand-tag">2026 / CREATIVE CRAFT & CODE</span>
     </div>
   </div>
 
@@ -212,6 +214,6 @@
   </footer>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=2.3.0"></script>
+  <script type="module" src="app.js?v=2.4.0"></script>
 </body>
 </html>

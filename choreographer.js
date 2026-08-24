@@ -53,11 +53,12 @@ export class Choreographer {
   }
 
   /**
-   * Realistic 3D Leaf Fall & WebGL Fluid Water Surface Opening Reveal (Navier-Stokes Stable Fluids)
-   * 1. 3D Leaf Falls gently with realistic aerodynamic sway & shadow convergence (0.0s - 1.0s)
-   * 2. Leaf Hits Water Surface -> Generates Navier-Stokes Fluid Dispersion + "Louis." text emerges (1.0s - 2.0s)
-   * 3. Leaf Sinks into deep fluid with viscosity refraction (2.0s - 2.8s)
-   * 4. 2nd Deep Fluid Surge Sweeps Full-Screen -> dissolves curtain & reveals homepage (2.8s - 3.8s)
+   * Minimalist Bauhaus Metal Dip Pen & Navier-Stokes Fluid Opening Reveal (6.8s Epic Sequence)
+   * 1. Craft Pen descends smoothly from top-right with gilded metallic sheen & shadow convergence (0.0s - 1.8s)
+   * 2. Pen Nib "Dips" Water Center -> Drops concentrated Prussian Ink -> Generates Wide Slow Fluid Waves (1.8s - 3.8s)
+   * 3. Water-Emerging Brand "Louis." glows with fluid light refraction (2.2s - 4.4s)
+   * 4. Pen retracts smoothly upwards -> 2nd Deep Heavy Water Swell Sweeps Full-Screen (3.8s - 5.4s)
+   * 5. Deep Obsidian-Prussian Fluid melts like morning mist into clean Ivory Homepage (5.4s - 6.8s)
    */
   playOpeningReveal(waterAnimator = null) {
     const gsap = window.gsap;
@@ -80,24 +81,22 @@ export class Choreographer {
     gsap.set('.hero-title-line', { y: '105%', opacity: 0 });
     gsap.set(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt', '.site-nav'], { y: 24, opacity: 0 });
     
-    // 3D Leaf starting state: High in the air with strong 3D rotation & floating shadow
-    gsap.set('.zen-leaf-3d-wrap', {
-      y: -window.innerHeight * 0.7,
-      x: -60,
-      rotationX: 55,
-      rotationY: -35,
-      rotationZ: -30,
-      scale: 1.8,
+    // Bauhaus Craft Pen starting state: Poised in the air at top-right
+    gsap.set('.craft-pen-wrap', {
+      y: -window.innerHeight * 0.5,
+      x: 80,
+      rotation: 25,
+      scale: 1.2,
       opacity: 0
     });
-    gsap.set('.leaf-3d-shadow', {
-      scale: 0.15,
+    gsap.set('.craft-pen-shadow', {
+      scale: 0.1,
       opacity: 0,
-      y: 60
+      y: 50
     });
     gsap.set('.zen-brand-emerge', {
       scale: 0.85,
-      y: 20,
+      y: 30,
       opacity: 0
     });
 
@@ -112,116 +111,124 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 1.0s) Gentle, Poetic 3D Leaf Floating Descent
-    revealTl.to('.zen-leaf-3d-wrap', {
+    // 1. (0.0s - 1.8s) Craft Pen descends with smooth mechanical elegance
+    revealTl.to('.craft-pen-wrap', {
       y: 0,
       x: 0,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 14,
+      rotation: 12,
       scale: 1.0,
       opacity: 1,
-      duration: 1.05,
-      ease: 'power2.out'
+      duration: 1.8,
+      ease: 'power3.out'
     });
 
-    revealTl.to('.leaf-3d-shadow', {
+    revealTl.to('.craft-pen-shadow', {
       scale: 1.0,
-      opacity: 0.9,
+      opacity: 0.95,
       y: 0,
-      duration: 1.05,
-      ease: 'power2.out'
+      duration: 1.8,
+      ease: 'power3.out'
     }, '<');
 
-    // 2. (1.0s - 2.1s) Leaf Touches Fluid Surface -> Navier-Stokes Fluid Dispersion
+    // 2. (1.8s - 3.8s) Pen Nib "Dips" Water Center -> Ink Drops & Fluid Dispersion
+    // Quick gentle dip downwards and slight bounce
+    revealTl.to('.craft-pen-wrap', {
+      y: 8,
+      duration: 0.35,
+      ease: 'power2.inOut',
+      yoyo: true,
+      repeat: 1
+    });
+
     const rippleObj1 = { p: 0 };
     revealTl.to(rippleObj1, {
       p: 1,
-      duration: 1.2,
+      duration: 2.2,
       ease: 'power1.out',
       onUpdate: () => {
         if (waterAnimator) {
           waterAnimator.splatIntensity = rippleObj1.p;
         }
       }
-    }, '-=0.1');
+    }, '-=0.3');
 
-    // Water Emerging Brand Text Distortion & Reveal
+    // Brand "Louis." surfaces from the deep Prussian ink pool
     revealTl.to('.zen-brand-emerge', {
       opacity: 1,
       scale: 1,
-      y: -65,
-      duration: 0.9,
+      y: -90,
+      duration: 1.4,
       ease: 'power2.out'
-    }, '-=1.0');
+    }, '-=1.8');
 
-    // 3. (2.0s - 2.7s) Leaf Sinks Slowly into Deep Fluid
-    revealTl.to('.zen-leaf-3d-wrap', {
-      scale: 0.2,
+    // 3. (3.6s - 4.8s) Pen gracefully retracts upwards into the air
+    revealTl.to('.craft-pen-wrap', {
+      y: -window.innerHeight * 0.6,
+      x: 60,
+      rotation: 30,
       opacity: 0,
-      rotationZ: 65,
-      y: 40,
-      duration: 0.7,
-      ease: 'power2.inOut'
+      duration: 1.5,
+      ease: 'power2.in'
     }, '+=0.2');
 
-    revealTl.to('.leaf-3d-shadow', {
+    revealTl.to('.craft-pen-shadow', {
       scale: 0.1,
       opacity: 0,
-      duration: 0.6,
-      ease: 'power2.inOut'
+      duration: 1.2,
+      ease: 'power2.in'
     }, '<');
 
-    // 4. (2.6s - 3.8s) 2nd Full-Screen Navier-Stokes Surge Sweeps Screen
+    // 4. (4.2s - 5.8s) 2nd Heavy Deep Ocean Surge Swell Sweeps Full Screen
     const rippleObj2 = { p: 0 };
     revealTl.to(rippleObj2, {
       p: 1,
-      duration: 1.3,
+      duration: 2.0,
       ease: 'power2.out',
       onUpdate: () => {
         if (waterAnimator) {
           waterAnimator.surgeIntensity = rippleObj2.p;
         }
       }
-    }, '-=0.2');
+    }, '-=1.0');
 
-    // Smooth Curtain & Brand Transition
+    // Brand dissolves into water light
     revealTl.to('.zen-brand-emerge', {
       opacity: 0,
       scale: 1.15,
-      duration: 0.7,
+      duration: 0.9,
       ease: 'power2.out'
-    }, '<');
+    }, '-=1.2');
 
+    // 5. (5.2s - 6.8s) Deep Obsidian Curtain dissolves like silk into Ivory Canvas
     revealTl.to('#zen-leaf-curtain', {
       opacity: 0,
-      duration: 0.8,
-      ease: 'power2.out'
-    }, '-=0.5');
+      duration: 1.4,
+      ease: 'power2.inOut'
+    }, '-=0.8');
 
-    // 5. Clean Editorial Homepage Release
+    // Homepage Typography & Navigation Take Over with Pure Grace
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
-      duration: 0.9,
+      duration: 1.1,
       ease: 'power3.out'
-    }, '-=0.4');
+    }, '-=0.7');
 
     revealTl.to('.hero-title-line', {
       y: '0%',
       opacity: 1,
-      stagger: 0.1,
-      duration: 1.1,
+      stagger: 0.12,
+      duration: 1.3,
       ease: 'power3.out'
-    }, '-=0.6');
+    }, '-=0.9');
 
     revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
       y: 0,
       opacity: 1,
-      stagger: 0.08,
-      duration: 0.85,
+      stagger: 0.1,
+      duration: 1.0,
       ease: 'power3.out'
-    }, '-=0.5');
+    }, '-=0.8');
   }
 
   /**

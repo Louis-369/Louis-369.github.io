@@ -55,26 +55,26 @@ export class WebGLFluidWaterAnimation {
         uResolution: { value: new THREE.Vector2(this.width, this.height) },
         uTouchProgress: { value: 0 },
         uSurgeProgress: { value: 0 },
-        // Exact User JSON Preset Uniforms
-        uWaterColor: { value: new THREE.Color('#4d4d4d') },
-        uInkColor: { value: new THREE.Color('#1b3b64') },
-        uVolumeFactor: { value: 0.79 },
-        uInkStrength: { value: 1.4 },
+        // Exact User JSON Preset Uniforms with "Xuan-Mo" Prussian Ink Calibrations
+        uWaterColor: { value: new THREE.Color('#232B2B') }, // Deep Obsidian Slate
+        uInkColor: { value: new THREE.Color('#162A45') },   // Rich Prussian Ink
+        uVolumeFactor: { value: 0.85 },
+        uInkStrength: { value: 1.6 },
         uShininess: { value: 271.0 },
-        uFresnelColor: { value: new THREE.Color('#000000') },
-        uFresnelIntensity: { value: 2.2 },
-        uGlowColor: { value: new THREE.Color('#f2f2f2') },
+        uFresnelColor: { value: new THREE.Color('#0A1118') },
+        uFresnelIntensity: { value: 2.4 },
+        uGlowColor: { value: new THREE.Color('#E8ECEF') },
         uGlowPower: { value: 8.3 },
         uWaveSize: { value: 0.117 },
-        uWaveSteepness: { value: 0.063 },
+        uWaveSteepness: { value: 0.045 },
         uSurfaceTension: { value: 1.0 },
-        uFlowSpeed: { value: 0.65 }, // Tuned for graceful slow fluid flow
+        uFlowSpeed: { value: 0.35 }, // Extremely slow, graceful, viscous liquid speed
         uRippleStrength: { value: 0.015 },
         uRippleDamping: { value: 0.945 },
         uLight1Pos: { value: new THREE.Vector3(0.7, 0.7, 0.4) },
-        uLight1Color: { value: new THREE.Color('#eef2ff') },
+        uLight1Color: { value: new THREE.Color('#EEF2FF') },
         uLight2Pos: { value: new THREE.Vector3(0.3, 0.3, 0.6) },
-        uLight2Color: { value: new THREE.Color('#b1b1c3') }
+        uLight2Color: { value: new THREE.Color('#B1B1C3') }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -140,7 +140,7 @@ export class WebGLFluidWaterAnimation {
           return 130.0 * dot(m, g);
         }
 
-        // Navier-Stokes Fluid Height & Density Advection
+        // Navier-Stokes Fluid Height & Density Advection (Wide Spaced, Broad Wavelengths)
         float getFluidHeight(vec2 uv) {
           float aspect = uResolution.x / uResolution.y;
           vec2 p = (uv - 0.5);
@@ -151,39 +151,40 @@ export class WebGLFluidWaterAnimation {
           
           // Organic Liquid Advection Vector Field
           vec2 flowVec = vec2(
-            snoise(uv * 3.5 + vec2(t * 0.2, -t * 0.15)),
-            snoise(uv * 3.5 + vec2(-t * 0.15, t * 0.2))
-          ) * 0.08;
+            snoise(uv * 2.2 + vec2(t * 0.15, -t * 0.1)),
+            snoise(uv * 2.2 + vec2(-t * 0.1, t * 0.15))
+          ) * 0.06;
 
           float height = 0.0;
 
-          // 1. Slow Gentle Liquid Drop Impact Wave (Touch Stage)
+          // 1. Slow, Gentle Dip-Pen Ink Drop Dispersion (Wide Broad Spacing)
           if (uTouchProgress > 0.0) {
             float pTouch = uTouchProgress;
-            float r = pTouch * 0.65;
+            float r = pTouch * 0.85; // Wide spreading radius
             float d = abs(dist - r);
-            float envelope = exp(-d * 18.0) * max(0.0, 1.0 - pTouch);
+            float envelope = exp(-d * 8.5) * max(0.0, 1.0 - pTouch);
             
-            // Navier-Stokes Vortical Ripple Curl
-            float curl = snoise((uv + flowVec) * 8.0 + t);
-            float ripple = sin(d * 42.0 - pTouch * 12.0 + curl * 0.8) * envelope;
-            height += ripple * uWaveSteepness * 2.8;
+            // Wavelength lengthened: sin(d * 18.0) instead of rapid 42.0
+            float curl = snoise((uv + flowVec) * 4.0 + t);
+            float ripple = sin(d * 18.0 - pTouch * 7.0 + curl * 0.6) * envelope;
+            height += ripple * uWaveSteepness * 3.5;
           }
 
-          // 2. Slow Deep Viscous Liquid Surge (Sinking Stage)
+          // 2. Slow Deep Ocean Surge Waves (Wide spaced heavy water body)
           if (uSurgeProgress > 0.0) {
             float pSurge = uSurgeProgress;
-            float r = pSurge * 1.25;
+            float r = pSurge * 1.5;
             float d = abs(dist - r);
-            float envelope = exp(-d * 10.0) * pow(max(0.0, 1.0 - pSurge), 1.1);
+            float envelope = exp(-d * 5.0) * pow(max(0.0, 1.0 - pSurge), 1.05);
 
-            float curl = snoise((uv + flowVec) * 5.0 - t * 0.5);
-            float surge = sin(d * 24.0 - pSurge * 9.0 + curl * 1.2) * envelope;
-            height += surge * uWaveSteepness * 4.5;
+            // Wavelength lengthened: sin(d * 10.0) for thick deep water swells
+            float curl = snoise((uv + flowVec) * 2.8 - t * 0.4);
+            float surge = sin(d * 10.0 - pSurge * 5.0 + curl * 0.8) * envelope;
+            height += surge * uWaveSteepness * 5.5;
           }
 
-          // Ambient fluid micro-turbulence
-          height += snoise(uv * 12.0 + flowVec * 2.0 + t * 0.4) * 0.004;
+          // Ambient micro-flow
+          height += snoise(uv * 6.0 + flowVec * 1.5 + t * 0.25) * 0.003;
 
           return height;
         }
@@ -192,7 +193,7 @@ export class WebGLFluidWaterAnimation {
           vec2 uv = vUv;
           
           // Surface Normal calculation (Finite Differences with Surface Tension)
-          float eps = 0.0035;
+          float eps = 0.004;
           float hC = getFluidHeight(uv);
           float hR = getFluidHeight(uv + vec2(eps, 0.0));
           float hT = getFluidHeight(uv + vec2(0.0, eps));
@@ -209,9 +210,9 @@ export class WebGLFluidWaterAnimation {
           vec3 h2 = normalize(l2 + viewDir);
           float spec2 = pow(max(dot(normal, h2), 0.0), uShininess * 0.6);
 
-          vec3 specular = uLight1Color * spec1 * 0.85 + uLight2Color * spec2 * 0.5;
+          vec3 specular = uLight1Color * spec1 * 0.9 + uLight2Color * spec2 * 0.6;
 
-          // 2. Fresnel Reflection (Deep Black/Ink to Water Tone)
+          // 2. Fresnel Reflection (Deep Obsidian to Prussian Ink Tone)
           float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), uFresnelIntensity);
           vec3 fresnelCol = mix(uFresnelColor, uInkColor, fresnel);
 
@@ -219,16 +220,15 @@ export class WebGLFluidWaterAnimation {
           vec3 paperCanvas = vec3(0.98, 0.972, 0.96);
           
           // Deep rich fluid body with volume scattering
-          float fluidPresence = smoothstep(0.0003, 0.025, abs(hC));
-          vec3 deepPool = mix(uWaterColor, uInkColor, fresnel * uInkStrength * 0.7 + abs(hC) * 3.5);
-          deepPool = mix(deepPool, vec3(0.85, 0.22, 0.16), (1.0 - normal.z) * 0.25); // Subtle vermilion rim tone
+          float fluidPresence = smoothstep(0.0002, 0.02, abs(hC));
+          vec3 deepPool = mix(uWaterColor, uInkColor, fresnel * uInkStrength * 0.8 + abs(hC) * 4.0);
           
           vec3 fluidColor = mix(paperCanvas, deepPool, fluidPresence * uVolumeFactor);
-          fluidColor += specular * 1.2;
+          fluidColor += specular * 1.3;
 
           // Liquid Edge Glow (from user JSON)
           float glow = pow(abs(hC) * 18.0, uGlowPower * 0.22);
-          fluidColor += uGlowColor * glow * 0.22;
+          fluidColor += uGlowColor * glow * 0.25;
 
           float alpha = fluidPresence * 0.96;
 
