@@ -138,64 +138,8 @@ class Application {
     });
 
     // 3. 1:1 bymonolog.com "Still waiting..." Tab Visibility Typewriter Marquee
-    this.initVisibilityTitleMarquee();
-  }
-
-  initVisibilityTitleMarquee() {
-    const originalTitle = document.title || "Louis · Creative Developer & Builder";
-    let typeTimeout = null;
-    const targetPhrase = "Still waiting...";
-
-    const startTyping = () => {
-      let charIdx = 0;
-      let isDeleting = false;
-      let pauseCount = 0;
-
-      const typeStep = () => {
-        if (!document.hidden) return;
-
-        if (!isDeleting) {
-          charIdx++;
-          document.title = targetPhrase.slice(0, charIdx);
-          
-          if (charIdx === targetPhrase.length) {
-            // Full phrase typed, hold for 1.8s
-            isDeleting = true;
-            typeTimeout = setTimeout(typeStep, 1800);
-            return;
-          }
-          // Typewriter speed: dots type slightly slower for rhythmic anticipation
-          const speed = charIdx > 13 ? 400 : 130;
-          typeTimeout = setTimeout(typeStep, speed);
-        } else {
-          // Subtle delete back to "Still waiting" and re-type dots
-          charIdx--;
-          document.title = targetPhrase.slice(0, charIdx);
-          
-          if (charIdx === 13) { // Back to "Still waiting"
-            isDeleting = false;
-            typeTimeout = setTimeout(typeStep, 600);
-            return;
-          }
-          typeTimeout = setTimeout(typeStep, 70);
-        }
-      };
-
-      typeStep();
-    };
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (typeTimeout) clearTimeout(typeTimeout);
-        startTyping();
-      } else {
-        if (typeTimeout) {
-          clearTimeout(typeTimeout);
-          typeTimeout = null;
-        }
-        document.title = originalTitle;
-      }
-    });
+    // 4. Global interaction bindings
+    this.initMagneticCursor();
   }
 }
 
