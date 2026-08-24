@@ -396,6 +396,7 @@ export class WebGLFluidWaterAnimation {
       uniform float aspectRatio;
       uniform vec2 uSinkCenter;
       uniform float uSinkForce;
+      uniform float uTextOpacity;
 
       float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}
       
@@ -475,7 +476,7 @@ export class WebGLFluidWaterAnimation {
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
         // 5. IN-SHADER DYNAMIC PHYSICAL TEXT MASK INVERSION (方案一：GPU 像素級即時反相)
-        float textAlpha = texture2D(uText, uv).a;
+        float textAlpha = texture2D(uText, uv).a * uTextOpacity;
         if (textAlpha > 0.01) {
           // Over dark ink: Inverts to brilliant pure ivory white (#FAF8F5)
           // Over clean paper: Inverts to deep rich black (#121316)
@@ -693,11 +694,13 @@ export class WebGLFluidWaterAnimation {
       this.textTexture = gl.createTexture();
     }
     gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); // Fix Y-inversion in WebGL!
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false); // Reset state
   }
 
   resizeCanvas() {
@@ -929,6 +932,7 @@ export class WebGLFluidWaterAnimation {
     gl.uniform1f(this.progDisplay.uniforms.aspectRatio, this.canvas.width / this.canvas.height);
     gl.uniform2f(this.progDisplay.uniforms.uSinkCenter, this.sinkCenter ? this.sinkCenter.x : 0.5, this.sinkCenter ? this.sinkCenter.y : 0.5);
     gl.uniform1f(this.progDisplay.uniforms.uSinkForce, this.sinkForce || 0);
+    gl.uniform1f(this.progDisplay.uniforms.uTextOpacity, this.textOpacity !== undefined ? this.textOpacity : 0.0);
     this.blit(null);
   }
 

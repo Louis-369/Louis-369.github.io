@@ -158,13 +158,15 @@ export class Choreographer {
       }
     });
 
-    // Louis. DOM text seamlessly fades in as fluid absorbs into the dot
-    revealTl.to('.hero-title-line', {
-      opacity: 1,
-      scale: 1.0,
-      duration: 1.4,
-      ease: 'power2.out'
-    }, '-=0.2');
+    // In-Shader text only reveals AFTER the brush dips and ink expands!
+    if (waterAnimator) {
+      waterAnimator.textOpacity = 0.0;
+      revealTl.to(waterAnimator, {
+        textOpacity: 1.0,
+        duration: 1.2,
+        ease: 'power2.out'
+      }, '-=0.1');
+    }
 
     // 3. (2.5s - 3.6s) Brush lifts upwards and pulls back into the top-right
     revealTl.to('.craft-pen-wrap', {
@@ -255,6 +257,14 @@ export class Choreographer {
       duration: 0.65,
       ease: 'back.out(1.4)'
     }, '-=0.4');
+
+    // Smooth handover: DOM text fades in as WebGL fluid canvas completes absorption
+    revealTl.to('.hero-title-line', {
+      opacity: 1,
+      scale: 1.0,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '<');
 
     // Water Fluid Canvas cleanly completes absorption
     revealTl.to('#water-fluid-canvas', {
