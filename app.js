@@ -19,6 +19,12 @@ class Application {
   }
 
   init() {
+    // 0. Force scroll restoration to top on refresh
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     // 1. Render dynamic projects list (bymonolog 12-col open grid)
     this.renderProjects();
 

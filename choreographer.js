@@ -148,71 +148,72 @@ export class Choreographer {
       }
     });
 
-    // Suminagashi Water Emerging Brand "Louis."
+    // Suminagashi Water Emerging Brand "Louis." (Exactly aligned with Hero title)
     revealTl.to('.zen-brand-emerge', {
       opacity: 1,
       scale: 1,
-      y: -85,
+      y: 0,
       duration: 1.4,
       ease: 'power2.out'
     }, '-=0.2');
 
-    // 3. (2.2s - 3.6s) Brush smoothly lifts and glides to the FAR LEFT edge of the screen
+    // 3. (2.2s - 3.4s) Brush lifts upwards and pulls back into the top-right
     revealTl.to('.craft-pen-wrap', {
-      x: -window.innerWidth * 0.44, // Glides to leftmost edge
-      y: -20,
-      rotation: -14, // Tilts inward ready to sweep
-      duration: 1.4,
-      ease: 'power2.inOut'
-    }, '-=0.8');
-
-    // 4. (3.6s - 5.2s) Option A: Brush Nib physically wipes the curtain open via Dynamic Clip-Path
-    const sweepProgress = { p: 0 };
-    revealTl.to('.craft-pen-wrap', {
-      x: window.innerWidth * 0.50, // Sweeps across to far right beyond screen edge
-      y: 15,
-      rotation: 22,
-      opacity: 1, // Keep solid until finish!
-      duration: 1.6,
-      ease: 'power2.inOut'
+      x: window.innerWidth * 0.35,
+      y: -window.innerHeight * 0.45,
+      rotation: 35,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power2.in'
     }, '+=0.2');
 
-    revealTl.to(sweepProgress, {
-      p: 1,
-      duration: 1.6,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        const p = sweepProgress.p;
-        // Screen percentage from 0% to 100%
-        const cutX = Math.max(0, Math.min(100, p * 105));
-        
-        // Curtain clip-path physically peels away exactly behind the brush nib
-        const curtain = document.getElementById('zen-leaf-curtain');
-        if (curtain) {
-          curtain.style.clipPath = `polygon(${cutX}% 0%, 100% 0%, 100% 100%, ${cutX}% 100%)`;
-        }
+    revealTl.to('.craft-pen-shadow', {
+      scale: 0.1,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power2.in'
+    }, '<');
 
-        if (waterAnimator && typeof waterAnimator.sweepHorizontalFlow === 'function') {
-          const currentX = 0.05 + p * 0.90;
-          const currentY = 0.5 - Math.sin(p * Math.PI) * 0.05;
-          waterAnimator.sweepHorizontalFlow(currentX, currentY, 1.2);
+    // 4. (3.0s - 4.8s) LETTER "O" CENTRIPETAL VORTEX SINK ACTIVATION!
+    // Letter O pulses with gravitational vortex effect while sucking all fluid inwards
+    revealTl.to('.letter-o-sink', {
+      scale: 1.25,
+      duration: 0.6,
+      ease: 'power2.out',
+      yoyo: true,
+      repeat: 1
+    }, '-=0.4');
+
+    const vortexObj = { power: 0, wash: 0 };
+    revealTl.to(vortexObj, {
+      power: 1,
+      wash: 1,
+      duration: 1.6,
+      ease: 'power3.inOut',
+      onUpdate: () => {
+        if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
+          // Get exact screen normalized coordinates of the letter 'o'
+          const oEl = document.getElementById('letter-o-sink');
+          let targetX = 0.44; // Fallback normalized center
+          let targetY = 0.50;
+          if (oEl) {
+            const rect = oEl.getBoundingClientRect();
+            targetX = (rect.left + rect.width * 0.5) / window.innerWidth;
+            targetY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
+          }
+
+          // Continuously accelerate suction of water into letter O hole
+          waterAnimator.triggerCentripetalVortexSink(targetX, targetY, vortexObj.power * 1.5);
+          waterAnimator.washProgress = Math.pow(vortexObj.wash, 1.8);
         }
       }
     }, '<');
 
-    // Brand is wiped away synchronously as the brush crosses center
-    revealTl.to('.zen-brand-emerge', {
+    // 5. (4.6s - 5.5s) All fluid vanishes cleanly into the O hole -> Curtain removes seamlessly
+    revealTl.to('#zen-leaf-curtain', {
       opacity: 0,
-      scale: 1.05,
-      duration: 0.6,
-      ease: 'power1.out'
-    }, '-=0.9');
-
-    // Brush fades out only after reaching far right edge
-    revealTl.to('.craft-pen-wrap', {
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power2.out'
+      duration: 0.7,
+      ease: 'power2.inOut'
     }, '-=0.2');
   }
 

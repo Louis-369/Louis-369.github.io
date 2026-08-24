@@ -577,16 +577,23 @@ export class WebGLFluidWaterAnimation {
     }
   }
 
-  // 2. Second Sweep: Pure Left-to-Right Horizontal Fluid Stream with Rich Ink Wake (由左至右帶有飽滿墨浪的推進)
-  sweepHorizontalFlow(x, y, intensity = 1.0) {
-    // Inject powerful rightward horizontal force (+X direction) with vortex turbulence
-    const vx = 4200 * intensity;
-    const vy = Math.sin(x * 16.0) * 450 * intensity;
-    this.splatVelocity(x, y, vx, vy, 0.018);
-    
-    // Inject dense physical ink along the stroke path (alternating between Pine Soot and Prussian Blue)
-    const ink = Math.random() > 0.4 ? this.INKS[0] : this.INKS[1];
-    this.splatDye(x, y, ink, 0.65 * intensity, 0.0035);
+  // 2. Second Stage: Letter "O" Centripetal Vortex Black Hole (向心黑洞漩渦吸水力場)
+  triggerCentripetalVortexSink(targetX, targetY, power = 1.0) {
+    const numSinkNodes = 12;
+    for (let i = 0; i < numSinkNodes; i++) {
+      const theta = (i / numSinkNodes) * Math.PI * 2;
+      const radius = 0.04 + Math.random() * 0.18; // Inflow catchment zone
+      const nodeX = targetX + Math.cos(theta) * radius;
+      const nodeY = targetY + Math.sin(theta) * radius;
+
+      // Inward radial velocity (-direction towards target center) + Tangential swirl velocity (Vortex rotation)
+      const inwardVx = -Math.cos(theta) * 2800 * power;
+      const inwardVy = -Math.sin(theta) * 2800 * power;
+      const swirlVx = -Math.sin(theta) * 3600 * power; // Clockwise spiral
+      const swirlVy = Math.cos(theta) * 3600 * power;
+
+      this.splatVelocity(nodeX, nodeY, inwardVx + swirlVx, inwardVy + swirlVy, 0.008);
+    }
   }
 
   stepDrops(dt) {
