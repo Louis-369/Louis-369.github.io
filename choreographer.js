@@ -76,9 +76,10 @@ export class Choreographer {
       return;
     }
 
-    // Initial Elements Setup: Hide homepage content until reveal!
-    gsap.set('.hero-title-line', { y: '100%', opacity: 0 });
+    // Initial Elements Setup: Set Hero title in place, hide supporting elements
+    gsap.set('.hero-title-line', { y: '0%', opacity: 1 });
     gsap.set(['.site-nav', '.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], { y: 25, opacity: 0 });
+    gsap.set('.vortex-singularity-portal', { scale: 0.01, rotation: 0, opacity: 0 });
     
     // Calligraphy Brush starting state: Poised directly above center
     gsap.set('.craft-pen-wrap', {
@@ -159,40 +160,61 @@ export class Choreographer {
       ease: 'power2.in'
     }, '<');
 
-    // 4. (2.8s - 4.2s) Fluid smoothly washes and dissipates
-    const washObj = { w: 0 };
-    revealTl.to(washObj, {
-      w: 1,
+    // 4. (2.7s - 4.2s) PERIOD DOT '.' EXPANDS INTO A VORTEX PORTAL & SUCKS IN ALL FLUID!
+    revealTl.to('.vortex-singularity-portal', {
+      scale: 28, // Expands to cover central water pool
+      rotation: 360,
+      opacity: 0.95,
+      duration: 0.9,
+      ease: 'power3.out'
+    }, '-=0.3');
+
+    const suctionObj = { power: 0, wash: 0 };
+    revealTl.to(suctionObj, {
+      power: 1,
+      wash: 1,
       duration: 1.4,
-      ease: 'power2.out',
+      ease: 'power2.inOut',
       onUpdate: () => {
-        if (waterAnimator) {
-          waterAnimator.washProgress = washObj.w;
+        if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
+          // Track exact normalized coordinates of the dot
+          const dotEl = document.getElementById('hero-title-dot');
+          let dotX = 0.58;
+          let dotY = 0.50;
+          if (dotEl) {
+            const rect = dotEl.getBoundingClientRect();
+            dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
+            dotY = 1 - (rect.top + rect.height * 0.5) / window.innerHeight;
+          }
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 4.0);
+          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
+    }, '<');
+
+    // 5. (3.8s - 4.5s) Vortex Portal Collapses rapidly back into the tiny period dot '.'
+    revealTl.to('.vortex-singularity-portal', {
+      scale: 0.01,
+      rotation: 720,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power3.in'
     }, '-=0.4');
 
-    // 5. (3.6s - 4.6s) Curtain smoothly fades out into pure Homepage
+    // 6. (4.0s - 4.8s) Curtain fades out cleanly
     revealTl.to('#zen-leaf-curtain', {
       opacity: 0,
-      duration: 1.0,
+      duration: 0.8,
       ease: 'power2.inOut'
-    }, '-=0.6');
+    }, '-=0.5');
 
-    // 6. Homepage Elements Cascade Upwards with Editorial Majesty
+    // 7. (4.3s - 5.2s) Supporting Hero Elements & Navbar Gracefully Cascade In
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
       duration: 0.9,
       ease: 'power3.out'
-    }, '-=0.7');
-
-    revealTl.to('.hero-title-line', {
-      y: '0%',
-      opacity: 1,
-      duration: 1.1,
-      ease: 'power3.out'
-    }, '-=0.8');
+    }, '-=0.6');
 
     revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
       y: 0,

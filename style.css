@@ -385,7 +385,8 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .hero-title-container {
-  overflow: hidden;
+  overflow: visible; /* Allow vortex portal to expand gracefully */
+  position: relative;
 }
 
 .hero-title-line {
@@ -395,6 +396,39 @@ html.lenis .lenis.lenis-stopped {
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: var(--ink-primary);
+  display: inline-block;
+  position: relative;
+}
+
+.hero-title-dot {
+  position: relative;
+  display: inline-block;
+}
+
+/* Expanding Black Hole Vortex Portal attached directly to the dot */
+.vortex-singularity-portal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  margin-left: -16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, 
+    #0A0908 0%, 
+    #1A1715 50%, 
+    #2B241E 75%, 
+    rgba(43, 36, 30, 0) 100%
+  );
+  box-shadow: 
+    0 0 35px rgba(10, 9, 8, 0.8),
+    0 0 70px rgba(43, 36, 30, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.01) rotate(0deg);
+  will-change: transform, opacity;
+  z-index: 15;
 }
 
 .hero-tagline {
