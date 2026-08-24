@@ -379,18 +379,12 @@ html.lenis .lenis.lenis-stopped {
   display: inline-block;
   position: relative;
   z-index: 6;
-  /* Three-layer feathered warm paper diffusion aura for crystal-clear text contrast */
-  text-shadow: 
-    0 0 16px rgba(250, 248, 245, 0.90),
-    0 0 36px rgba(250, 248, 245, 0.75),
-    0 0 72px rgba(250, 248, 245, 0.60);
 }
 
 /*
  * Self-Drawn Period Dot (CSS Circle)
  * DOM rect center === visual ink dot center, zero baseline offset.
- * This eliminates the font glyph baseline misalignment that caused
- * getBoundingClientRect() to return a center point above the visible dot.
+ * Scalable Black Hole Singularity during suction.
  */
 .hero-title-dot {
   display: inline-block;
@@ -402,6 +396,8 @@ html.lenis .lenis.lenis-stopped {
   background: currentColor;
   vertical-align: baseline;
   position: relative;
+  transform-origin: 50% 50%;
+  will-change: transform;
   opacity: 1;
   z-index: 7;
 }

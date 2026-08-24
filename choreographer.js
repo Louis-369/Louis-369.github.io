@@ -202,6 +202,13 @@ export class Choreographer {
     // ─────────────────────────────────────────────────────────────────
 
     // 4. (3.2s - 5.0s) PURE LINEAR DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
+    // Period Dot Expands as a Black Hole Singularity (Option A: 2.6x expansion)!
+    revealTl.to('#hero-title-dot', {
+      scale: 2.6,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '-=0.6');
+
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
@@ -224,9 +231,16 @@ export class Choreographer {
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
-    }, '-=0.6');
+    }, '<');
 
-    // 5. (4.8s - 5.6s) Water Fluid Canvas cleanly completes absorption
+    // 5. (4.8s - 5.5s) Black Hole Period Dot Snaps Back to Original Scale!
+    revealTl.to('#hero-title-dot', {
+      scale: 1.0,
+      duration: 0.65,
+      ease: 'back.out(1.5)'
+    }, '-=0.4');
+
+    // Water Fluid Canvas cleanly completes absorption
     revealTl.to('#water-fluid-canvas', {
       opacity: 0,
       duration: 0.8,
@@ -234,7 +248,7 @@ export class Choreographer {
       onComplete: () => {
         if (debugDotEl) debugDotEl.remove();
       }
-    }, '-=0.4');
+    }, '-=0.5');
 
     // 6. (5.0s - 6.0s) Supporting Hero Elements & Navbar Gracefully Cascade In
     revealTl.to('.site-nav', {
