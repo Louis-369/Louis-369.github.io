@@ -107,7 +107,7 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
+  z-index: 50;
   pointer-events: auto;
 }
 
@@ -248,6 +248,12 @@ html.lenis .lenis.lenis-stopped {
 
 /* ==========================================================================
    Minimalist Bauhaus Metal Dip Pen & Fluid Ripple Reveal
+   Stacking Hierarchy:
+   - Base Content & Hero: z-index: 10
+   - Hero Dot Vortex:     z-index: 15
+   - Opening Fluid Canvas: z-index: 20
+   - Calligraphy Pen:      z-index: 25
+   - Navigation Header:    z-index: 50
    ========================================================================== */
 .zen-leaf-curtain {
   position: fixed;
@@ -255,14 +261,14 @@ html.lenis .lenis.lenis-stopped {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #FAF7EF; /* Warm Authentic Washi Paper Canvas */
-  z-index: 9999;
+  background: transparent; /* Pure transparent - reveals underlying Hero canvas */
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  pointer-events: all;
-  will-change: transform, opacity;
+  pointer-events: none; /* Let pointer events pass cleanly */
+  will-change: opacity;
 }
 
 .water-fluid-canvas {
@@ -272,7 +278,7 @@ html.lenis .lenis.lenis-stopped {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 21;
 }
 
 /* Minimalist Bauhaus Metal Dip Pen (工藝金屬沾水筆) */
@@ -284,7 +290,7 @@ html.lenis .lenis.lenis-stopped {
   height: 240px;
   margin-top: -240px; /* Pivots exactly from the nib tip */
   margin-left: -55px;
-  z-index: 10;
+  z-index: 25;
   display: flex;
   align-items: center;
   justify-content: center;
