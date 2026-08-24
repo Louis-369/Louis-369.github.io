@@ -346,26 +346,58 @@ export class WebGLFluidWaterAnimation {
       }
     `;
 
-    // Clean Transparent Suminagashi Beer-Lambert Display Shader
+    // Master Hybrid Shader: Authentic Navier-Stokes Fluid + 3D Liquid Water Surface (Dual Light Fresnel Specular & Liquid Glow)
     const FRAG_DISPLAY = `
       precision highp float;
       precision highp sampler2D;
       varying vec2 vUv;
       uniform sampler2D uDye;
+      uniform sampler2D uVelocity;
       uniform vec2 uAspect;
       uniform vec2 uRes;
       uniform float uWash;
 
       void main () {
         vec2 uv = vUv;
-        vec3 d = texture2D(uDye, uv).rgb;
+        vec2 eps = vec2(1.0 / uRes.x, 1.0 / uRes.y) * 2.0;
 
-        // Pure Beer–Lambert Dye Absorption on Clean Canvas
+        // Sample Dye & Velocity
+        vec3 d = texture2D(uDye, uv).rgb;
+        float hC = (d.r + d.g + d.b) * 0.333;
+        float hR = (texture2D(uDye, uv + vec2(eps.x, 0.0)).r + texture2D(uDye, uv + vec2(eps.x, 0.0)).g + texture2D(uDye, uv + vec2(eps.x, 0.0)).b) * 0.333;
+        float hT = (texture2D(uDye, uv + vec2(0.0, eps.y)).r + texture2D(uDye, uv + vec2(0.0, eps.y)).g + texture2D(uDye, uv + vec2(0.0, eps.y)).b) * 0.333;
+
+        // 3D Liquid Surface Normal Calculation with Surface Tension
+        vec3 normal = normalize(vec3((hC - hR) * 18.0, (hC - hT) * 18.0, 1.0));
+        vec3 viewDir = vec3(0.0, 0.0, 1.0);
+
+        // 1. Dual Light Sources Blinn-Phong Specular (from User JSON Preset)
+        vec3 l1 = normalize(vec3(0.7, 0.7, 0.4));
+        vec3 h1 = normalize(l1 + viewDir);
+        float spec1 = pow(max(dot(normal, h1), 0.0), 271.0);
+
+        vec3 l2 = normalize(vec3(0.3, 0.3, 0.6));
+        vec3 h2 = normalize(l2 + viewDir);
+        float spec2 = pow(max(dot(normal, h2), 0.0), 160.0);
+
+        vec3 specular = vec3(0.93, 0.95, 1.0) * spec1 * 1.6 + vec3(0.69, 0.69, 0.76) * spec2 * 0.9;
+
+        // 2. Fresnel Grazing Liquid Reflection
+        float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.2);
+        vec3 fresnelCol = mix(vec3(0.04, 0.07, 0.12), vec3(0.14, 0.26, 0.42), fresnel);
+
+        // 3. Beer–Lambert Deep Dye Absorption
         vec3 paper = vec3(0.98, 0.972, 0.96); // Warm Ivory Canvas
         vec3 inkCol = paper * exp(-d);
-        
-        float inkAmount = clamp((d.r + d.g + d.b) * 0.45, 0.0, 1.0);
-        float alpha = inkAmount * (1.0 - uWash);
+        inkCol = mix(inkCol, fresnelCol, fresnel * 0.55);
+        inkCol += specular;
+
+        // 4. Liquid Glow (from User JSON Preset)
+        float glow = pow(clamp(hC * 1.4, 0.0, 1.0), 8.3 * 0.25);
+        inkCol += vec3(0.95, 0.95, 0.95) * glow * 0.35;
+
+        float inkAmount = clamp(hC * 1.5, 0.0, 1.0);
+        float alpha = smoothstep(0.005, 0.08, inkAmount) * (1.0 - uWash);
 
         gl_FragColor = vec4(inkCol, alpha);
       }

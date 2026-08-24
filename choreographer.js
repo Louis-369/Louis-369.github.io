@@ -110,11 +110,11 @@ export class Choreographer {
       }
     });
 
-    // 1. (0.0s - 1.5s) Brush descends vertically with Zen stillness
+    // 1. (0.0s - 1.6s) Brush descends vertically at exact center
     revealTl.to('.craft-pen-wrap', {
       y: 0,
       opacity: 1,
-      duration: 1.5,
+      duration: 1.6,
       ease: 'power3.out'
     });
 
@@ -122,11 +122,11 @@ export class Choreographer {
       scale: 1.0,
       opacity: 0.9,
       y: 0,
-      duration: 1.5,
+      duration: 1.6,
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.5s - 3.4s) Brush Tip "Dips" Water Center -> Ink Marbling & Brand Emerge
+    // 2. (1.6s - 2.2s) Brush Tip "Dips" Water Center -> Drops Real GPU Fluid Ink
     revealTl.to('.craft-pen-wrap', {
       y: 12,
       scaleY: 0.94, // Soft bristle flexion
@@ -136,11 +136,11 @@ export class Choreographer {
       repeat: 1,
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
-          // Drops pure Pine Soot Ink into the real GPU Navier-Stokes fluid simulation!
+          // Injects physical Navier-Stokes drop
           waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0]);
           setTimeout(() => {
             if (waterAnimator) waterAnimator.spawnDrop(0.51, 0.49, waterAnimator.INKS[1]);
-          }, 350);
+          }, 300);
         }
       }
     });
@@ -150,22 +150,34 @@ export class Choreographer {
       opacity: 1,
       scale: 1,
       y: -85,
-      duration: 1.4,
+      duration: 1.5,
       ease: 'power2.out'
-    }, '-=1.2');
+    }, '-=0.2');
 
-    // 3. (3.4s - 4.5s) Brush sweeps horizontally across screen to wipe/wash ink
+    // 3. (2.2s - 3.6s) Brush smoothly lifts and glides to the FAR LEFT edge of the screen
     revealTl.to('.craft-pen-wrap', {
-      x: window.innerWidth * 0.45,
-      y: -15,
+      x: -window.innerWidth * 0.42, // Glides to leftmost edge
+      y: -20,
+      rotation: -14, // Tilts inward ready to sweep
+      duration: 1.4,
+      ease: 'power2.inOut'
+    }, '-=1.0');
+
+    // 4. (3.6s - 5.0s) Brush sweeps from FAR LEFT all the way across to FAR RIGHT
+    revealTl.to('.craft-pen-wrap', {
+      x: window.innerWidth * 0.46, // Sweeps across to far right
+      y: 10,
       rotation: 18,
       opacity: 0,
-      duration: 1.2,
+      duration: 1.4,
       ease: 'power2.inOut',
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.splatVelocity === 'function') {
-          // Push real horizontal fluid force across screen
-          waterAnimator.splatVelocity(0.5, 0.5, 3200, 200, 0.008);
+          // Push real horizontal fluid velocity across screen
+          waterAnimator.splatVelocity(0.3, 0.5, 4500, 150, 0.012);
+          setTimeout(() => {
+            if (waterAnimator) waterAnimator.splatVelocity(0.65, 0.5, 4500, 150, 0.012);
+          }, 250);
         }
       }
     }, '+=0.2');
@@ -173,7 +185,7 @@ export class Choreographer {
     const washObj = { w: 0 };
     revealTl.to(washObj, {
       w: 1,
-      duration: 1.3,
+      duration: 1.4,
       ease: 'power2.out',
       onUpdate: () => {
         if (waterAnimator) {
@@ -182,18 +194,18 @@ export class Choreographer {
       }
     }, '<');
 
-    // Brand dissolves smoothly
+    // Brand dissolves smoothly with sweep
     revealTl.to('.zen-brand-emerge', {
       opacity: 0,
-      scale: 1.1,
-      duration: 0.8,
+      scale: 1.08,
+      duration: 0.9,
       ease: 'power2.out'
     }, '<');
 
-    // 4. (4.4s - 5.5s) Curtain opens smoothly into Ivory Homepage
+    // 5. (5.0s - 6.2s) Curtain opens smoothly into Ivory Homepage
     revealTl.to('#zen-leaf-curtain', {
       opacity: 0,
-      duration: 1.1,
+      duration: 1.2,
       ease: 'power2.inOut'
     }, '-=0.5');
 
