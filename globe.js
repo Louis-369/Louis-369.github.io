@@ -462,18 +462,19 @@ export class WebGLFluidWaterAnimation {
         inkCol = mix(inkCol, vec3(0.05, 0.045, 0.045), clamp(hC * 0.85, 0.0, 0.96));
 
         // 4. Enhanced Rayleigh Atmospheric Volumetric Ink Mist (煙波晨霧瀰漫 · 溫潤朦朧意境)
-        float mistIntensity = smoothstep(0.015, 0.50, hC) * (1.0 - smoothstep(0.35, 0.90, hC));
-        vec3 mistColor = vec3(0.45, 0.45, 0.48);
-        inkCol = mix(inkCol, mistColor, mistIntensity * 0.75 * lightRetract);
+        float mistIntensity = smoothstep(0.04, 0.45, hC) * (1.0 - smoothstep(0.30, 0.85, hC));
+        vec3 mistColor = vec3(0.97, 0.965, 0.955);
+        inkCol = mix(inkCol, mistColor, mistIntensity * 0.55 * lightRetract);
 
         // Blend in glossy Fresnel liquid sheen
-        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.45 * lightRetract);
+        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.35 * lightRetract);
 
         // Rich specular highlight strictly tied to active liquid ink bodies
         float inkAmount = clamp(hC * 1.8, 0.0, 1.0);
-        inkCol += specular * smoothstep(0.04, 0.30, inkAmount);
+        inkCol += specular * smoothstep(0.06, 0.32, inkAmount);
 
-        float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
+        // Clean Absorption: completely vanishes without leaving any ghost outline or watermark
+        float alpha = smoothstep(0.04, 0.20, inkAmount) * pow(clamp(1.0 - uWash, 0.0, 1.0), 1.6);
 
         // 5. IN-SHADER DYNAMIC PHYSICAL TEXT MASK INVERSION (方案一：GPU 像素級即時反相)
         float textAlpha = texture2D(uText, uv).a * uTextOpacity;
