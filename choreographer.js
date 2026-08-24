@@ -168,21 +168,19 @@ export class Choreographer {
       }, '-=0.1');
     }
 
-    // 3. (2.5s - 3.6s) Brush lifts upwards and pulls back into the top-right
+    // 3. (2.5s - 3.6s) Brush Gently Fades Out In-Place with Zen Stillness (原地優雅漸隱消散)
     revealTl.to('.craft-pen-wrap', {
-      x: window.innerWidth * 0.35,
-      y: -window.innerHeight * 0.45,
-      rotation: 35,
       opacity: 0,
-      duration: 1.2,
-      ease: 'power2.in'
+      y: -12,
+      duration: 1.1,
+      ease: 'power2.out'
     }, '+=0.1');
 
     revealTl.to('.craft-pen-shadow', {
-      scale: 0.1,
       opacity: 0,
-      duration: 0.85,
-      ease: 'power2.in'
+      scale: 0.2,
+      duration: 0.9,
+      ease: 'power2.out'
     }, '<');
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────

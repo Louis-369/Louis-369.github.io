@@ -684,19 +684,20 @@ export class WebGLFluidWaterAnimation {
 
       ctx.font = `700 ${fontSize}px "Playfair Display", Georgia, serif`;
       ctx.letterSpacing = '-0.03em';
-      ctx.textBaseline = 'alphabetic';
       ctx.fillStyle = '#FFFFFF';
 
-      // Measure exact ascent to match DOM alphabetic baseline
+      // Measure exact Playfair Display font metrics to eliminate line-height half-leading offset
       const metrics = ctx.measureText('Louis');
-      const ascent = metrics.actualBoundingBoxAscent || fontSize * 0.72;
-
-      // Draw 'Louis' text exactly at DOM title position
       const tx = (tRect.left - cRect.left) * dpr;
-      const ty = (tRect.top - cRect.top) * dpr + ascent;
-      ctx.fillText('Louis', tx, ty);
+      const ty = (tRect.top - cRect.top) * dpr;
 
-      // Draw period dot at exact DOM dot center
+      // In CSS, text is vertically aligned by font box. Using actual font ascent gives 1:1 baseline placement:
+      ctx.textBaseline = 'alphabetic';
+      const baselineOffset = (tRect.height * dpr - (metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent)) * 0.5;
+      const exactBaselineY = ty + metrics.actualBoundingBoxAscent + baselineOffset;
+      ctx.fillText('Louis', tx, exactBaselineY);
+
+      // Draw period dot at exact DOM dot bounding box
       if (dotEl) {
         const dRect = dotEl.getBoundingClientRect();
         const dx = (dRect.left + dRect.width * 0.5 - cRect.left) * dpr;
@@ -713,7 +714,7 @@ export class WebGLFluidWaterAnimation {
       this.textTexture = gl.createTexture();
     }
     gl.bindTexture(gl.TEXTURE_2D, this.textTexture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); // Fix Y-inversion
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
