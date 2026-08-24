@@ -613,12 +613,12 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .result-number {
-  font-family: var(--font-mono);
-  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem);
   font-weight: 700;
   color: var(--ink-primary);
-  line-height: 1;
-  letter-spacing: -0.03em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .result-label {

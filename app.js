@@ -94,7 +94,7 @@ class Application {
                   <span>${project.category}</span>
                 </div>
                 <h3 class="works-project-title">${project.title}</h3>
-                <p class="works-project-desc">${project.description}</p>
+                <p class="works-project-desc">${project.desc || project.summary}</p>
               </div>
 
               <!-- Bottom Impact Metric Highlight -->
