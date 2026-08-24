@@ -452,24 +452,34 @@ export class WebGLFluidWaterAnimation {
 
         // 2. Fresnel Grazing Liquid Water Sheen (強烈水感反光邊緣)
         float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.1);
-        // 3. Pure Charcoal Ink Pigment (真正的松煙炭黑水墨，不混雜假紙張顏色)
-        vec3 pureInk = vec3(0.065, 0.06, 0.06);
-        float inkDensity = 1.0 - exp(-hC * 3.6);
+        vec3 fresnelSheen = mix(vec3(0.96, 0.95, 0.93), vec3(0.85, 0.89, 0.96), fresnel);
 
-        // Subtle liquid sheen on active ink bodies
-        vec3 inkCol = pureInk;
-        inkCol += fresnelSheen * fresnel * 0.25 * lightRetract * inkDensity;
-        inkCol += specular * smoothstep(0.06, 0.35, inkDensity);
+        // 3. True Physical Sumi Ink Pigment Model (純粹松煙墨色與層次灰階)
+        vec3 deepInk = vec3(0.045, 0.042, 0.042);
+        vec3 midInk = vec3(0.24, 0.23, 0.25);
+        vec3 inkCol = mix(midInk, deepInk, clamp(hC * 1.6, 0.0, 1.0));
 
-        // Pure Transparent Alpha Pipeline: 100% true alpha against native DOM background
-        float alpha = smoothstep(0.02, 0.22, inkDensity) * pow(clamp(1.0 - uWash, 0.0, 1.0), 1.5);
+        // 4. Enhanced Rayleigh Atmospheric Volumetric Ink Mist (煙波晨霧瀰漫)
+        float mistIntensity = smoothstep(0.05, 0.45, hC) * (1.0 - smoothstep(0.30, 0.85, hC));
+        vec3 mistColor = vec3(0.96, 0.95, 0.94);
+        inkCol = mix(inkCol, mistColor, mistIntensity * 0.45 * lightRetract);
 
-        // 4. IN-SHADER DYNAMIC PHYSICAL TEXT MASK INVERSION (方案一：GPU 像素級即時反相)
+        // Blend in glossy Fresnel liquid sheen
+        inkCol = mix(inkCol, fresnelSheen, fresnel * 0.30 * lightRetract);
+
+        // Rich specular highlight strictly tied to active liquid ink bodies
+        float inkAmount = clamp(hC * 1.8, 0.0, 1.0);
+        inkCol += specular * smoothstep(0.06, 0.32, inkAmount);
+
+        // Pure Dye Alpha: 100% transparent where there is no ink, cleanly revealing Layer 1 DOM paper background
+        float alpha = smoothstep(0.02, 0.16, inkAmount) * pow(clamp(1.0 - uWash, 0.0, 1.0), 1.6);
+
+        // 5. IN-SHADER DYNAMIC PHYSICAL TEXT MASK INVERSION (GPU 像素級即時反相)
         float textAlpha = texture2D(uText, uv).a * uTextOpacity;
         if (textAlpha > 0.01) {
           // Over dark ink: Inverts to brilliant pure ivory white (#FAF8F5)
           // Over clean paper: Inverts to deep rich black (#121316)
-          vec3 invertedTextCol = mix(vec3(0.12, 0.11, 0.11), vec3(0.98, 0.97, 0.95), clamp(inkDensity * 1.6, 0.0, 1.0));
+          vec3 invertedTextCol = mix(vec3(0.12, 0.11, 0.11), vec3(0.98, 0.97, 0.95), clamp(inkAmount * 1.4, 0.0, 1.0));
           inkCol = mix(inkCol, invertedTextCol, textAlpha * (1.0 - uWash * 0.8));
           alpha = max(alpha, textAlpha * (1.0 - uWash));
         }
