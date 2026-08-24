@@ -147,17 +147,17 @@ export class Choreographer {
           waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.35);
           
           setTimeout(() => {
-            // Wave 2: Subtle Organic Left Drift (炭灰中墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.485, 0.495, waterAnimator.INKS[1], 1.15);
+            // Wave 2: Charcoal Mist Ink (炭灰中墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.504, 0.497, waterAnimator.INKS[1], 1.15);
           }, 140);
 
           setTimeout(() => {
-            // Wave 3: Subtle Organic Right Drift (流動水墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.515, 0.505, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.15);
+            // Wave 3: Flowing Indigo Water Ink (流動水墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.496, 0.503, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.15);
           }, 280);
 
           setTimeout(() => {
-            // Wave 4: Ambient Cloud Ink (散開全景淡墨)
+            // Wave 4: Ambient Cloud Mist (散開全景淡墨)
             if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 0.95);
           }, 420);
         }

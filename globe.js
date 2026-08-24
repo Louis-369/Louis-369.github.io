@@ -32,12 +32,12 @@ export class WebGLFluidWaterAnimation {
     const config = {
       SIM_RES: 160,
       DYE_RES: 1024,
-      DENSITY_DISSIPATION: 0.012,
-      VELOCITY_DISSIPATION: 1.15,
+      DENSITY_DISSIPATION: 0.01,
+      VELOCITY_DISSIPATION: 1.25,
       PRESSURE: 0.85,
       PRESSURE_ITER: 22,
-      CURL: 10.5,
-      SPLAT_FORCE: 6800,
+      CURL: 6.0,
+      SPLAT_FORCE: 7200,
       WASH_DISSIPATION: 1.8,
     };
     this.config = config;
@@ -766,8 +766,6 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
-    const seedAngle = Math.random() * Math.PI * 2;
-
     this.drops.push({
       x,
       y,
@@ -775,27 +773,18 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.4,
       r0: 0.0001,
-      r1: 0.0076 * intensity * (0.88 + Math.random() * 0.24), // Graceful 75% natural coverage
-      swirl: (Math.random() - 0.5) * 0.6,
-      seedAngle
+      r1: 0.0076 * intensity, // Graceful 75% natural coverage
+      swirl: (Math.random() - 0.5) * 0.5
     });
 
-    // 1. Natural Balanced Organic Fluid Dispersion (自然平衡的天然有機水墨流淌)
+    // 1. Clean Concentric Liquid Water Wavefront (Round 1 同心圓水波浪頭)
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
-      const jitter = (Math.random() - 0.5) * 0.35;
-      const theta = (i / numRays) * Math.PI * 2 + jitter;
-      const cosT = Math.cos(theta);
-      const sinT = Math.sin(theta);
-
-      const speed = 52 * intensity;
-      this.splatVelocity(
-        x + cosT * 0.008,
-        y + sinT * 0.008,
-        cosT * speed,
-        sinT * speed,
-        0.0045
-      );
+      const theta = (i / numRays) * Math.PI * 2;
+      const rx = Math.cos(theta);
+      const ry = Math.sin(theta);
+      const speed = 72 * intensity;
+      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * speed, ry * speed, 0.0045);
     }
   }
 
@@ -830,20 +819,17 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Gentle fluid gliding
+      // Smooth outward expanding water ripples
       if (d.age < d.dur * 0.88) {
         const ringRad = 0.015 + ease * 0.052;
         const numPushes = 8;
         for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.4 + (Math.random() - 0.5) * 0.2;
-          const cosA = Math.cos(ang);
-          const sinA = Math.sin(ang);
-
+          const ang = (p / numPushes) * Math.PI * 2;
           this.splatVelocity(
-            d.x + cosA * ringRad,
-            d.y + sinA * ringRad,
-            cosA * 24 + -sinA * 8 * d.swirl,
-            sinA * 24 + cosA * 8 * d.swirl,
+            d.x + Math.cos(ang) * ringRad,
+            d.y + Math.sin(ang) * ringRad,
+            Math.cos(ang) * 24,
+            Math.sin(ang) * 24,
             0.0045
           );
         }
