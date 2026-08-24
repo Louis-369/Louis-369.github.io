@@ -141,53 +141,6 @@ class Application {
     // 3. 1:1 bymonolog.com "Still waiting..." Tab Visibility Typewriter Marquee
     // 4. Global interaction bindings
     this.initMagneticCursor();
-
-    // 5. Smart Logo Contrast Inversion Observer
-    this.initLogoContrastObserver();
-  }
-
-  initLogoContrastObserver() {
-    const brand = document.querySelector('.nav-brand');
-    if (!brand) return;
-
-    // Detect when logo scrolls over dark images or dark blocks
-    const checkDarkOverlap = () => {
-      const bRect = brand.getBoundingClientRect();
-      // Sample 3 points along the logo: left, center, right
-      const samplePoints = [
-        { x: bRect.left + 5, y: bRect.top + bRect.height * 0.5 },
-        { x: bRect.left + bRect.width * 0.5, y: bRect.top + bRect.height * 0.5 },
-        { x: bRect.right - 5, y: bRect.top + bRect.height * 0.5 }
-      ];
-
-      let isOverDark = false;
-      for (const pt of samplePoints) {
-        const elementsUnder = document.elementsFromPoint(pt.x, pt.y);
-        for (const el of elementsUnder) {
-          if (
-            el.closest('.works-image-mask') || 
-            el.closest('.works-home-image') || 
-            el.closest('.works-placeholder-visual') || 
-            el.closest('.footer-dark') || 
-            el.classList.contains('is-dark-surface')
-          ) {
-            isOverDark = true;
-            break;
-          }
-        }
-        if (isOverDark) break;
-      }
-
-      if (isOverDark) {
-        brand.classList.add('is-over-dark');
-      } else {
-        brand.classList.remove('is-over-dark');
-      }
-    };
-
-    window.addEventListener('scroll', checkDarkOverlap, { passive: true });
-    window.addEventListener('resize', checkDarkOverlap, { passive: true });
-    checkDarkOverlap();
   }
 }
 
