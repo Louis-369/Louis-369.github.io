@@ -164,28 +164,34 @@ export class Choreographer {
     }, '-=1.0');
 
     // 4. (3.6s - 5.0s) Brush sweeps from FAR LEFT all the way across to FAR RIGHT
+    const sweepProgress = { p: 0 };
     revealTl.to('.craft-pen-wrap', {
-      x: window.innerWidth * 0.46, // Sweeps across to far right
-      y: 10,
-      rotation: 18,
+      x: window.innerWidth * 0.48, // Sweeps across to far right
+      y: 12,
+      rotation: 20,
       opacity: 0,
-      duration: 1.4,
+      duration: 1.45,
+      ease: 'power2.inOut'
+    }, '+=0.2');
+
+    revealTl.to(sweepProgress, {
+      p: 1,
+      duration: 1.45,
       ease: 'power2.inOut',
-      onStart: () => {
-        if (waterAnimator && typeof waterAnimator.splatVelocity === 'function') {
-          // Push real horizontal fluid velocity across screen
-          waterAnimator.splatVelocity(0.3, 0.5, 4500, 150, 0.012);
-          setTimeout(() => {
-            if (waterAnimator) waterAnimator.splatVelocity(0.65, 0.5, 4500, 150, 0.012);
-          }, 250);
+      onUpdate: () => {
+        if (waterAnimator && typeof waterAnimator.sweepHorizontalFlow === 'function') {
+          // Calculate exact real-time pen tip position on screen (0.08 to 0.92)
+          const currentX = 0.08 + sweepProgress.p * 0.84;
+          const currentY = 0.5 - Math.sin(sweepProgress.p * Math.PI) * 0.04;
+          waterAnimator.sweepHorizontalFlow(currentX, currentY, 1.0 - sweepProgress.p * 0.3);
         }
       }
-    }, '+=0.2');
+    }, '<');
 
     const washObj = { w: 0 };
     revealTl.to(washObj, {
       w: 1,
-      duration: 1.4,
+      duration: 1.45,
       ease: 'power2.out',
       onUpdate: () => {
         if (waterAnimator) {

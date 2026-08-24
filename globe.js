@@ -559,14 +559,31 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 2.2,
-      r0: 0.00006,
-      r1: 0.0028,
-      swirl: (Math.random() - 0.5) * 2.5
+      dur: 2.8,
+      r0: 0.00008,
+      r1: 0.0045,
+      swirl: (Math.random() - 0.5) * 1.8
     });
 
-    const a = Math.random() * Math.PI * 2;
-    this.splatVelocity(x, y, Math.cos(a) * 24, Math.sin(a) * 24, 0.002);
+    // 1. First Touch: Pure 360-degree Radial Ripple Expansion (360度圓形同心圓漣漪速度場)
+    const numRays = 16;
+    for (let i = 0; i < numRays; i++) {
+      const theta = (i / numRays) * Math.PI * 2;
+      const rx = Math.cos(theta);
+      const ry = Math.sin(theta);
+      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * 45, ry * 45, 0.0035);
+    }
+  }
+
+  // 2. Second Sweep: Pure Left-to-Right Horizontal Fluid Stream (由左至右單向水流推進)
+  sweepHorizontalFlow(x, y, intensity = 1.0) {
+    // Inject powerful rightward horizontal force (+X direction) with slight vertical wave variance
+    const vx = 3800 * intensity;
+    const vy = (Math.random() - 0.5) * 200 * intensity;
+    this.splatVelocity(x, y, vx, vy, 0.015);
+    
+    // Inject dynamic ink trail along the sweep path
+    this.splatDye(x, y, this.INKS[1], 0.15 * intensity, 0.0018);
   }
 
   stepDrops(dt) {
@@ -576,18 +593,23 @@ export class WebGLFluidWaterAnimation {
       const t = Math.min(d.age / d.dur, 1);
       const ease = 1 - Math.pow(1 - t, 3);
       const r = d.r0 + (d.r1 - d.r0) * ease;
-      const amt = (1 - t) * (1 - t) * 2.8 * dt * 6;
+      const amt = (1 - t) * (1 - t) * 3.2 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      if (d.age < d.dur * 0.85) {
-        const ang = d.age * 2.5 * d.swirl + d.swirl * 5;
-        this.splatVelocity(
-          d.x + Math.cos(ang) * 0.015,
-          d.y + Math.sin(ang) * 0.015,
-          -Math.sin(ang) * 9 * d.swirl,
-          Math.cos(ang) * 9 * d.swirl,
-          0.0022
-        );
+      // Continuous gentle outward radial expansion & marbling swirl
+      if (d.age < d.dur * 0.9) {
+        const ringRad = 0.015 + ease * 0.035;
+        const numPushes = 8;
+        for (let p = 0; p < numPushes; p++) {
+          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl;
+          this.splatVelocity(
+            d.x + Math.cos(ang) * ringRad,
+            d.y + Math.sin(ang) * ringRad,
+            Math.cos(ang) * 16 + -Math.sin(ang) * 12 * d.swirl,
+            Math.sin(ang) * 16 + Math.cos(ang) * 12 * d.swirl,
+            0.0028
+          );
+        }
       }
       if (t >= 1) this.drops.splice(i, 1);
     }
