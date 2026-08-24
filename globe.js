@@ -473,19 +473,29 @@ export class WebGLFluidWaterAnimation {
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
-        // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (From User's Reference Code)
+        // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined ~55° Pitch Interstellar View)
         if (uSinkForce > 0.01) {
           vec2 toCenter = (uv - uSinkCenter);
           toCenter.x *= aspectRatio;
-          float r = length(toCenter);
+
+          // 3D Tilt Rotation Matrix: Pitch ~55° (Y-compression 2.2x) + Roll ~15°
+          float tiltAngle = 0.26; // ~15 deg roll
+          float cosT = cos(tiltAngle);
+          float sinT = sin(tiltAngle);
+          vec2 tiltedP = vec2(
+            toCenter.x * cosT - toCenter.y * sinT,
+            (toCenter.x * sinT + toCenter.y * cosT) * 2.2 // 55-degree pitch foreshortening
+          );
           
-          // Scaled to a refined compact size: Disk outer radius ~ 0.038 (approx 36px - 44px)
-          float diskOuter = 0.042 * clamp(uSinkForce * 1.3, 0.0, 1.0);
+          float r = length(tiltedP);
+          
+          // Scaled to a refined compact size: Disk outer radius ~ 0.048
+          float diskOuter = 0.048 * clamp(uSinkForce * 1.3, 0.0, 1.0);
           float diskInner = diskOuter * 0.22; // Event horizon radius
           
           if (r < diskOuter) {
             float normR = clamp((r - diskInner) / (diskOuter - diskInner), 0.0, 1.0);
-            float angle = atan(toCenter.y, toCenter.x);
+            float angle = atan(tiltedP.y, tiltedP.x);
             
             // Accretion disk orbital velocity & rotation (Reference Shader Math)
             float rotSpeed = 3.5 / (pow(r * 40.0, 1.2) + 0.8);
@@ -683,25 +693,25 @@ export class WebGLFluidWaterAnimation {
     this.dye.swap();
   }
 
-  spawnDrop(x, y, ink) {
+  spawnDrop(x, y, ink, intensity = 1.0) {
     this.drops.push({
       x,
       y,
       ink,
       age: 0,
-      dur: 2.8,
-      r0: 0.00008,
-      r1: 0.0045,
-      swirl: (Math.random() - 0.5) * 1.8
+      dur: 3.2,
+      r0: 0.0001,
+      r1: 0.0072 * intensity,
+      swirl: (Math.random() - 0.5) * 2.4
     });
 
-    // 1. First Touch: Pure 360-degree Radial Ripple Expansion (360度圓形同心圓漣漪速度場)
-    const numRays = 16;
+    // 1. Multi-Directional High-Energy Liquid Splatter Burst
+    const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const theta = (i / numRays) * Math.PI * 2;
       const rx = Math.cos(theta);
       const ry = Math.sin(theta);
-      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * 45, ry * 45, 0.0035);
+      this.splatVelocity(x + rx * 0.01, y + ry * 0.01, rx * 85 * intensity, ry * 85 * intensity, 0.0045);
     }
   }
 

@@ -124,20 +124,33 @@ export class Choreographer {
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.8s - 2.5s) Brush Tip "Dips" Water Center -> Spawns Rich Liquid Ink Drops
+    // 2. (1.8s - 2.5s) Brush Tip "Dips" Water Center -> Spawns Magnificent 4-Wave Liquid Ink Explosion!
     revealTl.to('.craft-pen-wrap', {
-      y: 14,
-      scaleY: 0.93,
-      duration: 0.35,
+      y: 16,
+      scaleY: 0.91,
+      duration: 0.38,
       ease: 'power2.inOut',
       yoyo: true,
       repeat: 1,
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
-          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0]);
+          // Wave 1: Heavy Pine Soot Core Ink (濃松煙主墨)
+          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.4);
+          
           setTimeout(() => {
-            if (waterAnimator) waterAnimator.spawnDrop(0.508, 0.492, waterAnimator.INKS[1]);
-          }, 300);
+            // Wave 2: Charcoal Mist Ink (炭灰中墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.512, 0.490, waterAnimator.INKS[1], 1.2);
+          }, 140);
+
+          setTimeout(() => {
+            // Wave 3: Flowing Indigo Ink (流動水墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.488, 0.510, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.1);
+          }, 280);
+
+          setTimeout(() => {
+            // Wave 4: Atmospheric Cloud Ink (散開淡墨)
+            if (waterAnimator) waterAnimator.spawnDrop(0.505, 0.495, waterAnimator.INKS[1], 0.9);
+          }, 420);
         }
       }
     });
