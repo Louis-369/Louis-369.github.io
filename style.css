@@ -107,13 +107,17 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 50;
-  pointer-events: auto;
+  z-index: 100;
+  pointer-events: none;
+  background: transparent;
+  isolation: auto;
 }
 
 .navbar-brand-wrap {
   display: flex;
   align-items: center;
+  pointer-events: auto;
+  mix-blend-mode: difference;
 }
 
 /* Logo Smart Inversion (智慧反射/穿透反色): White on dark, inverts to deep black on light paper */
@@ -128,7 +132,6 @@ html.lenis .lenis.lenis-stopped {
   mix-blend-mode: difference;
   transition: opacity 0.3s ease;
   cursor: pointer;
-  z-index: 100;
 }
 
 .nav-brand:hover {
@@ -139,6 +142,7 @@ html.lenis .lenis.lenis-stopped {
 .navbar-right-group {
   display: flex;
   align-items: center;
+  pointer-events: auto;
   mix-blend-mode: normal;
 }
 
@@ -420,7 +424,7 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.65rem;
+  gap: 0.55rem;
   text-decoration: none;
   z-index: 25;
   cursor: pointer;
@@ -433,8 +437,8 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .hero-scroll-indicator .scroll-corner-track {
-  width: 64px;
-  height: 20px;
+  width: 96px;
+  height: 18px;
   position: relative;
 }
 
@@ -444,26 +448,26 @@ html.lenis .lenis.lenis-stopped {
   overflow: visible;
 }
 
-/* Background static L-corner guide line */
+/* Background static L-corner guide line (Horizontal across -> 90° down) */
 .hero-scroll-indicator .corner-path-bg {
-  stroke: rgba(18, 19, 22, 0.12);
+  stroke: rgba(18, 19, 22, 0.14);
   stroke-width: 1.2px;
   stroke-linecap: square;
 }
 
-/* Animated flowing light pulse along the L-corner */
+/* Animated flowing light pulse along Direction A: Left -> Right -> 90° Down */
 .hero-scroll-indicator .corner-path-flow {
   stroke: var(--ink-primary);
   stroke-width: 1.5px;
   stroke-linecap: round;
-  stroke-dasharray: 22 70;
-  stroke-dashoffset: 22;
-  animation: cornerLineFlow 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  stroke-dasharray: 28 120;
+  stroke-dashoffset: 28;
+  animation: cornerLineFlowA 2.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
-@keyframes cornerLineFlow {
+@keyframes cornerLineFlowA {
   0% {
-    stroke-dashoffset: 22;
+    stroke-dashoffset: 28;
     opacity: 0;
   }
   15% {
@@ -473,7 +477,7 @@ html.lenis .lenis.lenis-stopped {
     opacity: 1;
   }
   100% {
-    stroke-dashoffset: -70;
+    stroke-dashoffset: -112;
     opacity: 0;
   }
 }
@@ -486,7 +490,7 @@ html.lenis .lenis.lenis-stopped {
   color: var(--ink-muted);
   text-transform: uppercase;
   transition: color 0.3s ease;
-  padding-left: 2px;
+  padding-left: 1px;
 }
 
 .hero-scroll-indicator:hover .scroll-text {
