@@ -33,7 +33,7 @@ export class WebGLFluidWaterAnimation {
       SIM_RES: 160,
       DYE_RES: 1024,
       DENSITY_DISSIPATION: 0.008,
-      VELOCITY_DISSIPATION: 0.95,
+      VELOCITY_DISSIPATION: 1.15,
       PRESSURE: 0.85,
       PRESSURE_ITER: 24,
       CURL: 7.5,
