@@ -766,9 +766,13 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
-    // Generate unique organic seed for non-repeating natural ink flow
-    const seedAngle = Math.random() * Math.PI * 2;
-    const asymmetry = 0.7 + Math.random() * 0.6;
+    // Generate true wild organic branches (2-4 major natural ink streams)
+    const numStreams = 2 + Math.floor(Math.random() * 3);
+    const streamAngles = [];
+    for (let s = 0; s < numStreams; s++) {
+      streamAngles.push(Math.random() * Math.PI * 2);
+    }
+    const asymmetry = 0.65 + Math.random() * 0.7;
 
     this.drops.push({
       x,
@@ -777,19 +781,25 @@ export class WebGLFluidWaterAnimation {
       age: 0,
       dur: 3.2,
       r0: 0.0001,
-      r1: 0.0068 * intensity * asymmetry,
-      swirl: (Math.random() - 0.5) * 1.8,
-      seedAngle
+      r1: 0.0065 * intensity * asymmetry,
+      swirl: (Math.random() - 0.5) * 2.2,
+      streamAngles
     });
 
-    // 1. Organic Asymmetric Liquid Splash Wave
-    const numRays = 24;
-    for (let i = 0; i < numRays; i++) {
-      const theta = (i / numRays) * Math.PI * 2;
-      const waveMod = Math.sin(theta * 2.0 + seedAngle) * 0.35 + 1.0;
-      const rx = Math.cos(theta) * waveMod;
-      const ry = Math.sin(theta) * waveMod;
-      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * 62 * intensity, ry * 62 * intensity, 0.0045);
+    // Wild Organic Velocity Tendrils (天然不規則墨脈竄流)
+    for (let s = 0; s < numStreams; s++) {
+      const baseAng = streamAngles[s];
+      const streamPower = (0.7 + Math.random() * 0.6) * intensity;
+      const subRays = 4 + Math.floor(Math.random() * 4);
+      
+      for (let j = 0; j < subRays; j++) {
+        const spread = (Math.random() - 0.5) * 0.7;
+        const ang = baseAng + spread;
+        const dist = 0.005 + Math.random() * 0.015;
+        const vx = Math.cos(ang) * 75 * streamPower;
+        const vy = Math.sin(ang) * 75 * streamPower;
+        this.splatVelocity(x + Math.cos(ang) * dist, y + Math.sin(ang) * dist, vx, vy, 0.005);
+      }
     }
   }
 
@@ -824,18 +834,17 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 3.0 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Organic marbling fluid glide
-      if (d.age < d.dur * 0.88) {
-        const ringRad = 0.015 + ease * 0.052;
-        const numPushes = 8;
-        for (let p = 0; p < numPushes; p++) {
-          const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.6;
+      // Wild organic branching fluid glide along stream vectors
+      if (d.age < d.dur * 0.88 && d.streamAngles) {
+        for (let s = 0; s < d.streamAngles.length; s++) {
+          const ang = d.streamAngles[s] + d.age * d.swirl * 0.5;
+          const dist = 0.01 + ease * 0.048;
           this.splatVelocity(
-            d.x + Math.cos(ang) * ringRad,
-            d.y + Math.sin(ang) * ringRad,
-            Math.cos(ang) * 26 + -Math.sin(ang) * 14 * d.swirl,
-            Math.sin(ang) * 26 + Math.cos(ang) * 14 * d.swirl,
-            0.005
+            d.x + Math.cos(ang) * dist,
+            d.y + Math.sin(ang) * dist,
+            Math.cos(ang) * 28 + -Math.sin(ang) * 16 * d.swirl,
+            Math.sin(ang) * 28 + Math.cos(ang) * 16 * d.swirl,
+            0.0055
           );
         }
       }

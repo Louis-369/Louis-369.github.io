@@ -124,64 +124,65 @@ export class Choreographer {
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.8s - 2.5s) Brush Tip "Dips" Water Center -> Spawns Magnificent 4-Wave Liquid Ink Explosion!
+    // 2. (1.8s) Brush Tip "Dips" Water Center -> Instantly triggers ink explosion
     revealTl.to('.craft-pen-wrap', {
       y: 16,
       scaleY: 0.91,
-      duration: 0.38,
-      ease: 'power2.inOut',
-      yoyo: true,
-      repeat: 1,
+      duration: 0.22,
+      ease: 'power2.in',
       onStart: () => {
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
           if (typeof waterAnimator.initTextTexture === 'function') {
             waterAnimator.initTextTexture();
           }
-          // Wave 1: Heavy Pine Soot Core Ink (濃松煙主墨)
+          // Spawn wild natural ink flows with randomized positions
           waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.4);
           
           setTimeout(() => {
-            // Wave 2: Charcoal Mist Ink (炭灰中墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.512, 0.490, waterAnimator.INKS[1], 1.2);
-          }, 140);
+            const rx = 0.5 + (Math.random() - 0.5) * 0.04;
+            const ry = 0.5 + (Math.random() - 0.5) * 0.04;
+            if (waterAnimator) waterAnimator.spawnDrop(rx, ry, waterAnimator.INKS[1], 1.2);
+          }, 120);
 
           setTimeout(() => {
-            // Wave 3: Flowing Indigo Ink (流動水墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.488, 0.510, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.1);
-          }, 280);
+            const rx = 0.5 + (Math.random() - 0.5) * 0.06;
+            const ry = 0.5 + (Math.random() - 0.5) * 0.06;
+            if (waterAnimator) waterAnimator.spawnDrop(rx, ry, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.1);
+          }, 240);
 
           setTimeout(() => {
-            // Wave 4: Atmospheric Cloud Ink (散開淡墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.505, 0.495, waterAnimator.INKS[1], 0.9);
-          }, 420);
+            const rx = 0.5 + (Math.random() - 0.5) * 0.05;
+            const ry = 0.5 + (Math.random() - 0.5) * 0.05;
+            if (waterAnimator) waterAnimator.spawnDrop(rx, ry, waterAnimator.INKS[1], 0.9);
+          }, 360);
         }
       }
     });
 
-    // In-Shader text only reveals AFTER the brush dips and ink expands!
+    // 3. Brush Disappears IMMEDIATELY in 0.1s right after touching water
+    revealTl.to('.craft-pen-wrap', {
+      opacity: 0,
+      y: -10,
+      duration: 0.12,
+      ease: 'power1.out'
+    }, '+=0.05');
+
+    revealTl.to('.craft-pen-shadow', {
+      opacity: 0,
+      scale: 0.01,
+      duration: 0.10,
+      ease: 'power1.out'
+    }, '<');
+
+    // In-Shader text reveals as ink expands
     if (waterAnimator) {
       waterAnimator.textOpacity = 0.0;
       revealTl.to(waterAnimator, {
         textOpacity: 1.0,
         duration: 1.2,
         ease: 'power2.out'
-      }, '-=0.1');
+      }, '-=0.05');
     }
-
-    // 3. Brush Fades Out Gracefully within 0.6s - 0.8s after touching water
-    revealTl.to('.craft-pen-wrap', {
-      opacity: 0,
-      y: -14,
-      duration: 0.55,
-      ease: 'power2.out'
-    }, '+=0.2');
-
-    revealTl.to('.craft-pen-shadow', {
-      opacity: 0,
-      scale: 0.1,
-      duration: 0.50,
-      ease: 'power2.out'
-    }, '<');
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────
     // Uses canvas.getBoundingClientRect() as the sole reference frame,
