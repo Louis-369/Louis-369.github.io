@@ -127,18 +127,18 @@ export class Choreographer {
     revealTl.to('.craft-pen-shadow', {
       scale: 1.0,
       opacity: 0.9,
-      y: penLandingY,
       duration: 1.8,
       ease: 'power3.out'
     }, '<');
 
-    // 2. (1.8s - 2.18s) Brush Tip "Dips" Water -> Spawns Liquid Ink Wave
+    // 2. (1.8s - 2.15s) Brush Tip "Dips" Water -> Strikes water surface and releases ink!
     revealTl.to('.craft-pen-wrap', {
       y: penLandingY + 12,
-      scaleY: 0.92,
-      duration: 0.38,
+      scaleY: 0.93,
+      duration: 0.35,
       ease: 'power2.in',
-      onStart: () => {
+      onComplete: () => {
+        // Ink releases EXACTLY when pen tip contacts the water surface!
         if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
           if (typeof waterAnimator.initTextTexture === 'function') {
             waterAnimator.initTextTexture();
@@ -164,18 +164,18 @@ export class Choreographer {
       }
     });
 
-    // 3. Brush Fades Out IMMEDIATELY within 0.28s as soon as it touches water! (點完0.28秒立刻透明消失)
+    // 3. (2.15s - 2.75s) Brush Gently Fades Out AFTER touching the water (0.58s smooth Zen fade)
     revealTl.to('.craft-pen-wrap', {
       opacity: 0,
-      y: penLandingY - 8,
-      duration: 0.28,
+      y: penLandingY - 14,
+      duration: 0.58,
       ease: 'power2.out'
-    });
+    }, '+=0.05');
 
     revealTl.to('.craft-pen-shadow', {
       opacity: 0,
       scale: 0.1,
-      duration: 0.25,
+      duration: 0.50,
       ease: 'power2.out'
     }, '<');
 
@@ -186,7 +186,7 @@ export class Choreographer {
         textOpacity: 1.0,
         duration: 1.2,
         ease: 'power2.out'
-      }, '-=0.2');
+      }, '-=0.3');
     }
 
     // ─── Canvas-Relative Coordinate Helper ───────────────────────────

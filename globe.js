@@ -766,7 +766,6 @@ export class WebGLFluidWaterAnimation {
   }
 
   spawnDrop(x, y, ink, intensity = 1.0) {
-    const aspect = this.canvas.width / this.canvas.height;
     const seedAngle = Math.random() * Math.PI * 2;
 
     this.drops.push({
@@ -778,11 +777,10 @@ export class WebGLFluidWaterAnimation {
       r0: 0.0001,
       r1: 0.0076 * intensity * (0.85 + Math.random() * 0.35), // Expands gracefully to ~75% coverage
       swirl: (Math.random() - 0.5) * 1.5,
-      seedAngle,
-      aspect
+      seedAngle
     });
 
-    // 1. Pure Organic Random Fluid Dispersion with +0.42 Corner Boost (兼顧角落速度差與隨機流淌)
+    // 1. 100% Uniform Speed Fluid Dispersion (完全均勻一致的擴散速度，無任何方向速度差)
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const jitter = (Math.random() - 0.5) * 0.35;
@@ -790,17 +788,9 @@ export class WebGLFluidWaterAnimation {
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // Goldilocks 0.42 corner speed compensation
-      const diagonalFactor = Math.abs(cosT * sinT) * 2.0;
-      const cornerBoost = 1.0 + diagonalFactor * 0.42;
-
-      // Pure organic non-repeating flow amplitude
-      const randomPower = (0.75 + Math.random() * 0.5) * cornerBoost;
-      const rx = cosT * randomPower;
-      const ry = sinT * randomPower;
-
-      const speed = 54 * intensity * randomPower;
-      this.splatVelocity(x + rx * 0.008, y + ry * 0.008, rx * speed, ry * speed, 0.0045);
+      // 100% Equal Speed in every direction
+      const speed = 54 * intensity;
+      this.splatVelocity(x + cosT * 0.008, y + sinT * 0.008, cosT * speed, sinT * speed, 0.0045);
     }
   }
 
@@ -835,7 +825,7 @@ export class WebGLFluidWaterAnimation {
       const amt = (1 - t) * (1 - t) * 2.8 * dt * 5;
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
-      // Organic fluid gliding
+      // Uniform fluid gliding without directional bias
       if (d.age < d.dur * 0.88) {
         const ringRad = 0.015 + ease * 0.055;
         const numPushes = 8;
@@ -843,13 +833,12 @@ export class WebGLFluidWaterAnimation {
           const ang = (p / numPushes) * Math.PI * 2 + d.age * d.swirl * 0.5 + (Math.random() - 0.5) * 0.2;
           const cosA = Math.cos(ang);
           const sinA = Math.sin(ang);
-          const diagBoost = 1.0 + Math.abs(cosA * sinA) * 0.42;
 
           this.splatVelocity(
             d.x + cosA * ringRad,
             d.y + sinA * ringRad,
-            (cosA * 24 + -sinA * 12 * d.swirl) * diagBoost,
-            (sinA * 24 + cosA * 12 * d.swirl) * diagBoost,
+            cosA * 24 + -sinA * 12 * d.swirl,
+            sinA * 24 + cosA * 12 * d.swirl,
             0.0045
           );
         }
