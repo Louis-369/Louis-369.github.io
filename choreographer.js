@@ -78,7 +78,6 @@ export class Choreographer {
 
     // Initial Elements Setup: All Hero elements initially HIDDEN!
     gsap.set('.hero-title-line', { opacity: 0, scale: 0.98 });
-    gsap.set('#hero-title-dot', { opacity: 0 }); // Dot starts as pure WebGL liquid ink!
     gsap.set(['.site-nav', '.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], { y: 25, opacity: 0 });
     
     // Calligraphy Brush starting state: Poised directly above center
@@ -102,7 +101,7 @@ export class Choreographer {
         if (canvas) canvas.style.display = 'none';
         const pen = document.getElementById('craft-pen-wrap');
         if (pen) pen.remove();
-        gsap.set(['.hero-title-line', '#hero-title-dot', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
+        gsap.set(['.hero-title-line', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
         this.initLenis();
         this.initScrollAnimations();
         this.onRevealComplete();
@@ -143,38 +142,38 @@ export class Choreographer {
       }
     });
 
-    // Louis emerges gracefully from under water, while the dot is pure liquid ink!
+    // Louis. emerges gracefully from under water with its dot always intact!
     revealTl.to('.hero-title-line', {
       opacity: 1,
       scale: 1.0,
-      duration: 1.2,
+      duration: 1.1,
       ease: 'power2.out'
     }, '-=0.2');
 
-    // 3. (1.8s - 2.8s) Brush lifts upwards and pulls back into the top-right
+    // 3. (1.8s - 2.6s) Brush lifts upwards and pulls back into the top-right
     revealTl.to('.craft-pen-wrap', {
       x: window.innerWidth * 0.35,
       y: -window.innerHeight * 0.45,
       rotation: 35,
       opacity: 0,
-      duration: 1.0,
+      duration: 0.85,
       ease: 'power2.in'
     }, '+=0.05');
 
     revealTl.to('.craft-pen-shadow', {
       scale: 0.1,
       opacity: 0,
-      duration: 0.7,
+      duration: 0.6,
       ease: 'power2.in'
     }, '<');
 
-    // 4. (1.8s - 3.6s) PURE NAVIER-STOKES GPU FLUID VORTEX SUCKED DIRECTLY INTO THE PERIOD DOT!
+    // 4. (1.8s - 3.2s) RAPID & DECISIVE DIRECT VACUUM SUCTION STRAIGHT INTO THE PERIOD DOT!
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 1.8,
-      ease: 'power2.inOut',
+      duration: 1.3, // Fast, decisive, and snappy suction!
+      ease: 'power3.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
           const dotEl = document.getElementById('hero-title-dot');
@@ -185,26 +184,19 @@ export class Choreographer {
             dotX = (rect.left + rect.width * 0.5) / window.innerWidth;
             dotY = 1.0 - (rect.top + rect.height * 0.5) / window.innerHeight;
           }
-          // Pure Navier-Stokes GPU Swirling Pull directly into the dot
-          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 4.2);
+          // Direct linear gravitational vacuum pull straight into the dot
+          waterAnimator.triggerCentripetalVortexSink(dotX, dotY, suctionObj.power * 5.5);
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.4);
         }
       }
-    }, '-=0.9');
+    }, '-=0.7');
 
-    // 5. (3.4s - 4.0s) Fluid absorbs completely into the dot -> Typographic Period Dot becomes fully crisp
-    revealTl.to('#hero-title-dot', {
-      opacity: 1,
-      duration: 0.5,
-      ease: 'power2.out'
-    }, '-=0.4');
-
-    // 6. (4.0s - 4.8s) Water Fluid Canvas cleanly completes absorption
+    // 5. (2.9s - 3.6s) Water Fluid Canvas cleanly completes absorption
     revealTl.to('#water-fluid-canvas', {
       opacity: 0,
-      duration: 0.8,
+      duration: 0.7,
       ease: 'power2.inOut'
-    }, '-=0.5');
+    }, '-=0.3');
 
     // 7. (4.2s - 5.0s) Supporting Hero Elements & Navbar Gracefully Cascade In
     revealTl.to('.site-nav', {

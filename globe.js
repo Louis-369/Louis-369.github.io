@@ -600,26 +600,24 @@ export class WebGLFluidWaterAnimation {
     }
   }
 
-  // 2. Second Stage: Letter "O" Centripetal Vortex Black Hole (向心黑洞漩渦吸水力場)
+  // 2. Direct Centripetal Inward Sink Pull into Period Dot (直球向心吸水，無任何混亂旋渦)
   triggerCentripetalVortexSink(targetX, targetY, power = 1.0) {
     this.sinkCenter = { x: targetX, y: targetY };
     this.sinkForce = power;
-    this.sinkSwirl = 2.2;
+    this.sinkSwirl = 0.0; // 0 swirl = 100% direct linear gravitational suction into the dot
 
-    const numSinkNodes = 12;
+    const numSinkNodes = 16;
     for (let i = 0; i < numSinkNodes; i++) {
       const theta = (i / numSinkNodes) * Math.PI * 2;
-      const radius = 0.03 + Math.random() * 0.16; // Inflow catchment zone
+      const radius = 0.04 + Math.random() * 0.22;
       const nodeX = targetX + Math.cos(theta) * radius;
       const nodeY = targetY + Math.sin(theta) * radius;
 
-      // Inward radial velocity (-direction towards target center) + Tangential swirl velocity (Vortex rotation)
-      const inwardVx = -Math.cos(theta) * 3200 * power;
-      const inwardVy = -Math.sin(theta) * 3200 * power;
-      const swirlVx = -Math.sin(theta) * 4200 * power; // Clockwise spiral
-      const swirlVy = Math.cos(theta) * 4200 * power;
+      // Pure direct linear inward velocity towards the dot center
+      const inwardVx = -Math.cos(theta) * 6500 * power;
+      const inwardVy = -Math.sin(theta) * 6500 * power;
 
-      this.splatVelocity(nodeX, nodeY, inwardVx + swirlVx, inwardVy + swirlVy, 0.008);
+      this.splatVelocity(nodeX, nodeY, inwardVx, inwardVy, 0.012);
     }
   }
 
