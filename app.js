@@ -7,27 +7,25 @@
 
 import { siteConfig, featuredProjects } from './data/projects.js';
 import { Choreographer } from './choreographer.js';
-import { AmbientParticles, HeroWebGLShader } from './globe.js';
+import { InkConvergeAnimation } from './globe.js';
 
 class Application {
   constructor() {
     this.projects = featuredProjects;
     this.choreographer = null;
-    this.ambientParticles = null;
-    this.heroWebGL = null;
+    this.inkAnimator = null;
     
     this.init();
   }
 
   init() {
-    // 1. Render dynamic projects list (bymonolog paper-cut cards)
+    // 1. Render dynamic projects list (bymonolog 12-col open grid)
     this.renderProjects();
 
-    // 2. Initialize background particles & 1:1 s0animation WebGL Shader Sculpture
-    this.ambientParticles = new AmbientParticles('ambient-canvas');
-    this.heroWebGL = new HeroWebGLShader('hero-webgl-canvas');
+    // 2. Initialize 4-corner ink convergence animation
+    this.inkAnimator = new InkConvergeAnimation('ink-converge-canvas');
 
-    // 3. Initialize Choreographer & play opening reveal (s0 rhythm)
+    // 3. Initialize Choreographer & play opening reveal (Ink -> Vermilion Seal -> Focal Dot Expand)
     this.choreographer = new Choreographer({
       onRevealComplete: () => {
         document.body.classList.remove('is-loading');
@@ -37,10 +35,10 @@ class Application {
 
     // Run opening reveal
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      this.choreographer.playOpeningReveal();
+      this.choreographer.playOpeningReveal(this.inkAnimator);
     } else {
       window.addEventListener('DOMContentLoaded', () => {
-        this.choreographer.playOpeningReveal();
+        this.choreographer.playOpeningReveal(this.inkAnimator);
       });
     }
 
@@ -60,30 +58,29 @@ class Application {
 
       return `
         <div class="works-home-item" data-project-index="${idx}">
-          <a href="${project.url}" ${targetAttr} class="works-home-link ${isWip ? 'is-disabled' : ''}">
-            <!-- Left: Open Architecture Visual Window (Columns 1-7) -->
+          <a href="${project.liveUrl}" class="works-home-link" ${targetAttr}>
+            <!-- Left: Visual Column (Cols 1-7, 58%) -->
             <div class="works-visual-column">
               <div class="works-image-mask">
-                ${project.image ? `
-                  <img src="${project.image}" alt="${project.title}" class="works-home-image" loading="lazy" />
-                ` : `
-                  <div class="works-placeholder-visual" style="background: ${project.colorScheme.bgSubtle};">
-                    <span class="placeholder-icon" style="color: ${project.colorScheme.accent};">🚧</span>
-                    <span class="placeholder-text">${project.title}</span>
-                  </div>
-                `}
+                ${project.image 
+                  ? `<img src="${project.image}" alt="${project.title}" class="works-home-image" loading="lazy" />`
+                  : `<div class="works-placeholder-visual">
+                       <span class="placeholder-icon">${project.icon}</span>
+                       <span class="placeholder-text">${project.title}</span>
+                     </div>`
+                }
               </div>
             </div>
 
-            <!-- Right: Open Editorial Content Details (Columns 8-12) -->
+            <!-- Right: Content Column (Cols 8-12, 42%) -->
             <div class="works-content-column">
               <div class="works-content-header">
                 <div class="works-meta-stamp">
-                  <span class="meta-brand-prefix">SS</span>
-                  <span class="meta-index-pill">${indexFormatted}/${String(this.projects.length).padStart(2, '0')}</span>
+                  <span class="meta-index-pill">SS / ${indexFormatted}/04</span>
+                  <span>${project.category}</span>
                 </div>
                 <h3 class="works-project-title">${project.title}</h3>
-                <p class="works-project-desc">${project.desc}</p>
+                <p class="works-project-desc">${project.description}</p>
               </div>
 
               <!-- Bottom Impact Metric Highlight -->
@@ -98,10 +95,21 @@ class Application {
     }).join('');
   }
 
-
-
   bindInteractions() {
-    // 1. Smooth navigation anchor links
+    // 1. Logo Click: Smooth Scroll Directly to Top
+    const logoBrand = document.getElementById('nav-brand-logo');
+    if (logoBrand) {
+      logoBrand.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (this.choreographer && this.choreographer.lenis) {
+          this.choreographer.lenis.scrollTo(0, { duration: 1.4 });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    // 2. Smooth navigation anchor links
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener('click', (e) => {
         const targetId = anchor.getAttribute('href');
@@ -115,7 +123,7 @@ class Application {
       });
     });
 
-    // 2. 1:1 bymonolog.com "On hold..." Tab Visibility Marquee
+    // 3. 1:1 bymonolog.com "Still waiting..." Tab Visibility Typewriter Marquee
     this.initVisibilityTitleMarquee();
   }
 

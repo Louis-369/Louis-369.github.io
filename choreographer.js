@@ -53,10 +53,9 @@ export class Choreographer {
   }
 
   /**
-   * s0animation 1:1 Viewport Reveal Animation Sequence
-   * Concentrated Center Box -> Explosive Clip-Path Expand -> Counter-Scale Zoom -> Typography Stagger
+   * Cinematic Ink-Stamp Opening Reveal (4-Corner Ink -> Vermilion Seal -> Focal Dot Collapse -> Supernova Expand)
    */
-  playOpeningReveal() {
+  playOpeningReveal(inkAnimator = null) {
     const gsap = window.gsap;
     if (!gsap) {
       console.warn('GSAP not loaded.');
@@ -64,8 +63,8 @@ export class Choreographer {
     }
 
     if (this.prefersReducedMotion) {
-      gsap.set('.hero-viewport-frame', { clipPath: 'inset(0% 0% 0% 0% round 0px)', scale: 1 });
-      gsap.set('.hero-media-inner', { scale: 1 });
+      const curtain = document.getElementById('ink-opening-curtain');
+      if (curtain) curtain.remove();
       gsap.set(['.hero-title-line', '.hero-badge', '.hero-tagline', '.site-nav', '.hero-scroll-prompt'], { opacity: 1, y: 0 });
       this.initLenis();
       this.initScrollAnimations();
@@ -73,84 +72,93 @@ export class Choreographer {
       return;
     }
 
-    // Initial state: Central floating paper frame
-    gsap.set('.hero-viewport-frame', {
-      clipPath: 'inset(22% 26% 22% 26% round 24px)',
-      scale: 0.96,
-      opacity: 1
-    });
-    gsap.set('.hero-media-inner', {
-      scale: 1.35
-    });
-    gsap.set('.hero-title-line', {
-      y: '105%',
-      opacity: 0
-    });
-    gsap.set(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt', '.site-nav'], {
-      y: 24,
-      opacity: 0
-    });
-    gsap.set('.preloader-center-badge', {
-      opacity: 1,
-      scale: 1
-    });
+    // Initial Elements Setup
+    gsap.set('.hero-title-line', { y: '105%', opacity: 0 });
+    gsap.set(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt', '.site-nav'], { y: 24, opacity: 0 });
+    gsap.set('.ink-seal-wrapper', { scale: 0.85, opacity: 0 });
+    gsap.set('.ink-focal-dot', { scale: 0, opacity: 1 });
 
     const revealTl = gsap.timeline({
-      delay: 0.2,
       onComplete: () => {
+        if (inkAnimator) inkAnimator.destroy();
+        const curtain = document.getElementById('ink-opening-curtain');
+        if (curtain) curtain.remove();
         this.initLenis();
         this.initScrollAnimations();
         this.onRevealComplete();
       }
     });
 
-    // Phase 1: Hold focus on center badge (0.0 - 0.6s)
-    revealTl.to('.preloader-center-badge', {
-      opacity: 0,
-      scale: 0.9,
-      duration: 0.45,
+    // 1. (0.0s - 0.6s) 4-Corner Ink Streams Rush to Center
+    const inkProgressObj = { p: 0 };
+    revealTl.to(inkProgressObj, {
+      p: 1,
+      duration: 0.65,
       ease: 'power2.inOut',
-      delay: 0.4
+      onUpdate: () => {
+        if (inkAnimator) inkAnimator.render(inkProgressObj.p);
+      }
     });
 
-    // Phase 2: Explosive Viewport Expand & Lens Zoom-Out (0.6 - 1.8s)
-    // Using cubic-bezier(0.83, 0, 0.17, 1) equivalent via power4.inOut
-    revealTl.to('.hero-viewport-frame', {
-      clipPath: 'inset(0% 0% 0% 0% round 0px)',
-      scale: 1.0,
-      duration: 1.45,
-      ease: 'power4.inOut'
+    // 2. (0.6s - 1.1s) Vermilion Seal Stamp Impacts & Forges
+    revealTl.to('.ink-seal-wrapper', {
+      opacity: 1,
+      scale: 1,
+      duration: 0.45,
+      ease: 'back.out(1.8)'
     }, '-=0.15');
 
-    revealTl.to('.hero-media-inner', {
-      scale: 1.0,
-      duration: 1.45,
-      ease: 'power4.inOut'
+    // 3. (1.1s - 1.4s) Seal Collapses into a Compact Vermilion Focal Dot
+    revealTl.to('.ink-seal-wrapper', {
+      scale: 0.05,
+      opacity: 0,
+      duration: 0.35,
+      ease: 'power3.in'
+    }, '+=0.25');
+
+    revealTl.to('.ink-focal-dot', {
+      scale: 1,
+      duration: 0.35,
+      ease: 'power3.in'
     }, '<');
 
-    // Phase 3: Staggered Typography & UI Release (1.3s - 2.2s)
+    // 4. (1.4s - 1.9s) Focal Dot Explosively Expands (Supernova Reveal) & Curtain Dissolves
+    revealTl.to('.ink-focal-dot', {
+      scale: 180,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power4.out'
+    });
+
+    revealTl.to('#ink-opening-curtain', {
+      opacity: 0,
+      duration: 0.45,
+      ease: 'power2.out'
+    }, '-=0.4');
+
+    // 5. Staggered Entrance of Editorial Typography & Navigation
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
-      duration: 0.9,
+      duration: 0.8,
       ease: 'power3.out'
-    }, '-=0.65');
+    }, '-=0.35');
 
     revealTl.to('.hero-title-line', {
       y: '0%',
       opacity: 1,
-      stagger: 0.1,
-      duration: 1.1,
+      stagger: 0.08,
+      duration: 1.0,
       ease: 'power3.out'
-    }, '-=0.7');
+    }, '-=0.5');
 
     revealTl.to(['.hero-badge', '.hero-tagline', '.hero-scroll-prompt'], {
       y: 0,
       opacity: 1,
-      stagger: 0.08,
-      duration: 0.85,
+      stagger: 0.06,
+      duration: 0.75,
       ease: 'power3.out'
-    }, '-=0.6');
+    }, '-=0.45');
   }
 
   /**
