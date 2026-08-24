@@ -389,15 +389,17 @@ export class WebGLFluidWaterAnimation {
         // 3. Beer–Lambert Deep Dye Absorption
         vec3 paper = vec3(0.98, 0.972, 0.96); // Warm Ivory Canvas
         vec3 inkCol = paper * exp(-d);
-        inkCol = mix(inkCol, fresnelCol, fresnel * 0.55);
-        inkCol += specular;
+        inkCol = mix(inkCol, fresnelCol, fresnel * 0.45);
+        
+        // Specular highlight only appears on top of physical ink bodies (no floating white haze on empty background)
+        float inkAmount = clamp(hC * 1.6, 0.0, 1.0);
+        inkCol += specular * smoothstep(0.02, 0.25, inkAmount);
 
         // 4. Liquid Glow (from User JSON Preset)
-        float glow = pow(clamp(hC * 1.4, 0.0, 1.0), 8.3 * 0.25);
-        inkCol += vec3(0.95, 0.95, 0.95) * glow * 0.35;
+        float glow = pow(clamp(hC * 1.2, 0.0, 1.0), 8.3 * 0.25);
+        inkCol += vec3(0.95, 0.95, 0.95) * glow * 0.25 * smoothstep(0.02, 0.25, inkAmount);
 
-        float inkAmount = clamp(hC * 1.5, 0.0, 1.0);
-        float alpha = smoothstep(0.005, 0.08, inkAmount) * (1.0 - uWash);
+        float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
         gl_FragColor = vec4(inkCol, alpha);
       }
@@ -575,15 +577,16 @@ export class WebGLFluidWaterAnimation {
     }
   }
 
-  // 2. Second Sweep: Pure Left-to-Right Horizontal Fluid Stream (由左至右單向水流推進)
+  // 2. Second Sweep: Pure Left-to-Right Horizontal Fluid Stream with Rich Ink Wake (由左至右帶有飽滿墨浪的推進)
   sweepHorizontalFlow(x, y, intensity = 1.0) {
-    // Inject powerful rightward horizontal force (+X direction) with slight vertical wave variance
-    const vx = 3800 * intensity;
-    const vy = (Math.random() - 0.5) * 200 * intensity;
-    this.splatVelocity(x, y, vx, vy, 0.015);
+    // Inject powerful rightward horizontal force (+X direction) with vortex turbulence
+    const vx = 4200 * intensity;
+    const vy = Math.sin(x * 16.0) * 450 * intensity;
+    this.splatVelocity(x, y, vx, vy, 0.018);
     
-    // Inject dynamic ink trail along the sweep path
-    this.splatDye(x, y, this.INKS[1], 0.15 * intensity, 0.0018);
+    // Inject dense physical ink along the stroke path (alternating between Pine Soot and Prussian Blue)
+    const ink = Math.random() > 0.4 ? this.INKS[0] : this.INKS[1];
+    this.splatDye(x, y, ink, 0.65 * intensity, 0.0035);
   }
 
   stepDrops(dt) {

@@ -330,19 +330,25 @@ html.lenis .lenis.lenis-stopped {
 
 .zen-brand-text {
   font-family: var(--font-serif);
-  font-size: clamp(2.6rem, 5.5vw, 4.0rem);
+  font-size: clamp(3.0rem, 6.0vw, 4.4rem);
   font-weight: 700;
-  color: #2B2620; /* Deep Pine Soot Ink */
+  color: #0F1216; /* Pure Deep Obsidian Charcoal Ink */
   letter-spacing: -0.02em;
   line-height: 1;
-  text-shadow: 0 2px 18px rgba(35, 67, 107, 0.25);
+  /* Multi-layered sharp contrast: Crisp light halo + deep ambient shadow */
+  text-shadow: 
+    0 0 16px rgba(250, 247, 239, 0.95),
+    0 0 32px rgba(250, 247, 239, 0.8),
+    0 4px 28px rgba(15, 18, 22, 0.45);
 }
 
 .zen-brand-tag {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.22em;
-  color: #6E6354; /* Washi Muted Clay */
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  color: #1E293B; /* Crisp Dark Slate */
+  font-weight: 600;
+  text-shadow: 0 0 12px rgba(250, 247, 239, 0.9);
 }
 
 /* ==========================================================================
