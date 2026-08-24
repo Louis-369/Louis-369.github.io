@@ -473,18 +473,18 @@ export class WebGLFluidWaterAnimation {
 
         float alpha = smoothstep(0.01, 0.12, inkAmount) * (1.0 - uWash);
 
-        // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined ~55° Pitch Interstellar View)
+        // 5. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined along y = x diagonal / 45° angle)
         if (uSinkForce > 0.01) {
           vec2 toCenter = (uv - uSinkCenter);
           toCenter.x *= aspectRatio;
 
-          // 3D Tilt Rotation Matrix: Pitch ~55° (Y-compression 2.2x) + Roll ~15°
-          float tiltAngle = 0.26; // ~15 deg roll
-          float cosT = cos(tiltAngle);
-          float sinT = sin(tiltAngle);
+          // 3D Tilt Matrix aligned with y = x diagonal (45° rotation + 2.2x perpendicular pitch foreshortening)
+          // u_axis along y = x, v_axis perpendicular to y = x
+          float cos45 = 0.7071068;
+          float sin45 = 0.7071068;
           vec2 tiltedP = vec2(
-            toCenter.x * cosT - toCenter.y * sinT,
-            (toCenter.x * sinT + toCenter.y * cosT) * 2.2 // 55-degree pitch foreshortening
+            toCenter.x * cos45 + toCenter.y * sin45,         // Major axis along y = x
+            (-toCenter.x * sin45 + toCenter.y * cos45) * 2.2 // Foreshortened minor axis
           );
           
           float r = length(tiltedP);
