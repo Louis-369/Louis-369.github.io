@@ -33,7 +33,7 @@ export class WebGLFluidWaterAnimation {
   initEngine() {
     const config = {
       SIM_RES: 160,
-      DYE_RES: 512,
+      DYE_RES: 1024,
       DENSITY_DISSIPATION: 0.008,
       VELOCITY_DISSIPATION: 1.20,
       PRESSURE: 0.85,
