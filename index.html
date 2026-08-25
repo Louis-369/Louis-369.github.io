@@ -170,19 +170,52 @@
     <!-- Philosophy & About Section (1:1 bymonolog.com Dark Tactile Matrix) -->
     <section class="about-section is-dark-surface" id="about">
       <div class="about-container">
-        <!-- Left Column: Story & Ethos -->
+        <!-- Left Column: 1:1 Monolog Story & Ethos Slider -->
         <div class="about-left-col">
+          <div class="about-slider-controls">
+            <div class="about-slider-progress">
+              <div class="slider-progress-bar" id="ethos-progress-bar"></div>
+            </div>
+            <div class="about-slider-actions">
+              <div class="slider-arrows">
+                <button class="slider-arrow-btn" id="ethos-prev-btn" aria-label="Previous story">←</button>
+                <button class="slider-arrow-btn" id="ethos-next-btn" aria-label="Next story">→</button>
+              </div>
+              <span class="slider-counter" id="ethos-counter">01/03</span>
+            </div>
+          </div>
+
           <div class="about-section-stamp">
             <span class="about-stamp-tag">(PHILOSOPHY & ETHOS)</span>
           </div>
 
-          <blockquote class="about-lead-quote">
-            "The gap between an ordinary digital tool and a memorable experience is relentless craft and intention."
-          </blockquote>
-
-          <p class="about-body-text">
-            I specialize in high-performance web applications, interactive creative media, and seamless digital utility tools. Every project is engineered from scratch with deep respect for typography, fluid motion, and uncompromising client-side performance.
-          </p>
+          <!-- Dynamic Stories Container -->
+          <div class="about-stories-track" id="about-stories-track">
+            <div class="ethos-story-slide active" data-slide="0">
+              <blockquote class="about-lead-quote">
+                "The gap between an ordinary digital tool and a memorable experience is relentless craft and intention."
+              </blockquote>
+              <p class="about-body-text">
+                I engineer web systems from scratch with deep respect for typography, fluid physics, and uncompromising client-side speed.
+              </p>
+            </div>
+            <div class="ethos-story-slide" data-slide="1">
+              <blockquote class="about-lead-quote">
+                "Computing is tactile. Physics, typography, and motion are not decorations—they are the interface."
+              </blockquote>
+              <p class="about-body-text">
+                Every interaction should feel organic, responsive, and weighted with natural physical feedback.
+              </p>
+            </div>
+            <div class="ethos-story-slide" data-slide="2">
+              <blockquote class="about-lead-quote">
+                "Building digital tools that amplify human thought and deliver transformative utility."
+              </blockquote>
+              <p class="about-body-text">
+                Combining architectural rigor with editorial aesthetics to build software that stands the test of time.
+              </p>
+            </div>
+          </div>
 
           <div class="about-author-card">
             <div class="author-avatar-badge">

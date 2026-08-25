@@ -521,14 +521,14 @@ html.lenis .lenis.lenis-stopped {
   stroke-linecap: square;
 }
 
-/* Animated progressive fill along flush L-corner: Fills from left across and down to 100%, holds, then immediately refills from 0% */
+/* Animated progressive fill along flush L-corner: Fills in 1.9s, holds full for 0.3s, then immediately recharges */
 .hero-scroll-indicator .corner-path-flow {
   stroke: var(--ink-primary);
   stroke-width: 1.5px;
   stroke-linecap: square;
   stroke-dasharray: 140;
   stroke-dashoffset: 140;
-  animation: cornerLineRecharge 2.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: cornerLineRecharge 2.3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
 @keyframes cornerLineRecharge {
@@ -536,19 +536,23 @@ html.lenis .lenis.lenis-stopped {
     stroke-dashoffset: 140;
     opacity: 0;
   }
-  5% {
+  4% {
     opacity: 1;
   }
-  68%, 88% {
-    stroke-dashoffset: 0; /* 衝到滿 100% */
+  82.6% {
+    stroke-dashoffset: 0; /* 1.9s 蓄力充滿至 100% */
+    opacity: 1;
+  }
+  95.6% {
+    stroke-dashoffset: 0; /* 滿格定格 0.3 秒 (至 2.2s) */
     opacity: 1;
   }
   98% {
     stroke-dashoffset: 0;
-    opacity: 0;           /* 滿了之後微淡出 */
+    opacity: 0;           /* 滿格結束微淡出 */
   }
   100% {
-    stroke-dashoffset: 140; /* 瞬間回到起點 0%，無縫重新充滿 */
+    stroke-dashoffset: 140; /* 瞬間回到 0%，無縫重新充滿 */
     opacity: 0;
   }
 }
@@ -765,9 +769,6 @@ html.lenis .lenis.lenis-stopped {
   }
 }
 
-  background: #94A3B8;
-}
-
 /* ==========================================================================
    About & Statement Section
    ========================================================================== */
@@ -799,6 +800,90 @@ html.lenis .lenis.lenis-stopped {
   display: flex;
   flex-direction: column;
   gap: 2.2rem;
+}
+
+/* 1:1 Monolog Story Slider Controls */
+.about-slider-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-slider-progress {
+  width: 100%;
+  max-width: 220px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 33.33%;
+  height: 100%;
+  background: #FAF8F5;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s ease;
+}
+
+.about-slider-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 220px;
+}
+
+.slider-arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.slider-arrow-btn {
+  background: transparent;
+  border: none;
+  color: #FAF8F5;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+.slider-arrow-btn:hover {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+.slider-counter {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #8A8D98;
+  letter-spacing: 0.08em;
+}
+
+/* Stories Track & Slides */
+.about-stories-track {
+  position: relative;
+  min-height: 180px;
+}
+
+.ethos-story-slide {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ethos-story-slide.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .about-section-stamp {

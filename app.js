@@ -150,6 +150,37 @@ class Application {
         item.classList.add('active');
       });
     });
+
+    // 6. 1:1 bymonolog.com Left Ethos Story Slider
+    this.initEthosSlider();
+  }
+
+  initEthosSlider() {
+    const slides = document.querySelectorAll('.ethos-story-slide');
+    const prevBtn = document.getElementById('ethos-prev-btn');
+    const nextBtn = document.getElementById('ethos-next-btn');
+    const counterEl = document.getElementById('ethos-counter');
+    const progressBar = document.getElementById('ethos-progress-bar');
+    if (!slides.length || !prevBtn || !nextBtn) return;
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    const updateSlide = (newIndex) => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (newIndex + totalSlides) % totalSlides;
+      slides[currentSlide].classList.add('active');
+
+      if (counterEl) {
+        counterEl.textContent = `0${currentSlide + 1}/0${totalSlides}`;
+      }
+      if (progressBar) {
+        progressBar.style.transform = `translateX(${currentSlide * 100}%)`;
+      }
+    };
+
+    prevBtn.addEventListener('click', () => updateSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => updateSlide(currentSlide + 1));
   }
 }
 
