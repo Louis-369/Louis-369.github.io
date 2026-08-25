@@ -5,13 +5,15 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects } from './data/projects.js?v=20260825_02';
-import { Choreographer } from './choreographer.js?v=20260825_02';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260825_02';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260825_04';
+import { Choreographer } from './choreographer.js?v=20260825_04';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260825_04';
 
 class Application {
   constructor() {
     this.projects = featuredProjects;
+    this.stories = aboutStories;
+    this.capabilities = capabilities;
     this.choreographer = null;
     this.waterAnimator = null;
     
@@ -28,10 +30,14 @@ class Application {
     // 1. Render dynamic projects list (bymonolog 12-col open grid)
     this.renderProjects();
 
-    // 2. Initialize WebGL Physical Water Fluid Ripple Simulation
+    // 2. Render dynamic 1:1 Monolog About Stories & Capabilities
+    this.renderAboutStories();
+    this.renderCapabilities();
+
+    // 3. Initialize WebGL Physical Water Fluid Ripple Simulation
     this.waterAnimator = new WebGLFluidWaterAnimation('water-fluid-canvas');
 
-    // 3. Initialize Choreographer & play opening reveal (3D Leaf Fall -> WebGL Ripples -> Sinks -> Shockwave)
+    // 4. Initialize Choreographer & play opening reveal (3D Leaf Fall -> WebGL Ripples -> Sinks -> Shockwave)
     this.choreographer = new Choreographer({
       onRevealComplete: () => {
         document.body.classList.remove('is-loading');
@@ -56,7 +62,7 @@ class Application {
       window.addEventListener('DOMContentLoaded', startReveal);
     }
 
-    // 4. Global interaction bindings
+    // 5. Global interaction bindings
     this.bindInteractions();
   }
 
@@ -67,19 +73,18 @@ class Application {
     container.innerHTML = this.projects.map((project, idx) => {
       const isExternal = project.isExternal;
       const targetAttr = isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
-      const isWip = project.tags.includes('WIP');
       const indexFormatted = String(idx + 1).padStart(2, '0');
+      const totalFormatted = String(this.projects.length).padStart(2, '0');
 
       return `
         <div class="works-home-item" data-project-index="${idx}">
-          <a href="${project.liveUrl}" class="works-home-link" ${targetAttr}>
+          <a href="${project.url || '#'}" class="works-home-link" ${targetAttr}>
             <!-- Left: Visual Column (Cols 1-7, 58%) -->
             <div class="works-visual-column">
               <div class="works-image-mask">
                 ${project.image 
                   ? `<img src="${project.image}" alt="${project.title}" class="works-home-image" loading="lazy" />`
                   : `<div class="works-placeholder-visual">
-                       <span class="placeholder-icon">${project.icon}</span>
                        <span class="placeholder-text">${project.title}</span>
                      </div>`
                 }
@@ -90,7 +95,7 @@ class Application {
             <div class="works-content-column">
               <div class="works-content-header">
                 <div class="works-meta-stamp">
-                  <span class="meta-index-pill">SS / ${indexFormatted}/04</span>
+                  <span class="meta-index-pill">SS / ${indexFormatted}/${totalFormatted}</span>
                   <span>${project.category}</span>
                 </div>
                 <h3 class="works-project-title">${project.title}</h3>
@@ -109,6 +114,42 @@ class Application {
     }).join('');
   }
 
+  renderAboutStories() {
+    const container = document.getElementById('about-stories-track');
+    const counterEl = document.getElementById('ethos-counter');
+    const progressBar = document.getElementById('ethos-progress-bar');
+    if (!container) return;
+
+    container.innerHTML = this.stories.map((story, idx) => `
+      <div class="ethos-story-slide ${idx === 0 ? 'active' : ''}" data-slide="${idx}">
+        <blockquote class="about-lead-quote">
+          "${story.quote}"
+        </blockquote>
+        <p class="about-body-text">
+          ${story.body}
+        </p>
+      </div>
+    `).join('');
+
+    const total = this.stories.length;
+    if (counterEl) counterEl.textContent = `01/0${total}`;
+    if (progressBar) {
+      progressBar.style.width = `${100 / total}%`;
+      progressBar.style.transform = `translateX(0%)`;
+    }
+  }
+
+  renderCapabilities() {
+    const list = document.getElementById('about-capabilities-list');
+    if (!list) return;
+
+    list.innerHTML = this.capabilities.map((cap, idx) => `
+      <li class="capability-item ${idx === 0 ? 'active' : ''}">
+        <span class="capability-name">${cap}</span>
+      </li>
+    `).join('');
+  }
+
   bindInteractions() {
     // 1. Logo Click: Smooth Scroll Directly to Top
     const logoBrand = document.getElementById('nav-brand-logo');
@@ -123,38 +164,39 @@ class Application {
       });
     }
 
-    // 2. Smooth navigation anchor links & SCROLL DOWN click
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener('click', (e) => {
-        const targetId = anchor.getAttribute('href');
+    // 2. Smooth internal page scrolling (#works, #about, etc.)
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const targetId = link.getAttribute('href');
         if (targetId && targetId !== '#') {
           const targetEl = document.querySelector(targetId);
           if (targetEl && this.choreographer && this.choreographer.lenis) {
             e.preventDefault();
-            // Scroll precisely to the top of #works so hero & SCROLL DOWN are 100% past the top edge
             this.choreographer.lenis.scrollTo(targetEl, { offset: 0, duration: 1.4 });
           }
         }
       });
     });
 
-    // 3. 1:1 bymonolog.com "Still waiting..." Tab Visibility Typewriter Marquee
-    // 4. Global interaction bindings
+    // 3. Global Magnetic Cursor
     this.initMagneticCursor();
 
-    // 5. 1:1 bymonolog.com Interactive Capabilities Stack Hover
-    const capItems = document.querySelectorAll('.capability-item');
-    capItems.forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        capItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
+    // 4. 1:1 bymonolog.com Interactive Capabilities Stack Hover
+    const capList = document.getElementById('about-capabilities-list');
+    if (capList) {
+      capList.addEventListener('mouseover', (e) => {
+        const item = e.target.closest('.capability-item');
+        if (item) {
+          document.querySelectorAll('.capability-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+        }
       });
-    });
+    }
 
-    // 6. 1:1 bymonolog.com Left Ethos Story Slider
+    // 5. 1:1 bymonolog.com Left Ethos Story Slider
     this.initEthosSlider();
 
-    // 7. 1:1 Monolog Adaptive Header Dark/Light Theme Switcher
+    // 6. 1:1 Monolog Adaptive Header Dark/Light Theme Switcher
     this.initNavThemeObserver();
   }
 
@@ -169,7 +211,6 @@ class Application {
 
       if (aboutSection) {
         const aboutRect = aboutSection.getBoundingClientRect();
-        // Trigger as soon as header reaches the about section
         if (aboutRect.top <= (navRect.bottom + 10) && aboutRect.bottom >= (navRect.top - 10)) {
           isOverDark = true;
         }
@@ -185,7 +226,6 @@ class Application {
     window.addEventListener('scroll', checkOverlap, { passive: true });
     window.addEventListener('resize', checkOverlap, { passive: true });
 
-    // Ensure Lenis smooth scroll updates trigger the theme switch instantly
     const pollLenis = setInterval(() => {
       if (this.choreographer && this.choreographer.lenis) {
         this.choreographer.lenis.on('scroll', checkOverlap);
@@ -193,22 +233,24 @@ class Application {
       }
     }, 100);
 
-    // Initial check
     checkOverlap();
   }
 
   initEthosSlider() {
-    const slides = document.querySelectorAll('.ethos-story-slide');
     const prevBtn = document.getElementById('ethos-prev-btn');
     const nextBtn = document.getElementById('ethos-next-btn');
     const counterEl = document.getElementById('ethos-counter');
     const progressBar = document.getElementById('ethos-progress-bar');
-    if (!slides.length || !prevBtn || !nextBtn) return;
+    const tagEl = document.getElementById('ethos-current-tag');
+    if (!prevBtn || !nextBtn) return;
 
     let currentSlide = 0;
-    const totalSlides = slides.length;
 
     const updateSlide = (newIndex) => {
+      const slides = document.querySelectorAll('.ethos-story-slide');
+      const totalSlides = this.stories.length;
+      if (!slides.length || totalSlides === 0) return;
+
       slides[currentSlide].classList.remove('active');
       currentSlide = (newIndex + totalSlides) % totalSlides;
       slides[currentSlide].classList.add('active');
@@ -219,10 +261,13 @@ class Application {
       if (progressBar) {
         progressBar.style.transform = `translateX(${currentSlide * 100}%)`;
       }
+      if (tagEl && this.stories[currentSlide] && this.stories[currentSlide].tag) {
+        tagEl.textContent = this.stories[currentSlide].tag;
+      }
     };
 
-    prevBtn.addEventListener('click', () => updateSlide(currentSlide - 1));
-    nextBtn.addEventListener('click', () => updateSlide(currentSlide + 1));
+    prevBtn.onclick = () => updateSlide(currentSlide - 1);
+    nextBtn.onclick = () => updateSlide(currentSlide + 1);
   }
 }
 

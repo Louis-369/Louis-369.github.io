@@ -101,3 +101,45 @@ export const featuredProjects = [
     coverBadge: "04 / EXPERIMENTAL"
   }
 ];
+
+/**
+ * About Section Stories / Ethos (1:1 Monolog Data-Driven Stories Slider)
+ * Easily add/remove stories here without touching HTML!
+ */
+export const aboutStories = [
+  {
+    id: "craft",
+    quote: "The gap between an ordinary digital tool and a memorable experience is relentless craft and intention.",
+    body: "I engineer web systems from scratch with deep respect for typography, fluid physics, and uncompromising client-side speed.",
+    tag: "(PHILOSOPHY & ETHOS)"
+  },
+  {
+    id: "tactile",
+    quote: "Computing is tactile. Physics, typography, and motion are not decorations—they are the interface.",
+    body: "Every interaction should feel organic, responsive, and weighted with natural physical feedback.",
+    tag: "(TACTILE INTERACTION)"
+  },
+  {
+    id: "utility",
+    quote: "Building digital tools that amplify human thought and deliver transformative utility.",
+    body: "Combining architectural rigor with editorial aesthetics to build software that stands the test of time.",
+    tag: "(AUGMENTED INTELLIGENCE)"
+  },
+  {
+    id: "longevity",
+    quote: "Timeless software is born where raw engineering discipline meets timeless graphic design.",
+    body: "Focusing on zero-dependency lightweight performance, robust architecture, and tactile digital craftsmanship.",
+    tag: "(TIMELESS ARCHITECTURE)"
+  }
+];
+
+/**
+ * Capabilities Matrix (Right Column Highlight List)
+ */
+export const capabilities = [
+  "Web Architecture",
+  "Interactive WebGL",
+  "Fluid UI/UX Design",
+  "AI Workflow Tools",
+  "Creative Engineering"
+];

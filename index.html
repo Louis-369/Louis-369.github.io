@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260825_03">
+  <link rel="stylesheet" href="style.css?v=20260825_04">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -104,14 +104,17 @@
         </div>
       </div>
 
-      <!-- Horizontal Bottom-Left Editorial Scroll Indicator with Flush Aligned L-Corner Line -->
+      <!-- Horizontal Bottom-Left Editorial Scroll Indicator with Pure DOM Dual-Line Corner -->
       <a href="#works" class="hero-scroll-indicator" id="hero-scroll-indicator" aria-label="Scroll Down to Works">
         <div class="scroll-wrap-box">
           <span class="scroll-text">SCROLL DOWN</span>
-          <svg class="scroll-corner-svg" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 2 H98 V98" class="corner-path-bg" vector-effect="non-scaling-stroke" />
-            <path d="M0 2 H98 V98" class="corner-path-flow" vector-effect="non-scaling-stroke" />
-          </svg>
+          <!-- Pure DOM Dual-Bar Tracks (Pure GPU Compositor) -->
+          <div class="corner-bar-top-track">
+            <div class="corner-bar-top-fill"></div>
+          </div>
+          <div class="corner-bar-right-track">
+            <div class="corner-bar-right-fill"></div>
+          </div>
         </div>
       </a>
 
@@ -189,32 +192,9 @@
             <span class="about-stamp-tag">(PHILOSOPHY & ETHOS)</span>
           </div>
 
-          <!-- Dynamic Stories Container -->
+          <!-- Dynamic Stories Container (Populated via app.js) -->
           <div class="about-stories-track" id="about-stories-track">
-            <div class="ethos-story-slide active" data-slide="0">
-              <blockquote class="about-lead-quote">
-                "The gap between an ordinary digital tool and a memorable experience is relentless craft and intention."
-              </blockquote>
-              <p class="about-body-text">
-                I engineer web systems from scratch with deep respect for typography, fluid physics, and uncompromising client-side speed.
-              </p>
-            </div>
-            <div class="ethos-story-slide" data-slide="1">
-              <blockquote class="about-lead-quote">
-                "Computing is tactile. Physics, typography, and motion are not decorations—they are the interface."
-              </blockquote>
-              <p class="about-body-text">
-                Every interaction should feel organic, responsive, and weighted with natural physical feedback.
-              </p>
-            </div>
-            <div class="ethos-story-slide" data-slide="2">
-              <blockquote class="about-lead-quote">
-                "Building digital tools that amplify human thought and deliver transformative utility."
-              </blockquote>
-              <p class="about-body-text">
-                Combining architectural rigor with editorial aesthetics to build software that stands the test of time.
-              </p>
-            </div>
+            <!-- Populated via app.js from data/projects.js -->
           </div>
 
           <div class="about-author-card">
@@ -228,29 +208,15 @@
           </div>
         </div>
 
-        <!-- Right Column: Interactive Capabilities Stack -->
+        <!-- Right Column: Interactive Capabilities Stack (Populated via app.js) -->
         <div class="about-right-col">
           <div class="about-capabilities-header">
             <span class="capabilities-dot">●</span>
             <span class="capabilities-title">What I can help with</span>
           </div>
 
-          <ul class="capabilities-stack-list">
-            <li class="capability-item active">
-              <span class="capability-name">Web Architecture</span>
-            </li>
-            <li class="capability-item">
-              <span class="capability-name">Interactive WebGL</span>
-            </li>
-            <li class="capability-item">
-              <span class="capability-name">Fluid UI/UX Design</span>
-            </li>
-            <li class="capability-item">
-              <span class="capability-name">AI Workflow Tools</span>
-            </li>
-            <li class="capability-item">
-              <span class="capability-name">Creative Engineering</span>
-            </li>
+          <ul class="capabilities-stack-list" id="about-capabilities-list">
+            <!-- Populated via app.js from data/projects.js -->
           </ul>
         </div>
       </div>
@@ -276,6 +242,6 @@
   </footer>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260825_02"></script>
+  <script type="module" src="app.js?v=20260825_04"></script>
 </body>
 </html>

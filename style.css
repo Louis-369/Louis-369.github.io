@@ -536,54 +536,101 @@ html.lenis .lenis.lenis-stopped {
   color: var(--ink-primary);
 }
 
-.hero-scroll-indicator .scroll-corner-svg {
+/* Pure DOM Dual-Line Corner Tracks (Zero Repaint · Pure GPU Compositing) */
+.hero-scroll-indicator .corner-bar-top-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: rgba(18, 19, 22, 0.16);
+  overflow: hidden;
+}
+
+.hero-scroll-indicator .corner-bar-top-fill {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  background: var(--ink-primary);
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: domBarTopRecharge 3.2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
 }
 
-/* Background static L-corner guide line (Flush with S on left, flush with N on right) */
-.hero-scroll-indicator .corner-path-bg {
-  stroke: rgba(18, 19, 22, 0.16);
-  stroke-width: 1.2px;
-  stroke-linecap: square;
+.hero-scroll-indicator .corner-bar-right-track {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.5px;
+  height: 100%;
+  background: rgba(18, 19, 22, 0.16);
+  overflow: hidden;
 }
 
-/* Animated progressive fill along flush L-corner: 3.2s cycle (Slow -> Fast -> Slow in 2.6s, holds full for 0.3s, then immediately recharges) */
-.hero-scroll-indicator .corner-path-flow {
-  stroke: var(--ink-primary);
-  stroke-width: 1.5px;
-  stroke-linecap: square;
-  stroke-dasharray: 140;
-  stroke-dashoffset: 140;
-  animation: cornerLineRecharge 3.2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+.hero-scroll-indicator .corner-bar-right-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--ink-primary);
+  transform-origin: center top;
+  transform: scaleY(0);
+  animation: domBarRightRecharge 3.2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
 }
 
-@keyframes cornerLineRecharge {
+/* Horizontal Top Bar Animation (0.0s - 1.8s Fill -> Hold -> Reset) */
+@keyframes domBarTopRecharge {
   0% {
-    stroke-dashoffset: 140;
+    transform: scaleX(0);
     opacity: 0;
   }
   3% {
     opacity: 1;
   }
-  81.25% {
-    stroke-dashoffset: 0; /* 2.6s 慢 -> 快 -> 慢 充到滿 100% */
+  56.25% {
+    transform: scaleX(1); /* 1.8s 水平線慢->快->慢 衝滿 100% */
     opacity: 1;
   }
   90.6% {
-    stroke-dashoffset: 0; /* 滿格定格 0.3 秒 (至 2.9s) */
+    transform: scaleX(1); /* 滿格定格 0.3 秒 */
     opacity: 1;
   }
   95% {
-    stroke-dashoffset: 0;
-    opacity: 0;           /* 滿格結束微淡出 */
+    transform: scaleX(1);
+    opacity: 0;
   }
   100% {
-    stroke-dashoffset: 140; /* 瞬間回到 0%，無縫重新充滿 */
+    transform: scaleX(0);
+    opacity: 0;
+  }
+}
+
+/* Vertical Right Bar Animation (1.4s - 2.6s Seamless Handover Fill -> Hold -> Reset) */
+@keyframes domBarRightRecharge {
+  0%, 43.75% {
+    transform: scaleY(0); /* 前 1.4s 靜候水平線衝刺 */
+    opacity: 0;
+  }
+  44% {
+    opacity: 1;
+  }
+  81.25% {
+    transform: scaleY(1); /* 2.6s 垂直線慢->快->慢 接力垂滿 100% */
+    opacity: 1;
+  }
+  90.6% {
+    transform: scaleY(1); /* 滿格定格 0.3 秒 (至 2.9s) */
+    opacity: 1;
+  }
+  95% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(0);
     opacity: 0;
   }
 }
