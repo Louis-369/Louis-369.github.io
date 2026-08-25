@@ -784,23 +784,23 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 4.8,
+      dur: 5.6,
       r0: 0.0001,
-      r1: 0.0115 * intensity * (0.95 + Math.random() * 0.25), // Expansive 90%+ canvas coverage
-      swirl: (Math.random() - 0.5) * 1.8,
+      r1: 0.0098 * intensity * (0.92 + Math.random() * 0.16), // Balanced ~85% canvas coverage
+      swirl: (Math.random() - 0.5) * 1.4,
       streamAngles,
       burstSeed
     });
 
-    // 1. High-Speed Kinetic Ink Splatter Burst (高速隨機潑墨炸裂射線群)
+    // 1. Serene Kinetic Ink Splatter Burst (沉穩水墨緩慢暈染群)
     for (let i = 0; i < streamAngles.length; i++) {
       const theta = streamAngles[i];
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // High kinetic velocity per stream with organic variance
-      const streamPower = (0.80 + Math.random() * 0.55) * intensity;
-      const speed = 145 * streamPower;
+      // Elegant gentle velocity per stream for authentic meditative ink spread
+      const streamPower = (0.75 + Math.random() * 0.45) * intensity;
+      const speed = 92 * streamPower;
 
       // Core stream splat
       this.splatVelocity(
@@ -869,9 +869,9 @@ export class WebGLFluidWaterAnimation {
           const cosA = Math.cos(liveAngle);
           const sinA = Math.sin(liveAngle);
 
-          // Fast forward momentum keeping streams flowing like liquid metal
-          const pushSpeed = (1.0 - t * 0.5) * 45;
-          const crossSpeed = (Math.random() - 0.5) * 18 * d.swirl;
+          // Gentle steady momentum keeping ink flowing like authentic Chinese calligraphy ink
+          const pushSpeed = (1.0 - t * 0.45) * 26;
+          const crossSpeed = (Math.random() - 0.5) * 11 * d.swirl;
 
           this.splatVelocity(
             d.x + cosA * currentRad,
