@@ -5,9 +5,9 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260825_04';
-import { Choreographer } from './choreographer.js?v=20260825_04';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260825_04';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260825_05';
+import { Choreographer } from './choreographer.js?v=20260825_05';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260825_05';
 
 class Application {
   constructor() {
@@ -36,6 +36,23 @@ class Application {
 
     // 3. Initialize WebGL Physical Water Fluid Ripple Simulation
     this.waterAnimator = new WebGLFluidWaterAnimation('water-fluid-canvas');
+
+    // Pause WebGL fluid simulation when hero is out of view (saves ~30-50MB GPU and CPU rAF)
+    const heroEl = document.getElementById('hero');
+    if (heroEl && 'IntersectionObserver' in window) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (this.waterAnimator) {
+            if (entry.isIntersecting) {
+              this.waterAnimator.resume();
+            } else {
+              this.waterAnimator.pause();
+            }
+          }
+        });
+      }, { threshold: 0.05 });
+      heroObserver.observe(heroEl);
+    }
 
     // 4. Initialize Choreographer & play opening reveal (3D Leaf Fall -> WebGL Ripples -> Sinks -> Shockwave)
     this.choreographer = new Choreographer({
@@ -178,10 +195,7 @@ class Application {
       });
     });
 
-    // 3. Global Magnetic Cursor
-    this.initMagneticCursor();
-
-    // 4. 1:1 bymonolog.com Interactive Capabilities Stack Hover
+    // 3. 1:1 bymonolog.com Interactive Capabilities Stack Hover
     const capList = document.getElementById('about-capabilities-list');
     if (capList) {
       capList.addEventListener('mouseover', (e) => {
@@ -193,47 +207,8 @@ class Application {
       });
     }
 
-    // 5. 1:1 bymonolog.com Left Ethos Story Slider
+    // 4. 1:1 bymonolog.com Left Ethos Story Slider
     this.initEthosSlider();
-
-    // 6. 1:1 Monolog Adaptive Header Dark/Light Theme Switcher
-    this.initNavThemeObserver();
-  }
-
-  initNavThemeObserver() {
-    const nav = document.querySelector('.site-nav');
-    const aboutSection = document.getElementById('about');
-    if (!nav) return;
-
-    const checkOverlap = () => {
-      const navRect = nav.getBoundingClientRect();
-      let isOverDark = false;
-
-      if (aboutSection) {
-        const aboutRect = aboutSection.getBoundingClientRect();
-        if (aboutRect.top <= (navRect.bottom + 10) && aboutRect.bottom >= (navRect.top - 10)) {
-          isOverDark = true;
-        }
-      }
-
-      if (isOverDark) {
-        nav.classList.add('is-dark-theme');
-      } else {
-        nav.classList.remove('is-dark-theme');
-      }
-    };
-
-    window.addEventListener('scroll', checkOverlap, { passive: true });
-    window.addEventListener('resize', checkOverlap, { passive: true });
-
-    const pollLenis = setInterval(() => {
-      if (this.choreographer && this.choreographer.lenis) {
-        this.choreographer.lenis.on('scroll', checkOverlap);
-        clearInterval(pollLenis);
-      }
-    }, 100);
-
-    checkOverlap();
   }
 
   initEthosSlider() {

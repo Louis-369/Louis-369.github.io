@@ -14,6 +14,8 @@ export class WebGLFluidWaterAnimation {
     if (!this.canvas) return;
 
     this.isDestroyed = false;
+    this.isPaused = false;
+    this.rafId = null;
     this.splatIntensity = 0;
     this.surgeIntensity = 0;
     this.washProgress = 0;
@@ -31,11 +33,11 @@ export class WebGLFluidWaterAnimation {
   initEngine() {
     const config = {
       SIM_RES: 160,
-      DYE_RES: 1024,
+      DYE_RES: 512,
       DENSITY_DISSIPATION: 0.008,
       VELOCITY_DISSIPATION: 1.20,
       PRESSURE: 0.85,
-      PRESSURE_ITER: 24,
+      PRESSURE_ITER: 16,
       CURL: 7.5,
       SPLAT_FORCE: 7500,
       WASH_DISSIPATION: 1.8,
@@ -885,9 +887,10 @@ export class WebGLFluidWaterAnimation {
   }
 
   bindEvents() {
-    window.addEventListener('resize', () => this.resizeCanvas());
+    this.onResize = () => this.resizeCanvas();
+    window.addEventListener('resize', this.onResize);
 
-    this.canvas.addEventListener('pointermove', e => {
+    this.onPointerMove = e => {
       const rect = this.canvas.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
       const y = 1 - (e.clientY - rect.top) / rect.height;
@@ -898,7 +901,8 @@ export class WebGLFluidWaterAnimation {
         this.splatDye(x, y, this.INKS[1], 0.2, 0.0004);
       }
       this.lastPtr = { x, y };
-    });
+    };
+    this.canvas.addEventListener('pointermove', this.onPointerMove);
   }
 
   stepSimulation(dt) {
@@ -1004,7 +1008,7 @@ export class WebGLFluidWaterAnimation {
   }
 
   loop() {
-    if (this.isDestroyed) return;
+    if (this.isDestroyed || this.isPaused) return;
     const now = performance.now();
     let dt = (now - this.lastTime) / 1000;
     dt = Math.min(dt, 1 / 30);
@@ -1015,11 +1019,84 @@ export class WebGLFluidWaterAnimation {
     this.stepSimulation(dt);
     this.render();
 
-    requestAnimationFrame(this.loop);
+    this.rafId = requestAnimationFrame(this.loop);
+  }
+
+  pause() {
+    this.isPaused = true;
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
+  resume() {
+    if (!this.isPaused || this.isDestroyed) return;
+    this.isPaused = false;
+    this.lastTime = performance.now();
+    this.loop();
+  }
+
+  deleteFBO(target) {
+    if (!target || !this.gl) return;
+    const gl = this.gl;
+    if (target.texture) gl.deleteTexture(target.texture);
+    if (target.fbo) gl.deleteFramebuffer(target.fbo);
+  }
+
+  deleteDoubleFBO(target) {
+    if (!target) return;
+    this.deleteFBO(target.read);
+    this.deleteFBO(target.write);
+  }
+
+  deleteProgram(prog) {
+    if (prog && prog.program && this.gl) {
+      this.gl.deleteProgram(prog.program);
+    }
   }
 
   destroy() {
+    if (this.isDestroyed) return;
     this.isDestroyed = true;
+    this.pause();
+
+    // 1. Remove event listeners
+    if (this.onResize) window.removeEventListener('resize', this.onResize);
+    if (this.onPointerMove && this.canvas) this.canvas.removeEventListener('pointermove', this.onPointerMove);
+
+    const gl = this.gl;
+    if (gl) {
+      // 2. Delete all FBOs & Textures
+      this.deleteDoubleFBO(this.dye);
+      this.deleteDoubleFBO(this.velocity);
+      this.deleteFBO(this.divergence);
+      this.deleteFBO(this.curl);
+      this.deleteDoubleFBO(this.pressure);
+      if (this.textTexture) gl.deleteTexture(this.textTexture);
+
+      // 3. Delete Buffers
+      if (this.quad) gl.deleteBuffer(this.quad);
+
+      // 4. Delete Shader Programs
+      [
+        this.progCopy, this.progClear, this.progSplat, this.progAdvect,
+        this.progDivergence, this.progCurl, this.progVorticity,
+        this.progPressure, this.progGradient, this.progDisplay
+      ].forEach(p => this.deleteProgram(p));
+
+      // 5. Release WebGL Context
+      const loseExt = gl.getExtension('WEBGL_lose_context');
+      if (loseExt) loseExt.loseContext();
+    }
+
+    this.dye = null;
+    this.velocity = null;
+    this.divergence = null;
+    this.curl = null;
+    this.pressure = null;
+    this.textTexture = null;
+    this.drops = [];
   }
 }
 

@@ -78,7 +78,9 @@ html.lenis .lenis.lenis-stopped {
   pointer-events: none;
   z-index: 999;
   opacity: 0.042;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: url("assets/noise.png?v=20260825_05");
+  background-repeat: repeat;
+  background-size: 128px 128px;
 }
 
 /* Background Ambient Canvas */
@@ -338,7 +340,6 @@ html.lenis .lenis.lenis-stopped {
   justify-content: center;
   transform-origin: 50% 100%; /* Pivot from tip */
   transform-style: preserve-3d;
-  will-change: transform, opacity;
   pointer-events: none;
 }
 
@@ -429,7 +430,6 @@ html.lenis .lenis.lenis-stopped {
   vertical-align: baseline;
   position: relative;
   transform-origin: 50% 50%;
-  will-change: transform;
   opacity: 1;
   z-index: 7;
 }
@@ -643,6 +643,8 @@ html.lenis .lenis.lenis-stopped {
   width: 100%;
   padding: 8rem 4vw 10rem 4vw;
   z-index: 20;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
 }
 
 .section-header-block {
@@ -862,6 +864,8 @@ html.lenis .lenis.lenis-stopped {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 20;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .about-container {
@@ -1104,6 +1108,8 @@ html.lenis .lenis.lenis-stopped {
   padding: 5rem 4vw 4rem 4vw;
   background: var(--bg-canvas);
   z-index: 20;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .footer-inner {
