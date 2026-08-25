@@ -552,14 +552,14 @@ html.lenis .lenis.lenis-stopped {
   stroke-linecap: square;
 }
 
-/* Animated progressive fill along flush L-corner: Fills in 1.9s, holds full for 0.3s, then immediately recharges */
+/* Animated progressive fill along flush L-corner: 3.2s cycle (Slow -> Fast -> Slow in 2.6s, holds full for 0.3s, then immediately recharges) */
 .hero-scroll-indicator .corner-path-flow {
   stroke: var(--ink-primary);
   stroke-width: 1.5px;
   stroke-linecap: square;
   stroke-dasharray: 140;
   stroke-dashoffset: 140;
-  animation: cornerLineRecharge 2.3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: cornerLineRecharge 3.2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
 }
 
 @keyframes cornerLineRecharge {
@@ -567,18 +567,18 @@ html.lenis .lenis.lenis-stopped {
     stroke-dashoffset: 140;
     opacity: 0;
   }
-  4% {
+  3% {
     opacity: 1;
   }
-  82.6% {
-    stroke-dashoffset: 0; /* 1.9s 蓄力充滿至 100% */
+  81.25% {
+    stroke-dashoffset: 0; /* 2.6s 慢 -> 快 -> 慢 充到滿 100% */
     opacity: 1;
   }
-  95.6% {
-    stroke-dashoffset: 0; /* 滿格定格 0.3 秒 (至 2.2s) */
+  90.6% {
+    stroke-dashoffset: 0; /* 滿格定格 0.3 秒 (至 2.9s) */
     opacity: 1;
   }
-  98% {
+  95% {
     stroke-dashoffset: 0;
     opacity: 0;           /* 滿格結束微淡出 */
   }
