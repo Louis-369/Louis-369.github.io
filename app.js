@@ -165,12 +165,12 @@ class Application {
 
     const checkOverlap = () => {
       const navRect = nav.getBoundingClientRect();
-      const navCenterY = navRect.top + navRect.height * 0.5;
-
       let isOverDark = false;
+
       if (aboutSection) {
         const aboutRect = aboutSection.getBoundingClientRect();
-        if (aboutRect.top <= navCenterY && aboutRect.bottom >= navCenterY) {
+        // Trigger as soon as header reaches the about section
+        if (aboutRect.top <= (navRect.bottom + 10) && aboutRect.bottom >= (navRect.top - 10)) {
           isOverDark = true;
         }
       }
@@ -184,6 +184,16 @@ class Application {
 
     window.addEventListener('scroll', checkOverlap, { passive: true });
     window.addEventListener('resize', checkOverlap, { passive: true });
+
+    // Ensure Lenis smooth scroll updates trigger the theme switch instantly
+    const pollLenis = setInterval(() => {
+      if (this.choreographer && this.choreographer.lenis) {
+        this.choreographer.lenis.on('scroll', checkOverlap);
+        clearInterval(pollLenis);
+      }
+    }, 100);
+
+    // Initial check
     checkOverlap();
   }
 

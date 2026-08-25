@@ -254,27 +254,31 @@ html.lenis .lenis.lenis-stopped {
    Adaptive Header Dark Theme (When hovering/scrolling over #about or dark surfaces)
    ========================================================================== */
 .site-nav.is-dark-theme .nav-brand {
-  color: #FAF8F5;
+  color: #FAF8F5 !important;
 }
 
 .site-nav.is-dark-theme .navbar-link {
-  color: #FAF8F5;
+  color: #FAF8F5 !important;
+}
+
+.site-nav.is-dark-theme .navbar-link-text {
+  color: #FAF8F5 !important;
 }
 
 .site-nav.is-dark-theme .navbar-link::before {
-  background-color: #FAF8F5;
+  background-color: #FAF8F5 !important;
 }
 
 .site-nav.is-dark-theme .navbar-link:hover .navbar-link-text {
-  color: #0F1013;
+  color: #0F1013 !important;
 }
 
 .site-nav.is-dark-theme .navbar-arrow-svg {
-  color: #FAF8F5;
+  color: #FAF8F5 !important;
 }
 
 .site-nav.is-dark-theme .navbar-link:hover .navbar-arrow-svg {
-  color: #0F1013;
+  color: #0F1013 !important;
 }
 
 /* ==========================================================================
