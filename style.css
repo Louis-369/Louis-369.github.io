@@ -521,29 +521,34 @@ html.lenis .lenis.lenis-stopped {
   stroke-linecap: square;
 }
 
-/* Animated flowing light pulse along flush L-corner */
+/* Animated progressive fill along flush L-corner: Fills from left across and down to 100%, holds, then refills */
 .hero-scroll-indicator .corner-path-flow {
   stroke: var(--ink-primary);
   stroke-width: 1.5px;
-  stroke-linecap: round;
-  stroke-dasharray: 28 140;
-  stroke-dashoffset: 28;
-  animation: cornerLineFlowFlush 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  stroke-linecap: square;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: cornerLineFillFull 2.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
-@keyframes cornerLineFlowFlush {
+@keyframes cornerLineFillFull {
   0% {
-    stroke-dashoffset: 28;
-    opacity: 0;
+    stroke-dashoffset: 140;
+    opacity: 0.2;
   }
-  15% {
+  10% {
     opacity: 1;
   }
-  85% {
+  50%, 75% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  95% {
+    stroke-dashoffset: -140;
     opacity: 1;
   }
   100% {
-    stroke-dashoffset: -130;
+    stroke-dashoffset: -140;
     opacity: 0;
   }
 }
@@ -766,37 +771,164 @@ html.lenis .lenis.lenis-stopped {
 /* ==========================================================================
    About & Statement Section
    ========================================================================== */
+/* ==========================================================================
+   About Section - 1:1 bymonolog.com Dark Tactile Paper Matrix
+   ========================================================================== */
 .about-section {
   position: relative;
   width: 100%;
-  padding: 6rem 4vw 8rem 4vw;
-  background: #F4F1EA;
-  border-top: 1px solid var(--border-paper);
-  border-bottom: 1px solid var(--border-paper);
+  padding: 9rem 4vw 10rem 4vw;
+  background-color: #0F1013; /* Deep Noir Paper Canvas */
+  color: #FAF8F5;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 20;
 }
 
-.about-content-inner {
-  max-width: 960px;
+.about-container {
+  max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 5fr 6fr; /* 1:1 Monolog Dual Column Ratio */
+  gap: clamp(3rem, 6vw, 7rem);
+  align-items: flex-start;
+}
+
+/* Left Column: Story & Ethos */
+.about-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.about-section-stamp {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  color: #8A8D98;
+  text-transform: uppercase;
+}
+
+.about-lead-quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 2.6vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: #FAF8F5;
+  letter-spacing: -0.015em;
+}
+
+.about-body-text {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  font-weight: 300;
+  color: #A0A4B0;
+  line-height: 1.85;
+  max-width: 500px;
+}
+
+.about-author-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.author-avatar-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1C1E24;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FAF8F5;
+}
+
+.author-meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.author-name {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #FAF8F5;
+}
+
+.author-role {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #8A8D98;
+  letter-spacing: 0.04em;
+}
+
+/* Right Column: Monolog Interactive Capabilities Stack */
+.about-right-col {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.about-quote {
-  font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
-  font-weight: 400;
-  line-height: 1.35;
-  color: var(--ink-primary);
+.about-capabilities-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: #8A8D98;
 }
 
-.about-details-p {
-  font-size: 1.1rem;
-  color: var(--ink-secondary);
-  line-height: 1.7;
-  max-width: 760px;
+.capabilities-dot {
+  color: #FAF8F5;
+  font-size: 0.75rem;
+}
+
+.capabilities-stack-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.capability-item {
+  position: relative;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.capability-name {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: rgba(250, 248, 245, 0.22); /* Subdued gray initially */
+  transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+}
+
+.capability-item:hover .capability-name,
+.capability-item.active .capability-name {
+  color: #FAF8F5; /* Brilliant crisp white on hover/active */
+  transform: translateX(8px);
+}
+
+@media (max-width: 900px) {
+  .about-container {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
 }
 
 /* ==========================================================================

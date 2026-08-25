@@ -141,6 +141,15 @@ class Application {
     // 3. 1:1 bymonolog.com "Still waiting..." Tab Visibility Typewriter Marquee
     // 4. Global interaction bindings
     this.initMagneticCursor();
+
+    // 5. 1:1 bymonolog.com Interactive Capabilities Stack Hover
+    const capItems = document.querySelectorAll('.capability-item');
+    capItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        capItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
   }
 }
 
