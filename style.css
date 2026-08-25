@@ -403,12 +403,62 @@ html.lenis .lenis.lenis-stopped {
   z-index: 7;
 }
 
-.hero-tagline {
-  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+/*
+ * Dictionary Entry Layout & Typography
+ * Authentic Oxford / Editorial Dictionary Aesthetic
+ */
+.hero-dictionary-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 680px;
+  margin-top: 1.6rem;
+}
+
+.dict-phonetic-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.08em;
+}
+
+.dict-ipa {
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+
+.dict-divider {
+  opacity: 0.5;
+}
+
+.dict-pos {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+}
+
+.dict-def-en {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.02rem, 2.0vw, 1.25rem);
+  color: var(--ink-primary);
+  line-height: 1.55;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.dict-def-tw {
+  font-family: 'Noto Serif TC', 'Songti TC', serif;
+  font-size: clamp(0.95rem, 1.8vw, 1.12rem);
   color: var(--ink-secondary);
   line-height: 1.6;
-  max-width: 620px;
   font-weight: 400;
+  letter-spacing: 0.04em;
 }
 
 /*
