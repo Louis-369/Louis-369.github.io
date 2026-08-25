@@ -127,7 +127,7 @@ html.lenis .lenis.lenis-stopped {
   color: var(--ink-primary);
   text-decoration: none;
   letter-spacing: -0.02em;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, color 0.4s ease;
   cursor: pointer;
 }
 
@@ -192,7 +192,7 @@ html.lenis .lenis.lenis-stopped {
   background-color: var(--ink-primary);
   transform-origin: right;
   transform: scaleX(0);
-  transition: transform 600ms cubic-bezier(0.2, 1, 0.36, 1);
+  transition: transform 600ms cubic-bezier(0.2, 1, 0.36, 1), background-color 0.4s ease;
   z-index: -1;
 }
 
@@ -248,6 +248,33 @@ html.lenis .lenis.lenis-stopped {
 
 .navbar-link:hover .navbar-arrow-svg.is-duplicate {
   transform: translate(0, 0);
+}
+
+/* ==========================================================================
+   Adaptive Header Dark Theme (When hovering/scrolling over #about or dark surfaces)
+   ========================================================================== */
+.site-nav.is-dark-theme .nav-brand {
+  color: #FAF8F5;
+}
+
+.site-nav.is-dark-theme .navbar-link {
+  color: #FAF8F5;
+}
+
+.site-nav.is-dark-theme .navbar-link::before {
+  background-color: #FAF8F5;
+}
+
+.site-nav.is-dark-theme .navbar-link:hover .navbar-link-text {
+  color: #0F1013;
+}
+
+.site-nav.is-dark-theme .navbar-arrow-svg {
+  color: #FAF8F5;
+}
+
+.site-nav.is-dark-theme .navbar-link:hover .navbar-arrow-svg {
+  color: #0F1013;
 }
 
 /* ==========================================================================

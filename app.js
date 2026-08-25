@@ -153,6 +153,38 @@ class Application {
 
     // 6. 1:1 bymonolog.com Left Ethos Story Slider
     this.initEthosSlider();
+
+    // 7. 1:1 Monolog Adaptive Header Dark/Light Theme Switcher
+    this.initNavThemeObserver();
+  }
+
+  initNavThemeObserver() {
+    const nav = document.querySelector('.site-nav');
+    const aboutSection = document.getElementById('about');
+    if (!nav) return;
+
+    const checkOverlap = () => {
+      const navRect = nav.getBoundingClientRect();
+      const navCenterY = navRect.top + navRect.height * 0.5;
+
+      let isOverDark = false;
+      if (aboutSection) {
+        const aboutRect = aboutSection.getBoundingClientRect();
+        if (aboutRect.top <= navCenterY && aboutRect.bottom >= navCenterY) {
+          isOverDark = true;
+        }
+      }
+
+      if (isOverDark) {
+        nav.classList.add('is-dark-theme');
+      } else {
+        nav.classList.remove('is-dark-theme');
+      }
+    };
+
+    window.addEventListener('scroll', checkOverlap, { passive: true });
+    window.addEventListener('resize', checkOverlap, { passive: true });
+    checkOverlap();
   }
 
   initEthosSlider() {
