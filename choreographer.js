@@ -356,5 +356,17 @@ export class Choreographer {
         );
       }
     });
+
+    // 4. 1:1 bymonolog.com Header Dark Theme Switcher (Rock-Solid GSAP ScrollTrigger Binding)
+    const siteNav = document.querySelector('.site-nav');
+    const aboutEl = document.getElementById('about');
+    if (siteNav && aboutEl) {
+      ScrollTrigger.create({
+        trigger: aboutEl,
+        start: 'top 60px',
+        end: 'bottom 60px',
+        toggleClass: { targets: siteNav, className: 'is-dark-theme' }
+      });
+    }
   }
 }
