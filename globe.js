@@ -784,9 +784,9 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 3.4,
+      dur: 4.8,
       r0: 0.0001,
-      r1: 0.0080 * intensity * (0.9 + Math.random() * 0.2), // Graceful 75% coverage
+      r1: 0.0115 * intensity * (0.95 + Math.random() * 0.25), // Expansive 90%+ canvas coverage
       swirl: (Math.random() - 0.5) * 1.8,
       streamAngles,
       burstSeed
@@ -799,8 +799,8 @@ export class WebGLFluidWaterAnimation {
       const sinT = Math.sin(theta);
 
       // High kinetic velocity per stream with organic variance
-      const streamPower = (0.75 + Math.random() * 0.55) * intensity;
-      const speed = 125 * streamPower;
+      const streamPower = (0.80 + Math.random() * 0.55) * intensity;
+      const speed = 145 * streamPower;
 
       // Core stream splat
       this.splatVelocity(
@@ -856,9 +856,9 @@ export class WebGLFluidWaterAnimation {
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
       // High-speed stream propulsion & cross-flow merging
-      if (d.age < d.dur * 0.85) {
+      if (d.age < d.dur * 0.90) {
         const streamCount = d.streamAngles.length;
-        const currentRad = 0.02 + ease * 0.075;
+        const currentRad = 0.02 + ease * 0.095;
 
         for (let s = 0; s < streamCount; s++) {
           // Dynamic steering: streams weave and merge as they expand

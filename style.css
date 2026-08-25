@@ -78,7 +78,7 @@ html.lenis .lenis.lenis-stopped {
   pointer-events: none;
   z-index: 999;
   opacity: 0.042;
-  background-image: url("assets/noise.png?v=20260825_07");
+  background-image: url("assets/noise.png?v=20260825_08");
   background-repeat: repeat;
   background-size: 128px 128px;
 }
