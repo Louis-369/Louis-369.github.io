@@ -1312,41 +1312,105 @@ body.matrix-open {
 
 @keyframes whiteCursorBlink {
   0%, 100% { opacity: 0.1; }
-  50% { opacity: 1; }
+/* ==========================================================================
+   Cyberpunk Scramble Exit Button (.ui-btn)
+   ========================================================================== */
+.ui-btn {
+  --btn-default-bg: rgba(26, 30, 26, 0.85);
+  --btn-padding: 10px 22px;
+  --btn-hover-bg: rgba(36, 44, 36, 0.95);
+  --btn-transition: .3s;
+  --btn-letter-spacing: .12rem;
+  --btn-animation-duration: 1.2s;
+  --btn-shadow-color: rgba(0, 0, 0, 0.4);
+  --btn-shadow: 0 2px 12px 0 var(--btn-shadow-color);
+  --hover-btn-color: #00FF41;
+  --default-btn-color: #ffffff;
+  --font-size: 13px;
+  --font-weight: 600;
+  --font-family: 'Geist Mono', 'SF Mono', Menlo, Roboto Mono, monospace;
 }
 
-.matrix-exit-btn {
-  background: rgba(0, 255, 65, 0.08);
-  border: 1px solid rgba(0, 255, 65, 0.4);
-  color: #00FF41;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 0.5rem 1.1rem;
+.ui-btn {
+  box-sizing: border-box;
+  padding: var(--btn-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--default-btn-color);
+  font: var(--font-weight) var(--font-size) var(--font-family);
+  background: var(--btn-default-bg);
+  border: 1px solid rgba(0, 255, 65, 0.35);
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.25s ease;
-  text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+  transition: var(--btn-transition);
+  overflow: hidden;
+  box-shadow: var(--btn-shadow);
+  backdrop-filter: blur(8px);
 }
 
-.matrix-exit-btn:hover {
-  background: #00FF41;
-  color: #050706;
-  box-shadow: 0 0 16px rgba(0, 255, 65, 0.8);
-  transform: translateY(-1px);
+.ui-btn span {
+  letter-spacing: var(--btn-letter-spacing);
+  transition: var(--btn-transition);
+  box-sizing: border-box;
+  position: relative;
+  background: inherit;
+}
+
+.ui-btn span::before {
+  box-sizing: border-box;
+  position: absolute;
+  content: "";
+  background: inherit;
+}
+
+.ui-btn:hover, .ui-btn:focus {
+  background: var(--btn-hover-bg);
+  border-color: #00FF41;
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.45);
+}
+
+.ui-btn:hover span, .ui-btn:focus span {
+  color: var(--hover-btn-color);
+  text-shadow: 0 0 8px #00FF41;
+}
+
+.ui-btn:hover span::before, .ui-btn:focus span::before {
+  animation: chitchat linear both var(--btn-animation-duration);
+}
+
+@keyframes chitchat {
+  0% { content: "#"; }
+  5% { content: "."; }
+  10% { content: "^{"; }
+  15% { content: "-!"; }
+  20% { content: "#$_"; }
+  25% { content: "№:0"; }
+  30% { content: "#{+."; }
+  35% { content: "@}-?"; }
+  40% { content: "?{4@%"; }
+  45% { content: "=.,^!"; }
+  50% { content: "?2@%"; }
+  55% { content: "\;1}]"; }
+  60% { content: "?{%:%"; right: 0; }
+  65% { content: "|{f[4"; right: 0; }
+  70% { content: "{4%0%"; right: 0; }
+  75% { content: "'1_0<"; right: 0; }
+  80% { content: "{0%"; right: 0; }
+  85% { content: "]>'"; right: 0; }
+  90% { content: "4"; right: 0; }
+  95% { content: "2"; right: 0; }
+  100% { content: ""; right: 0; }
 }
 
 .matrix-hud-bottom {
   position: absolute;
-  bottom: 2rem;
+  bottom: 2.2rem;
   left: 3vw;
   right: 3vw;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-  gap: 0.5rem;
   pointer-events: none;
   z-index: 10;
 }
@@ -1354,18 +1418,25 @@ body.matrix-open {
 .matrix-hud-quote {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(0.9rem, 1.8vw, 1.15rem);
-  color: rgba(255, 255, 255, 0.75);
-  letter-spacing: 0.02em;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-  max-width: 680px;
+  font-size: clamp(0.78rem, 1.4vw, 1.05rem);
+  color: #FFFFFF;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  animation: matrixQuoteBreathe 4.5s ease-in-out infinite;
+  user-select: none;
 }
 
-.matrix-hud-hint {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: rgba(0, 255, 65, 0.6);
-  letter-spacing: 0.15em;
+@keyframes matrixQuoteBreathe {
+  0%, 100% {
+    opacity: 0.22;
+    filter: blur(0.6px);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    opacity: 0.88;
+    filter: blur(0px);
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.6), 0 0 28px rgba(0, 255, 65, 0.3);
+  }
 }
 
 /* ==========================================================================
