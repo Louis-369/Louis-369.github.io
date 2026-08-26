@@ -784,42 +784,42 @@ export class WebGLFluidWaterAnimation {
       y,
       ink,
       age: 0,
-      dur: 5.6,
+      dur: 4.2,
       r0: 0.0001,
-      r1: 0.0098 * intensity * (0.92 + Math.random() * 0.16), // Balanced ~85% canvas coverage
-      swirl: (Math.random() - 0.5) * 1.4,
+      r1: 0.0092 * intensity * (0.92 + Math.random() * 0.16), // Balanced ~80% canvas coverage
+      swirl: (Math.random() - 0.5) * 1.5,
       streamAngles,
       burstSeed
     });
 
-    // 1. Serene Kinetic Ink Splatter Burst (沉穩水墨緩慢暈染群)
+    // 1. Kinetic Ink Splatter Burst (Gentle Suminagashi dispersion · 慢速優雅水墨流動)
     for (let i = 0; i < streamAngles.length; i++) {
       const theta = streamAngles[i];
       const cosT = Math.cos(theta);
       const sinT = Math.sin(theta);
 
-      // Elegant gentle velocity per stream for authentic meditative ink spread
+      // Calibrated slower kinetic velocity for smooth, graceful flow
       const streamPower = (0.75 + Math.random() * 0.45) * intensity;
-      const speed = 92 * streamPower;
+      const speed = 72 * streamPower;
 
       // Core stream splat
       this.splatVelocity(
-        x + cosT * 0.012,
-        y + sinT * 0.012,
+        x + cosT * 0.010,
+        y + sinT * 0.010,
         cosT * speed,
         sinT * speed,
-        0.0055
+        0.0050
       );
 
       // Companion micro-droplet splatter on flanks
       const flankAngle = theta + (Math.random() - 0.5) * 0.45;
-      const flankSpeed = speed * (0.4 + Math.random() * 0.35);
+      const flankSpeed = speed * (0.30 + Math.random() * 0.25);
       this.splatVelocity(
-        x + Math.cos(flankAngle) * 0.018,
-        y + Math.sin(flankAngle) * 0.018,
+        x + Math.cos(flankAngle) * 0.015,
+        y + Math.sin(flankAngle) * 0.015,
         Math.cos(flankAngle) * flankSpeed,
         Math.sin(flankAngle) * flankSpeed,
-        0.0035
+        0.0030
       );
     }
   }
@@ -856,29 +856,29 @@ export class WebGLFluidWaterAnimation {
       this.splatDye(d.x, d.y, d.ink, amt, r);
 
       // High-speed stream propulsion & cross-flow merging
-      if (d.age < d.dur * 0.90) {
+      if (d.age < d.dur * 0.85) {
         const streamCount = d.streamAngles.length;
-        const currentRad = 0.02 + ease * 0.095;
+        const currentRad = 0.02 + ease * 0.075;
 
         for (let s = 0; s < streamCount; s++) {
-          // Dynamic steering: streams weave and merge as they expand
+          // Dynamic steering: streams weave and merge gracefully
           const baseAngle = d.streamAngles[s];
-          const weave = Math.sin(d.age * 3.5 + s * 1.5) * 0.35 * d.swirl;
+          const weave = Math.sin(d.age * 2.8 + s * 1.5) * 0.25 * d.swirl;
           const liveAngle = baseAngle + weave;
 
           const cosA = Math.cos(liveAngle);
           const sinA = Math.sin(liveAngle);
 
-          // Gentle steady momentum keeping ink flowing like authentic Chinese calligraphy ink
-          const pushSpeed = (1.0 - t * 0.45) * 26;
-          const crossSpeed = (Math.random() - 0.5) * 11 * d.swirl;
+          // Slower, meditative forward momentum keeping streams flowing like liquid silk
+          const pushSpeed = (1.0 - t * 0.5) * 22;
+          const crossSpeed = (Math.random() - 0.5) * 8 * d.swirl;
 
           this.splatVelocity(
             d.x + cosA * currentRad,
             d.y + sinA * currentRad,
             cosA * pushSpeed - sinA * crossSpeed,
             sinA * pushSpeed + cosA * crossSpeed,
-            0.0050
+            0.0045
           );
         }
       }

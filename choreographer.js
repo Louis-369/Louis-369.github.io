@@ -158,13 +158,8 @@ export class Choreographer {
 
           setTimeout(() => {
             // Wave 4: Ambient Cloud Mist (散開全景淡墨)
-            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 0.95);
-          }, 420);
-
-          setTimeout(() => {
-            // Wave 5: Deep Horizon Bleed (85% 舒緩墨雲擴散)
-            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[0], 0.95);
-          }, 560);
+            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 0.90);
+          }, 400);
         }
       }
     });
@@ -189,7 +184,7 @@ export class Choreographer {
       waterAnimator.textOpacity = 0.0;
       revealTl.to(waterAnimator, {
         textOpacity: 1.0,
-        duration: 1.8,
+        duration: 1.3,
         ease: 'power2.out'
       }, '-=0.3');
     }
@@ -228,18 +223,18 @@ export class Choreographer {
     }
     // ─────────────────────────────────────────────────────────────────
 
-    // 4. Ink Reaches 85% Canvas Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
+    // 4. Ink Reaches 80% Canvas Coverage -> PURE LINEAR VACUUM SUCTION INTO THE PERIOD DOT!
     revealTl.to('#hero-title-dot', {
-      scale: 1.45,
-      duration: 0.9,
+      scale: 1.40,
+      duration: 0.85,
       ease: 'power2.out'
-    }, '+=2.65');
+    }, '+=1.15');
 
     const suctionObj = { power: 0, wash: 0 };
     revealTl.to(suctionObj, {
       power: 1,
       wash: 1,
-      duration: 2.4,
+      duration: 2.0,
       ease: 'power2.inOut',
       onUpdate: () => {
         if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
@@ -253,7 +248,7 @@ export class Choreographer {
           }
 
           // Direct linear gravitational vacuum pull straight into the period dot
-          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, suctionObj.power * 6.2);
+          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, suctionObj.power * 6.0);
           waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.35);
         }
       }
