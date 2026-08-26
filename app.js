@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_21';
-import { Choreographer } from './choreographer.js?v=20260826_21';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_21';
-import { MatrixEngine } from './matrix.js?v=20260826_21';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_22';
+import { Choreographer } from './choreographer.js?v=20260826_22';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_22';
+import { MatrixEngine } from './matrix.js?v=20260826_22';
 
 class Application {
   constructor() {
@@ -346,7 +346,6 @@ class Application {
     const totalSlides = this.stories.length;
     const SLIDE_DURATION = 6.0; // 6.0s per article
     let progressTween = null;
-    let isPaused = false;
     let isTransitioning = false;
 
     const startProgress = () => {
@@ -361,9 +360,6 @@ class Application {
             updateSlide(currentSlide + 1);
           }
         });
-        if (isPaused) {
-          progressTween.pause();
-        }
       }
     };
 
@@ -444,14 +440,14 @@ class Application {
       }
     };
 
-    // Manual navigation: Fast-forward rush to 100% on click (1:1 bymonolog setting)
+    // Manual navigation: Fast-forward rush to 100% in 0.2s on click
     nextBtn.onclick = () => {
       if (isTransitioning) return;
       if (progressTween) progressTween.kill();
       if (window.gsap) {
         window.gsap.to(progressBar, {
           scaleX: 1,
-          duration: 0.16,
+          duration: 0.2,
           ease: 'power2.out',
           onComplete: () => {
             updateSlide(currentSlide + 1);
@@ -468,7 +464,7 @@ class Application {
       if (window.gsap) {
         window.gsap.to(progressBar, {
           scaleX: 0,
-          duration: 0.14,
+          duration: 0.18,
           ease: 'power2.out',
           onComplete: () => {
             updateSlide(currentSlide - 1);
@@ -479,18 +475,6 @@ class Application {
       }
     };
 
-    // Hover pause: User can read comfortably without auto-skipping
-    if (storyContainer) {
-      storyContainer.addEventListener('mouseenter', () => {
-        isPaused = true;
-        if (progressTween) progressTween.pause();
-      });
-      storyContainer.addEventListener('mouseleave', () => {
-        isPaused = false;
-        if (progressTween && !isTransitioning) progressTween.resume();
-      });
-    }
-
     // Viewport IntersectionObserver: Only progress when visible on screen
     const aboutSection = document.getElementById('about');
     if (aboutSection && 'IntersectionObserver' in window) {
@@ -499,7 +483,7 @@ class Application {
           if (entry.isIntersecting) {
             if (!progressTween) {
               startProgress();
-            } else if (!isPaused && !isTransitioning) {
+            } else if (!isTransitioning) {
               progressTween.resume();
             }
           } else {
