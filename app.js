@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_10';
-import { Choreographer } from './choreographer.js?v=20260826_10';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_10';
-import { MatrixEngine } from './matrix.js?v=20260826_10';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_11';
+import { Choreographer } from './choreographer.js?v=20260826_11';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_11';
+import { MatrixEngine } from './matrix.js?v=20260826_11';
 
 class Application {
   constructor() {
@@ -232,17 +232,17 @@ class Application {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const bendAmount = relX * 28; // bend handle left or right
+      const bend = relX * 18; // Perpendicular arch deflection
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M12 24 Q${12 + bendAmount} 42 ${12 + bendAmount * 0.7} 60` },
+          attr: { d: `M 22 20 Q ${15 + bend} ${28 + bend * 0.7} 8 36` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
         });
         window.gsap.to(spoonSvg, {
-          rotation: relX * 20,
+          rotation: relX * 22,
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -254,14 +254,14 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M12 24 Q12 42 12 60' },
-          duration: 0.7,
+          attr: { d: 'M 22 20 Q 15 28 8 36' },
+          duration: 0.75,
           ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
         });
         window.gsap.to(spoonSvg, {
           rotation: 0,
-          duration: 0.7,
+          duration: 0.75,
           ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
         });
@@ -278,7 +278,7 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M12 24 Q12 42 12 60' } });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 22 20 Q 15 28 8 36' } });
             window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1, filter: 'none' });
             // Open matrix
             if (this.matrixEngine) {
@@ -287,9 +287,9 @@ class Application {
           }
         });
 
-        // 1. Extreme psychic bend
+        // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M12 24 Q36 34 30 60' },
+          attr: { d: 'M 22 20 Q 28 32 8 36' },
           duration: 0.22,
           ease: 'power4.in'
         });

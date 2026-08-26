@@ -1185,8 +1185,8 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .spoon-svg {
-  width: 14px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   filter: drop-shadow(0 2px 4px rgba(18, 19, 22, 0.15));
   transition: filter 0.3s ease;
   overflow: visible;
