@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_12';
-import { Choreographer } from './choreographer.js?v=20260826_12';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_12';
-import { MatrixEngine } from './matrix.js?v=20260826_12';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_13';
+import { Choreographer } from './choreographer.js?v=20260826_13';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_13';
+import { MatrixEngine } from './matrix.js?v=20260826_13';
 
 class Application {
   constructor() {
@@ -232,11 +232,11 @@ class Application {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const bend = relX * 24; // Handle deflection
+      const bend = relX * 22; // Handle deflection
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M 17.8 17.8 Q ${17.8 + bend} 25.5 17.8 33` },
+          attr: { d: `M 20 18.8 Q ${20 + bend} 26.5 20 34` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -254,7 +254,7 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M 17.8 17.8 Q 17.8 25.5 17.8 33' },
+          attr: { d: 'M 20 18.8 Q 20 26.5 20 34' },
           duration: 0.75,
           ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
@@ -278,7 +278,7 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M 17.8 17.8 Q 17.8 25.5 17.8 33' } });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 20 18.8 Q 20 26.5 20 34' } });
             window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1 });
             // Open matrix
             if (this.matrixEngine) {
@@ -289,7 +289,7 @@ class Application {
 
         // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M 17.8 17.8 Q 38 22 17.8 33' },
+          attr: { d: 'M 20 18.8 Q 42 22 20 34' },
           duration: 0.22,
           ease: 'power4.in'
         });
