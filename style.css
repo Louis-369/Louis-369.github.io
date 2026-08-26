@@ -1316,12 +1316,12 @@ body.matrix-open {
 }
 
 /* ==========================================================================
-   Cyberpunk Scramble Exit Button (.ui-btn - Borderless Dark)
+   Cyberpunk Scramble Exit Button (.ui-btn - Transparent & Borderless)
    ========================================================================== */
 .ui-btn {
-  --btn-default-bg: #050706;
+  --btn-default-bg: transparent;
   --btn-padding: 8px 18px;
-  --btn-hover-bg: #0d100e;
+  --btn-hover-bg: transparent;
   --btn-transition: .3s;
   --btn-letter-spacing: .12rem;
   --btn-animation-duration: 1.2s;
@@ -1342,7 +1342,7 @@ body.matrix-open {
   justify-content: center;
   color: var(--default-btn-color);
   font: var(--font-weight) var(--font-size) var(--font-family);
-  background: var(--btn-default-bg);
+  background: transparent;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -1356,18 +1356,18 @@ body.matrix-open {
   transition: var(--btn-transition);
   box-sizing: border-box;
   position: relative;
-  background: inherit;
+  background: transparent;
 }
 
 .ui-btn span::before {
   box-sizing: border-box;
   position: absolute;
   content: "";
-  background: inherit;
+  background: transparent;
 }
 
 .ui-btn:hover, .ui-btn:focus {
-  background: var(--btn-hover-bg);
+  background: transparent;
   color: #FFFFFF;
 }
 
