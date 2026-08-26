@@ -1348,9 +1348,11 @@ body.matrix-open {
 
 .matrix-hud-bottom {
   position: absolute;
-  bottom: 2.2rem;
+  bottom: clamp(1.5rem, 4vh, 2.5rem);
   left: 0;
   width: 100%;
+  padding: 0 5vw;
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1358,6 +1360,7 @@ body.matrix-open {
   z-index: 10;
   opacity: 0;
   transition: opacity 1s ease;
+  box-sizing: border-box;
 }
 
 .matrix-hud-bottom.is-visible {
@@ -1367,12 +1370,14 @@ body.matrix-open {
 .matrix-hud-quote {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(0.8rem, 1.4vw, 1.05rem);
+  font-size: clamp(0.78rem, 1.35vw, 1.05rem);
   color: #FFFFFF;
   letter-spacing: 0.04em;
+  text-align: center;
   white-space: nowrap;
   animation: matrixQuoteBreathe 4.5s ease-in-out infinite;
   user-select: none;
+  max-width: 90vw;
 }
 
 @keyframes matrixQuoteBreathe {
@@ -1420,5 +1425,23 @@ body.matrix-open {
     flex-direction: column;
     align-items: flex-start;
     gap: 1.2rem;
+  }
+
+  /* Matrix Mobile Portrait Adaptations */
+  .matrix-hud-quote {
+    white-space: normal;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    max-width: 86vw;
+  }
+
+  .matrix-typewriter-wrap {
+    width: 90vw;
+    text-align: center;
+  }
+
+  .typewriter-text,
+  .typewriter-cursor {
+    font-size: 1.6rem;
   }
 }
