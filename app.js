@@ -232,11 +232,11 @@ class Application {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const bend = relX * 24; // Handle deflection along perpendicular
+      const bend = relX * 26; // Handle deflection
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M 25.6 22.9 Q ${39 - bend} ${36.3 + bend} 54 51.3` },
+          attr: { d: `M 25 19.5 Q ${25 + bend} 31.5 25 44` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -254,7 +254,7 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M 25.6 22.9 Q 39 36.3 54 51.3' },
+          attr: { d: 'M 25 19.5 Q 25 31.5 25 44' },
           duration: 0.75,
           ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
@@ -278,7 +278,7 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M 25.6 22.9 Q 39 36.3 54 51.3' } });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 25 19.5 Q 25 31.5 25 44' } });
             window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1 });
             // Open matrix
             if (this.matrixEngine) {
@@ -289,7 +289,7 @@ class Application {
 
         // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M 25.6 22.9 Q 62 24 54 51.3' },
+          attr: { d: 'M 25 19.5 Q 52 26 25 44' },
           duration: 0.22,
           ease: 'power4.in'
         });

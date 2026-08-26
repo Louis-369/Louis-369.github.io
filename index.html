@@ -240,16 +240,29 @@
         <!-- Psychic Silver Spoon Easter Egg Trigger -->
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
           <span class="spoon-tooltip">There is no spoon.</span>
-          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Reference Emojione Cutlery Spoon Geometry -->
-            <g id="spoon-group">
-              <!-- Spoon Bowl with Perfect Curvature -->
-              <path d="M 8.81 22.915 C 3.013 17.117 -0.183 7.605 3.712 3.71 C 7.606 -0.18 17.114 3.012 22.911 8.809 C 26.05 11.949 28.753 19.821 25.614 22.958 C 22.475 26.096 14.603 23.393 8.81 22.915 Z" fill="#121316"/>
-              <!-- High-Contrast 3D Crescent Scoop Hollow -->
-              <path d="M 25.341 24.391 C 24.14 25.594 22.457 26.145 20.55 26.129 C 20.368 26.084 20.191 26.045 20.006 26 C 22.759 20.824 21.019 12.845 15.628 5.897 C 17.72 7.27 19.82 9.04 21.895 11.115 C 25.208 14.428 26.724 17.576 27.08 20.425 C 27.317 22.336 26.548 24.039 25.341 24.391 Z" fill="#FAF8F5"/>
-              <!-- Slender Bendable Handle -->
-              <path id="spoon-handle-path" d="M 25.6 22.9 Q 39 36.3 54 51.3" stroke="#121316" stroke-width="4.4" stroke-linecap="round"/>
-              <circle cx="53.5" cy="50.8" r="2.8" fill="#121316"/>
+          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="spoonBowlGrad" x1="16" y1="4" x2="34" y2="18" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#121316"/>
+                <stop offset="60%" stop-color="#2D3039"/>
+                <stop offset="100%" stop-color="#121316"/>
+              </linearGradient>
+              <linearGradient id="spoonCavityGrad" x1="18" y1="5" x2="30" y2="16" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0F1013"/>
+                <stop offset="40%" stop-color="#4A5568"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+            </defs>
+            <!-- 45-degree Angled 3/4 Perspective Cutlery Spoon -->
+            <g id="spoon-group" transform="rotate(-45 25 25)">
+              <!-- Outer Spoon Bowl Silhouette (Emojione Precise Curvature) -->
+              <path d="M 25 3.5 C 18.2 3.5, 15.6 9.2, 17.5 14.8 C 19.2 19.2, 23.6 20.2, 25 20.2 C 26.4 20.2, 30.8 19.2, 32.5 14.8 C 34.4 9.2, 31.8 3.5, 25 3.5 Z" fill="#121316"/>
+              <!-- Iconic Crescent Scoop Hollow Cavity (From Reference) -->
+              <path d="M 25 5.2 C 20.5 5.2, 18.5 9.8, 19.8 14.5 C 20.8 17.8, 24 18.8, 25 18.8 C 23.2 15, 22.4 9.2, 25 5.2 Z" fill="#FAF8F5"/>
+              <!-- Slender Elongated Bendable Handle -->
+              <path id="spoon-handle-path" d="M 25 19.5 Q 25 31.5 25 44" stroke="#121316" stroke-width="2.6" stroke-linecap="round"/>
+              <!-- Handle Tip Teardrop Finial -->
+              <circle cx="25" cy="43.5" r="1.6" fill="#121316"/>
             </g>
           </svg>
         </div>
