@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_03">
+  <link rel="stylesheet" href="style.css?v=20260826_04">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -265,12 +265,13 @@
   <!-- Matrix Digital Rain Easter Egg Full-Screen Overlay -->
   <div class="matrix-overlay" id="matrix-overlay" aria-hidden="true">
     <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+
+    <!-- Central Typewriter Intro Container -->
+    <div class="matrix-typewriter-wrap" id="matrix-typewriter-wrap">
+      <span class="typewriter-text" id="typewriter-text"></span><span class="typewriter-cursor" id="typewriter-cursor">_</span>
+    </div>
     
     <div class="matrix-hud-top">
-      <div class="matrix-hud-title">
-        <span class="matrix-status-pulse"></span>
-        <span>SYSTEM_OVERRIDE // 0xFA_MATRIX</span>
-      </div>
       <button class="matrix-exit-btn" id="matrix-exit-btn" aria-label="Exit Matrix Mode">
         <span>[ ESC // EXIT MATRIX ]</span>
       </button>
@@ -283,6 +284,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_03"></script>
+  <script type="module" src="app.js?v=20260826_04"></script>
 </body>
 </html>

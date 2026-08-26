@@ -2,10 +2,12 @@
  * matrix.js - Full-Screen Matrix Digital Rain Engine & Easter Egg Orchestrator
  * 
  * Features:
- * 1. Tri-lingual token dictionary (C++/Assembly logic, Philosophical Chinese metaphors, Japanese katakana/kanji)
- * 2. GSAP Stagger cascade entrance
- * 3. Mouse magnetic repulsion & plasma white-green glow reaction
- * 4. Zero-cost teardown on exit (cancels rAF, clears canvas, removes event listeners)
+ * 1. White cursor respiration -> Typewriter `> reset` sequence -> Flash launch
+ * 2. Tri-lingual token dictionary (C++/Assembly logic, Philosophical Chinese metaphors, Japanese katakana/kanji)
+ * 3. Pure pitch-black high-contrast canvas without green shadow pollution
+ * 4. GSAP Stagger cascade entrance
+ * 5. Mouse magnetic repulsion & plasma white-green glow reaction
+ * 6. Zero-cost teardown on exit
  */
 
 export class MatrixEngine {
@@ -13,10 +15,16 @@ export class MatrixEngine {
     this.overlay = document.getElementById('matrix-overlay');
     this.canvas = document.getElementById('matrix-canvas');
     this.exitBtn = document.getElementById('matrix-exit-btn');
+    this.typewriterWrap = document.getElementById('matrix-typewriter-wrap');
+    this.typewriterText = document.getElementById('typewriter-text');
+    this.typewriterCursor = document.getElementById('typewriter-cursor');
     this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
 
     this.isActive = false;
+    this.isRainRunning = false;
     this.rafId = null;
+    this.typeInterval = null;
+    this.typeTimeout = null;
     this.columns = [];
     this.mouse = { x: -9999, y: -9999, isHovering: false };
     
@@ -71,9 +79,9 @@ export class MatrixEngine {
     for (let i = 0; i < numCols; i++) {
       // Stagger entrance: columns start higher up with progressive stagger delays
       const staggerProgress = i / numCols;
-      const initialDelay = staggerProgress * 1.6 + Math.random() * 0.4;
-      const speed = 1.2 + Math.random() * 2.2;
-      const length = Math.floor(16 + Math.random() * 28);
+      const initialDelay = staggerProgress * 1.4 + Math.random() * 0.35;
+      const speed = 1.4 + Math.random() * 2.2;
+      const length = Math.floor(16 + Math.random() * 26);
 
       // Create stream characters
       const stream = [];
@@ -85,14 +93,14 @@ export class MatrixEngine {
       }
 
       this.columns.push({
-        x: i * columnWidth + 10,
-        y: -length * 20 - (initialDelay * 80),
+        x: i * columnWidth + 11,
+        y: -length * 20 - (initialDelay * 70),
         baseSpeed: speed,
         speed,
         length,
-        fontSize: 14 + (Math.random() > 0.85 ? 4 : 0),
+        fontSize: 14 + (Math.random() > 0.85 ? 3 : 0),
         stream,
-        tokenInject: Math.random() > 0.5 ? this.getRandomToken() : null,
+        tokenInject: Math.random() > 0.45 ? this.getRandomToken() : null,
         tokenY: Math.floor(Math.random() * length),
         headGlow: Math.random() > 0.3
       });
@@ -127,7 +135,9 @@ export class MatrixEngine {
     window.addEventListener('resize', () => {
       if (this.isActive) {
         this.resize();
-        this.initColumns();
+        if (this.isRainRunning) {
+          this.initColumns();
+        }
       }
     });
 
@@ -150,25 +160,98 @@ export class MatrixEngine {
   open() {
     if (this.isActive || !this.overlay || !this.canvas) return;
     this.isActive = true;
+    this.isRainRunning = false;
 
     this.overlay.classList.add('is-active');
     this.overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('matrix-open');
 
     this.resize();
-    this.initColumns();
 
-    // GSAP Overlay Entrance Animation
+    // Reset and clear canvas to pure pitch black
+    if (this.ctx) {
+      this.ctx.shadowBlur = 0;
+      this.ctx.shadowColor = 'transparent';
+      this.ctx.fillStyle = '#050706';
+      this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    }
+
+    // GSAP Overlay Fade In
     if (window.gsap) {
       window.gsap.fromTo(this.overlay, 
-        { opacity: 0, scale: 1.05 },
-        { opacity: 1, scale: 1.0, duration: 0.6, ease: 'power3.out' }
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: 'power2.out' }
       );
       window.gsap.fromTo('.matrix-hud-top, .matrix-hud-bottom',
-        { opacity: 0, y: (i) => i === 0 ? -20 : 20 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.3, stagger: 0.1, ease: 'power2.out' }
+        { opacity: 0, y: (i) => i === 0 ? -15 : 15 },
+        { opacity: 1, y: 0, duration: 0.6, delay: 0.2, ease: 'power2.out' }
       );
     }
+
+    // Start Central White Cursor & Typewriter sequence
+    this.playTypewriterIntro();
+  }
+
+  playTypewriterIntro() {
+    if (this.typewriterText) this.typewriterText.textContent = '';
+    if (this.typewriterWrap) {
+      this.typewriterWrap.style.display = 'flex';
+      this.typewriterWrap.style.opacity = '1';
+      this.typewriterWrap.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+
+    const command = '> reset';
+    let charIdx = 0;
+
+    // 1. Initial white cursor breathing pause (500ms)
+    this.typeTimeout = setTimeout(() => {
+      if (!this.isActive) return;
+
+      // 2. Typewriter typing out '> reset'
+      this.typeInterval = setInterval(() => {
+        if (!this.isActive) {
+          clearInterval(this.typeInterval);
+          return;
+        }
+
+        charIdx++;
+        if (this.typewriterText) {
+          this.typewriterText.textContent = command.slice(0, charIdx);
+        }
+
+        if (charIdx >= command.length) {
+          clearInterval(this.typeInterval);
+          this.typeInterval = null;
+
+          // 3. Pause 350ms -> pulse dissolve -> trigger waterfall digital rain
+          this.typeTimeout = setTimeout(() => {
+            if (!this.isActive) return;
+
+            if (window.gsap && this.typewriterWrap) {
+              window.gsap.to(this.typewriterWrap, {
+                scale: 1.35,
+                opacity: 0,
+                duration: 0.35,
+                ease: 'power3.in',
+                onComplete: () => {
+                  if (this.typewriterWrap) this.typewriterWrap.style.display = 'none';
+                }
+              });
+            } else if (this.typewriterWrap) {
+              this.typewriterWrap.style.display = 'none';
+            }
+
+            this.startDigitalRain();
+          }, 350);
+        }
+      }, 95);
+    }, 550);
+  }
+
+  startDigitalRain() {
+    if (!this.isActive) return;
+    this.isRainRunning = true;
+    this.initColumns();
 
     this.loop = this.loop.bind(this);
     this.lastTime = performance.now();
@@ -178,11 +261,21 @@ export class MatrixEngine {
   close() {
     if (!this.isActive) return;
     
+    // Clear all intro timers
+    if (this.typeInterval) {
+      clearInterval(this.typeInterval);
+      this.typeInterval = null;
+    }
+    if (this.typeTimeout) {
+      clearTimeout(this.typeTimeout);
+      this.typeTimeout = null;
+    }
+
     // GSAP Overlay Exit
     if (window.gsap) {
       window.gsap.to(this.overlay, {
         opacity: 0,
-        duration: 0.45,
+        duration: 0.4,
         ease: 'power2.in',
         onComplete: () => {
           this.teardown();
@@ -195,6 +288,7 @@ export class MatrixEngine {
 
   teardown() {
     this.isActive = false;
+    this.isRainRunning = false;
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
@@ -202,6 +296,12 @@ export class MatrixEngine {
     if (this.overlay) {
       this.overlay.classList.remove('is-active');
       this.overlay.setAttribute('aria-hidden', 'true');
+    }
+    if (this.typewriterWrap) {
+      this.typewriterWrap.style.display = 'none';
+    }
+    if (this.typewriterText) {
+      this.typewriterText.textContent = '';
     }
     document.body.classList.remove('matrix-open');
     if (this.ctx && this.canvas) {
@@ -211,7 +311,7 @@ export class MatrixEngine {
   }
 
   loop(now) {
-    if (!this.isActive || !this.ctx) return;
+    if (!this.isActive || !this.isRainRunning || !this.ctx) return;
 
     const dt = Math.min((now - this.lastTime) / 1000, 0.1);
     this.lastTime = now;
@@ -220,8 +320,12 @@ export class MatrixEngine {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    // Semi-transparent black wash for classic phosphorescent trail decay
-    ctx.fillStyle = 'rgba(5, 7, 6, 0.15)';
+    // Reset shadow state before clearing background to prevent green bloom accumulation
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+
+    // Deep Pitch-Black semi-transparent wash for crisp phosphorescent trail falloff
+    ctx.fillStyle = 'rgba(5, 7, 6, 0.20)';
     ctx.fillRect(0, 0, w, h);
 
     const mouseRadius = 140;
@@ -235,9 +339,9 @@ export class MatrixEngine {
 
       // Wrap back to top once entire stream has exited screen
       if (col.y - col.length * 20 > h) {
-        col.y = -col.length * 20 - Math.random() * 80;
-        col.speed = 1.2 + Math.random() * 2.4;
-        col.tokenInject = Math.random() > 0.4 ? this.getRandomToken() : null;
+        col.y = -col.length * 20 - Math.random() * 70;
+        col.speed = 1.3 + Math.random() * 2.3;
+        col.tokenInject = Math.random() > 0.45 ? this.getRandomToken() : null;
       }
 
       ctx.font = `${col.fontSize}px 'Geist Mono', 'Noto Serif TC', monospace`;
@@ -279,7 +383,7 @@ export class MatrixEngine {
           if (distSq < mouseRadiusSq && distSq > 1) {
             const dist = Math.sqrt(distSq);
             mouseIntensity = 1 - (dist / mouseRadius);
-            const repelForce = (1 - (dist / mouseRadius)) * 32;
+            const repelForce = (1 - (dist / mouseRadius)) * 34;
             renderX += (dx / dist) * repelForce;
             renderY += (dy / dist) * (repelForce * 0.4);
             isNearMouse = true;
@@ -291,30 +395,36 @@ export class MatrixEngine {
 
         if (isNearMouse) {
           // Electric Plasma White-Cyan Bloom near cursor
-          ctx.fillStyle = `rgba(255, 255, 255, ${0.9 + mouseIntensity * 0.1})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.95 + mouseIntensity * 0.05})`;
           ctx.shadowColor = '#00FF41';
-          ctx.shadowBlur = 12 + mouseIntensity * 16;
+          ctx.shadowBlur = 8 + mouseIntensity * 12;
+          ctx.fillText(displayChar, renderX, renderY);
+          ctx.shadowBlur = 0;
+          ctx.shadowColor = 'transparent';
         } else if (isLeadingHead && col.headGlow) {
-          // High-Intensity Pure White Leader Head
+          // Pure White Crisp Leader Head with tight green aura
           ctx.fillStyle = '#FFFFFF';
           ctx.shadowColor = '#00FF41';
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = 8;
+          ctx.fillText(displayChar, renderX, renderY);
+          ctx.shadowBlur = 0;
+          ctx.shadowColor = 'transparent';
         } else {
-          // Phosphor Green Trail Falloff (from vivid green to deep stealth emerald)
+          // Razor-Sharp Phosphor Green Trail (Zero blur bleed, 100% crisp high-contrast)
+          ctx.shadowBlur = 0;
+          ctx.shadowColor = 'transparent';
           const trailDepth = j / col.length;
-          const alpha = Math.max(0.12, Math.pow(trailDepth, 1.8));
+          const alpha = Math.max(0.14, Math.pow(trailDepth, 1.6));
           
-          if (trailDepth > 0.85) {
+          if (trailDepth > 0.82) {
             ctx.fillStyle = `rgba(180, 255, 190, ${alpha})`;
-          } else if (trailDepth > 0.5) {
+          } else if (trailDepth > 0.45) {
             ctx.fillStyle = `rgba(0, 255, 65, ${alpha})`;
           } else {
-            ctx.fillStyle = `rgba(0, 180, 45, ${alpha * 0.8})`;
+            ctx.fillStyle = `rgba(0, 160, 40, ${alpha * 0.85})`;
           }
-          ctx.shadowBlur = 0;
+          ctx.fillText(displayChar, renderX, renderY);
         }
-
-        ctx.fillText(displayChar, renderX, renderY);
       }
     }
 

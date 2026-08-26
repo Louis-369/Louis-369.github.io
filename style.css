@@ -1272,36 +1272,47 @@ body.matrix-open {
   left: 3vw;
   right: 3vw;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   pointer-events: auto;
   z-index: 10;
 }
 
-.matrix-hud-title {
-  display: inline-flex;
+/* Central Typewriter Opening Terminal */
+.matrix-typewriter-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 25;
+  display: flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.typewriter-text {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #00FF41;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: #FFFFFF;
   letter-spacing: 0.12em;
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.9), 0 0 32px #00FF41;
 }
 
-.matrix-status-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #00FF41;
-  box-shadow: 0 0 10px #00FF41;
-  animation: matrixPulse 1.4s ease-in-out infinite;
+.typewriter-cursor {
+  font-family: var(--font-mono);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 0 0 16px #FFFFFF;
+  margin-left: 2px;
+  animation: whiteCursorBlink 0.65s ease-in-out infinite;
 }
 
-@keyframes matrixPulse {
-  0%, 100% { opacity: 0.3; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.15); }
+@keyframes whiteCursorBlink {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; }
 }
 
 .matrix-exit-btn {
