@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_16">
+  <link rel="stylesheet" href="style.css?v=20260826_17">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -241,7 +241,14 @@
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
           <span class="spoon-tooltip">There is no spoon.</span>
           <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M56.745 49.696c-9.055-6.69-10.482-6.958-14.822-11.298c-3.314-3.314-5.576-5.575-10.414-10.416c-3.139-3.137-.436-11.009-8.596-19.173C17.114 3.012 7.606-.18 3.712 3.71C-.183 7.605 3.013 17.117 8.81 22.915c8.163 8.159 16.035 5.455 19.174 8.595c4.84 4.838 7.101 7.1 10.414 10.415c4.34 4.34 4.608 5.768 11.297 14.821c3.306 4.482 6.474 7.332 10.429 3.377c3.952-3.952 1.102-7.12-3.379-10.427M25.341 24.391c-1.201 1.203-2.884 1.754-4.791 1.738c-.182-.045-.359-.084-.544-.129c2.753-5.176 1.013-13.155-4.378-20.103a21.995 21.995 0 0 1 6.267 4.363c3.313 3.313 4.829 6.461 5.185 9.31c.237 1.911-.532 3.614-1.739 4.821" fill="#121316"/>
+            <!-- Part 1: Anchor Spoon Bowl (勺頭穩固錨定) -->
+            <g id="spoon-bowl-part">
+              <path d="M 3.712 3.71 C -0.183 7.605 3.013 17.117 8.81 22.915 C 16.035 30.14 23.345 28.5 27 24.5 C 29.5 21.5 28.5 14.5 22.915 8.808 C 17.114 3.012 7.606 -0.18 3.712 3.71 Z M 25.341 24.391 C 24.14 25.594 22.457 26.145 20.55 26.129 C 20.368 26.084 20.191 26.045 20.006 26 C 22.759 20.824 21.019 12.845 15.628 5.897 C 18 7.5 20.5 9.5 21.895 10.26 C 25.208 13.573 26.724 16.721 27.08 19.57 C 27.317 21.481 26.548 23.184 25.341 24.391 Z" fill="#121316"/>
+            </g>
+            <!-- Part 2: Articulated Bending Handle (以勺頸 (23, 23) 為關節支點劇烈弓形彎曲) -->
+            <g id="spoon-handle-part" style="transform-origin: 23px 23px;">
+              <path d="M 25.5 24 C 29 28 32 31 35.5 35 C 40 39.5 41.5 41.5 48 50 C 51.5 54.5 54.5 57 58.5 53 C 62.5 49 60 46 55.5 42.5 C 47 36 45 34.5 40.5 30 C 37 26.5 34 23.5 30 20 Z" fill="#121316"/>
+            </g>
           </svg>
         </div>
 
@@ -271,6 +278,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_16"></script>
+  <script type="module" src="app.js?v=20260826_17"></script>
 </body>
 </html>

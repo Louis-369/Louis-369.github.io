@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_16';
-import { Choreographer } from './choreographer.js?v=20260826_16';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_16';
-import { MatrixEngine } from './matrix.js?v=20260826_16';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_17';
+import { Choreographer } from './choreographer.js?v=20260826_17';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_17';
+import { MatrixEngine } from './matrix.js?v=20260826_17';
 
 class Application {
   constructor() {
@@ -221,8 +221,10 @@ class Application {
 
   initSpoonEasterEgg() {
     const spoonTrigger = document.getElementById('footer-spoon-trigger');
+    const spoonHandle = document.getElementById('spoon-handle-part');
+    const spoonBowl = document.getElementById('spoon-bowl-part');
     const spoonSvg = document.getElementById('spoon-svg-elem');
-    if (!spoonTrigger || !spoonSvg) return;
+    if (!spoonTrigger || !spoonHandle || !spoonSvg) return;
 
     let isBending = false;
 
@@ -233,29 +235,47 @@ class Application {
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
       
       if (window.gsap) {
-        window.gsap.to(spoonSvg, {
-          rotate: relX * 36,
-          skewX: relX * 24,
-          skewY: -relX * 14,
-          transformOrigin: '28% 28%',
+        // Dramatic handle bending relative to stationary bowl
+        window.gsap.to(spoonHandle, {
+          rotate: relX * 55, // Bend handle up to 55 degrees from neck joint!
+          skewX: relX * 30, // Elastic arc bowing
+          transformOrigin: '23px 23px',
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
         });
+        if (spoonBowl) {
+          window.gsap.to(spoonBowl, {
+            rotate: -relX * 8, // Subtle counter-torque on head
+            transformOrigin: '23px 23px',
+            duration: 0.25,
+            ease: 'power2.out',
+            overwrite: 'auto'
+          });
+        }
       }
     });
 
     spoonTrigger.addEventListener('mouseleave', () => {
       if (isBending) return;
       if (window.gsap) {
-        window.gsap.to(spoonSvg, {
+        window.gsap.to(spoonHandle, {
           rotate: 0,
           skewX: 0,
-          skewY: 0,
+          transformOrigin: '23px 23px',
           duration: 0.75,
-          ease: 'elastic.out(1.2, 0.4)',
+          ease: 'elastic.out(1.4, 0.35)',
           overwrite: 'auto'
         });
+        if (spoonBowl) {
+          window.gsap.to(spoonBowl, {
+            rotate: 0,
+            transformOrigin: '23px 23px',
+            duration: 0.75,
+            ease: 'elastic.out(1.4, 0.35)',
+            overwrite: 'auto'
+          });
+        }
       }
     });
 
@@ -269,7 +289,8 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonSvg, { rotate: 0, skewX: 0, skewY: 0, scale: 1, opacity: 1 });
+            window.gsap.set([spoonHandle, spoonBowl], { rotate: 0, skewX: 0, opacity: 1, scale: 1 });
+            window.gsap.set(spoonSvg, { opacity: 1, scale: 1 });
             // Open matrix
             if (this.matrixEngine) {
               this.matrixEngine.open();
@@ -277,12 +298,11 @@ class Application {
           }
         });
 
-        // 1. Extreme psychic 90-degree kink
-        tl.to(spoonSvg, {
-          rotate: 45,
-          skewX: -42,
-          scale: 1.25,
-          transformOrigin: '32% 32%',
+        // 1. Extreme psychic 90-degree fold at neck
+        tl.to(spoonHandle, {
+          rotate: 88,
+          skewX: -45,
+          transformOrigin: '23px 23px',
           duration: 0.22,
           ease: 'power4.in'
         });
