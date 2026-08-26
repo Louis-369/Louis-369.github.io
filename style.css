@@ -1312,23 +1312,26 @@ body.matrix-open {
 
 @keyframes whiteCursorBlink {
   0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; }
+}
+
 /* ==========================================================================
-   Cyberpunk Scramble Exit Button (.ui-btn)
+   Cyberpunk Scramble Exit Button (.ui-btn - Monochrome)
    ========================================================================== */
 .ui-btn {
-  --btn-default-bg: rgba(26, 30, 26, 0.85);
+  --btn-default-bg: #121316;
   --btn-padding: 10px 22px;
-  --btn-hover-bg: rgba(36, 44, 36, 0.95);
+  --btn-hover-bg: #222327;
   --btn-transition: .3s;
   --btn-letter-spacing: .12rem;
   --btn-animation-duration: 1.2s;
-  --btn-shadow-color: rgba(0, 0, 0, 0.4);
+  --btn-shadow-color: rgba(0, 0, 0, 0.5);
   --btn-shadow: 0 2px 12px 0 var(--btn-shadow-color);
-  --hover-btn-color: #00FF41;
-  --default-btn-color: #ffffff;
+  --hover-btn-color: #FFFFFF;
+  --default-btn-color: #FFFFFF;
   --font-size: 13px;
   --font-weight: 600;
-  --font-family: 'Geist Mono', 'SF Mono', Menlo, Roboto Mono, monospace;
+  --font-family: 'Geist Mono', Menlo, Roboto Mono, monospace;
 }
 
 .ui-btn {
@@ -1340,7 +1343,7 @@ body.matrix-open {
   color: var(--default-btn-color);
   font: var(--font-weight) var(--font-size) var(--font-family);
   background: var(--btn-default-bg);
-  border: 1px solid rgba(0, 255, 65, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   cursor: pointer;
   transition: var(--btn-transition);
@@ -1366,13 +1369,12 @@ body.matrix-open {
 
 .ui-btn:hover, .ui-btn:focus {
   background: var(--btn-hover-bg);
-  border-color: #00FF41;
-  box-shadow: 0 0 16px rgba(0, 255, 65, 0.45);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
 }
 
 .ui-btn:hover span, .ui-btn:focus span {
   color: var(--hover-btn-color);
-  text-shadow: 0 0 8px #00FF41;
 }
 
 .ui-btn:hover span::before, .ui-btn:focus span::before {
@@ -1406,8 +1408,8 @@ body.matrix-open {
 .matrix-hud-bottom {
   position: absolute;
   bottom: 2.2rem;
-  left: 3vw;
-  right: 3vw;
+  left: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1418,7 +1420,7 @@ body.matrix-open {
 .matrix-hud-quote {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(0.78rem, 1.4vw, 1.05rem);
+  font-size: clamp(0.8rem, 1.4vw, 1.05rem);
   color: #FFFFFF;
   letter-spacing: 0.04em;
   white-space: nowrap;
@@ -1429,13 +1431,12 @@ body.matrix-open {
 @keyframes matrixQuoteBreathe {
   0%, 100% {
     opacity: 0.22;
-    filter: blur(0.6px);
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+    filter: blur(0.5px);
   }
   50% {
     opacity: 0.88;
     filter: blur(0px);
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.6), 0 0 28px rgba(0, 255, 65, 0.3);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
   }
 }
 
