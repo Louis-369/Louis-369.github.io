@@ -2,12 +2,14 @@
  * matrix.js - Full-Screen Matrix Digital Rain Engine & Easter Egg Orchestrator
  * 
  * Features:
- * 1. White cursor respiration -> Typewriter `> reset` sequence -> Flash launch
- * 2. Tri-lingual token dictionary (C++/Assembly logic, Philosophical Chinese metaphors, Japanese katakana/kanji)
- * 3. Pure pitch-black high-contrast canvas without green shadow pollution
- * 4. GSAP Stagger cascade entrance
- * 5. Mouse magnetic repulsion & plasma white-green glow reaction
- * 6. Zero-cost teardown on exit
+ * 1. 3-cycle pure white breathing cursor -> slow typewriter `> RESET` -> seamless digital rain launch
+ * 2. Bottom quote hidden during typewriter intro and revealed smoothly with digital rain
+ * 3. Tri-lingual token dictionary (C++/Assembly logic, Philosophical Chinese metaphors, Japanese katakana/kanji)
+ * 4. Pure pitch-black high-contrast canvas without green shadow pollution
+ * 5. GSAP Stagger cascade entrance
+ * 6. Mouse magnetic repulsion & plasma white-green glow reaction
+ * 7. Slower, deliberate JS Scramble text decoder on transparent EXIT button
+ * 8. Zero-cost teardown on exit
  */
 
 export class MatrixEngine {
@@ -15,6 +17,7 @@ export class MatrixEngine {
     this.overlay = document.getElementById('matrix-overlay');
     this.canvas = document.getElementById('matrix-canvas');
     this.exitBtn = document.getElementById('matrix-exit-btn');
+    this.hudBottom = document.querySelector('.matrix-hud-bottom');
     this.typewriterWrap = document.getElementById('matrix-typewriter-wrap');
     this.typewriterText = document.getElementById('typewriter-text');
     this.typewriterCursor = document.getElementById('typewriter-cursor');
@@ -165,6 +168,7 @@ export class MatrixEngine {
     const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let scrambleInterval = null;
 
+    // Slower, deliberate cyberpunk decoding effect
     this.exitBtn.addEventListener('mouseenter', () => {
       let iteration = 0;
       clearInterval(scrambleInterval);
@@ -185,8 +189,8 @@ export class MatrixEngine {
           textSpan.textContent = targetText;
         }
 
-        iteration += 1 / 3;
-      }, 30);
+        iteration += 1 / 7; // Slower lock-in rate
+      }, 45); // Slower tick interval
     });
 
     this.exitBtn.addEventListener('mouseleave', () => {
@@ -204,6 +208,11 @@ export class MatrixEngine {
     this.overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('matrix-open');
 
+    // Ensure bottom quote is hidden during intro
+    if (this.hudBottom) {
+      this.hudBottom.classList.remove('is-visible');
+    }
+
     this.resize();
 
     // Reset and clear canvas to pure pitch black
@@ -220,8 +229,8 @@ export class MatrixEngine {
         { opacity: 0 },
         { opacity: 1, duration: 0.4, ease: 'power2.out' }
       );
-      window.gsap.fromTo('.matrix-hud-top, .matrix-hud-bottom',
-        { opacity: 0, y: (i) => i === 0 ? -15 : 15 },
+      window.gsap.fromTo('.matrix-hud-top',
+        { opacity: 0, y: -15 },
         { opacity: 1, y: 0, duration: 0.6, delay: 0.2, ease: 'power2.out' }
       );
     }
@@ -238,14 +247,14 @@ export class MatrixEngine {
       this.typewriterWrap.style.transform = 'translate(-50%, -50%) scale(1)';
     }
 
-    const command = '> reset';
+    const command = '> RESET';
     let charIdx = 0;
 
-    // 1. Initial white cursor breathing pause (500ms)
+    // 1. Initial 3-cycle pure white cursor breathing pause (2100ms)
     this.typeTimeout = setTimeout(() => {
       if (!this.isActive) return;
 
-      // 2. Typewriter typing out '> reset'
+      // 2. Slow, deliberate typewriter keystrokes (190ms per character)
       this.typeInterval = setInterval(() => {
         if (!this.isActive) {
           clearInterval(this.typeInterval);
@@ -261,16 +270,16 @@ export class MatrixEngine {
           clearInterval(this.typeInterval);
           this.typeInterval = null;
 
-          // 3. Pause 350ms -> pulse dissolve -> trigger waterfall digital rain
+          // 3. Pause 450ms -> clean fade dissolve -> launch digital waterfall rain
           this.typeTimeout = setTimeout(() => {
             if (!this.isActive) return;
 
             if (window.gsap && this.typewriterWrap) {
               window.gsap.to(this.typewriterWrap, {
-                scale: 1.35,
+                scale: 1.15,
                 opacity: 0,
-                duration: 0.35,
-                ease: 'power3.in',
+                duration: 0.4,
+                ease: 'power2.in',
                 onComplete: () => {
                   if (this.typewriterWrap) this.typewriterWrap.style.display = 'none';
                 }
@@ -280,16 +289,21 @@ export class MatrixEngine {
             }
 
             this.startDigitalRain();
-          }, 350);
+          }, 450);
         }
-      }, 95);
-    }, 550);
+      }, 190);
+    }, 2100);
   }
 
   startDigitalRain() {
     if (!this.isActive) return;
     this.isRainRunning = true;
     this.initColumns();
+
+    // Reveal bottom quote smoothly once digital rain starts
+    if (this.hudBottom) {
+      this.hudBottom.classList.add('is-visible');
+    }
 
     this.loop = this.loop.bind(this);
     this.lastTime = performance.now();
@@ -340,6 +354,9 @@ export class MatrixEngine {
     }
     if (this.typewriterText) {
       this.typewriterText.textContent = '';
+    }
+    if (this.hudBottom) {
+      this.hudBottom.classList.remove('is-visible');
     }
     document.body.classList.remove('matrix-open');
     if (this.ctx && this.canvas) {

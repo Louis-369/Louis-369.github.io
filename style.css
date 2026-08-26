@@ -1297,7 +1297,8 @@ body.matrix-open {
   font-weight: 700;
   color: #FFFFFF;
   letter-spacing: 0.12em;
-  text-shadow: 0 0 16px rgba(255, 255, 255, 0.9), 0 0 32px #00FF41;
+  text-transform: uppercase;
+  text-shadow: none;
 }
 
 .typewriter-cursor {
@@ -1305,13 +1306,13 @@ body.matrix-open {
   font-size: clamp(1.8rem, 4vw, 3.2rem);
   font-weight: 700;
   color: #FFFFFF;
-  text-shadow: 0 0 16px #FFFFFF;
+  text-shadow: none;
   margin-left: 2px;
-  animation: whiteCursorBlink 0.65s ease-in-out infinite;
+  animation: whiteCursorBlink 0.7s ease-in-out infinite;
 }
 
 @keyframes whiteCursorBlink {
-  0%, 100% { opacity: 0.1; }
+  0%, 100% { opacity: 0; }
   50% { opacity: 1; }
 }
 
@@ -1356,6 +1357,12 @@ body.matrix-open {
   align-items: center;
   pointer-events: none;
   z-index: 10;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.matrix-hud-bottom.is-visible {
+  opacity: 1;
 }
 
 .matrix-hud-quote {
