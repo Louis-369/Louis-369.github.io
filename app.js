@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_18';
-import { Choreographer } from './choreographer.js?v=20260826_18';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_18';
-import { MatrixEngine } from './matrix.js?v=20260826_18';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_19';
+import { Choreographer } from './choreographer.js?v=20260826_19';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_19';
+import { MatrixEngine } from './matrix.js?v=20260826_19';
 
 class Application {
   constructor() {
@@ -221,24 +221,38 @@ class Application {
 
   initSpoonEasterEgg() {
     const spoonTrigger = document.getElementById('footer-spoon-trigger');
-    const spoonGroup = document.getElementById('spoon-main-group');
+    const spoonHandle = document.getElementById('spoon-handle-path');
+    const spoonTip = document.getElementById('spoon-handle-tip');
     const spoonSvg = document.getElementById('spoon-svg-elem');
-    if (!spoonTrigger || !spoonGroup || !spoonSvg) return;
+    if (!spoonTrigger || !spoonHandle || !spoonSvg) return;
 
     let isBending = false;
 
-    // Hover dynamic seamless psychic bending (bowl anchored at top-right, handle flexes from neck)
+    // Hover dynamic psychic Bézier bending based on mouse pointer
     spoonTrigger.addEventListener('mousemove', (e) => {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+      const bendAmount = relX * 38; // Dynamic Bézier arc arching
       
       if (window.gsap) {
-        window.gsap.to(spoonGroup, {
-          rotate: relX * 42,
-          skewX: relX * 28,
-          skewY: -relX * 16,
-          transformOrigin: '50px 14px', // Anchored precisely at bowl head!
+        window.gsap.to(spoonHandle, {
+          attr: { d: `M 32 23 Q ${32 + bendAmount} 39.5 ${32 + bendAmount * 0.65} 56` },
+          duration: 0.25,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+        if (spoonTip) {
+          window.gsap.to(spoonTip, {
+            cx: 32 + bendAmount * 0.65,
+            cy: 56,
+            duration: 0.25,
+            ease: 'power2.out',
+            overwrite: 'auto'
+          });
+        }
+        window.gsap.to(spoonSvg, {
+          rotate: relX * 22,
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -249,12 +263,25 @@ class Application {
     spoonTrigger.addEventListener('mouseleave', () => {
       if (isBending) return;
       if (window.gsap) {
-        window.gsap.to(spoonGroup, {
-          rotate: 0,
-          skewX: 0,
-          skewY: 0,
+        window.gsap.to(spoonHandle, {
+          attr: { d: 'M 32 23 Q 32 39.5 32 56' },
           duration: 0.75,
-          ease: 'elastic.out(1.4, 0.35)',
+          ease: 'elastic.out(1.3, 0.35)',
+          overwrite: 'auto'
+        });
+        if (spoonTip) {
+          window.gsap.to(spoonTip, {
+            cx: 32,
+            cy: 56,
+            duration: 0.75,
+            ease: 'elastic.out(1.3, 0.35)',
+            overwrite: 'auto'
+          });
+        }
+        window.gsap.to(spoonSvg, {
+          rotate: 0,
+          duration: 0.75,
+          ease: 'elastic.out(1.3, 0.35)',
           overwrite: 'auto'
         });
       }
@@ -270,8 +297,9 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonGroup, { rotate: 0, skewX: 0, skewY: 0, opacity: 1, scale: 1 });
-            window.gsap.set(spoonSvg, { opacity: 1, scale: 1 });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 32 23 Q 32 39.5 32 56' } });
+            if (spoonTip) window.gsap.set(spoonTip, { cx: 32, cy: 56 });
+            window.gsap.set(spoonSvg, { rotate: 0, scale: 1, opacity: 1 });
             // Open matrix
             if (this.matrixEngine) {
               this.matrixEngine.open();
@@ -279,14 +307,26 @@ class Application {
           }
         });
 
-        // 1. Extreme psychic 90-degree kink at bowl neck
-        tl.to(spoonGroup, {
-          rotate: -60,
-          skewX: 48,
-          transformOrigin: '50px 14px',
+        // 1. Extreme psychic 90-degree kink
+        tl.to(spoonHandle, {
+          attr: { d: 'M 32 23 Q 68 32 46 56' },
           duration: 0.22,
           ease: 'power4.in'
         });
+        if (spoonTip) {
+          tl.to(spoonTip, {
+            cx: 46,
+            cy: 56,
+            duration: 0.22,
+            ease: 'power4.in'
+          }, '<');
+        }
+        tl.to(spoonSvg, {
+          rotate: 45,
+          scale: 1.25,
+          duration: 0.22,
+          ease: 'power4.in'
+        }, '<');
 
         // 2. Electric glitch
         tl.to(spoonSvg, {

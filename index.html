@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_18">
+  <link rel="stylesheet" href="style.css?v=20260826_19">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -241,9 +241,18 @@
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
           <span class="spoon-tooltip">There is no spoon.</span>
           <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- 45-degree Angled Silver Spoon: Bowl at Top-Right, Handle at Bottom-Left -->
-            <g id="spoon-main-group" transform="scale(-1, 1) translate(-64, 0)" style="transform-origin: 32px 32px;">
-              <path id="spoon-full-mesh" d="M56.745 49.696c-9.055-6.69-10.482-6.958-14.822-11.298c-3.314-3.314-5.576-5.575-10.414-10.416c-3.139-3.137-.436-11.009-8.596-19.173C17.114 3.012 7.606-.18 3.712 3.71C-.183 7.605 3.013 17.117 8.81 22.915c8.163 8.159 16.035 5.455 19.174 8.595c4.84 4.838 7.101 7.1 10.414 10.415c4.34 4.34 4.608 5.768 11.297 14.821c3.306 4.482 6.474 7.332 10.429 3.377c3.952-3.952 1.102-7.12-3.379-10.427M25.341 24.391c-1.201 1.203-2.884 1.754-4.791 1.738c-.182-.045-.359-.084-.544-.129c2.753-5.176 1.013-13.155-4.378-20.103a21.995 21.995 0 0 1 6.267 4.363c3.313 3.313 4.829 6.461 5.185 9.31c.237 1.911-.532 3.614-1.739 4.821" fill="#121316"/>
+            <!-- 45-degree Angled Cutlery Spoon -->
+            <g transform="rotate(-45 32 32)">
+              <!-- High-Definition 3D Scooped Spoon Bowl -->
+              <!-- Outer Belly Contour -->
+              <path d="M 32 4 C 20.5 4, 16.5 13.5, 28.5 24 C 30 25.5, 34 25.5, 35.5 24 C 47.5 13.5, 43.5 4, 32 4 Z" fill="#121316"/>
+              <!-- Inner Scoop Hollow Cavity -->
+              <path d="M 32 6.5 C 23.5 6.5, 20.5 13, 29.5 20.5 C 30.8 21.5, 33.2 21.5, 34.5 20.5 C 43.5 13, 40.5 6.5, 32 6.5 Z" fill="#FAF8F5"/>
+              <!-- Inner Scoop Reflection Tone -->
+              <path d="M 32 7 C 25 7, 22.5 12.5, 30 19 C 31 19.8, 33 19.8, 34 19 C 41.5 12.5, 39 7, 32 7 Z" fill="#CBD5E1" opacity="0.35"/>
+              <!-- Original Dynamic Bézier Handle Path (Seamlessly Connected at Neck y:23) -->
+              <path id="spoon-handle-path" d="M 32 23 Q 32 39.5 32 56" stroke="#121316" stroke-width="4.2" stroke-linecap="round"/>
+              <circle id="spoon-handle-tip" cx="32" cy="56" r="2.2" fill="#121316"/>
             </g>
           </svg>
         </div>
@@ -274,6 +283,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_18"></script>
+  <script type="module" src="app.js?v=20260826_19"></script>
 </body>
 </html>
