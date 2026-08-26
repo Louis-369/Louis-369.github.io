@@ -236,7 +236,7 @@ class Application {
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M 25 19.5 Q ${25 + bend} 31.5 25 44` },
+          attr: { d: `M 25 18.2 Q ${25 + bend} 31 25 44` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -254,7 +254,7 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M 25 19.5 Q 25 31.5 25 44' },
+          attr: { d: 'M 25 18.2 Q 25 31 25 44' },
           duration: 0.75,
           ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
@@ -278,7 +278,7 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M 25 19.5 Q 25 31.5 25 44' } });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 25 18.2 Q 25 31 25 44' } });
             window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1 });
             // Open matrix
             if (this.matrixEngine) {
@@ -289,7 +289,7 @@ class Application {
 
         // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M 25 19.5 Q 52 26 25 44' },
+          attr: { d: 'M 25 18.2 Q 52 26 25 44' },
           duration: 0.22,
           ease: 'power4.in'
         });
