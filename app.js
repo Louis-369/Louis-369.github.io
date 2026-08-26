@@ -5,9 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_02';
-import { Choreographer } from './choreographer.js?v=20260826_02';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_02';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_03';
+import { Choreographer } from './choreographer.js?v=20260826_03';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_03';
+import { MatrixEngine } from './matrix.js?v=20260826_03';
 
 class Application {
   constructor() {
@@ -16,6 +17,7 @@ class Application {
     this.capabilities = capabilities;
     this.choreographer = null;
     this.waterAnimator = null;
+    this.matrixEngine = null;
     
     this.init();
   }
@@ -36,6 +38,9 @@ class Application {
 
     // 3. Initialize WebGL Physical Water Fluid Ripple Simulation
     this.waterAnimator = new WebGLFluidWaterAnimation('water-fluid-canvas');
+
+    // 4. Initialize Full-Screen Matrix Digital Rain Engine
+    this.matrixEngine = new MatrixEngine();
 
     // Pause WebGL fluid simulation when hero is out of view (saves ~30-50MB GPU and CPU rAF)
     const heroEl = document.getElementById('hero');
@@ -209,6 +214,121 @@ class Application {
 
     // 4. 1:1 bymonolog.com Left Ethos Story Slider
     this.initEthosSlider();
+
+    // 5. Psychic Silver Spoon Easter Egg
+    this.initSpoonEasterEgg();
+  }
+
+  initSpoonEasterEgg() {
+    const spoonTrigger = document.getElementById('footer-spoon-trigger');
+    const spoonHandle = document.getElementById('spoon-handle-path');
+    const spoonSvg = document.getElementById('spoon-svg-elem');
+    if (!spoonTrigger || !spoonHandle || !spoonSvg) return;
+
+    let isBending = false;
+
+    // Hover dynamic psychic bending based on mouse pointer
+    spoonTrigger.addEventListener('mousemove', (e) => {
+      if (isBending) return;
+      const rect = spoonTrigger.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+      const bendAmount = relX * 28; // bend handle left or right
+      
+      if (window.gsap) {
+        window.gsap.to(spoonHandle, {
+          attr: { d: `M12 24 Q${12 + bendAmount} 42 ${12 + bendAmount * 0.7} 60` },
+          duration: 0.25,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+        window.gsap.to(spoonSvg, {
+          rotation: relX * 20,
+          duration: 0.25,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      }
+    });
+
+    spoonTrigger.addEventListener('mouseleave', () => {
+      if (isBending) return;
+      if (window.gsap) {
+        window.gsap.to(spoonHandle, {
+          attr: { d: 'M12 24 Q12 42 12 60' },
+          duration: 0.7,
+          ease: 'elastic.out(1.2, 0.4)',
+          overwrite: 'auto'
+        });
+        window.gsap.to(spoonSvg, {
+          rotation: 0,
+          duration: 0.7,
+          ease: 'elastic.out(1.2, 0.4)',
+          overwrite: 'auto'
+        });
+      }
+    });
+
+    // Click: violent bend -> electric flash -> open Matrix Digital Rain
+    const triggerMatrix = () => {
+      if (isBending) return;
+      isBending = true;
+
+      if (window.gsap) {
+        const tl = window.gsap.timeline({
+          onComplete: () => {
+            isBending = false;
+            // Reset spoon state
+            window.gsap.set(spoonHandle, { attr: { d: 'M12 24 Q12 42 12 60' } });
+            window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1, filter: 'none' });
+            // Open matrix
+            if (this.matrixEngine) {
+              this.matrixEngine.open();
+            }
+          }
+        });
+
+        // 1. Extreme psychic bend
+        tl.to(spoonHandle, {
+          attr: { d: 'M12 24 Q36 34 30 60' },
+          duration: 0.22,
+          ease: 'power4.in'
+        });
+        tl.to(spoonSvg, {
+          rotation: 45,
+          scale: 1.25,
+          duration: 0.22,
+          ease: 'power4.in'
+        }, '<');
+
+        // 2. Electric green glitch pulse
+        tl.to(spoonSvg, {
+          filter: 'drop-shadow(0 0 16px #00FF41) drop-shadow(0 0 32px #00FF41)',
+          duration: 0.08,
+          repeat: 3,
+          yoyo: true
+        });
+
+        // 3. Dissolve into the matrix void
+        tl.to(spoonSvg, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.22,
+          ease: 'power2.in'
+        });
+      } else {
+        if (this.matrixEngine) {
+          this.matrixEngine.open();
+        }
+      }
+    };
+
+    spoonTrigger.addEventListener('click', triggerMatrix);
+    spoonTrigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        triggerMatrix();
+      }
+    });
   }
 
   initEthosSlider() {

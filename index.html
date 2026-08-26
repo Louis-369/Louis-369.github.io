@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_02">
+  <link rel="stylesheet" href="style.css?v=20260826_03">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -236,12 +236,53 @@
 
       <div class="footer-bottom-row">
         <span>© 2026 LOUIS · ALL RIGHTS RESERVED</span>
+        
+        <!-- Psychic Silver Spoon Easter Egg Trigger -->
+        <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
+          <span class="spoon-tooltip">There is no spoon.</span>
+          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 24 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="spoonMetalGrad" x1="0" y1="0" x2="24" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#F1F5F9"/>
+                <stop offset="35%" stop-color="#94A3B8"/>
+                <stop offset="65%" stop-color="#E2E8F0"/>
+                <stop offset="100%" stop-color="#475569"/>
+              </linearGradient>
+            </defs>
+            <!-- Spoon Bowl -->
+            <ellipse cx="12" cy="13" rx="7.5" ry="11" fill="url(#spoonMetalGrad)"/>
+            <ellipse cx="12" cy="12.5" rx="5" ry="8" fill="rgba(18, 19, 22, 0.28)"/>
+            <!-- Flexible Bending Handle -->
+            <path id="spoon-handle-path" d="M12 24 Q12 42 12 60" stroke="url(#spoonMetalGrad)" stroke-width="3.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+
         <span>DESIGNED WITH EDITORIAL CRAFT</span>
       </div>
     </div>
   </footer>
 
+  <!-- Matrix Digital Rain Easter Egg Full-Screen Overlay -->
+  <div class="matrix-overlay" id="matrix-overlay" aria-hidden="true">
+    <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+    
+    <div class="matrix-hud-top">
+      <div class="matrix-hud-title">
+        <span class="matrix-status-pulse"></span>
+        <span>SYSTEM_OVERRIDE // 0xFA_MATRIX</span>
+      </div>
+      <button class="matrix-exit-btn" id="matrix-exit-btn" aria-label="Exit Matrix Mode">
+        <span>[ ESC // EXIT MATRIX ]</span>
+      </button>
+    </div>
+
+    <div class="matrix-hud-bottom">
+      <p class="matrix-hud-quote">"Do not try and bend the spoon. That's impossible. Instead... only try to realize the truth."</p>
+      <span class="matrix-hud-hint">MOVE CURSOR TO INTERACT · PRESS ESC TO RETURN</span>
+    </div>
+  </div>
+
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_02"></script>
+  <script type="module" src="app.js?v=20260826_03"></script>
 </body>
 </html>

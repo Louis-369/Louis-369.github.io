@@ -1161,6 +1161,200 @@ html.lenis .lenis.lenis-stopped {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--ink-muted);
+  position: relative;
+}
+
+/* ==========================================================================
+   Psychic Silver Spoon Easter Egg
+   ========================================================================== */
+.footer-spoon-easter-egg {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+  user-select: none;
+}
+
+.footer-spoon-easter-egg:hover {
+  background: rgba(18, 19, 22, 0.04);
+}
+
+.spoon-svg {
+  width: 14px;
+  height: 36px;
+  filter: drop-shadow(0 2px 4px rgba(18, 19, 22, 0.15));
+  transition: filter 0.3s ease;
+  overflow: visible;
+}
+
+.footer-spoon-easter-egg:hover .spoon-svg {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 65, 0.55)) drop-shadow(0 2px 4px rgba(18, 19, 22, 0.2));
+}
+
+.spoon-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #121316;
+  color: #FAF8F5;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.spoon-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: #121316 transparent transparent transparent;
+}
+
+.footer-spoon-easter-egg:hover .spoon-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Matrix Digital Rain Full-Screen Overlay
+   ========================================================================== */
+.matrix-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #050706;
+  z-index: 99999;
+  display: none;
+  opacity: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+.matrix-overlay.is-active {
+  display: block;
+}
+
+body.matrix-open {
+  overflow: hidden !important;
+}
+
+.matrix-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.matrix-hud-top {
+  position: absolute;
+  top: 2rem;
+  left: 3vw;
+  right: 3vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.matrix-hud-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #00FF41;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+}
+
+.matrix-status-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00FF41;
+  box-shadow: 0 0 10px #00FF41;
+  animation: matrixPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes matrixPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.matrix-exit-btn {
+  background: rgba(0, 255, 65, 0.08);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  color: #00FF41;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+}
+
+.matrix-exit-btn:hover {
+  background: #00FF41;
+  color: #050706;
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.8);
+  transform: translateY(-1px);
+}
+
+.matrix-hud-bottom {
+  position: absolute;
+  bottom: 2rem;
+  left: 3vw;
+  right: 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.matrix-hud-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  max-width: 680px;
+}
+
+.matrix-hud-hint {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(0, 255, 65, 0.6);
+  letter-spacing: 0.15em;
 }
 
 /* ==========================================================================
@@ -1194,6 +1388,6 @@ html.lenis .lenis.lenis-stopped {
   .footer-bottom-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.8rem;
+    gap: 1.2rem;
   }
 }
