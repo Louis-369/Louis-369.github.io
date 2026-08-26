@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_19">
+  <link rel="stylesheet" href="style.css?v=20260826_20">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -241,18 +241,80 @@
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
           <span class="spoon-tooltip">There is no spoon.</span>
           <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- 45-degree Angled Cutlery Spoon -->
             <g transform="rotate(-45 32 32)">
-              <!-- High-Definition 3D Scooped Spoon Bowl -->
-              <!-- Outer Belly Contour -->
-              <path d="M 32 4 C 20.5 4, 16.5 13.5, 28.5 24 C 30 25.5, 34 25.5, 35.5 24 C 47.5 13.5, 43.5 4, 32 4 Z" fill="#121316"/>
-              <!-- Inner Scoop Hollow Cavity -->
-              <path d="M 32 6.5 C 23.5 6.5, 20.5 13, 29.5 20.5 C 30.8 21.5, 33.2 21.5, 34.5 20.5 C 43.5 13, 40.5 6.5, 32 6.5 Z" fill="#FAF8F5"/>
-              <!-- Inner Scoop Reflection Tone -->
-              <path d="M 32 7 C 25 7, 22.5 12.5, 30 19 C 31 19.8, 33 19.8, 34 19 C 41.5 12.5, 39 7, 32 7 Z" fill="#CBD5E1" opacity="0.35"/>
-              <!-- Original Dynamic Bézier Handle Path (Seamlessly Connected at Neck y:23) -->
-              <path id="spoon-handle-path" d="M 32 23 Q 32 39.5 32 56" stroke="#121316" stroke-width="4.2" stroke-linecap="round"/>
-              <circle id="spoon-handle-tip" cx="32" cy="56" r="2.2" fill="#121316"/>
+              <!-- Redesigned Spoon Bowl: outer silhouette -->
+              <path
+                d="
+                  M 32 3.5
+                  C 21.2 3.5, 15.7 10.1, 17.3 16.8
+                  C 18.5 21.8, 23.9 24.4, 29.4 25.3
+                  C 30.3 25.45, 30.8 26.1, 30.8 27
+                  L 33.2 27
+                  C 33.2 26.1, 33.7 25.45, 34.6 25.3
+                  C 40.1 24.4, 45.5 21.8, 46.7 16.8
+                  C 48.3 10.1, 42.8 3.5, 32 3.5
+                  Z
+                "
+                fill="#121316"
+              />
+
+              <!-- Inner scooped cavity -->
+              <path
+                d="
+                  M 32 6.5
+                  C 23.7 6.5, 19.3 10.8, 20.2 15.3
+                  C 21.1 19.4, 25.9 22.2, 32 22.8
+                  C 38.1 22.2, 42.9 19.4, 43.8 15.3
+                  C 44.7 10.8, 40.3 6.5, 32 6.5
+                  Z
+                "
+                fill="#FAF8F5"
+              />
+
+              <!-- Subtle inner shadow -->
+              <path
+                d="
+                  M 20.2 15.3
+                  C 22.3 19.2, 26.3 21.4, 32 22
+                  C 37.7 21.4, 41.7 19.2, 43.8 15.3
+                  C 42.7 20.1, 38.1 22.8, 32 23.3
+                  C 25.9 22.8, 21.3 20.1, 20.2 15.3
+                  Z
+                "
+                fill="#CBD5E1"
+                opacity="0.28"
+              />
+
+              <!-- Soft reflection -->
+              <path
+                d="
+                  M 23.2 11.8
+                  C 25.6 8.7, 29.4 7.4, 34.3 8.1
+                  C 29.8 8.8, 26.1 11.2, 23.4 15.1
+                  C 23 14, 22.9 12.8, 23.2 11.8
+                  Z
+                "
+                fill="#FFFFFF"
+                opacity="0.48"
+              />
+
+              <!-- Existing handle: seamless dynamic Bézier handle -->
+              <path
+                id="spoon-handle-path"
+                d="M 32 25 Q 32 40.5 32 56"
+                stroke="#121316"
+                stroke-width="4.2"
+                stroke-linecap="round"
+                fill="none"
+              />
+
+              <circle
+                id="spoon-handle-tip"
+                cx="32"
+                cy="56"
+                r="2.2"
+                fill="#121316"
+              />
             </g>
           </svg>
         </div>
@@ -283,6 +345,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_19"></script>
+  <script type="module" src="app.js?v=20260826_20"></script>
 </body>
 </html>

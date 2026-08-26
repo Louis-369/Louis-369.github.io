@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_19';
-import { Choreographer } from './choreographer.js?v=20260826_19';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_19';
-import { MatrixEngine } from './matrix.js?v=20260826_19';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_20';
+import { Choreographer } from './choreographer.js?v=20260826_20';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_20';
+import { MatrixEngine } from './matrix.js?v=20260826_20';
 
 class Application {
   constructor() {
@@ -237,7 +237,7 @@ class Application {
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M 32 23 Q ${32 + bendAmount} 39.5 ${32 + bendAmount * 0.65} 56` },
+          attr: { d: `M 32 25 Q ${32 + bendAmount} 40.5 ${32 + bendAmount * 0.65} 56` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -264,7 +264,7 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M 32 23 Q 32 39.5 32 56' },
+          attr: { d: 'M 32 25 Q 32 40.5 32 56' },
           duration: 0.75,
           ease: 'elastic.out(1.3, 0.35)',
           overwrite: 'auto'
@@ -297,7 +297,7 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M 32 23 Q 32 39.5 32 56' } });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 32 25 Q 32 40.5 32 56' } });
             if (spoonTip) window.gsap.set(spoonTip, { cx: 32, cy: 56 });
             window.gsap.set(spoonSvg, { rotate: 0, scale: 1, opacity: 1 });
             // Open matrix
@@ -309,7 +309,7 @@ class Application {
 
         // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M 32 23 Q 68 32 46 56' },
+          attr: { d: 'M 32 25 Q 68 34 46 56' },
           duration: 0.22,
           ease: 'power4.in'
         });
