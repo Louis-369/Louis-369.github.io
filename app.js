@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_17';
-import { Choreographer } from './choreographer.js?v=20260826_17';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_17';
-import { MatrixEngine } from './matrix.js?v=20260826_17';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_18';
+import { Choreographer } from './choreographer.js?v=20260826_18';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_18';
+import { MatrixEngine } from './matrix.js?v=20260826_18';
 
 class Application {
   constructor() {
@@ -221,61 +221,42 @@ class Application {
 
   initSpoonEasterEgg() {
     const spoonTrigger = document.getElementById('footer-spoon-trigger');
-    const spoonHandle = document.getElementById('spoon-handle-part');
-    const spoonBowl = document.getElementById('spoon-bowl-part');
+    const spoonGroup = document.getElementById('spoon-main-group');
     const spoonSvg = document.getElementById('spoon-svg-elem');
-    if (!spoonTrigger || !spoonHandle || !spoonSvg) return;
+    if (!spoonTrigger || !spoonGroup || !spoonSvg) return;
 
     let isBending = false;
 
-    // Hover dynamic psychic bending based on mouse pointer
+    // Hover dynamic seamless psychic bending (bowl anchored at top-right, handle flexes from neck)
     spoonTrigger.addEventListener('mousemove', (e) => {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
       
       if (window.gsap) {
-        // Dramatic handle bending relative to stationary bowl
-        window.gsap.to(spoonHandle, {
-          rotate: relX * 55, // Bend handle up to 55 degrees from neck joint!
-          skewX: relX * 30, // Elastic arc bowing
-          transformOrigin: '23px 23px',
+        window.gsap.to(spoonGroup, {
+          rotate: relX * 42,
+          skewX: relX * 28,
+          skewY: -relX * 16,
+          transformOrigin: '50px 14px', // Anchored precisely at bowl head!
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
         });
-        if (spoonBowl) {
-          window.gsap.to(spoonBowl, {
-            rotate: -relX * 8, // Subtle counter-torque on head
-            transformOrigin: '23px 23px',
-            duration: 0.25,
-            ease: 'power2.out',
-            overwrite: 'auto'
-          });
-        }
       }
     });
 
     spoonTrigger.addEventListener('mouseleave', () => {
       if (isBending) return;
       if (window.gsap) {
-        window.gsap.to(spoonHandle, {
+        window.gsap.to(spoonGroup, {
           rotate: 0,
           skewX: 0,
-          transformOrigin: '23px 23px',
+          skewY: 0,
           duration: 0.75,
           ease: 'elastic.out(1.4, 0.35)',
           overwrite: 'auto'
         });
-        if (spoonBowl) {
-          window.gsap.to(spoonBowl, {
-            rotate: 0,
-            transformOrigin: '23px 23px',
-            duration: 0.75,
-            ease: 'elastic.out(1.4, 0.35)',
-            overwrite: 'auto'
-          });
-        }
       }
     });
 
@@ -289,7 +270,7 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set([spoonHandle, spoonBowl], { rotate: 0, skewX: 0, opacity: 1, scale: 1 });
+            window.gsap.set(spoonGroup, { rotate: 0, skewX: 0, skewY: 0, opacity: 1, scale: 1 });
             window.gsap.set(spoonSvg, { opacity: 1, scale: 1 });
             // Open matrix
             if (this.matrixEngine) {
@@ -298,11 +279,11 @@ class Application {
           }
         });
 
-        // 1. Extreme psychic 90-degree fold at neck
-        tl.to(spoonHandle, {
-          rotate: 88,
-          skewX: -45,
-          transformOrigin: '23px 23px',
+        // 1. Extreme psychic 90-degree kink at bowl neck
+        tl.to(spoonGroup, {
+          rotate: -60,
+          skewX: 48,
+          transformOrigin: '50px 14px',
           duration: 0.22,
           ease: 'power4.in'
         });
