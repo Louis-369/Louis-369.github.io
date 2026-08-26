@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_20';
-import { Choreographer } from './choreographer.js?v=20260826_20';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_20';
-import { MatrixEngine } from './matrix.js?v=20260826_20';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_21';
+import { Choreographer } from './choreographer.js?v=20260826_21';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_21';
+import { MatrixEngine } from './matrix.js?v=20260826_21';
 
 class Application {
   constructor() {
@@ -344,10 +344,9 @@ class Application {
 
     let currentSlide = 0;
     const totalSlides = this.stories.length;
-    const SLIDE_DURATION = 6.5; // 6.5s per article
+    const SLIDE_DURATION = 6.0; // 6.0s per article
     let progressTween = null;
     let isPaused = false;
-    let isVisible = false;
     let isTransitioning = false;
 
     const startProgress = () => {
@@ -362,7 +361,7 @@ class Application {
             updateSlide(currentSlide + 1);
           }
         });
-        if (isPaused || !isVisible) {
+        if (isPaused) {
           progressTween.pause();
         }
       }
@@ -445,9 +444,40 @@ class Application {
       }
     };
 
-    // Manual navigation resets timer and transitions immediately
-    prevBtn.onclick = () => updateSlide(currentSlide - 1);
-    nextBtn.onclick = () => updateSlide(currentSlide + 1);
+    // Manual navigation: Fast-forward rush to 100% on click (1:1 bymonolog setting)
+    nextBtn.onclick = () => {
+      if (isTransitioning) return;
+      if (progressTween) progressTween.kill();
+      if (window.gsap) {
+        window.gsap.to(progressBar, {
+          scaleX: 1,
+          duration: 0.16,
+          ease: 'power2.out',
+          onComplete: () => {
+            updateSlide(currentSlide + 1);
+          }
+        });
+      } else {
+        updateSlide(currentSlide + 1);
+      }
+    };
+
+    prevBtn.onclick = () => {
+      if (isTransitioning) return;
+      if (progressTween) progressTween.kill();
+      if (window.gsap) {
+        window.gsap.to(progressBar, {
+          scaleX: 0,
+          duration: 0.14,
+          ease: 'power2.out',
+          onComplete: () => {
+            updateSlide(currentSlide - 1);
+          }
+        });
+      } else {
+        updateSlide(currentSlide - 1);
+      }
+    };
 
     // Hover pause: User can read comfortably without auto-skipping
     if (storyContainer) {
@@ -457,7 +487,7 @@ class Application {
       });
       storyContainer.addEventListener('mouseleave', () => {
         isPaused = false;
-        if (progressTween && isVisible && !isTransitioning) progressTween.resume();
+        if (progressTween && !isTransitioning) progressTween.resume();
       });
     }
 
@@ -466,8 +496,7 @@ class Application {
     if (aboutSection && 'IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          isVisible = entry.isIntersecting;
-          if (isVisible) {
+          if (entry.isIntersecting) {
             if (!progressTween) {
               startProgress();
             } else if (!isPaused && !isTransitioning) {
@@ -479,10 +508,9 @@ class Application {
             }
           }
         });
-      }, { threshold: 0.15 });
+      }, { threshold: 0.05 });
       observer.observe(aboutSection);
     } else {
-      isVisible = true;
       startProgress();
     }
   }
