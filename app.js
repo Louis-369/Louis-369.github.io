@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_11';
-import { Choreographer } from './choreographer.js?v=20260826_11';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_11';
-import { MatrixEngine } from './matrix.js?v=20260826_11';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_12';
+import { Choreographer } from './choreographer.js?v=20260826_12';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_12';
+import { MatrixEngine } from './matrix.js?v=20260826_12';
 
 class Application {
   constructor() {
@@ -232,17 +232,17 @@ class Application {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const bend = relX * 18; // Perpendicular arch deflection
+      const bend = relX * 24; // Handle deflection
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M 22 20 Q ${15 + bend} ${28 + bend * 0.7} 8 36` },
+          attr: { d: `M 17.8 17.8 Q ${17.8 + bend} 25.5 17.8 33` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
         });
         window.gsap.to(spoonSvg, {
-          rotation: relX * 22,
+          rotation: relX * 20,
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -254,7 +254,7 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M 22 20 Q 15 28 8 36' },
+          attr: { d: 'M 17.8 17.8 Q 17.8 25.5 17.8 33' },
           duration: 0.75,
           ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
@@ -278,8 +278,8 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M 22 20 Q 15 28 8 36' } });
-            window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1, filter: 'none' });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 17.8 17.8 Q 17.8 25.5 17.8 33' } });
+            window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1 });
             // Open matrix
             if (this.matrixEngine) {
               this.matrixEngine.open();
@@ -289,7 +289,7 @@ class Application {
 
         // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M 22 20 Q 28 32 8 36' },
+          attr: { d: 'M 17.8 17.8 Q 38 22 17.8 33' },
           duration: 0.22,
           ease: 'power4.in'
         });
@@ -300,9 +300,9 @@ class Application {
           ease: 'power4.in'
         }, '<');
 
-        // 2. Electric green glitch pulse
+        // 2. Electric glitch
         tl.to(spoonSvg, {
-          filter: 'drop-shadow(0 0 16px #00FF41) drop-shadow(0 0 32px #00FF41)',
+          opacity: 0.3,
           duration: 0.08,
           repeat: 3,
           yoyo: true

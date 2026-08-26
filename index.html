@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_11">
+  <link rel="stylesheet" href="style.css?v=20260826_12">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -240,20 +240,23 @@
         <!-- Psychic Silver Spoon Easter Egg Trigger -->
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
           <span class="spoon-tooltip">There is no spoon.</span>
-          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="spoonSideGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFFFFF"/>
-                <stop offset="35%" stop-color="#CBD5E1"/>
-                <stop offset="70%" stop-color="#94A3B8"/>
-                <stop offset="100%" stop-color="#475569"/>
+              <linearGradient id="spoonMetal" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#121316"/>
+                <stop offset="100%" stop-color="#2D3039"/>
               </linearGradient>
             </defs>
-            <!-- 45-degree Side Profile Concave Spoon Bowl -->
-            <path d="M 34 8 C 41 12, 39 21, 26 21 C 24 21, 22 20, 22 20" stroke="url(#spoonSideGrad)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
-            <path d="M 34 8 C 39 12, 37 19, 26 20.5 Z" fill="rgba(148, 163, 184, 0.28)"/>
-            <!-- Flexible Bending Handle extending from neck (22, 20) to base (8, 36) -->
-            <path id="spoon-handle-path" d="M 22 20 Q 15 28 8 36" stroke="url(#spoonSideGrad)" stroke-width="2.6" stroke-linecap="round"/>
+            <!-- 45-degree Angled Side-Profile Spoon -->
+            <g id="spoon-group" transform="rotate(-45 18 18)">
+              <!-- Side-Profile Spoon Bowl with Deep Concave Scoop -->
+              <!-- Outer Convex Belly -->
+              <path d="M18 4 C11 5, 10 13, 17.5 18 C18 18, 18 18, 18 18 C20 14, 21 8, 18 4 Z" fill="url(#spoonMetal)"/>
+              <!-- Inner Hollow Scoop Highlight -->
+              <path d="M18 4.8 C12.5 5.8, 12 12.5, 17.2 17.2 C19 13.8, 20 8.5, 18 4.8 Z" fill="#64748B" opacity="0.35"/>
+              <!-- Bendable Handle -->
+              <path id="spoon-handle-path" d="M17.8 17.8 Q17.8 25.5 17.8 33" stroke="url(#spoonMetal)" stroke-width="2.6" stroke-linecap="round"/>
+            </g>
           </svg>
         </div>
 
@@ -283,6 +286,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_11"></script>
+  <script type="module" src="app.js?v=20260826_12"></script>
 </body>
 </html>
