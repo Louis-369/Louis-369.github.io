@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260826_13">
+  <link rel="stylesheet" href="style.css?v=20260826_14">
 
   <!-- Lenis Smooth Scroll CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -240,15 +240,31 @@
         <!-- Psychic Silver Spoon Easter Egg Trigger -->
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
           <span class="spoon-tooltip">There is no spoon.</span>
-          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- 45-degree Angled Authentic Side-Profile Spoon -->
-            <g id="spoon-group" transform="rotate(-45 20 20)">
-              <!-- Outer Spoon Bowl Silhouette with Deep Dropping Scoop Belly -->
-              <path d="M 11 5 C 8 13, 14 18.5, 19.8 18.8 C 20.8 18.8, 21.2 17.8, 21.2 16.8 C 21 12.8, 17 8.2, 27 4.2 C 27.8 3.8, 27 3.2, 25.5 3.4 C 18 4.2, 13.5 4.6, 11 5 Z" fill="#121316"/>
-              <!-- High-Contrast Inner Hollow Scoop Cutout -->
-              <path d="M 13.5 6 C 11 11.5, 15 15.8, 19.5 16.8 C 19 13.2, 16.5 9, 24.5 5 C 19.5 5.2, 16 5.6, 13.5 6 Z" fill="#FAF8F5"/>
-              <!-- Bendable Handle -->
-              <path id="spoon-handle-path" d="M 20 18.8 Q 20 26.5 20 34" stroke="#121316" stroke-width="2.8" stroke-linecap="round"/>
+          <svg class="spoon-svg" id="spoon-svg-elem" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="spoonBowlGrad" x1="16" y1="4" x2="34" y2="18" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#121316"/>
+                <stop offset="60%" stop-color="#2D3039"/>
+                <stop offset="100%" stop-color="#121316"/>
+              </linearGradient>
+              <linearGradient id="spoonCavityGrad" x1="18" y1="5" x2="30" y2="16" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0F1013"/>
+                <stop offset="40%" stop-color="#4A5568"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+            </defs>
+            <!-- 45-degree Angled 3/4 Perspective Cutlery Spoon -->
+            <g id="spoon-group" transform="rotate(-45 25 25)">
+              <!-- Outer Spoon Bowl Silhouette -->
+              <path d="M 25 4 C 17.5 4, 15.5 10.5, 23.5 18 C 24.2 18.5, 25.8 18.5, 26.5 18 C 34.5 10.5, 32.5 4, 25 4 Z" fill="url(#spoonBowlGrad)"/>
+              <!-- 3/4 Perspective Inner Concave Scoop Cavity (3D Depth) -->
+              <path d="M 25 5.5 C 19 5.5, 17.5 10, 24.2 16.2 C 24.6 16.5, 25.4 16.5, 25.8 16.2 C 31.5 10, 30.5 5.5, 25 5.5 Z" fill="url(#spoonCavityGrad)"/>
+              <!-- Inner Rim Depth Highlight -->
+              <path d="M 25 6 C 20.5 6, 19 9.5, 24.5 15" stroke="#FFFFFF" stroke-width="0.8" opacity="0.6" stroke-linecap="round" fill="none"/>
+              <!-- Slender Elongated Bendable Handle -->
+              <path id="spoon-handle-path" d="M 25 18.2 Q 25 31 25 44" stroke="#121316" stroke-width="2.6" stroke-linecap="round"/>
+              <!-- Handle Tip Teardrop Finial -->
+              <circle cx="25" cy="43.5" r="1.6" fill="#121316"/>
             </g>
           </svg>
         </div>
@@ -279,6 +295,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20260826_13"></script>
+  <script type="module" src="app.js?v=20260826_14"></script>
 </body>
 </html>
