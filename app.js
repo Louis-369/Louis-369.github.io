@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_21';
-import { Choreographer } from './choreographer.js?v=20260826_21';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_21';
-import { MatrixEngine } from './matrix.js?v=20260826_21';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_16';
+import { Choreographer } from './choreographer.js?v=20260826_16';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_16';
+import { MatrixEngine } from './matrix.js?v=20260826_16';
 
 class Application {
   constructor() {
@@ -222,37 +222,27 @@ class Application {
   initSpoonEasterEgg() {
     const spoonTrigger = document.getElementById('footer-spoon-trigger');
     const spoonHandle = document.getElementById('spoon-handle-path');
-    const spoonTip = document.getElementById('spoon-handle-tip');
     const spoonSvg = document.getElementById('spoon-svg-elem');
     if (!spoonTrigger || !spoonHandle || !spoonSvg) return;
 
     let isBending = false;
 
-    // Hover dynamic psychic Bézier bending based on mouse pointer
+    // Hover dynamic psychic bending based on mouse pointer
     spoonTrigger.addEventListener('mousemove', (e) => {
       if (isBending) return;
       const rect = spoonTrigger.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const bendAmount = relX * 38; // Dynamic Bézier arc arching
+      const bend = relX * 26; // Handle deflection
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: `M 32 23 Q ${32 + bendAmount} 39.5 ${32 + bendAmount * 0.65} 56` },
+          attr: { d: `M 25 18.2 Q ${25 + bend} 31 25 44` },
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
         });
-        if (spoonTip) {
-          window.gsap.to(spoonTip, {
-            cx: 32 + bendAmount * 0.65,
-            cy: 56,
-            duration: 0.25,
-            ease: 'power2.out',
-            overwrite: 'auto'
-          });
-        }
         window.gsap.to(spoonSvg, {
-          rotate: relX * 22,
+          rotation: relX * 18,
           duration: 0.25,
           ease: 'power2.out',
           overwrite: 'auto'
@@ -264,24 +254,15 @@ class Application {
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
-          attr: { d: 'M 32 23 Q 32 39.5 32 56' },
+          attr: { d: 'M 25 18.2 Q 25 31 25 44' },
           duration: 0.75,
-          ease: 'elastic.out(1.3, 0.35)',
+          ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
         });
-        if (spoonTip) {
-          window.gsap.to(spoonTip, {
-            cx: 32,
-            cy: 56,
-            duration: 0.75,
-            ease: 'elastic.out(1.3, 0.35)',
-            overwrite: 'auto'
-          });
-        }
         window.gsap.to(spoonSvg, {
-          rotate: 0,
+          rotation: 0,
           duration: 0.75,
-          ease: 'elastic.out(1.3, 0.35)',
+          ease: 'elastic.out(1.2, 0.4)',
           overwrite: 'auto'
         });
       }
@@ -297,9 +278,8 @@ class Application {
           onComplete: () => {
             isBending = false;
             // Reset spoon state
-            window.gsap.set(spoonHandle, { attr: { d: 'M 32 23 Q 32 39.5 32 56' } });
-            if (spoonTip) window.gsap.set(spoonTip, { cx: 32, cy: 56 });
-            window.gsap.set(spoonSvg, { rotate: 0, scale: 1, opacity: 1 });
+            window.gsap.set(spoonHandle, { attr: { d: 'M 25 18.2 Q 25 31 25 44' } });
+            window.gsap.set(spoonSvg, { rotation: 0, scale: 1, opacity: 1 });
             // Open matrix
             if (this.matrixEngine) {
               this.matrixEngine.open();
@@ -309,20 +289,12 @@ class Application {
 
         // 1. Extreme psychic 90-degree kink
         tl.to(spoonHandle, {
-          attr: { d: 'M 32 23 Q 68 32 46 56' },
+          attr: { d: 'M 25 18.2 Q 52 26 25 44' },
           duration: 0.22,
           ease: 'power4.in'
         });
-        if (spoonTip) {
-          tl.to(spoonTip, {
-            cx: 46,
-            cy: 56,
-            duration: 0.22,
-            ease: 'power4.in'
-          }, '<');
-        }
         tl.to(spoonSvg, {
-          rotate: 45,
+          rotation: 45,
           scale: 1.25,
           duration: 0.22,
           ease: 'power4.in'
@@ -330,7 +302,7 @@ class Application {
 
         // 2. Electric glitch
         tl.to(spoonSvg, {
-          opacity: 0.2,
+          opacity: 0.3,
           duration: 0.08,
           repeat: 3,
           yoyo: true
