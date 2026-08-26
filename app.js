@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_18';
-import { Choreographer } from './choreographer.js?v=20260826_18';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_18';
-import { MatrixEngine } from './matrix.js?v=20260826_18';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_19';
+import { Choreographer } from './choreographer.js?v=20260826_19';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_19';
+import { MatrixEngine } from './matrix.js?v=20260826_19';
 
 class Application {
   constructor() {
@@ -155,10 +155,6 @@ class Application {
 
     const total = this.stories.length;
     if (counterEl) counterEl.textContent = `01/0${total}`;
-    if (progressBar) {
-      progressBar.style.width = `${100 / total}%`;
-      progressBar.style.transform = `translateX(0%)`;
-    }
   }
 
   renderCapabilities() {
@@ -337,13 +333,36 @@ class Application {
     const counterEl = document.getElementById('ethos-counter');
     const progressBar = document.getElementById('ethos-progress-bar');
     const tagEl = document.getElementById('ethos-current-tag');
-    if (!prevBtn || !nextBtn) return;
+    const storyContainer = document.querySelector('.about-left-col');
+    if (!prevBtn || !nextBtn || !progressBar) return;
 
     let currentSlide = 0;
+    const totalSlides = this.stories.length;
+    const SLIDE_DURATION = 6.5; // 6.5s per article
+    let progressTween = null;
+    let isPaused = false;
+    let isVisible = false;
+
+    const startProgress = () => {
+      if (progressTween) progressTween.kill();
+      if (window.gsap) {
+        window.gsap.set(progressBar, { scaleX: 0 });
+        progressTween = window.gsap.to(progressBar, {
+          scaleX: 1,
+          duration: SLIDE_DURATION,
+          ease: 'none',
+          onComplete: () => {
+            updateSlide(currentSlide + 1);
+          }
+        });
+        if (isPaused || !isVisible) {
+          progressTween.pause();
+        }
+      }
+    };
 
     const updateSlide = (newIndex) => {
       const slides = document.querySelectorAll('.ethos-story-slide');
-      const totalSlides = this.stories.length;
       if (!slides.length || totalSlides === 0) return;
 
       slides[currentSlide].classList.remove('active');
@@ -353,16 +372,53 @@ class Application {
       if (counterEl) {
         counterEl.textContent = `0${currentSlide + 1}/0${totalSlides}`;
       }
-      if (progressBar) {
-        progressBar.style.transform = `translateX(${currentSlide * 100}%)`;
-      }
       if (tagEl && this.stories[currentSlide] && this.stories[currentSlide].tag) {
         tagEl.textContent = this.stories[currentSlide].tag;
       }
+
+      startProgress();
     };
 
+    // Manual navigation resets timer and transitions immediately
     prevBtn.onclick = () => updateSlide(currentSlide - 1);
     nextBtn.onclick = () => updateSlide(currentSlide + 1);
+
+    // Hover pause: User can read comfortably without auto-skipping
+    if (storyContainer) {
+      storyContainer.addEventListener('mouseenter', () => {
+        isPaused = true;
+        if (progressTween) progressTween.pause();
+      });
+      storyContainer.addEventListener('mouseleave', () => {
+        isPaused = false;
+        if (progressTween && isVisible) progressTween.resume();
+      });
+    }
+
+    // Viewport IntersectionObserver: Only progress when visible on screen
+    const aboutSection = document.getElementById('about');
+    if (aboutSection && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            if (!progressTween) {
+              startProgress();
+            } else if (!isPaused) {
+              progressTween.resume();
+            }
+          } else {
+            if (progressTween) {
+              progressTween.pause();
+            }
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(aboutSection);
+    } else {
+      isVisible = true;
+      startProgress();
+    }
   }
 }
 

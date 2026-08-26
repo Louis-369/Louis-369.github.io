@@ -896,19 +896,21 @@ html.lenis .lenis.lenis-stopped {
   width: 100%;
   max-width: 220px;
   height: 2px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
+  border-radius: 1px;
 }
 
 .slider-progress-bar {
   position: absolute;
   top: 0;
   left: 0;
-  width: 33.33%;
+  width: 100%;
   height: 100%;
   background: #FAF8F5;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s ease;
+  transform-origin: left center;
+  transform: scaleX(0);
 }
 
 .about-slider-actions {
