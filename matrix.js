@@ -122,6 +122,7 @@ export class MatrixEngine {
   bindEvents() {
     if (this.exitBtn) {
       this.exitBtn.addEventListener('click', () => this.close());
+      this.bindScrambleButton();
     }
 
     // Keyboard ESC to close
@@ -155,6 +156,43 @@ export class MatrixEngine {
         this.mouse.y = -9999;
       });
     }
+  }
+
+  bindScrambleButton() {
+    if (!this.exitBtn) return;
+    const textSpan = this.exitBtn.querySelector('span') || this.exitBtn;
+    const targetText = 'EXIT';
+    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let scrambleInterval = null;
+
+    this.exitBtn.addEventListener('mouseenter', () => {
+      let iteration = 0;
+      clearInterval(scrambleInterval);
+
+      scrambleInterval = setInterval(() => {
+        textSpan.textContent = targetText
+          .split('')
+          .map((letter, index) => {
+            if (index < Math.floor(iteration)) {
+              return targetText[index];
+            }
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join('');
+
+        if (iteration >= targetText.length) {
+          clearInterval(scrambleInterval);
+          textSpan.textContent = targetText;
+        }
+
+        iteration += 1 / 3;
+      }, 30);
+    });
+
+    this.exitBtn.addEventListener('mouseleave', () => {
+      clearInterval(scrambleInterval);
+      textSpan.textContent = targetText;
+    });
   }
 
   open() {
