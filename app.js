@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_19';
-import { Choreographer } from './choreographer.js?v=20260826_19';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_19';
-import { MatrixEngine } from './matrix.js?v=20260826_19';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_20';
+import { Choreographer } from './choreographer.js?v=20260826_20';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_20';
+import { MatrixEngine } from './matrix.js?v=20260826_20';
 
 class Application {
   constructor() {
@@ -136,19 +136,25 @@ class Application {
     }).join('');
   }
 
+  wrapWordsInMasks(text, isQuote = false) {
+    const quoteOpen = isQuote ? '<span class="split-word-mask"><span class="split-word-inner">“</span></span>' : '';
+    const quoteClose = isQuote ? '<span class="split-word-mask"><span class="split-word-inner">”</span></span>' : '';
+    const words = text.split(' ').map(w => `<span class="split-word-mask"><span class="split-word-inner">${w}</span></span>`).join(' ');
+    return `${quoteOpen}${words}${quoteClose}`;
+  }
+
   renderAboutStories() {
     const container = document.getElementById('about-stories-track');
     const counterEl = document.getElementById('ethos-counter');
-    const progressBar = document.getElementById('ethos-progress-bar');
     if (!container) return;
 
     container.innerHTML = this.stories.map((story, idx) => `
       <div class="ethos-story-slide ${idx === 0 ? 'active' : ''}" data-slide="${idx}">
         <blockquote class="about-lead-quote">
-          "${story.quote}"
+          ${this.wrapWordsInMasks(story.quote, true)}
         </blockquote>
         <p class="about-body-text">
-          ${story.body}
+          ${this.wrapWordsInMasks(story.body, false)}
         </p>
       </div>
     `).join('');
@@ -342,6 +348,7 @@ class Application {
     let progressTween = null;
     let isPaused = false;
     let isVisible = false;
+    let isTransitioning = false;
 
     const startProgress = () => {
       if (progressTween) progressTween.kill();
@@ -362,21 +369,80 @@ class Application {
     };
 
     const updateSlide = (newIndex) => {
+      if (isTransitioning) return;
       const slides = document.querySelectorAll('.ethos-story-slide');
       if (!slides.length || totalSlides === 0) return;
+      const nextSlideIndex = (newIndex + totalSlides) % totalSlides;
+      if (nextSlideIndex === currentSlide) return;
 
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (newIndex + totalSlides) % totalSlides;
-      slides[currentSlide].classList.add('active');
+      isTransitioning = true;
+      if (progressTween) progressTween.kill();
 
-      if (counterEl) {
-        counterEl.textContent = `0${currentSlide + 1}/0${totalSlides}`;
+      const outSlide = slides[currentSlide];
+      const inSlide = slides[nextSlideIndex];
+      const outWords = outSlide.querySelectorAll('.split-word-inner');
+      const inWords = inSlide.querySelectorAll('.split-word-inner');
+
+      if (window.gsap) {
+        const tl = window.gsap.timeline({
+          onComplete: () => {
+            outSlide.classList.remove('active');
+            window.gsap.set(outWords, { y: '0%', opacity: 1 });
+
+            inSlide.classList.add('active');
+            currentSlide = nextSlideIndex;
+
+            if (counterEl) counterEl.textContent = `0${currentSlide + 1}/0${totalSlides}`;
+            if (tagEl && this.stories[currentSlide] && this.stories[currentSlide].tag) {
+              tagEl.textContent = this.stories[currentSlide].tag;
+            }
+
+            // Stagger in new words
+            window.gsap.fromTo(inWords, {
+              y: '115%',
+              opacity: 0
+            }, {
+              y: '0%',
+              opacity: 1,
+              stagger: 0.012,
+              duration: 0.48,
+              ease: 'power3.out',
+              onComplete: () => {
+                isTransitioning = false;
+                startProgress();
+              }
+            });
+
+            // Flip Tag in
+            if (tagEl) {
+              window.gsap.fromTo(tagEl, { y: 6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' });
+            }
+          }
+        });
+
+        // Stagger out old words
+        tl.to(outWords, {
+          y: '-115%',
+          opacity: 0,
+          stagger: 0.009,
+          duration: 0.28,
+          ease: 'power3.in'
+        });
+
+        if (tagEl) {
+          tl.to(tagEl, { y: -6, opacity: 0, duration: 0.18 }, '<');
+        }
+      } else {
+        outSlide.classList.remove('active');
+        inSlide.classList.add('active');
+        currentSlide = nextSlideIndex;
+        if (counterEl) counterEl.textContent = `0${currentSlide + 1}/0${totalSlides}`;
+        if (tagEl && this.stories[currentSlide] && this.stories[currentSlide].tag) {
+          tagEl.textContent = this.stories[currentSlide].tag;
+        }
+        isTransitioning = false;
+        startProgress();
       }
-      if (tagEl && this.stories[currentSlide] && this.stories[currentSlide].tag) {
-        tagEl.textContent = this.stories[currentSlide].tag;
-      }
-
-      startProgress();
     };
 
     // Manual navigation resets timer and transitions immediately
@@ -391,7 +457,7 @@ class Application {
       });
       storyContainer.addEventListener('mouseleave', () => {
         isPaused = false;
-        if (progressTween && isVisible) progressTween.resume();
+        if (progressTween && isVisible && !isTransitioning) progressTween.resume();
       });
     }
 
@@ -404,7 +470,7 @@ class Application {
           if (isVisible) {
             if (!progressTween) {
               startProgress();
-            } else if (!isPaused) {
+            } else if (!isPaused && !isTransitioning) {
               progressTween.resume();
             }
           } else {

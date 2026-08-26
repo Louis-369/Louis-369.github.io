@@ -996,6 +996,19 @@ html.lenis .lenis.lenis-stopped {
   max-width: 500px;
 }
 
+/* Split-Text Stagger Slide Masks */
+.split-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  margin-right: 0.28em;
+}
+
+.split-word-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
 .about-author-card {
   display: flex;
   align-items: center;
