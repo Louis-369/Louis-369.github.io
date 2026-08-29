@@ -1071,6 +1071,7 @@ body.is-loading {
 /* Right Column: Seamless Capabilities Stack over Section Video */
 .about-right-col {
   position: relative;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -1081,6 +1082,7 @@ body.is-loading {
 
 .about-capabilities-header {
   position: relative;
+  z-index: 5;
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -1097,20 +1099,20 @@ body.is-loading {
 
 .capabilities-stack-list {
   position: relative;
+  z-index: 5;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  mix-blend-mode: difference;
+  gap: 0.35rem;
 }
 
 .capability-item {
   position: relative;
   cursor: pointer;
-  padding: 0.4rem 0;
+  padding: 0.35rem 0;
   transform-origin: left center;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-  opacity: 0.82;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  opacity: 0.28; /* Unselected: Elegant translucent dim state */
 }
 
 .capability-name {
@@ -1119,24 +1121,22 @@ body.is-loading {
   font-weight: 700;
   line-height: 1.10;
   letter-spacing: -0.035em;
-  color: #FFFFFF !important;
-  mix-blend-mode: difference;
+  color: #FAF8F5;
   display: inline-block;
   user-select: none;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  transition: color 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Active & Hover: Scale up slightly larger with smooth expansion */
+/* Active & Hover: 100% Solid Brilliant Spotlight + Smooth Expansion */
 .capability-item:hover,
 .capability-item.active {
   opacity: 1.0;
-  transform: scale(1.06) translateX(12px);
+  transform: scale(1.04) translateX(12px);
 }
 
 .capability-item:hover .capability-name,
 .capability-item.active .capability-name {
-  color: #FFFFFF !important;
-  mix-blend-mode: difference;
+  color: #FFFFFF;
 }
 
 @media (max-width: 900px) {
