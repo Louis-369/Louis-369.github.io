@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20260829_09">
+  <link rel="stylesheet" href="style.css?v=20260829_10">
 
   <!-- External Libraries (Lenis, GSAP, Three.js) -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -168,6 +168,11 @@
 
     <!-- Philosophy & About Section (1:1 bymonolog.com Dark Tactile Matrix) -->
     <section class="about-section is-dark-surface" id="about">
+      <!-- Full-Bleed Right Half Section Video Canvas (Spans full right half of the entire section) -->
+      <div class="about-section-video-canvas" id="capabilities-video-wrap" aria-hidden="true">
+        <!-- Populated via app.js with dynamic background video elements -->
+      </div>
+
       <div class="about-container">
         <!-- Left Column: 1:1 Monolog Story & Ethos Slider -->
         <div class="about-left-col">
@@ -204,13 +209,8 @@
           </div>
         </div>
 
-        <!-- Right Column: Interactive Capabilities Stack with Dynamic Video Canvas -->
+        <!-- Right Column: Interactive Capabilities Stack -->
         <div class="about-right-col">
-          <!-- Background Immersive Dynamic Video Canvas -->
-          <div class="about-capabilities-video-wrap" id="capabilities-video-wrap" aria-hidden="true">
-            <!-- Populated via app.js with dynamic background video elements -->
-          </div>
-
           <div class="about-capabilities-header">
             <span class="capabilities-dot">●</span>
             <span class="capabilities-title">What I can help with</span>

@@ -843,11 +843,56 @@ body.is-loading {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 20;
+  overflow: hidden;
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
 
+/* Full-Bleed Right Half Section Dynamic Video Canvas */
+.about-section-video-canvas {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 58vw;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.about-section-video-canvas::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #0F1013 0%, rgba(15, 16, 19, 0.35) 20%, rgba(15, 16, 19, 0.05) 50%, rgba(15, 16, 19, 0.45) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.capability-bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: brightness(0.85) contrast(1.2);
+}
+
+.capability-bg-video.active {
+  opacity: 0.65;
+  transform: scale(1.0);
+}
+
 .about-container {
+  position: relative;
+  z-index: 5;
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
@@ -858,6 +903,8 @@ body.is-loading {
 
 /* Left Column: Story & Ethos */
 .about-left-col {
+  position: relative;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   gap: 2.2rem;
@@ -1032,48 +1079,16 @@ body.is-loading {
   letter-spacing: 0.04em;
 }
 
-/* Right Column: Monolog Interactive Capabilities Stack with Dynamic Video Canvas */
+/* Right Column: Seamless Capabilities Stack over Section Video */
 .about-right-col {
   position: relative;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2.2rem 2rem;
-  border-radius: 6px;
-  background: #0D0E11;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  overflow: hidden;
-}
-
-/* Background Immersive Dynamic Video Canvas */
-.about-capabilities-video-wrap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-.capability-bg-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: brightness(0.88) contrast(1.2);
-}
-
-.capability-bg-video.active {
-  opacity: 0.60;
-  transform: scale(1.0);
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .about-capabilities-header {
@@ -1112,11 +1127,11 @@ body.is-loading {
 
 .capability-name {
   font-family: var(--font-serif);
-  font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+  font-size: clamp(2.6rem, 5.2vw, 4.8rem);
   font-weight: 700;
   line-height: 1.10;
   letter-spacing: -0.035em;
-  color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.30);
   transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
   user-select: none;
@@ -1125,16 +1140,17 @@ body.is-loading {
 .capability-item:hover .capability-name,
 .capability-item.active .capability-name {
   color: #FFFFFF !important;
-  transform: translateX(12px);
+  transform: translateX(14px);
 }
 
 @media (max-width: 900px) {
+  .about-section-video-canvas {
+    width: 100%;
+    opacity: 0.40;
+  }
   .about-container {
     grid-template-columns: 1fr;
     gap: 4rem;
-  }
-  .about-right-col {
-    padding: 1.5rem 1.2rem;
   }
 }
 
