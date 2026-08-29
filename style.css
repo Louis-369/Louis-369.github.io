@@ -5,11 +5,11 @@
 
 /* Design Tokens & CSS Variables */
 :root {
-  --bg-canvas: #F3EDE2;          /* Option E: Modern Oatmeal Paper Canvas */
+  --bg-canvas: #F6F2EB;          /* Slightly brighter, luminous warm ivory paper */
   --bg-card: #FFFFFF;            /* Pure white paper-cut plinth */
-  --bg-subtle: #E5DDCF;          /* Warm oat subtle shadow / secondary plinth */
-  --border-paper: rgba(18, 19, 22, 0.09); /* 1px tactile paper edge */
-  --border-focus: rgba(18, 19, 22, 0.28);
+  --bg-subtle: #ECE5DA;          /* Tactile paper gray / subtle plinth transition */
+  --border-paper: rgba(18, 19, 22, 0.08); /* 1px tactile paper edge */
+  --border-focus: rgba(18, 19, 22, 0.25);
   
   --ink-primary: #121316;        /* Deep charcoal ink */
   --ink-secondary: #4A4D57;      /* Refined editorial secondary */
@@ -77,8 +77,8 @@ html.lenis .lenis.lenis-stopped {
   height: 100vh;
   pointer-events: none;
   z-index: 999;
-  opacity: 0.042;
-  background-image: url("assets/noise.png?v=20260826_02");
+  opacity: 0.062;
+  background-image: url("assets/noise.png?v=20260829_08");
   background-repeat: repeat;
   background-size: 128px 128px;
 }
