@@ -5,10 +5,10 @@
 
 /* Design Tokens & CSS Variables */
 :root {
-  --bg-canvas: #F1ECE4;          /* Rich tactile warm ivory art paper */
+  --bg-canvas: #F3EDE2;          /* Option E: Modern Oatmeal Paper Canvas */
   --bg-card: #FFFFFF;            /* Pure white paper-cut plinth */
-  --bg-subtle: #E6DFD4;          /* Tactile paper gray / warm plinth shadow */
-  --border-paper: rgba(18, 19, 22, 0.10); /* 1px tactile paper edge */
+  --bg-subtle: #E5DDCF;          /* Warm oat subtle shadow / secondary plinth */
+  --border-paper: rgba(18, 19, 22, 0.09); /* 1px tactile paper edge */
   --border-focus: rgba(18, 19, 22, 0.28);
   
   --ink-primary: #121316;        /* Deep charcoal ink */
