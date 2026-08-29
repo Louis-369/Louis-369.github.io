@@ -1,7 +1,6 @@
 /**
- * projects.js - Portfolio Case Studies & Project Manifest
- * 
- * Declarative data structure formatted for editorial showcase.
+ * @file data/projects.js
+ * @description Declarative content manifest for featured works, ethos stories, and capabilities.
  */
 
 export const siteConfig = {
@@ -30,12 +29,7 @@ export const featuredProjects = [
     tags: ["Architecture", "Brutalism", "Urban", "Structure"],
     image: "assets/works/brutalist-building.jpg",
     url: "/mind-sync/",
-    isExternal: false,
-    colorScheme: {
-      accent: "#D97706",
-      bgSubtle: "#F5F3EF"
-    },
-    coverBadge: "01 / SHOWCASE"
+    isExternal: false
   },
   {
     id: "sticker-to-gif",
@@ -51,12 +45,7 @@ export const featuredProjects = [
     tags: ["Photography", "Cinematic", "Dusk", "Moment"],
     image: "assets/works/sunset-park.jpg",
     url: "/sticker-to-gif/",
-    isExternal: false,
-    colorScheme: {
-      accent: "#E11D48",
-      bgSubtle: "#FFF1F2"
-    },
-    coverBadge: "02 / SHOWCASE"
+    isExternal: false
   },
   {
     id: "fitstepsync",
@@ -72,12 +61,7 @@ export const featuredProjects = [
     tags: ["Live Stage", "Concert", "Energy", "Visual"],
     image: "assets/works/concert-stage.jpg",
     url: "https://github.com/Louis-369/FitStepSync",
-    isExternal: true,
-    colorScheme: {
-      accent: "#9333EA",
-      bgSubtle: "#FAF5FF"
-    },
-    coverBadge: "03 / SHOWCASE"
+    isExternal: true
   },
   {
     id: "next-matrix",
@@ -93,19 +77,10 @@ export const featuredProjects = [
     tags: ["AI Agent", "Workflow", "WIP"],
     image: null,
     url: "#",
-    isExternal: false,
-    colorScheme: {
-      accent: "#0D9488",
-      bgSubtle: "#F0FDFA"
-    },
-    coverBadge: "04 / EXPERIMENTAL"
+    isExternal: false
   }
 ];
 
-/**
- * About Section Stories / Ethos (1:1 Monolog Data-Driven Stories Slider)
- * Easily add/remove stories here without touching HTML!
- */
 export const aboutStories = [
   {
     id: "craft",
@@ -133,9 +108,6 @@ export const aboutStories = [
   }
 ];
 
-/**
- * Capabilities Matrix (Right Column Highlight List)
- */
 export const capabilities = [
   "Web Architecture",
   "Interactive WebGL",

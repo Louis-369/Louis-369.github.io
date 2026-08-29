@@ -1,15 +1,7 @@
 /**
- * matrix.js - Full-Screen Matrix Digital Rain Engine & Easter Egg Orchestrator
- * 
- * Features:
- * 1. 3-cycle pure white breathing cursor -> slow typewriter `> RESET` -> seamless digital rain launch
- * 2. Bottom quote hidden during typewriter intro and revealed smoothly with digital rain
- * 3. Tri-lingual token dictionary (C++/Assembly logic, Philosophical Chinese metaphors, Japanese katakana/kanji)
- * 4. Pure pitch-black high-contrast canvas without green shadow pollution
- * 5. GSAP Stagger cascade entrance
- * 6. Mouse magnetic repulsion & plasma white-green glow reaction
- * 7. Slower, deliberate JS Scramble text decoder on transparent EXIT button
- * 8. Zero-cost teardown on exit
+ * @file matrix.js
+ * @description Full-screen Matrix digital rain engine and typewriter intro coordinator.
+ * Implements continuous 60fps canvas stream, cursor magnetic repulsion, and tri-lingual token pool.
  */
 
 export class MatrixEngine {
@@ -48,7 +40,6 @@ export class MatrixEngine {
       symbols: 'ｱｶｻﾀﾅﾊﾏﾔﾗﾜ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*<>[]{}|:;'
     };
 
-    // Flatten glyph pool for single-character streams
     this.allGlyphs = [
       ...this.dictionary.symbols.split(''),
       ...this.dictionary.katakanaHalf.flatMap(s => s.split('')),
@@ -433,7 +424,7 @@ export class MatrixEngine {
           displayChar = col.tokenInject[charIndex] || item.glyph;
         }
 
-        // ─── Mouse Magnetic Repulsion & Glow Reaction ────────────────
+        // Mouse magnetic repulsion and illumination
         let renderX = col.x;
         let renderY = charY;
         let isNearMouse = false;
@@ -454,11 +445,10 @@ export class MatrixEngine {
           }
         }
 
-        // ─── Color Grading & Phosphor Glow ───────────────────────────
+        // Phosphor trail decay and leader glow
         const isLeadingHead = j === col.length - 1;
 
         if (isNearMouse) {
-          // Electric Plasma White-Cyan Bloom near cursor
           ctx.fillStyle = `rgba(255, 255, 255, ${0.95 + mouseIntensity * 0.05})`;
           ctx.shadowColor = '#00FF41';
           ctx.shadowBlur = 8 + mouseIntensity * 12;
@@ -466,7 +456,6 @@ export class MatrixEngine {
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
         } else if (isLeadingHead && col.headGlow) {
-          // Pure White Crisp Leader Head with tight green aura
           ctx.fillStyle = '#FFFFFF';
           ctx.shadowColor = '#00FF41';
           ctx.shadowBlur = 8;
@@ -474,7 +463,6 @@ export class MatrixEngine {
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
         } else {
-          // Razor-Sharp Phosphor Green Trail (Zero blur bleed, 100% crisp high-contrast)
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
           const trailDepth = j / col.length;

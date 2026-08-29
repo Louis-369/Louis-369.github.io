@@ -1,14 +1,13 @@
 /**
- * app.js - Main Application Orchestrator
- * 
- * Sets up the editorial page, renders Monolog-style paper-cut cards,
- * initializes magnetic cursor, and triggers s0 reveal rhythm.
+ * @file app.js
+ * @description Main application orchestrator.
+ * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260829_01';
-import { Choreographer } from './choreographer.js?v=20260829_01';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260829_01';
-import { MatrixEngine } from './matrix.js?v=20260829_01';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260829_02';
+import { Choreographer } from './choreographer.js?v=20260829_02';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20260829_02';
+import { MatrixEngine } from './matrix.js?v=20260829_02';
 
 class Application {
   constructor() {
@@ -22,27 +21,23 @@ class Application {
     this.init();
   }
 
+  /**
+   * Initializes application components and triggers opening sequence.
+   */
   init() {
-    // 0. Force scroll restoration to top on refresh
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
 
-    // 1. Render dynamic projects list (bymonolog 12-col open grid)
     this.renderProjects();
-
-    // 2. Render dynamic 1:1 Monolog About Stories & Capabilities
     this.renderAboutStories();
     this.renderCapabilities();
 
-    // 3. Initialize WebGL Physical Water Fluid Ripple Simulation
     this.waterAnimator = new WebGLFluidWaterAnimation('water-fluid-canvas');
-
-    // 4. Initialize Full-Screen Matrix Digital Rain Engine
     this.matrixEngine = new MatrixEngine();
 
-    // Pause WebGL fluid simulation when hero is out of view (saves ~30-50MB GPU and CPU rAF)
+    // Viewport observer: pause WebGL fluid simulation when hero is out of view
     const heroEl = document.getElementById('hero');
     if (heroEl && 'IntersectionObserver' in window) {
       const heroObserver = new IntersectionObserver((entries) => {
@@ -59,7 +54,6 @@ class Application {
       heroObserver.observe(heroEl);
     }
 
-    // 4. Initialize Choreographer & play opening reveal (3D Leaf Fall -> WebGL Ripples -> Sinks -> Shockwave)
     this.choreographer = new Choreographer({
       onRevealComplete: () => {
         document.body.classList.remove('is-loading');
@@ -67,7 +61,6 @@ class Application {
       }
     });
 
-    // Run opening reveal AFTER fonts are fully loaded (ensures stable layout for dot coordinates)
     const startReveal = () => {
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => {
@@ -84,10 +77,12 @@ class Application {
       window.addEventListener('DOMContentLoaded', startReveal);
     }
 
-    // 5. Global interaction bindings
     this.bindInteractions();
   }
 
+  /**
+   * Renders the featured projects grid.
+   */
   renderProjects() {
     const container = document.getElementById('works-cards-container');
     if (!container) return;
@@ -101,7 +96,6 @@ class Application {
       return `
         <div class="works-home-item" data-project-index="${idx}">
           <a href="${project.url || '#'}" class="works-home-link" ${targetAttr}>
-            <!-- Left: Visual Column (Cols 1-7, 58%) -->
             <div class="works-visual-column">
               <div class="works-image-mask">
                 ${project.image 
@@ -113,7 +107,6 @@ class Application {
               </div>
             </div>
 
-            <!-- Right: Content Column (Cols 8-12, 42%) -->
             <div class="works-content-column">
               <div class="works-content-header">
                 <div class="works-meta-stamp">
@@ -124,7 +117,6 @@ class Application {
                 <p class="works-project-desc">${project.desc || project.summary}</p>
               </div>
 
-              <!-- Bottom Impact Metric Highlight -->
               <div class="works-result-block">
                 <div class="result-number">${project.metrics[0].value}</div>
                 <div class="result-label">${project.metrics[0].label} · ${project.summary}</div>
@@ -136,6 +128,12 @@ class Application {
     }).join('');
   }
 
+  /**
+   * Wraps text in split masks for typography transition.
+   * @param {string} text
+   * @param {boolean} [isQuote=false]
+   * @returns {string}
+   */
   wrapWordsInMasks(text, isQuote = false) {
     const quoteOpen = isQuote ? '<span class="split-word-mask"><span class="split-word-inner">“</span></span>' : '';
     const quoteClose = isQuote ? '<span class="split-word-mask"><span class="split-word-inner">”</span></span>' : '';
@@ -143,6 +141,9 @@ class Application {
     return `${quoteOpen}${words}${quoteClose}`;
   }
 
+  /**
+   * Renders the philosophy story slides.
+   */
   renderAboutStories() {
     const container = document.getElementById('about-stories-track');
     const counterEl = document.getElementById('ethos-counter');
@@ -163,6 +164,9 @@ class Application {
     if (counterEl) counterEl.textContent = `01/0${total}`;
   }
 
+  /**
+   * Renders the interactive capabilities stack list.
+   */
   renderCapabilities() {
     const list = document.getElementById('about-capabilities-list');
     if (!list) return;
@@ -174,8 +178,11 @@ class Application {
     `).join('');
   }
 
+  /**
+   * Binds global navigation and interactive handlers.
+   */
   bindInteractions() {
-    // 1. Logo Click: Smooth Scroll Directly to Top
+    // 1. Logo brand smooth scroll to top
     const logoBrand = document.getElementById('nav-brand-logo');
     if (logoBrand) {
       logoBrand.addEventListener('click', (e) => {
@@ -188,7 +195,7 @@ class Application {
       });
     }
 
-    // 2. Smooth internal page scrolling (#works, #about, etc.)
+    // 2. Smooth internal anchor navigation
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
       link.addEventListener('click', (e) => {
         const targetId = link.getAttribute('href');
@@ -202,25 +209,26 @@ class Application {
       });
     });
 
-    // 3. 1:1 bymonolog.com Interactive Capabilities Stack Hover
+    // 3. Capabilities stack hover (optimized cached node list)
     const capList = document.getElementById('about-capabilities-list');
     if (capList) {
+      const capItems = capList.querySelectorAll('.capability-item');
       capList.addEventListener('mouseover', (e) => {
         const item = e.target.closest('.capability-item');
-        if (item) {
-          document.querySelectorAll('.capability-item').forEach(i => i.classList.remove('active'));
+        if (item && !item.classList.contains('active')) {
+          capItems.forEach(i => i.classList.remove('active'));
           item.classList.add('active');
         }
       });
     }
 
-    // 4. 1:1 bymonolog.com Left Ethos Story Slider
     this.initEthosSlider();
-
-    // 5. Psychic Silver Spoon Easter Egg
     this.initSpoonEasterEgg();
   }
 
+  /**
+   * Initializes psychic silver spoon easter egg with cached rect and Matrix rain trigger.
+   */
   initSpoonEasterEgg() {
     const spoonTrigger = document.getElementById('footer-spoon-trigger');
     const spoonHandle = document.getElementById('spoon-handle-path');
@@ -228,13 +236,18 @@ class Application {
     if (!spoonTrigger || !spoonHandle || !spoonSvg) return;
 
     let isBending = false;
+    let triggerRect = null;
 
-    // Hover dynamic psychic bending based on mouse pointer
+    // Cache bounding box on mouseenter to prevent layout thrashing
+    spoonTrigger.addEventListener('mouseenter', () => {
+      triggerRect = spoonTrigger.getBoundingClientRect();
+    });
+
     spoonTrigger.addEventListener('mousemove', (e) => {
       if (isBending) return;
-      const rect = spoonTrigger.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const bend = relX * 26; // Handle deflection
+      if (!triggerRect) triggerRect = spoonTrigger.getBoundingClientRect();
+      const relX = (e.clientX - triggerRect.left) / triggerRect.width - 0.5;
+      const bend = relX * 26;
       
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
@@ -253,6 +266,7 @@ class Application {
     });
 
     spoonTrigger.addEventListener('mouseleave', () => {
+      triggerRect = null;
       if (isBending) return;
       if (window.gsap) {
         window.gsap.to(spoonHandle, {
@@ -333,18 +347,20 @@ class Application {
     });
   }
 
+  /**
+   * Initializes timed ethos story progress slider with split-text staggered transitions.
+   */
   initEthosSlider() {
     const prevBtn = document.getElementById('ethos-prev-btn');
     const nextBtn = document.getElementById('ethos-next-btn');
     const counterEl = document.getElementById('ethos-counter');
     const progressBar = document.getElementById('ethos-progress-bar');
     const tagEl = document.getElementById('ethos-current-tag');
-    const storyContainer = document.querySelector('.about-left-col');
     if (!prevBtn || !nextBtn || !progressBar) return;
 
     let currentSlide = 0;
     const totalSlides = this.stories.length;
-    const SLIDE_DURATION = 6.0; // 6.0s per article
+    const SLIDE_DURATION = 6.0;
     let progressTween = null;
     let isTransitioning = false;
 
@@ -392,7 +408,6 @@ class Application {
               tagEl.textContent = this.stories[currentSlide].tag;
             }
 
-            // Stagger in new words
             window.gsap.fromTo(inWords, {
               y: '115%',
               opacity: 0
@@ -408,14 +423,12 @@ class Application {
               }
             });
 
-            // Flip Tag in
             if (tagEl) {
               window.gsap.fromTo(tagEl, { y: 6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' });
             }
           }
         });
 
-        // Stagger out old words
         tl.to(outWords, {
           y: '-115%',
           opacity: 0,
@@ -440,7 +453,7 @@ class Application {
       }
     };
 
-    // Manual navigation: Fast-forward rush to 100% in 0.2s on click
+    // Manual navigation: accelerated 0.2s progress rush
     nextBtn.onclick = () => {
       if (isTransitioning) return;
       if (progressTween) progressTween.kill();
@@ -475,7 +488,7 @@ class Application {
       }
     };
 
-    // Viewport IntersectionObserver: Only progress when visible on screen
+    // Viewport observer: pause progress ticker when off-screen
     const aboutSection = document.getElementById('about');
     if (aboutSection && 'IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
@@ -500,5 +513,4 @@ class Application {
   }
 }
 
-// Instantiate
 new Application();

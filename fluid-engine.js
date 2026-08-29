@@ -1,11 +1,7 @@
 /**
- * globe.js - 1:1 Raw WebGL Navier-Stokes Multi-Pass FBO Fluid Simulation (Suminagashi Engine)
- * 
- * Directly executes real Navier-Stokes Ping-Pong Framebuffer fluid dynamics:
- * - Ping-Pong Double FBO Advection (Velocity & Dye)
- * - Curl, Vorticity Confinement & Poisson Pressure Solving
- * - Beer–Lambert Liquid Dye Dynamics (Clean Transparent Paper Base)
- * - True Fluid Waves & Physics Dispersion
+ * @file fluid-engine.js
+ * @description WebGL Navier-Stokes Multi-Pass FBO Fluid Simulation (Suminagashi Ink Engine).
+ * Handles velocity/dye advection, Poisson pressure solving, and Beer-Lambert optical absorption.
  */
 
 export class WebGLFluidWaterAnimation {
