@@ -4,10 +4,10 @@
  * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260829_04';
-import { Choreographer } from './choreographer.js?v=20260829_04';
-import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20260829_04';
-import { MatrixEngine } from './matrix.js?v=20260829_04';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260829_09';
+import { Choreographer } from './choreographer.js?v=20260829_09';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20260829_09';
+import { MatrixEngine } from './matrix.js?v=20260829_09';
 
 class Application {
   constructor() {
@@ -165,17 +165,33 @@ class Application {
   }
 
   /**
-   * Renders the interactive capabilities stack list.
+   * Renders the interactive capabilities stack list and background video canvas.
    */
   renderCapabilities() {
     const list = document.getElementById('about-capabilities-list');
+    const videoWrap = document.getElementById('capabilities-video-wrap');
     if (!list) return;
 
     list.innerHTML = this.capabilities.map((cap, idx) => `
-      <li class="capability-item ${idx === 0 ? 'active' : ''}">
-        <span class="capability-name">${cap}</span>
+      <li class="capability-item ${idx === 0 ? 'active' : ''}" data-cap-index="${idx}">
+        <span class="capability-name">${cap.name}</span>
       </li>
     `).join('');
+
+    if (videoWrap) {
+      videoWrap.innerHTML = this.capabilities.map((cap, idx) => `
+        <video 
+          class="capability-bg-video ${idx === 0 ? 'active' : ''}" 
+          data-video-index="${idx}"
+          src="${cap.video}" 
+          muted 
+          loop 
+          playsinline 
+          preload="auto"
+          autoplay
+        ></video>
+      `).join('');
+    }
   }
 
   /**
@@ -209,15 +225,41 @@ class Application {
       });
     });
 
-    // 3. Capabilities stack hover (optimized cached node list)
+    // 3. Capabilities stack hover and dynamic video switching
     const capList = document.getElementById('about-capabilities-list');
+    const videoWrap = document.getElementById('capabilities-video-wrap');
     if (capList) {
       const capItems = capList.querySelectorAll('.capability-item');
+      const videoItems = videoWrap ? videoWrap.querySelectorAll('.capability-bg-video') : [];
+
+      const switchCapability = (idx) => {
+        capItems.forEach((item, i) => {
+          if (i === idx) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+
+        videoItems.forEach((video, i) => {
+          if (i === idx) {
+            video.classList.add('active');
+            if (video.paused) {
+              video.play().catch(() => {});
+            }
+          } else {
+            video.classList.remove('active');
+          }
+        });
+      };
+
       capList.addEventListener('mouseover', (e) => {
         const item = e.target.closest('.capability-item');
-        if (item && !item.classList.contains('active')) {
-          capItems.forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
+        if (item) {
+          const idx = parseInt(item.getAttribute('data-cap-index'), 10);
+          if (!isNaN(idx) && !item.classList.contains('active')) {
+            switchCapability(idx);
+          }
         }
       });
     }

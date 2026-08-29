@@ -109,9 +109,29 @@ export const aboutStories = [
 ];
 
 export const capabilities = [
-  "Web Architecture",
-  "Interactive WebGL",
-  "Fluid UI/UX Design",
-  "AI Workflow Tools",
-  "Creative Engineering"
+  {
+    id: "arch",
+    name: "Web Architecture",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-with-graphs-and-data-31913-large.mp4"
+  },
+  {
+    id: "webgl",
+    name: "Interactive WebGL",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-animation-41296-large.mp4"
+  },
+  {
+    id: "uiux",
+    name: "Fluid UI/UX Design",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-flowing-layers-of-purple-and-blue-colors-41525-large.mp4"
+  },
+  {
+    id: "ai",
+    name: "AI Workflow Tools",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-network-connection-with-bright-dots-and-lines-41300-large.mp4"
+  },
+  {
+    id: "eng",
+    name: "Creative Engineering",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-abstract-digital-sphere-of-lines-and-dots-41295-large.mp4"
+  }
 ];
