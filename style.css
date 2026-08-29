@@ -5,11 +5,11 @@
 
 /* Design Tokens & CSS Variables */
 :root {
-  --bg-canvas: #FAF8F5;          /* Warm ivory art paper */
+  --bg-canvas: #F1ECE4;          /* Rich tactile warm ivory art paper */
   --bg-card: #FFFFFF;            /* Pure white paper-cut plinth */
-  --bg-subtle: #F2EFE9;          /* Tactile paper gray */
-  --border-paper: rgba(18, 19, 22, 0.08); /* 1px paper edge */
-  --border-focus: rgba(18, 19, 22, 0.25);
+  --bg-subtle: #E6DFD4;          /* Tactile paper gray / warm plinth shadow */
+  --border-paper: rgba(18, 19, 22, 0.10); /* 1px tactile paper edge */
+  --border-focus: rgba(18, 19, 22, 0.28);
   
   --ink-primary: #121316;        /* Deep charcoal ink */
   --ink-secondary: #4A4D57;      /* Refined editorial secondary */
@@ -67,7 +67,7 @@ html.lenis .lenis.lenis-stopped {
 }
 
 /* ==========================================================================
-   Paper Grain Texture Overlay
+   Tactile Organic Paper Grain Texture Overlay
    ========================================================================== */
 .grain-overlay {
   position: fixed;
@@ -77,10 +77,11 @@ html.lenis .lenis.lenis-stopped {
   height: 100vh;
   pointer-events: none;
   z-index: 999;
-  opacity: 0.042;
-  background-image: url("assets/noise.png?v=20260826_02");
+  opacity: 0.088;
+  mix-blend-mode: multiply;
+  background-image: url("assets/noise.png?v=20260829_05");
   background-repeat: repeat;
-  background-size: 128px 128px;
+  background-size: 140px 140px;
 }
 
 /* Background Ambient Canvas */
