@@ -1098,15 +1098,17 @@ body.is-loading {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.5rem;
   mix-blend-mode: difference;
 }
 
 .capability-item {
   position: relative;
   cursor: pointer;
-  padding: 0.35rem 0;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.4rem 0;
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  opacity: 0.82;
 }
 
 .capability-name {
@@ -1115,18 +1117,24 @@ body.is-loading {
   font-weight: 700;
   line-height: 1.10;
   letter-spacing: -0.035em;
-  color: #6A6D78;
+  color: #FFFFFF !important;
   mix-blend-mode: difference;
-  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
   user-select: none;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+/* Active & Hover: Scale up slightly larger with smooth expansion */
+.capability-item:hover,
+.capability-item.active {
+  opacity: 1.0;
+  transform: scale(1.06) translateX(12px);
 }
 
 .capability-item:hover .capability-name,
 .capability-item.active .capability-name {
   color: #FFFFFF !important;
   mix-blend-mode: difference;
-  transform: translateX(14px);
 }
 
 @media (max-width: 900px) {
