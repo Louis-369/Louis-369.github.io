@@ -98,7 +98,16 @@ html.lenis .lenis.lenis-stopped {
    Navigation Bar & bymonolog Hover Micro-Interactions
    ========================================================================== */
 /* ==========================================================================
-   Navigation Bar (1:1 bymonolog.com Header Hierarchy)
+   Page Loading State & Scroll Lock
+   ========================================================================== */
+body.is-loading {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
+}
+
+/* ==========================================================================
+   Navigation Bar with Difference Inversion (mix-blend-mode: difference)
    ========================================================================== */
 .site-nav {
   position: fixed;
@@ -112,6 +121,7 @@ html.lenis .lenis.lenis-stopped {
   z-index: 1000;
   pointer-events: none;
   background: transparent;
+  mix-blend-mode: difference;
 }
 
 .navbar-brand-wrap {
@@ -120,16 +130,16 @@ html.lenis .lenis.lenis-stopped {
   pointer-events: auto;
 }
 
-/* Logo: Clean solid deep black typography (#121316) */
+/* Logo: Pure white with mix-blend-mode difference inverts to pure black on light paper */
 .nav-brand {
   display: inline-block;
   font-family: var(--font-serif);
   font-size: 1.45rem;
   font-weight: 700;
-  color: var(--ink-primary);
+  color: #FFFFFF;
   text-decoration: none;
   letter-spacing: -0.02em;
-  transition: opacity 0.3s ease, color 0.4s ease;
+  transition: opacity 0.3s ease;
   cursor: pointer;
 }
 
@@ -137,12 +147,11 @@ html.lenis .lenis.lenis-stopped {
   opacity: 0.75;
 }
 
-/* Right Navigation Group: Normal standard styling */
+/* Right Navigation Group */
 .navbar-right-group {
   display: flex;
   align-items: center;
   pointer-events: auto;
-  mix-blend-mode: normal;
 }
 
 /* 1. Monolog Contiguous Seamless Links List (ul / li) */
@@ -160,12 +169,12 @@ html.lenis .lenis.lenis-stopped {
   align-items: center;
 }
 
-/* Unified Link Item with Pure 0px Sharp Block Fill */
+/* Unified Link Item with Difference Inversion */
 .navbar-link {
   font-family: var(--font-mono);
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--ink-primary);
+  color: #FFFFFF;
   text-decoration: none;
   letter-spacing: 0.03em;
   position: relative;
@@ -191,16 +200,17 @@ html.lenis .lenis.lenis-stopped {
   width: 100%;
   height: 100%;
   border-radius: 0px;
-  background-color: var(--ink-primary);
+  background-color: #FFFFFF;
   transform-origin: right;
   transform: scaleX(0);
-  transition: transform 600ms cubic-bezier(0.2, 1, 0.36, 1), background-color 0.4s ease;
+  transition: transform 600ms cubic-bezier(0.2, 1, 0.36, 1);
   z-index: -1;
 }
 
 .navbar-link-text {
   position: relative;
   z-index: 2;
+  color: #FFFFFF;
   transition: color 0.3s cubic-bezier(0.16, 1, 0.35, 1);
 }
 
@@ -210,7 +220,7 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .navbar-link:hover .navbar-link-text {
-  color: var(--bg-canvas);
+  color: #000000;
 }
 
 /* GitHub 45° Vector Flying Arrow Inside Unified Bar */
@@ -229,8 +239,8 @@ html.lenis .lenis.lenis-stopped {
   position: relative;
   width: 10px;
   height: 10px;
-  color: var(--ink-primary);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1), color 0.3s ease;
+  color: #FFFFFF;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.35, 1);
 }
 
 .navbar-arrow-svg.is-duplicate {
@@ -241,7 +251,7 @@ html.lenis .lenis.lenis-stopped {
 }
 
 .navbar-link:hover .navbar-arrow-svg {
-  color: var(--bg-canvas);
+  color: #000000;
 }
 
 .navbar-link:hover .navbar-arrow-svg:not(.is-duplicate) {
@@ -250,37 +260,6 @@ html.lenis .lenis.lenis-stopped {
 
 .navbar-link:hover .navbar-arrow-svg.is-duplicate {
   transform: translate(0, 0);
-}
-
-/* ==========================================================================
-   Adaptive Header Dark Theme (When hovering/scrolling over #about or dark surfaces)
-   ========================================================================== */
-.site-nav.is-dark-theme .nav-brand {
-  color: #FAF8F5 !important;
-}
-
-.site-nav.is-dark-theme .navbar-link {
-  color: #FAF8F5 !important;
-}
-
-.site-nav.is-dark-theme .navbar-link-text {
-  color: #FAF8F5 !important;
-}
-
-.site-nav.is-dark-theme .navbar-link::before {
-  background-color: #FAF8F5 !important;
-}
-
-.site-nav.is-dark-theme .navbar-link:hover .navbar-link-text {
-  color: #0F1013 !important;
-}
-
-.site-nav.is-dark-theme .navbar-arrow-svg {
-  color: #FAF8F5 !important;
-}
-
-.site-nav.is-dark-theme .navbar-link:hover .navbar-arrow-svg {
-  color: #0F1013 !important;
 }
 
 /* ==========================================================================
