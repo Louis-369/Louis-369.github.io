@@ -244,9 +244,6 @@ export class Choreographer {
       duration: 1.0,
       ease: 'power3.out'
     }, '-=0.6');
-      duration: 1.0,
-      ease: 'power3.out'
-    }, '-=0.6');
 
     revealTl.to(['.hero-dictionary-entry', '.hero-scroll-indicator'], {
       y: 0,
