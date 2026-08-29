@@ -72,19 +72,19 @@ export class MatrixEngine {
 
   initColumns() {
     if (!this.canvas) return;
-    const width = this.canvas.width;
-    const height = this.canvas.height;
-    const columnWidth = 22; // Column spacing
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const columnWidth = 19; // Dense, cinematic column spacing
     const numCols = Math.floor(width / columnWidth);
 
     this.columns = [];
 
     for (let i = 0; i < numCols; i++) {
-      // Stagger entrance: columns start higher up with progressive stagger delays
+      // Natural organic entry wave: stagger across screen with randomized vertical offsets
       const staggerProgress = i / numCols;
-      const initialDelay = staggerProgress * 1.4 + Math.random() * 0.35;
-      const speed = 1.4 + Math.random() * 2.2;
-      const length = Math.floor(16 + Math.random() * 26);
+      const initialDelay = staggerProgress * 0.8 + Math.random() * 0.4;
+      const speed = 1.6 + Math.random() * 2.8;
+      const length = Math.floor(18 + Math.random() * 26);
 
       // Create stream characters
       const stream = [];
@@ -96,16 +96,16 @@ export class MatrixEngine {
       }
 
       this.columns.push({
-        x: i * columnWidth + 11,
-        y: -length * 20 - (initialDelay * 70),
+        x: i * columnWidth + columnWidth / 2,
+        y: -length * 20 - (initialDelay * 80),
         baseSpeed: speed,
         speed,
         length,
         fontSize: 14 + (Math.random() > 0.85 ? 3 : 0),
         stream,
-        tokenInject: Math.random() > 0.45 ? this.getRandomToken() : null,
-        tokenY: Math.floor(Math.random() * length),
-        headGlow: Math.random() > 0.3
+        tokenInject: Math.random() > 0.4 ? this.getRandomToken() : null,
+        tokenY: Math.floor(Math.random() * Math.max(1, length - 4)),
+        headGlow: Math.random() > 0.25
       });
     }
   }
@@ -392,11 +392,20 @@ export class MatrixEngine {
       const col = this.columns[i];
       col.y += col.speed * 60 * dt;
 
-      // Wrap back to top once entire stream has exited screen
-      if (col.y - col.length * 20 > h) {
-        col.y = -col.length * 20 - Math.random() * 70;
-        col.speed = 1.3 + Math.random() * 2.3;
-        col.tokenInject = Math.random() > 0.45 ? this.getRandomToken() : null;
+      // Wrap back to top immediately once the stream tail leaves the bottom of screen
+      if (col.y > h) {
+        col.length = Math.floor(18 + Math.random() * 26);
+        while (col.stream.length < col.length) {
+          col.stream.push({
+            glyph: this.getRandomGlyph(),
+            mutateTimer: Math.floor(Math.random() * 20)
+          });
+        }
+        col.y = -col.length * 20 - (Math.random() * 50);
+        col.speed = 1.6 + Math.random() * 2.8;
+        col.tokenInject = Math.random() > 0.4 ? this.getRandomToken() : null;
+        col.tokenY = Math.floor(Math.random() * Math.max(1, col.length - 4));
+        col.headGlow = Math.random() > 0.25;
       }
 
       ctx.font = `${col.fontSize}px 'Geist Mono', 'Noto Serif TC', monospace`;

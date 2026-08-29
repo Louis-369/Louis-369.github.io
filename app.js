@@ -5,10 +5,10 @@
  * initializes magnetic cursor, and triggers s0 reveal rhythm.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260826_22';
-import { Choreographer } from './choreographer.js?v=20260826_22';
-import { WebGLFluidWaterAnimation } from './globe.js?v=20260826_22';
-import { MatrixEngine } from './matrix.js?v=20260826_22';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260829_01';
+import { Choreographer } from './choreographer.js?v=20260829_01';
+import { WebGLFluidWaterAnimation } from './globe.js?v=20260829_01';
+import { MatrixEngine } from './matrix.js?v=20260829_01';
 
 class Application {
   constructor() {
