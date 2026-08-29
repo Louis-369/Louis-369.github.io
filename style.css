@@ -853,13 +853,13 @@ body.is-loading {
   position: absolute;
   top: 0;
   right: 0;
-  width: 58vw;
+  width: 68vw;
   height: 100%;
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 10%, black 25%, black 100%);
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 10%, black 25%, black 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 12%, black 100%);
 }
 
 .capability-bg-video {
