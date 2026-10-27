@@ -484,6 +484,7 @@ export class WebGLFluidWaterAnimation {
         }
 
         // 6. NOIR MICRO BLACK HOLE ACCRETION DISK (3D Inclined along y = x diagonal / 45° angle)
+        // Self-Contained Dual Lensing: projects gravitational shadow & incandescent photon ring across any canvas
         if (uSinkForce > 0.01) {
           vec2 toCenter = (uv - uSinkCenter);
           toCenter.x *= aspectRatio;
@@ -497,52 +498,63 @@ export class WebGLFluidWaterAnimation {
           );
           
           float r = length(tiltedP);
+          float rPhys = length(toCenter); // Uncompressed radial distance for ambient gravitational shadow
           
-          // Scaled to a refined compact size: Disk outer radius ~ 0.048
-          float diskOuter = 0.048 * clamp(uSinkForce * 1.3, 0.0, 1.0);
-          float diskInner = diskOuter * 0.22; // Event horizon radius
+          // Scaled to prominent compact size: Disk outer radius ~ 0.056
+          float diskOuter = 0.056 * clamp(uSinkForce * 1.35, 0.0, 1.0);
+          float diskInner = diskOuter * 0.20; // Event horizon radius
           
+          // A. Gravitational Ambient Darkening (Creates local deep dark stage on light paper)
+          float gravShadowRadius = diskOuter * 2.1;
+          if (rPhys < gravShadowRadius) {
+            float shadowNorm = 1.0 - smoothstep(diskInner * 0.8, gravShadowRadius, rPhys);
+            float shadowStrength = shadowNorm * clamp(uSinkForce * 1.4, 0.0, 0.94);
+            vec3 voidShadowCol = vec3(0.04, 0.04, 0.05); // Deep cosmological dark void
+            inkCol = mix(inkCol, voidShadowCol, shadowStrength);
+            alpha = max(alpha, shadowStrength);
+          }
+
           if (r < diskOuter) {
             float normR = clamp((r - diskInner) / (diskOuter - diskInner), 0.0, 1.0);
             float angle = atan(tiltedP.y, tiltedP.x);
             
             // Accretion disk orbital velocity & rotation
-            float rotSpeed = 3.5 / (pow(r * 40.0, 1.2) + 0.8);
-            float rotAngle = angle - uTime * rotSpeed * 2.8;
-            vec2 diskCoord = vec2(r * 28.0, rotAngle * 2.5);
+            float rotSpeed = 3.8 / (pow(r * 40.0, 1.2) + 0.8);
+            float rotAngle = angle - uTime * rotSpeed * 3.2;
+            vec2 diskCoord = vec2(r * 32.0, rotAngle * 2.8);
             
-            float fbmPattern = fbm(diskCoord, uTime * 0.45);
+            float fbmPattern = fbm(diskCoord, uTime * 0.55);
             
-            // Spiral vortex arm
-            float spiral = sin(rotAngle * 2.0 + r * 140.0 - uTime * 5.0);
-            float arm = smoothstep(-0.3, 0.7, spiral) * 0.4;
-            float totalPattern = fbmPattern * 0.7 + arm;
+            // Spiral vortex arms
+            float spiral = sin(rotAngle * 2.0 + r * 150.0 - uTime * 6.0);
+            float arm = smoothstep(-0.25, 0.75, spiral) * 0.45;
+            float totalPattern = fbmPattern * 0.75 + arm;
 
-            // Radiant White Photon Disk during suction
+            // Radiant White Photon Disk
             vec3 colorHot = vec3(1.0, 1.0, 1.0);
-            vec3 colorMid = vec3(0.85, 0.86, 0.90);
-            vec3 colorDeep = vec3(0.15, 0.15, 0.18);
+            vec3 colorMid = vec3(0.85, 0.88, 0.94);
+            vec3 colorDeep = vec3(0.08, 0.08, 0.10);
 
-            vec3 diskColor = mix(colorHot, colorMid, smoothstep(0.0, 0.45, normR));
-            diskColor = mix(diskColor, colorDeep, smoothstep(0.45, 1.0, normR));
-            diskColor *= (totalPattern + 0.5) * 1.6;
+            vec3 diskColor = mix(colorHot, colorMid, smoothstep(0.0, 0.42, normR));
+            diskColor = mix(diskColor, colorDeep, smoothstep(0.42, 1.0, normR));
+            diskColor *= (totalPattern + 0.45) * 1.7;
 
-            // Brilliant White Photon Ring Lensing Ring
-            float photonRing = exp(-pow((normR - 0.08) * 16.0, 2.0)) * 2.2;
+            // Brilliant Superheated White Photon Ring (Sharp lensing ring at inner edge)
+            float photonRing = exp(-pow((normR - 0.075) * 18.0, 2.0)) * 2.8;
             diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
 
             // Disk alpha mask
-            float diskAlpha = smoothstep(0.0, 0.06, normR) * (1.0 - smoothstep(0.82, 1.0, normR));
-            diskAlpha *= clamp(uSinkForce * 1.5, 0.0, 1.0);
+            float diskAlpha = smoothstep(0.0, 0.04, normR) * (1.0 - smoothstep(0.82, 1.0, normR));
+            diskAlpha *= clamp(uSinkForce * 1.6, 0.0, 1.0);
 
             // Composite Accretion Disk onto Canvas
             inkCol = mix(inkCol, diskColor, diskAlpha);
             alpha = max(alpha, diskAlpha);
 
-            // Event Horizon: Solid Black Core (becomes deep black dot upon collapse)
+            // Event Horizon: Absolute Pitch Black Core
             if (r < diskInner) {
               float innerMask = 1.0 - smoothstep(diskInner * 0.85, diskInner, r);
-              inkCol = mix(inkCol, vec3(0.06, 0.06, 0.07), innerMask * clamp(uSinkForce * 2.0, 0.0, 1.0));
+              inkCol = mix(inkCol, vec3(0.015, 0.015, 0.018), innerMask * clamp(uSinkForce * 2.2, 0.0, 1.0));
               alpha = max(alpha, innerMask);
             }
           }

@@ -268,8 +268,7 @@ body.is-loading {
    - Layer 1: .hero-paper-bg      (z-index: 1)  - Base Warm Paper
    - Layer 2: .hero-fluid-canvas  (z-index: 2)  - Physical WebGL Fluid
    - Layer 3: .hero-content-wrap  (z-index: 5)  - Louis. Title & Dot Vortex
-   - Layer 4: .craft-pen-wrap     (z-index: 10) - Calligraphy Pen Above
-   - Layer 5: .site-nav           (z-index: 50) - Header Navigation
+   - Layer 4: .site-nav           (z-index: 50) - Header Navigation
    ========================================================================== */
 .hero-section {
   position: relative;
@@ -302,41 +301,6 @@ body.is-loading {
   height: 100%;
   pointer-events: none;
   z-index: 2;
-}
-
-/* Minimalist Bauhaus Metal Dip Pen (工藝金屬沾水筆) */
-.craft-pen-wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 110px;
-  height: 240px;
-  margin-top: -240px; /* Pivots exactly from the nib tip */
-  margin-left: -55px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-origin: 50% 100%; /* Pivot from tip */
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-.craft-pen-shadow {
-  position: absolute;
-  width: 44px;
-  height: 12px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0) 72%);
-  bottom: -4px;
-  left: calc(50% - 22px); /* Centered right underneath the nib tip */
-  border-radius: 50%;
-  filter: blur(4px);
-  pointer-events: none;
-}
-
-.craft-pen-svg {
-  width: 100%;
-  height: 100%;
 }
 
 .hero-content-wrap {
@@ -396,7 +360,7 @@ body.is-loading {
 /*
  * Self-Drawn Period Dot (CSS Circle)
  * DOM rect center === visual ink dot center, zero baseline offset.
- * Scalable Black Hole Singularity during suction.
+ * Interactive Black Hole: click to trigger relativistic accretion disk & photon ring!
  */
 .hero-title-dot {
   display: inline-block;
@@ -411,6 +375,12 @@ body.is-loading {
   transform-origin: 50% 50%;
   opacity: 1;
   z-index: 7;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-title-dot:hover {
+  transform: scale(1.35);
 }
 
 /*

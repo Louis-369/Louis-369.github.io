@@ -4,10 +4,10 @@
  * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20260829_15';
-import { Choreographer } from './choreographer.js?v=20260829_15';
-import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20260829_15';
-import { MatrixEngine } from './matrix.js?v=20260829_15';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_04';
+import { Choreographer } from './choreographer.js?v=20261027_04';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_04';
+import { MatrixEngine } from './matrix.js?v=20261027_04';
 
 class Application {
   constructor() {
@@ -207,6 +207,17 @@ class Application {
           this.choreographer.lenis.scrollTo(0, { duration: 1.4 });
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    // 1.1 Period Dot Interactive Black Hole Accretion Disk trigger on click
+    const heroDot = document.getElementById('hero-title-dot');
+    if (heroDot) {
+      heroDot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (this.choreographer && typeof this.choreographer.triggerBlackHoleBurst === 'function') {
+          this.choreographer.triggerBlackHoleBurst(this.waterAnimator);
         }
       });
     }

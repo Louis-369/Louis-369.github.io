@@ -51,7 +51,10 @@ export class Choreographer {
   }
 
   /**
-   * Plays the calligraphy brush descent and Suminagashi vortex suction opening sequence.
+   * Fast, clean editorial opening reveal.
+   * Directly stages the hero typography and UI chrome with a gentle, premium fade.
+   * The interactive Black Hole Accretion Disk is attached to clicking the period dot!
+   * 
    * @param {Object|null} waterAnimator - WebGLFluidWaterAnimation instance.
    */
   playOpeningReveal(waterAnimator = null) {
@@ -70,29 +73,12 @@ export class Choreographer {
     }
 
     // Initial state: hide hero typography and UI chrome
-    gsap.set('.hero-title-line', { opacity: 0, scale: 0.98 });
-    gsap.set(['.site-nav', '.hero-dictionary-entry', '.hero-scroll-indicator'], { y: 25, opacity: 0 });
-    
-    gsap.set('.craft-pen-wrap', {
-      y: -window.innerHeight * 0.55,
-      x: 0,
-      rotation: 0,
-      scale: 1.05,
-      opacity: 0
-    });
-    gsap.set('.craft-pen-shadow', {
-      scale: 0.1,
-      opacity: 0,
-      y: 40
-    });
+    gsap.set('.hero-title-line', { opacity: 0, y: 16 });
+    gsap.set(['.site-nav', '.hero-dictionary-entry', '.hero-scroll-indicator'], { y: 20, opacity: 0 });
+    gsap.set('#water-fluid-canvas', { opacity: 1 }); // Canvas stays active for interactive clicks
 
     const revealTl = gsap.timeline({
       onComplete: () => {
-        if (waterAnimator) waterAnimator.destroy();
-        const canvas = document.getElementById('water-fluid-canvas');
-        if (canvas) canvas.style.display = 'none';
-        const pen = document.getElementById('craft-pen-wrap');
-        if (pen) pen.remove();
         gsap.set(['.hero-title-line', '.hero-dictionary-entry', '.site-nav', '.hero-scroll-indicator'], { opacity: 1, y: 0 });
         this.initLenis();
         this.initScrollAnimations();
@@ -100,158 +86,96 @@ export class Choreographer {
       }
     });
 
-    // Optical alignment: measure exact vertical center of hero title
-    const titleEl = document.getElementById('hero-title-line');
-    let penLandingY = 0;
-    if (titleEl) {
-      const tRect = titleEl.getBoundingClientRect();
-      penLandingY = (tRect.top + tRect.height * 0.46) - (window.innerHeight * 0.5);
-    }
-
-    // Phase 1: Brush vertical descent
-    revealTl.to('.craft-pen-wrap', {
-      y: penLandingY,
-      opacity: 1,
-      duration: 1.3,
-      ease: 'power3.out'
-    });
-
-    revealTl.to('.craft-pen-shadow', {
-      scale: 1.0,
-      opacity: 0.9,
-      duration: 1.3,
-      ease: 'power3.out'
-    }, '<');
-
-    // Phase 2: Brush tip contact and multi-wave ink release
-    revealTl.to('.craft-pen-wrap', {
-      y: penLandingY + 12,
-      scaleY: 0.93,
-      duration: 0.35,
-      ease: 'power2.in',
-      onComplete: () => {
-        if (waterAnimator && typeof waterAnimator.spawnDrop === 'function') {
-          if (typeof waterAnimator.initTextTexture === 'function') {
-            waterAnimator.initTextTexture();
-          }
-          waterAnimator.spawnDrop(0.5, 0.5, waterAnimator.INKS[0], 1.35);
-          
-          setTimeout(() => {
-            if (waterAnimator) waterAnimator.spawnDrop(0.504, 0.497, waterAnimator.INKS[1], 1.15);
-          }, 140);
-
-          setTimeout(() => {
-            if (waterAnimator) waterAnimator.spawnDrop(0.496, 0.503, waterAnimator.INKS[2] || waterAnimator.INKS[0], 1.15);
-          }, 280);
-
-          setTimeout(() => {
-            if (waterAnimator) waterAnimator.spawnDrop(0.50, 0.50, waterAnimator.INKS[1], 0.90);
-          }, 400);
-        }
-      }
-    });
-
-    // Phase 3: Brush fade-out
-    revealTl.to('.craft-pen-wrap', {
-      opacity: 0,
-      y: penLandingY - 14,
-      duration: 0.58,
-      ease: 'power2.out'
-    }, '+=0.05');
-
-    revealTl.to('.craft-pen-shadow', {
-      opacity: 0,
-      scale: 0.1,
-      duration: 0.50,
-      ease: 'power2.out'
-    }, '<');
-
-    if (waterAnimator) {
-      waterAnimator.textOpacity = 0.0;
-      revealTl.to(waterAnimator, {
-        textOpacity: 1.0,
-        duration: 1.3,
-        ease: 'power2.out'
-      }, '-=0.3');
-    }
-
-    /**
-     * Calculates UV coordinates of the title period dot relative to the WebGL canvas.
-     * @returns {{x: number, y: number}}
-     */
-    function getDotUV() {
-      const canvas = document.getElementById('water-fluid-canvas');
-      const dotEl = document.getElementById('hero-title-dot');
-      if (!canvas || !dotEl) return { x: 0.5, y: 0.5 };
-
-      const c = canvas.getBoundingClientRect();
-      const r = dotEl.getBoundingClientRect();
-      const cx = r.left + r.width * 0.5;
-      const cy = r.top + r.height * 0.5;
-
-      return {
-        x: (cx - c.left) / c.width,
-        y: 1.0 - (cy - c.top) / c.height
-      };
-    }
-
-    // Phase 4: Vortex sink suction into the period dot
-    revealTl.to('#hero-title-dot', {
-      scale: 1.40,
-      duration: 0.85,
-      ease: 'power2.out'
-    }, '+=1.15');
-
-    const suctionObj = { power: 0, wash: 0 };
-    revealTl.to(suctionObj, {
-      power: 1,
-      wash: 1,
-      duration: 2.0,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        if (waterAnimator && typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
-          const uv = getDotUV();
-          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, suctionObj.power * 6.0);
-          waterAnimator.washProgress = Math.pow(suctionObj.wash, 1.35);
-        }
-      }
-    }, '<');
-
-    // Phase 5: Dot accretion disk collapses and DOM title takes over
-    revealTl.to('#hero-title-dot', {
-      scale: 1.0,
-      duration: 0.65,
-      ease: 'back.out(1.4)'
-    }, '-=0.4');
-
+    // 1. Louis. Title line fades up smoothly
     revealTl.to('.hero-title-line', {
       opacity: 1,
-      scale: 1.0,
-      duration: 0.8,
-      ease: 'power2.out'
-    }, '<');
+      y: 0,
+      duration: 0.9,
+      ease: 'power3.out'
+    }, '+=0.1');
 
-    revealTl.to('#water-fluid-canvas', {
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power2.inOut'
-    }, '-=0.5');
-
-    // Phase 6: Supporting hero elements & navigation cascade in
+    // 2. Navigation bar cascades in
     revealTl.to('.site-nav', {
       y: 0,
       opacity: 1,
-      duration: 1.0,
+      duration: 0.8,
       ease: 'power3.out'
-    }, '-=0.6');
+    }, '-=0.5');
 
+    // 3. Dictionary entry and bottom scroll prompt reveal
     revealTl.to(['.hero-dictionary-entry', '.hero-scroll-indicator'], {
       y: 0,
       opacity: 1,
-      stagger: 0.12,
-      duration: 1.0,
+      stagger: 0.1,
+      duration: 0.8,
       ease: 'power3.out'
-    }, '-=0.8');
+    }, '-=0.6');
+  }
+
+  /**
+   * Triggers the authentic 3D Relativistic Accretion Disk & Photon Ring Black Hole burst
+   * centered right on the period dot when clicked!
+   * 
+   * @param {Object} waterAnimator - WebGLFluidWaterAnimation instance.
+   */
+  triggerBlackHoleBurst(waterAnimator) {
+    const gsap = window.gsap;
+    if (!gsap || !waterAnimator) return;
+
+    const canvas = document.getElementById('water-fluid-canvas');
+    const dotEl = document.getElementById('hero-title-dot');
+    if (!canvas || !dotEl) return;
+
+    const c = canvas.getBoundingClientRect();
+    const r = dotEl.getBoundingClientRect();
+    const cx = r.left + r.width * 0.5;
+    const cy = r.top + r.height * 0.5;
+
+    const uv = {
+      x: (cx - c.left) / c.width,
+      y: 1.0 - (cy - c.top) / c.height
+    };
+
+    // Kill any existing burst tween to prevent conflicts
+    gsap.killTweensOf(dotEl);
+
+    const burstObj = { power: 0 };
+    const burstTl = gsap.timeline();
+
+    // Dot expands as black hole singularity event horizon
+    burstTl.to(dotEl, {
+      scale: 2.3,
+      duration: 0.45,
+      ease: 'power2.out'
+    });
+
+    // WebGL Accretion Disk & Photon Ring surges at the dot's exact UV coordinates
+    burstTl.to(burstObj, {
+      power: 1.0,
+      duration: 1.45,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        if (typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
+          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, burstObj.power * 6.0);
+        }
+      }
+    }, '<');
+
+    // Gravitational suction pulls back and collapses into the dot
+    burstTl.to(burstObj, {
+      power: 0,
+      duration: 0.65,
+      ease: 'power3.in',
+      onUpdate: () => {
+        waterAnimator.sinkForce = burstObj.power;
+      }
+    });
+
+    burstTl.to(dotEl, {
+      scale: 1.0,
+      duration: 0.55,
+      ease: 'back.out(2.2)'
+    }, '-=0.45');
   }
 
   /**
