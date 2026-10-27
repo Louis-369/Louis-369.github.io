@@ -306,10 +306,20 @@ export class BlackHoleDot {
     }
 
     gsap.killTweensOf(this);
+    if (this.dotCore) gsap.killTweensOf(this.dotCore);
     if (this.gravTextEl) gsap.killTweensOf(this.gravTextEl);
     if (this.gravSubEl) gsap.killTweensOf(this.gravSubEl);
 
     const tl = gsap.timeline();
+
+    // 點觸發後立即隱藏實體圓點，讓 3D WebGL 著色器接管視覺
+    if (this.dotCore) {
+      tl.to(this.dotCore, {
+        opacity: 0,
+        duration: 0.12,
+        ease: 'power2.out'
+      }, 0);
+    }
 
     // Phase 1: 45° Accretion Disk + Keplerian Fluid + Photon Ring burst out of the '.'
     tl.to(this, {
@@ -362,6 +372,15 @@ export class BlackHoleDot {
         duration: 0.75,
         ease: 'back.out(1.8)'
       }, 1.65);
+    }
+
+    // 黑洞動畫坍縮結束（2.05s）後 0.1 秒（2.15s），實體圓點重新顯現
+    if (this.dotCore) {
+      tl.to(this.dotCore, {
+        opacity: 1,
+        duration: 0.2,
+        ease: 'power2.out'
+      }, 2.15);
     }
   }
 
