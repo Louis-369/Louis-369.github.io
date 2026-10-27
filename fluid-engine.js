@@ -500,12 +500,12 @@ export class WebGLFluidWaterAnimation {
           float r = length(tiltedP);
           float rPhys = length(toCenter); // Uncompressed radial distance for ambient gravitational shadow
           
-          // Scaled to prominent compact size: Disk outer radius ~ 0.056
-          float diskOuter = 0.056 * clamp(uSinkForce * 1.35, 0.0, 1.0);
-          float diskInner = diskOuter * 0.20; // Event horizon radius
+          // Scaled to match the full extent of the gravitational shadow: Disk outer radius ~ 0.118 (expanded ~2.1x)
+          float diskOuter = 0.118 * clamp(uSinkForce * 1.35, 0.0, 1.0);
+          float diskInner = diskOuter * 0.18; // Event horizon radius
           
           // A. Gravitational Ambient Darkening (Creates local deep dark stage on light paper)
-          float gravShadowRadius = diskOuter * 2.1;
+          float gravShadowRadius = diskOuter * 1.05; // Matched with accretion disk size
           if (rPhys < gravShadowRadius) {
             float shadowNorm = 1.0 - smoothstep(diskInner * 0.8, gravShadowRadius, rPhys);
             float shadowStrength = shadowNorm * clamp(uSinkForce * 1.4, 0.0, 0.94);
@@ -519,14 +519,14 @@ export class WebGLFluidWaterAnimation {
             float angle = atan(tiltedP.y, tiltedP.x);
             
             // Accretion disk orbital velocity & rotation
-            float rotSpeed = 3.8 / (pow(r * 40.0, 1.2) + 0.8);
+            float rotSpeed = 3.8 / (pow(r * 22.0, 1.2) + 0.8);
             float rotAngle = angle - uTime * rotSpeed * 3.2;
-            vec2 diskCoord = vec2(r * 32.0, rotAngle * 2.8);
+            vec2 diskCoord = vec2(r * 18.0, rotAngle * 2.8);
             
             float fbmPattern = fbm(diskCoord, uTime * 0.55);
             
             // Spiral vortex arms
-            float spiral = sin(rotAngle * 2.0 + r * 150.0 - uTime * 6.0);
+            float spiral = sin(rotAngle * 2.0 + r * 85.0 - uTime * 6.0);
             float arm = smoothstep(-0.25, 0.75, spiral) * 0.45;
             float totalPattern = fbmPattern * 0.75 + arm;
 
@@ -539,12 +539,12 @@ export class WebGLFluidWaterAnimation {
             diskColor = mix(diskColor, colorDeep, smoothstep(0.42, 1.0, normR));
             diskColor *= (totalPattern + 0.45) * 1.7;
 
-            // Brilliant Superheated White Photon Ring (Sharp lensing ring at inner edge)
-            float photonRing = exp(-pow((normR - 0.075) * 18.0, 2.0)) * 2.8;
-            diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
+            // [暫時隱藏] 白熱光子環透鏡強化 (Brilliant Superheated White Photon Ring)
+            // float photonRing = exp(-pow((normR - 0.075) * 18.0, 2.0)) * 2.8;
+            // diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
 
             // Disk alpha mask
-            float diskAlpha = smoothstep(0.0, 0.04, normR) * (1.0 - smoothstep(0.82, 1.0, normR));
+            float diskAlpha = smoothstep(0.0, 0.04, normR) * (1.0 - smoothstep(0.85, 1.0, normR));
             diskAlpha *= clamp(uSinkForce * 1.6, 0.0, 1.0);
 
             // Composite Accretion Disk onto Canvas
