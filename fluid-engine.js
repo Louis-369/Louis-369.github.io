@@ -525,10 +525,10 @@ export class WebGLFluidWaterAnimation {
             
             float fbmPattern = fbm(diskCoord, uTime * 0.55);
             
-            // Spiral vortex arms
-            float spiral = sin(rotAngle * 2.0 + r * 150.0 - uTime * 6.0);
-            float arm = smoothstep(-0.25, 0.75, spiral) * 0.45;
-            float totalPattern = fbmPattern * 0.75 + arm;
+            // Spiral vortex arms (temporarily bypassed / disabled as requested)
+            // float spiral = sin(rotAngle * 2.0 + r * 150.0 - uTime * 6.0);
+            // float arm = smoothstep(-0.25, 0.75, spiral) * 0.45;
+            float totalPattern = fbmPattern * 0.85;
 
             // Radiant White Photon Disk
             vec3 colorHot = vec3(1.0, 1.0, 1.0);
