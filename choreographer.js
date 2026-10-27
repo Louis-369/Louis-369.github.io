@@ -142,14 +142,10 @@ export class Choreographer {
     const burstObj = { power: 0 };
     const burstTl = gsap.timeline();
 
-    // Dot expands as black hole singularity event horizon
-    burstTl.to(dotEl, {
-      scale: 2.3,
-      duration: 0.45,
-      ease: 'power2.out'
-    });
+    // Dot remains perfectly stable at 1.0 (no scaling up), serving as the solid event horizon core
+    burstTl.set(dotEl, { scale: 1.0 });
 
-    // WebGL Accretion Disk & Photon Ring surges at the dot's exact UV coordinates
+    // WebGL Accretion Disk & Photon Ring surges outward from the dot's exact UV coordinates
     burstTl.to(burstObj, {
       power: 1.0,
       duration: 1.45,
@@ -159,7 +155,7 @@ export class Choreographer {
           waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, burstObj.power * 6.0);
         }
       }
-    }, '<');
+    });
 
     // Gravitational suction pulls back and collapses into the dot
     burstTl.to(burstObj, {
@@ -170,12 +166,6 @@ export class Choreographer {
         waterAnimator.sinkForce = burstObj.power;
       }
     });
-
-    burstTl.to(dotEl, {
-      scale: 1.0,
-      duration: 0.55,
-      ease: 'back.out(2.2)'
-    }, '-=0.45');
   }
 
   /**
