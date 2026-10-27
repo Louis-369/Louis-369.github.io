@@ -321,66 +321,66 @@ export class BlackHoleDot {
       }, 0);
     }
 
-    // Phase 1: 45° Accretion Disk + Keplerian Fluid + Photon Ring burst out of the '.'
+    // Phase 1: 45° Accretion Disk + Keplerian Fluid + Photon Ring burst out of the '.' (俐落爆發)
     tl.to(this, {
       burstProgress: 1.0,
-      duration: 0.48,
+      duration: 0.36,
       ease: 'power3.out'
     }, 0);
 
     // Pull surrounding 'Louis' text & subtitle toward the black hole dot
     if (this.gravTextEl) {
       tl.to(this.gravTextEl, {
-        x: 9,
-        skewX: -3.5,
-        scale: 0.975,
-        duration: 0.55,
+        x: 8,
+        skewX: -3.0,
+        scale: 0.98,
+        duration: 0.40,
         ease: 'power2.out'
       }, 0);
     }
 
     if (this.gravSubEl) {
       tl.to(this.gravSubEl, {
-        y: -4,
-        scale: 0.985,
-        duration: 0.55,
+        y: -3,
+        scale: 0.988,
+        duration: 0.40,
         ease: 'power2.out'
       }, 0);
     }
 
-    // Phase 2: Spin at relativistic speed for 1.5s, then suck everything back into the '.'
+    // Phase 2: 大幅縮短等待滯留時間 — 旋轉 0.70s 後立即高速坍縮吸回 (從原本 1.55s 縮減為 0.70s)
     tl.to(this, {
       burstProgress: 0.0,
-      duration: 0.5,
+      duration: 0.36,
       ease: 'power3.in'
-    }, 1.55);
+    }, 0.70);
 
     if (this.gravTextEl) {
       tl.to(this.gravTextEl, {
         x: 0,
         skewX: 0,
         scale: 1,
-        duration: 0.85,
-        ease: 'elastic.out(1.2, 0.4)'
-      }, 1.65);
+        duration: 0.65,
+        ease: 'elastic.out(1.2, 0.45)'
+      }, 0.78);
     }
 
     if (this.gravSubEl) {
       tl.to(this.gravSubEl, {
         y: 0,
         scale: 1,
-        duration: 0.75,
+        duration: 0.55,
         ease: 'back.out(1.8)'
-      }, 1.65);
+      }, 0.78);
     }
 
-    // 黑洞動畫坍縮結束（2.05s）後 0.1 秒（2.15s），實體圓點重新顯現
+    // 黑洞坍縮結束（0.70s + 0.36s = 1.06s）後，極短等待 0.05 秒（1.11s），實體圓點俐落重現
     if (this.dotCore) {
       tl.to(this.dotCore, {
         opacity: 1,
-        duration: 0.2,
+        duration: 0.16,
         ease: 'power2.out'
-      }, 2.15);
+      }, 1.11);
     }
   }
 
