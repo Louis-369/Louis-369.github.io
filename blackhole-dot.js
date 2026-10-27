@@ -363,6 +363,7 @@ export class BlackHoleDot {
     if (this.particles && this.particles.length) {
       const dotRect = this.dotCore ? this.dotCore.getBoundingClientRect() : null;
 
+      // 慢速長時長吸入：起步柔緩加速（power2.in），逐字漫漫飄向黑洞，完整呈現天體吸積的引力過程
       tl.to(this.particles, {
         x: (i, el) => {
           if (!dotRect) return 20;
@@ -375,14 +376,14 @@ export class BlackHoleDot {
           return (dotRect.top + dotRect.height * 0.5) - (rect.top + rect.height * 0.5);
         },
         scale: 0,
-        rotation: () => (Math.random() - 0.5) * 55,
+        rotation: () => (Math.random() - 0.5) * 65,
         skewX: () => (Math.random() - 0.5) * 35,
         opacity: 0,
-        filter: 'blur(3px)',
-        duration: 0.45,
-        ease: 'power3.in',
+        filter: 'blur(2.5px)',
+        duration: 0.75, // 單字吸入飛行時間由 0.45s 延長至 0.75s（吸得更慢更細膩）
+        ease: 'power2.in',
         stagger: {
-          amount: 0.35,
+          amount: 0.70, // 單字抽離的時間跨度由 0.35s 擴大至 0.70s（拉長第一階段整體過程）
           from: 'random' // 偽隨機亂序被吸入
         }
       }, 0);
