@@ -10,6 +10,9 @@ export class BlackHoleDot {
    * @param {HTMLElement} wrapEl - The .magnetic-wrap element
    * @param {Object} options
    * @param {'A'|'B'|'C'} [options.variant='A'] - Color & optical variant (A: Noir Eclipse, B: Sumi Ink Vortex, C: Gargantua Amber)
+   * @param {boolean} [options.cycle=false] - When true, sequentially cycles through variants on each click
+   * @param {string[]} [options.variants=['A','B','C']] - Variant sequence when cycling
+   * @param {function|null} [options.onVariantChange=null] - Callback triggered when variant changes
    * @param {number} [options.movement=0.55] - Magnetic attraction strength
    * @param {HTMLElement|null} [options.gravTextEl=null] - Text element to pull during black hole burst
    * @param {HTMLElement|null} [options.gravSubEl=null] - Subtitle element to pull during black hole burst
@@ -19,6 +22,13 @@ export class BlackHoleDot {
     if (!this.wrapEl) return;
 
     this.variant = options.variant || 'A';
+    this.cycle = options.cycle !== undefined ? options.cycle : false;
+    this.variants = options.variants || ['A', 'B', 'C'];
+    this.variantIndex = options.initialIndex !== undefined 
+      ? options.initialIndex 
+      : Math.max(0, this.variants.indexOf(this.variant));
+    this.onVariantChange = options.onVariantChange || null;
+
     this.movement = options.movement !== undefined ? options.movement : 0.55;
     this.gravTextEl = options.gravTextEl || null;
     this.gravSubEl = options.gravSubEl || null;
@@ -286,6 +296,14 @@ export class BlackHoleDot {
   triggerBurst() {
     const gsap = window.gsap;
     if (!gsap) return;
+
+    if (this.cycle) {
+      this.variant = this.variants[this.variantIndex];
+      this.variantIndex = (this.variantIndex + 1) % this.variants.length;
+      if (typeof this.onVariantChange === 'function') {
+        this.onVariantChange(this.variant);
+      }
+    }
 
     gsap.killTweensOf(this);
     if (this.gravTextEl) gsap.killTweensOf(this.gravTextEl);

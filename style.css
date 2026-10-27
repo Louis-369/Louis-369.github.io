@@ -366,6 +366,8 @@ body.is-loading {
   display: inline-block;
   transform-origin: right baseline;
   will-change: transform;
+  position: relative;
+  z-index: 5;
 }
 
 /* Exact square wrapper matching the period dot so magnetic center is 100% symmetric */
@@ -389,7 +391,7 @@ body.is-loading {
   width: 5.5rem;
   height: 5.5rem;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 20;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -403,6 +405,7 @@ body.is-loading {
   justify-content: center;
   will-change: transform;
   pointer-events: none;
+  z-index: 1;
 }
 
 /* The Core Period Dot (Always the exact same '.' from start to finish) */
@@ -414,7 +417,7 @@ body.is-loading {
   border-radius: 50%;
   background: currentColor;
   position: relative;
-  z-index: 5;
+  z-index: 6;
 }
 
 /* Local WebGL Shader Canvas centered directly on the period dot */
@@ -426,7 +429,7 @@ body.is-loading {
   height: 2.2em;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  z-index: 6;
+  z-index: 1;
 }
 
 /*

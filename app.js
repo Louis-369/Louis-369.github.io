@@ -4,11 +4,11 @@
  * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_2031';
-import { Choreographer } from './choreographer.js?v=20261027_2031';
-import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_2031';
-import { MatrixEngine } from './matrix.js?v=20261027_2031';
-import { BlackHoleDot } from './blackhole-dot.js?v=20261027_2031';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_2038';
+import { Choreographer } from './choreographer.js?v=20261027_2038';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_2038';
+import { MatrixEngine } from './matrix.js?v=20261027_2038';
+import { BlackHoleDot } from './blackhole-dot.js?v=20261027_2038';
 
 class Application {
   constructor() {
@@ -212,11 +212,12 @@ class Application {
       });
     }
 
-    // 1.1 Magnetic Cursor Pull & Authentic WebGL Black Hole on Period Dot
+    // 1.1 Magnetic Cursor Pull & Authentic WebGL Black Hole on Period Dot (Cycling A -> B -> C)
     const heroWrap = document.getElementById('hero-magnetic-wrap');
     if (heroWrap) {
       this.heroBlackHole = new BlackHoleDot(heroWrap, {
-        variant: 'A',
+        cycle: true,
+        variants: ['A', 'B', 'C'],
         movement: 0.55,
         gravTextEl: document.querySelector('.hero-title-line .js-grav-text'),
         gravSubEl: document.querySelector('.hero-dictionary-entry')
