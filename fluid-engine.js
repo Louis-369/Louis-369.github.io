@@ -395,7 +395,6 @@ export class WebGLFluidWaterAnimation {
       uniform vec2 uSinkCenter;
       uniform float uSinkForce;
       uniform float uTextOpacity;
-      uniform float uDotRadius;
 
       float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}
       
@@ -501,14 +500,9 @@ export class WebGLFluidWaterAnimation {
           float r = length(tiltedP);
           float rPhys = length(toCenter); // Uncompressed radial distance for ambient gravitational shadow
           
-          // Ensure the semi-minor axis (短軸) of the event horizon matches the original text period dot diameter
-          // Since minor axis is foreshortened by 2.2x in tiltedP space, r is 2.2 * physical distance along minor axis.
-          // Therefore, setting diskInner in tilted space to 2.2 * dotRadius guarantees the minor axis physical radius = dotRadius!
-          float minInner = max(uDotRadius * 2.2, 0.012);
-          
-          // Scaled to match the full extent of the gravitational shadow: Disk outer radius ~ 0.125
-          float diskOuter = max(0.125 * clamp(uSinkForce * 1.35, 0.0, 1.0), minInner * 2.2);
-          float diskInner = max(diskOuter * 0.22, minInner); // Event horizon radius: minor axis >= text period dot!
+          // Scaled to match the full extent of the gravitational shadow: Disk outer radius ~ 0.118 (expanded ~2.1x)
+          float diskOuter = 0.118 * clamp(uSinkForce * 1.35, 0.0, 1.0);
+          float diskInner = diskOuter * 0.18; // Event horizon radius
           
           // A. Gravitational Ambient Darkening (Creates local deep dark stage on light paper)
           float gravShadowRadius = diskOuter * 1.05; // Matched with accretion disk size
@@ -536,18 +530,16 @@ export class WebGLFluidWaterAnimation {
             float arm = smoothstep(-0.25, 0.75, spiral) * 0.45;
             float totalPattern = fbmPattern * 0.75 + arm;
 
-            // Radiant White Photon Disk
-            vec3 colorHot = vec3(1.0, 1.0, 1.0);
-            vec3 colorMid = vec3(0.85, 0.88, 0.94);
-            vec3 colorDeep = vec3(0.08, 0.08, 0.10);
+            // Deep Monochrome Gas Cloud (Soft Charcoal, Slate, Graphite Tone - No Harsh White Core)
+            vec3 colorInnerGas = vec3(0.55, 0.58, 0.65);
+            vec3 colorMidGas = vec3(0.25, 0.26, 0.30);
+            vec3 colorDeepGas = vec3(0.04, 0.04, 0.05);
 
-            vec3 diskColor = mix(colorHot, colorMid, smoothstep(0.0, 0.42, normR));
-            diskColor = mix(diskColor, colorDeep, smoothstep(0.42, 1.0, normR));
-            diskColor *= (totalPattern + 0.45) * 1.7;
+            vec3 diskColor = mix(colorInnerGas, colorMidGas, smoothstep(0.0, 0.42, normR));
+            diskColor = mix(diskColor, colorDeepGas, smoothstep(0.42, 1.0, normR));
+            diskColor *= (totalPattern + 0.40) * 1.35;
 
-            // [暫時隱藏] 白熱光子環透鏡強化 (Brilliant Superheated White Photon Ring)
-            // float photonRing = exp(-pow((normR - 0.075) * 18.0, 2.0)) * 2.8;
-            // diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
+            // [徹底移除] 白熱光子環透鏡強化 (Zero white photon ring / lens glare)
 
             // Disk alpha mask
             float diskAlpha = smoothstep(0.0, 0.04, normR) * (1.0 - smoothstep(0.85, 1.0, normR));
@@ -1018,7 +1010,6 @@ export class WebGLFluidWaterAnimation {
     gl.uniform2f(this.progDisplay.uniforms.uSinkCenter, this.sinkCenter ? this.sinkCenter.x : 0.5, this.sinkCenter ? this.sinkCenter.y : 0.5);
     gl.uniform1f(this.progDisplay.uniforms.uSinkForce, this.sinkForce || 0);
     gl.uniform1f(this.progDisplay.uniforms.uTextOpacity, this.textOpacity !== undefined ? this.textOpacity : 0.0);
-    gl.uniform1f(this.progDisplay.uniforms.uDotRadius, this.dotRadius || 0.012);
     this.blit(null);
   }
 
