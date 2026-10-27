@@ -395,6 +395,7 @@ export class WebGLFluidWaterAnimation {
       uniform vec2 uSinkCenter;
       uniform float uSinkForce;
       uniform float uTextOpacity;
+      uniform float uDotRadius;
 
       float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}
       
@@ -500,9 +501,14 @@ export class WebGLFluidWaterAnimation {
           float r = length(tiltedP);
           float rPhys = length(toCenter); // Uncompressed radial distance for ambient gravitational shadow
           
-          // Scaled to match the full extent of the gravitational shadow: Disk outer radius ~ 0.118 (expanded ~2.1x)
-          float diskOuter = 0.118 * clamp(uSinkForce * 1.35, 0.0, 1.0);
-          float diskInner = diskOuter * 0.18; // Event horizon radius
+          // Ensure the semi-minor axis (短軸) of the event horizon matches the original text period dot diameter
+          // Since minor axis is foreshortened by 2.2x in tiltedP space, r is 2.2 * physical distance along minor axis.
+          // Therefore, setting diskInner in tilted space to 2.2 * dotRadius guarantees the minor axis physical radius = dotRadius!
+          float minInner = max(uDotRadius * 2.2, 0.012);
+          
+          // Scaled to match the full extent of the gravitational shadow: Disk outer radius ~ 0.125
+          float diskOuter = max(0.125 * clamp(uSinkForce * 1.35, 0.0, 1.0), minInner * 2.2);
+          float diskInner = max(diskOuter * 0.22, minInner); // Event horizon radius: minor axis >= text period dot!
           
           // A. Gravitational Ambient Darkening (Creates local deep dark stage on light paper)
           float gravShadowRadius = diskOuter * 1.05; // Matched with accretion disk size
@@ -1012,6 +1018,7 @@ export class WebGLFluidWaterAnimation {
     gl.uniform2f(this.progDisplay.uniforms.uSinkCenter, this.sinkCenter ? this.sinkCenter.x : 0.5, this.sinkCenter ? this.sinkCenter.y : 0.5);
     gl.uniform1f(this.progDisplay.uniforms.uSinkForce, this.sinkForce || 0);
     gl.uniform1f(this.progDisplay.uniforms.uTextOpacity, this.textOpacity !== undefined ? this.textOpacity : 0.0);
+    gl.uniform1f(this.progDisplay.uniforms.uDotRadius, this.dotRadius || 0.012);
     this.blit(null);
   }
 

@@ -136,6 +136,13 @@ export class Choreographer {
       y: 1.0 - (cy - c.top) / c.height
     };
 
+    // Calculate actual typographic dot radius in normalized canvas UV space
+    // So Shader knows the exact physical diameter of the text period dot
+    const dotPhysicalRadius = (r.width * 0.5) / c.height;
+    if (waterAnimator) {
+      waterAnimator.dotRadius = dotPhysicalRadius;
+    }
+
     // Kill any existing burst tween to prevent conflicts
     gsap.killTweensOf(dotEl);
 
