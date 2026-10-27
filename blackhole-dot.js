@@ -321,66 +321,66 @@ export class BlackHoleDot {
       }, 0);
     }
 
-    // Phase 1: 45° Accretion Disk + Keplerian Fluid + Photon Ring burst out of the '.' (俐落爆發)
+    // Phase 1: 45° Accretion Disk + Keplerian Fluid + Photon Ring burst out of the '.'
     tl.to(this, {
       burstProgress: 1.0,
-      duration: 0.36,
+      duration: 0.48,
       ease: 'power3.out'
     }, 0);
 
     // Pull surrounding 'Louis' text & subtitle toward the black hole dot
     if (this.gravTextEl) {
       tl.to(this.gravTextEl, {
-        x: 8,
-        skewX: -3.0,
-        scale: 0.98,
-        duration: 0.40,
+        x: 9,
+        skewX: -3.5,
+        scale: 0.975,
+        duration: 0.55,
         ease: 'power2.out'
       }, 0);
     }
 
     if (this.gravSubEl) {
       tl.to(this.gravSubEl, {
-        y: -3,
-        scale: 0.988,
-        duration: 0.40,
+        y: -4,
+        scale: 0.985,
+        duration: 0.55,
         ease: 'power2.out'
       }, 0);
     }
 
-    // Phase 2: 大幅縮短等待滯留時間 — 旋轉 0.70s 後立即高速坍縮吸回 (從原本 1.55s 縮減為 0.70s)
+    // Phase 2: 天體級相對論高速旋轉，於 1.65s 開始向核心強烈坍縮，總耗時精準回歸 2.15s
     tl.to(this, {
       burstProgress: 0.0,
-      duration: 0.36,
+      duration: 0.50,
       ease: 'power3.in'
-    }, 0.70);
+    }, 1.65);
 
     if (this.gravTextEl) {
       tl.to(this.gravTextEl, {
         x: 0,
         skewX: 0,
         scale: 1,
-        duration: 0.65,
-        ease: 'elastic.out(1.2, 0.45)'
-      }, 0.78);
+        duration: 0.85,
+        ease: 'elastic.out(1.2, 0.4)'
+      }, 1.70);
     }
 
     if (this.gravSubEl) {
       tl.to(this.gravSubEl, {
         y: 0,
         scale: 1,
-        duration: 0.55,
+        duration: 0.75,
         ease: 'back.out(1.8)'
-      }, 0.78);
+      }, 1.70);
     }
 
-    // 坍縮結束瞬間（1.04s ~ 1.06s）零延遲無縫凝結重現
+    // 坍縮結束瞬間（2.13s ~ 2.15s）零延遲無縫凝結重現
     if (this.dotCore) {
       tl.to(this.dotCore, {
         opacity: 1,
-        duration: 0.14,
+        duration: 0.16,
         ease: 'power2.out'
-      }, 1.04);
+      }, 2.13);
     }
   }
 
