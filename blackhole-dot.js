@@ -42,10 +42,29 @@ export class BlackHoleDot {
     this.isAnimating = false;
     this.startTime = performance.now();
 
+    this.initParticles();
     this.initWebGL();
     this.bindEvents();
     this.renderLoop = this.renderLoop.bind(this);
     requestAnimationFrame(this.renderLoop);
+  }
+
+  initParticles() {
+    if (!this.gravSubEl) {
+      this.particles = [];
+      return;
+    }
+    let particles = Array.from(this.gravSubEl.querySelectorAll('.bh-word-particle'));
+    if (!particles.length) {
+      // Auto-tokenize plain text nodes into .bh-word-particle if not already wrapped
+      const text = this.gravSubEl.textContent.trim();
+      if (text) {
+        const words = text.split(/(\s+)/);
+        this.gravSubEl.innerHTML = words.map(w => w.trim() ? `<span class="bh-word-particle">${w}</span>` : w).join('');
+        particles = Array.from(this.gravSubEl.querySelectorAll('.bh-word-particle'));
+      }
+    }
+    this.particles = particles;
   }
 
   initWebGL() {
@@ -309,6 +328,7 @@ export class BlackHoleDot {
     if (this.dotCore) gsap.killTweensOf(this.dotCore);
     if (this.gravTextEl) gsap.killTweensOf(this.gravTextEl);
     if (this.gravSubEl) gsap.killTweensOf(this.gravSubEl);
+    if (this.particles && this.particles.length) gsap.killTweensOf(this.particles);
 
     const tl = gsap.timeline();
 
@@ -328,7 +348,7 @@ export class BlackHoleDot {
       ease: 'power3.out'
     }, 0);
 
-    // Pull surrounding 'Louis' text & subtitle toward the black hole dot
+    // Pull surrounding 'Louis' text toward the black hole dot
     if (this.gravTextEl) {
       tl.to(this.gravTextEl, {
         x: 9,
@@ -339,13 +359,85 @@ export class BlackHoleDot {
       }, 0);
     }
 
-    if (this.gravSubEl) {
+    // 單字粒子亂序引力吸入（個別單字以向量差飛向黑洞奇異點）
+    if (this.particles && this.particles.length) {
+      const dotRect = this.dotCore ? this.dotCore.getBoundingClientRect() : null;
+
+      tl.to(this.particles, {
+        x: (i, el) => {
+          if (!dotRect) return 20;
+          const rect = el.getBoundingClientRect();
+          return (dotRect.left + dotRect.width * 0.5) - (rect.left + rect.width * 0.5);
+        },
+        y: (i, el) => {
+          if (!dotRect) return -40;
+          const rect = el.getBoundingClientRect();
+          return (dotRect.top + dotRect.height * 0.5) - (rect.top + rect.height * 0.5);
+        },
+        scale: 0,
+        rotation: () => (Math.random() - 0.5) * 55,
+        skewX: () => (Math.random() - 0.5) * 35,
+        opacity: 0,
+        filter: 'blur(3px)',
+        duration: 0.45,
+        ease: 'power3.in',
+        stagger: {
+          amount: 0.35,
+          from: 'random' // 偽隨機亂序被吸入
+        }
+      }, 0);
+
+      // Phase 3: 黑洞於 2.15s 坍縮完畢後，單字在原地破土萌生，並帶有左右搖曳波浪
+      tl.set(this.particles, {
+        x: 0,
+        y: 14,
+        scale: 0,
+        rotation: 0,
+        skewX: 0,
+        filter: 'blur(0px)',
+        opacity: 0
+      }, 2.15);
+
+      // 向上生長
+      tl.to(this.particles, {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        duration: 0.48,
+        ease: 'back.out(2.2)',
+        stagger: {
+          amount: 0.38,
+          from: 'start'
+        }
+      }, 2.15);
+
+      // 原地左右搖曳回正（像春風吹過草木）
+      tl.to(this.particles, {
+        keyframes: [
+          { rotation: (i) => (i % 2 === 0 ? 5.0 : -5.0), duration: 0.18, ease: 'sine.out' },
+          { rotation: (i) => (i % 2 === 0 ? -3.2 : 3.2), duration: 0.22, ease: 'sine.inOut' },
+          { rotation: (i) => (i % 2 === 0 ? 1.6 : -1.6), duration: 0.20, ease: 'sine.inOut' },
+          { rotation: 0, duration: 0.25, ease: 'sine.inOut' }
+        ],
+        stagger: {
+          amount: 0.38,
+          from: 'start'
+        }
+      }, 2.15);
+    } else if (this.gravSubEl) {
       tl.to(this.gravSubEl, {
         y: -4,
         scale: 0.985,
         duration: 0.55,
         ease: 'power2.out'
       }, 0);
+
+      tl.to(this.gravSubEl, {
+        y: 0,
+        scale: 1,
+        duration: 0.75,
+        ease: 'back.out(1.8)'
+      }, 1.70);
     }
 
     // Phase 2: 天體級相對論高速旋轉，於 1.65s 開始向核心強烈坍縮，總耗時精準回歸 2.15s
@@ -362,15 +454,6 @@ export class BlackHoleDot {
         scale: 1,
         duration: 0.85,
         ease: 'elastic.out(1.2, 0.4)'
-      }, 1.70);
-    }
-
-    if (this.gravSubEl) {
-      tl.to(this.gravSubEl, {
-        y: 0,
-        scale: 1,
-        duration: 0.75,
-        ease: 'back.out(1.8)'
       }, 1.70);
     }
 

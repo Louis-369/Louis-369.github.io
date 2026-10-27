@@ -441,6 +441,13 @@ body.is-loading {
   z-index: 1;
 }
 
+/* Individual Word Particle for Chaotic Black Hole Suction & Regrowth Swaying */
+.bh-word-particle {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  transform-origin: center bottom;
+}
+
 /*
  * Dictionary Entry Layout & Typography
  * Authentic Oxford / Editorial Dictionary Aesthetic
