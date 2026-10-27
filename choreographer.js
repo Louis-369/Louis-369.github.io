@@ -75,7 +75,6 @@ export class Choreographer {
     // Initial state: hide hero typography and UI chrome
     gsap.set('.hero-title-line', { opacity: 0, y: 16 });
     gsap.set(['.site-nav', '.hero-dictionary-entry', '.hero-scroll-indicator'], { y: 20, opacity: 0 });
-    gsap.set('#water-fluid-canvas', { opacity: 1 }); // Canvas stays active for interactive clicks
 
     const revealTl = gsap.timeline({
       onComplete: () => {
@@ -113,59 +112,93 @@ export class Choreographer {
   }
 
   /**
-   * Triggers the authentic 3D Relativistic Accretion Disk & Photon Ring Black Hole burst
-   * centered right on the period dot when clicked!
-   * 
-   * @param {Object} waterAnimator - WebGLFluidWaterAnimation instance.
+   * Triggers the 100% self-contained 3D Accretion Disk & Photon Ring Black Hole burst
+   * and 1.5s gravitational lensing pull on surrounding text!
    */
-  triggerBlackHoleBurst(waterAnimator) {
+  triggerBlackHoleBurst() {
     const gsap = window.gsap;
-    if (!gsap || !waterAnimator) return;
+    if (!gsap) return;
 
-    const canvas = document.getElementById('water-fluid-canvas');
-    const dotEl = document.getElementById('hero-title-dot');
-    if (!canvas || !dotEl) return;
+    const halo = document.getElementById('hero-void-halo');
+    const disk = document.getElementById('hero-disk-system');
+    const textEl = document.querySelector('.hero-title-line .js-grav-text');
+    const subEl = document.querySelector('.hero-dictionary-entry');
 
-    const c = canvas.getBoundingClientRect();
-    const r = dotEl.getBoundingClientRect();
-    const cx = r.left + r.width * 0.5;
-    const cy = r.top + r.height * 0.5;
+    if (!halo || !disk) return;
 
-    const uv = {
-      x: (cx - c.left) / c.width,
-      y: 1.0 - (cy - c.top) / c.height
-    };
+    gsap.killTweensOf([halo, disk, textEl, subEl]);
 
-    // Kill any existing burst tween to prevent conflicts
-    gsap.killTweensOf(dotEl);
+    const tl = gsap.timeline();
 
-    const burstObj = { power: 0 };
-    const burstTl = gsap.timeline();
+    // Phase 1: Accretion Disk & Photon Ring burst open from the '.' itself
+    tl.to(halo, {
+      scale: 1,
+      opacity: 1,
+      duration: 0.38,
+      ease: "power3.out"
+    }, 0);
 
-    // Dot remains perfectly stable at 1.0 (no scaling up), serving as the solid event horizon core
-    burstTl.set(dotEl, { scale: 1.0 });
+    tl.to(disk, {
+      scale: 1,
+      opacity: 1,
+      duration: 0.45,
+      ease: "back.out(1.6)"
+    }, 0);
 
-    // WebGL Accretion Disk & Photon Ring surges outward from the dot's exact UV coordinates
-    burstTl.to(burstObj, {
-      power: 1.0,
-      duration: 1.45,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        if (typeof waterAnimator.triggerCentripetalVortexSink === 'function') {
-          waterAnimator.triggerCentripetalVortexSink(uv.x, uv.y, burstObj.power * 6.0);
-        }
-      }
-    });
+    // Surrounding 'Louis' text & dictionary entry get pulled toward the black hole dot
+    if (textEl) {
+      tl.to(textEl, {
+        x: 9,
+        skewX: -3.5,
+        scale: 0.975,
+        duration: 0.55,
+        ease: "power2.out"
+      }, 0);
+    }
 
-    // Gravitational suction pulls back and collapses into the dot
-    burstTl.to(burstObj, {
-      power: 0,
-      duration: 0.65,
-      ease: 'power3.in',
-      onUpdate: () => {
-        waterAnimator.sinkForce = burstObj.power;
-      }
-    });
+    if (subEl) {
+      tl.to(subEl, {
+        y: -4,
+        scale: 0.985,
+        duration: 0.55,
+        ease: "power2.out"
+      }, 0);
+    }
+
+    // Phase 2: Hold singularity for ~1.1s while ring spins at high speed, then collapse back into '.'
+    tl.to(disk, {
+      scale: 0,
+      opacity: 0,
+      duration: 0.42,
+      ease: "power3.in"
+    }, 1.45);
+
+    tl.to(halo, {
+      scale: 0,
+      opacity: 0,
+      duration: 0.42,
+      ease: "power3.in"
+    }, 1.45);
+
+    // Text snaps back to equilibrium with crisp elasticity
+    if (textEl) {
+      tl.to(textEl, {
+        x: 0,
+        skewX: 0,
+        scale: 1,
+        duration: 0.85,
+        ease: "elastic.out(1.2, 0.4)"
+      }, 1.55);
+    }
+
+    if (subEl) {
+      tl.to(subEl, {
+        y: 0,
+        scale: 1,
+        duration: 0.75,
+        ease: "back.out(1.8)"
+      }, 1.55);
+    }
   }
 
   /**

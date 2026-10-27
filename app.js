@@ -4,10 +4,10 @@
  * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_06';
-import { Choreographer } from './choreographer.js?v=20261027_06';
-import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_06';
-import { MatrixEngine } from './matrix.js?v=20261027_06';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_07';
+import { Choreographer } from './choreographer.js?v=20261027_07';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_07';
+import { MatrixEngine } from './matrix.js?v=20261027_07';
 
 class Application {
   constructor() {
@@ -211,13 +211,44 @@ class Application {
       });
     }
 
-    // 1.1 Period Dot Interactive Black Hole Accretion Disk trigger on click
-    const heroDot = document.getElementById('hero-title-dot');
-    if (heroDot) {
-      heroDot.addEventListener('click', (e) => {
+    // 1.1 Magnetic Cursor Pull & Black Hole Singularity Trigger on Period Dot
+    const heroArea = document.getElementById('hero-magnetic-area');
+    const heroContent = document.getElementById('hero-magnetic-content');
+
+    if (heroArea && heroContent) {
+      heroArea.addEventListener('mousemove', (e) => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const boundingRect = heroArea.getBoundingClientRect();
+        const halfDiff = Math.abs(boundingRect.width - boundingRect.height) / 2;
+        const relX = e.pageX - boundingRect.left - halfDiff;
+        const relY = e.pageY - boundingRect.top;
+
+        if (window.gsap) {
+          window.gsap.to(heroContent, {
+            x: (relX - boundingRect.width / 2) * 0.65,
+            y: (relY - boundingRect.height / 2 - scrollTop) * 0.65,
+            ease: 'power1.out',
+            duration: 0.6
+          });
+        }
+      });
+
+      heroArea.addEventListener('mouseleave', () => {
+        if (window.gsap) {
+          window.gsap.to(heroContent, {
+            scale: 1,
+            x: 0,
+            y: 0,
+            ease: 'power3.out',
+            duration: 0.6
+          });
+        }
+      });
+
+      heroArea.addEventListener('click', (e) => {
         e.stopPropagation();
         if (this.choreographer && typeof this.choreographer.triggerBlackHoleBurst === 'function') {
-          this.choreographer.triggerBlackHoleBurst(this.waterAnimator);
+          this.choreographer.triggerBlackHoleBurst();
         }
       });
     }

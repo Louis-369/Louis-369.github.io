@@ -352,35 +352,138 @@ body.is-loading {
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: var(--ink-primary);
-  display: inline-block;
+  display: inline-flex;
+  align-items: baseline;
   position: relative;
   z-index: 6;
+  user-select: none;
 }
 
-/*
- * Self-Drawn Period Dot (CSS Circle)
- * DOM rect center === visual ink dot center, zero baseline offset.
- * Interactive Black Hole: click to trigger relativistic accretion disk & photon ring!
- */
+/* ==========================================================================
+   Magnetic Wrap & Self-Contained Black Hole Dot Architecture
+   ========================================================================== */
+.js-grav-text {
+  display: inline-block;
+  transform-origin: right baseline;
+  will-change: transform;
+}
+
+.magnetic-wrap {
+  display: inline-block;
+  position: relative;
+  margin-left: 0.08em;
+  vertical-align: baseline;
+}
+
+.js-magnetic-area.magnetic-size {
+  position: absolute;
+  top: -2.6rem;
+  bottom: -2.6rem;
+  left: -2.6rem;
+  right: -2.6rem;
+  z-index: 10;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.js-magnetic-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* The Core Period Dot (Always the exact same '.' from start to finish) */
+.bh-dot-core,
 .hero-title-dot {
   display: inline-block;
   width: 0.16em;
   height: 0.16em;
-  margin-left: 0.10em; /* Natural typographic breathing gap from 's' */
-  margin-bottom: 0.08em;
   border-radius: 50%;
   background: currentColor;
-  vertical-align: baseline;
   position: relative;
+  z-index: 5;
   transform-origin: 50% 50%;
-  opacity: 1;
-  z-index: 7;
-  cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
-.hero-title-dot:hover {
-  opacity: 0.75; /* Subtle elegance: opacity shift instead of scaling */
+/* 3D 45-deg Tilted Accretion Disk Container (Lives inside the dot!) */
+.bh-disk-system {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.55em;
+  height: 1.55em;
+  margin-top: -0.775em;
+  margin-left: -0.775em;
+  pointer-events: none;
+  z-index: 4;
+  transform: rotate(-38deg) scaleY(0.44) scale(0);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Ambient Spherical Void Halo (un-foreshortened dark contrast aura) */
+.bh-void-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.95em;
+  height: 0.95em;
+  margin-top: -0.475em;
+  margin-left: -0.475em;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  transform: scale(0);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Rotating Plasma Ring inside Tilted System */
+.bh-accretion-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: bhSpin 1.8s linear infinite;
+}
+
+/* Sharp Inner Lensing Photon Ring */
+.bh-photon-ring {
+  position: absolute;
+  inset: 28%;
+  border-radius: 50%;
+}
+
+@keyframes bhSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Option A: Solar Eclipse & Noir Lensing (Default on homepage) */
+.hero-title-line .bh-void-halo {
+  background: radial-gradient(circle, rgba(18, 19, 22, 0.88) 0%, rgba(18, 19, 22, 0.45) 45%, rgba(18, 19, 22, 0) 75%);
+}
+
+.hero-title-line .bh-accretion-ring {
+  background: conic-gradient(
+    from 0deg,
+    rgba(18, 19, 22, 0.95),
+    rgba(212, 195, 163, 0.85),
+    rgba(18, 19, 22, 0.98),
+    rgba(255, 255, 255, 0.92),
+    rgba(18, 19, 22, 0.95)
+  );
+  -webkit-mask-image: radial-gradient(circle, transparent 24%, black 32%, black 52%, transparent 72%);
+  mask-image: radial-gradient(circle, transparent 24%, black 32%, black 52%, transparent 72%);
+  filter: blur(1.5px);
+}
+
+.hero-title-line .bh-photon-ring {
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 12px 2px rgba(255, 250, 235, 0.95), inset 0 0 8px rgba(212, 175, 55, 0.7);
 }
 
 /*

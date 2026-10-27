@@ -68,15 +68,15 @@ export const featuredProjects = [
     title: "Next Innovation Matrix",
     category: "AI Tools / In Development",
     year: "2026",
-    summary: "次世代智慧工作流矩陣 (Coming Soon)",
-    desc: "結合本地端輕量化模型推理與智慧自動化工作流的全新工具矩陣，正在嚴密構建中。",
+    summary: "次世代智慧工作流矩陣 · 黑洞視覺實驗室 (WIP Lab)",
+    desc: "結合本地端輕量化模型推理與互動物理實驗室，點擊進入預覽三種『磁力黑洞句點』光學色調方案。",
     metrics: [
       { label: "Status", value: "WIP / 施工中" },
-      { label: "Stage", value: "Incubating" }
+      { label: "Stage", value: "Interactive Lab" }
     ],
-    tags: ["AI Agent", "Workflow", "WIP"],
+    tags: ["AI Agent", "Black Hole Lab", "WIP"],
     image: null,
-    url: "#",
+    url: "wip.html",
     isExternal: false
   }
 ];

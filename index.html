@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20261027_05">
+  <link rel="stylesheet" href="style.css?v=20261027_07">
 
   <!-- External Libraries (Lenis, GSAP, Three.js) -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -73,14 +73,23 @@
       <!-- Layer 1: Warm Paper Canvas Base Background -->
       <div class="hero-paper-bg"></div>
 
-      <!-- Layer 2: WebGL Navier-Stokes Physical Fluid Canvas (Middle Layer) -->
-      <canvas id="water-fluid-canvas" class="hero-fluid-canvas"></canvas>
-
-      <!-- Layer 3: Hero Content (Louis. Title & Dot Vortex on Top of Fluid) -->
+      <!-- Layer 2: Hero Content (Louis. Title with Self-Contained Magnetic Black Hole Dot) -->
       <div class="hero-content-wrap">
         <div class="hero-title-container">
           <h1 class="hero-title-line" id="hero-title-line">
-            Louis<span class="hero-title-dot" id="hero-title-dot" aria-hidden="true"></span>
+            <span class="js-grav-text">Louis</span>
+            <div class="magnetic-wrap" id="hero-magnetic-wrap">
+              <div class="js-magnetic-area magnetic-size" id="hero-magnetic-area" title="Click to trigger Black Hole"></div>
+              <div class="js-magnetic-content" id="hero-magnetic-content">
+                <span class="bh-dot-core" id="hero-title-dot">
+                  <span class="bh-void-halo" id="hero-void-halo"></span>
+                  <span class="bh-disk-system" id="hero-disk-system">
+                    <span class="bh-accretion-ring"></span>
+                    <span class="bh-photon-ring"></span>
+                  </span>
+                </span>
+              </div>
+            </div>
           </h1>
         </div>
 
@@ -263,6 +272,6 @@
   </div>
 
   <!-- Application ESM Entrypoint -->
-  <script type="module" src="app.js?v=20261027_06"></script>
+  <script type="module" src="app.js?v=20261027_07"></script>
 </body>
 </html>
