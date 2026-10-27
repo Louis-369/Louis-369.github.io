@@ -260,5 +260,64 @@ export class Choreographer {
         );
       }
     });
+
+    // 4. Works & About 區塊過渡節奏（慢快慢 S-Curve 視差）
+    // Works 進入：柔緩抬升淡入
+    gsap.fromTo('.works-section',
+      { opacity: 0.75, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        ease: 'power3.inOut',
+        scrollTrigger: {
+          trigger: '.works-section',
+          start: 'top 90%',
+          end: 'top 50%',
+          scrub: 1.0
+        }
+      }
+    );
+
+    // About 進入：深色紙質矩陣以 S 型曲線浮現
+    gsap.fromTo('.about-container',
+      { opacity: 0.35, y: 60 },
+      {
+        opacity: 1,
+        y: 0,
+        ease: 'power4.inOut',
+        scrollTrigger: {
+          trigger: '.about-section',
+          start: 'top 85%',
+          end: 'top 35%',
+          scrub: 1.2
+        }
+      }
+    );
+
+    // 5. 導航列高亮同步（ScrollTrigger 實時標記當前區塊）
+    const navWorks = document.getElementById('nav-link-works');
+    const navAbout = document.getElementById('nav-link-about');
+
+    if (navWorks) {
+      ScrollTrigger.create({
+        trigger: '#works',
+        start: 'top center',
+        end: 'bottom center',
+        onToggle: (self) => {
+          navWorks.classList.toggle('is-current', self.isActive);
+        }
+      });
+    }
+
+    if (navAbout) {
+      ScrollTrigger.create({
+        trigger: '#about',
+        start: 'top center',
+        end: 'bottom center',
+        onToggle: (self) => {
+          navAbout.classList.toggle('is-current', self.isActive);
+        }
+      });
+    }
   }
 }

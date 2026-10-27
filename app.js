@@ -4,11 +4,11 @@
  * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_2049';
-import { Choreographer } from './choreographer.js?v=20261027_2049';
-import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_2049';
-import { MatrixEngine } from './matrix.js?v=20261027_2049';
-import { BlackHoleDot } from './blackhole-dot.js?v=20261027_2049';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_2053';
+import { Choreographer } from './choreographer.js?v=20261027_2053';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_2053';
+import { MatrixEngine } from './matrix.js?v=20261027_2053';
+import { BlackHoleDot } from './blackhole-dot.js?v=20261027_2053';
 
 class Application {
   constructor() {
@@ -199,13 +199,16 @@ class Application {
    * Binds global navigation and interactive handlers.
    */
   bindInteractions() {
-    // 1. Logo brand smooth scroll to top
+    // 1. Logo brand smooth scroll to top (慢快慢 S-Curve)
     const logoBrand = document.getElementById('nav-brand-logo');
     if (logoBrand) {
       logoBrand.addEventListener('click', (e) => {
         e.preventDefault();
         if (this.choreographer && this.choreographer.lenis) {
-          this.choreographer.lenis.scrollTo(0, { duration: 1.4 });
+          this.choreographer.lenis.scrollTo(0, {
+            duration: 1.65,
+            easing: (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
+          });
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -224,7 +227,10 @@ class Application {
       });
     }
 
-    // 2. Smooth internal anchor navigation
+    // 2. Smooth internal anchor navigation between Works & About (頂級慢快慢 easeInOutQuart 節奏)
+    // 參數標準：起步柔緩加速（慢）-> 中段高速巡航平滑過渡（快）-> 抵達時絲滑緩剎著陸（慢）
+    const easeInOutQuart = (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
       link.addEventListener('click', (e) => {
         const targetId = link.getAttribute('href');
@@ -232,7 +238,11 @@ class Application {
           const targetEl = document.querySelector(targetId);
           if (targetEl && this.choreographer && this.choreographer.lenis) {
             e.preventDefault();
-            this.choreographer.lenis.scrollTo(targetEl, { offset: 0, duration: 1.4 });
+            this.choreographer.lenis.scrollTo(targetEl, {
+              offset: 0,
+              duration: 1.65,
+              easing: easeInOutQuart
+            });
           }
         }
       });

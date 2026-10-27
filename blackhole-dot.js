@@ -374,13 +374,13 @@ export class BlackHoleDot {
       }, 0.78);
     }
 
-    // 黑洞坍縮結束（0.70s + 0.36s = 1.06s）後，極短等待 0.05 秒（1.11s），實體圓點俐落重現
+    // 坍縮結束瞬間（1.04s ~ 1.06s）零延遲無縫凝結重現
     if (this.dotCore) {
       tl.to(this.dotCore, {
         opacity: 1,
-        duration: 0.16,
+        duration: 0.14,
         ease: 'power2.out'
-      }, 1.11);
+      }, 1.04);
     }
   }
 

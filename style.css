@@ -223,6 +223,15 @@ body.is-loading {
   color: #000000;
 }
 
+.navbar-link.is-current::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+.navbar-link.is-current .navbar-link-text {
+  color: #000000;
+}
+
 /* GitHub 45° Vector Flying Arrow Inside Unified Bar */
 .navbar-arrow-box {
   position: relative;
