@@ -530,20 +530,22 @@ export class WebGLFluidWaterAnimation {
             float arm = smoothstep(-0.25, 0.75, spiral) * 0.45;
             float totalPattern = fbmPattern * 0.75 + arm;
 
-            // Deep Monochrome Gas Cloud (Soft Charcoal, Slate, Graphite Tone - No Harsh White Core)
-            vec3 colorInnerGas = vec3(0.55, 0.58, 0.65);
-            vec3 colorMidGas = vec3(0.25, 0.26, 0.30);
-            vec3 colorDeepGas = vec3(0.04, 0.04, 0.05);
+            // Accretion Disk Palette: Soft charcoal into deep space ink without harsh outer white glare
+            vec3 colorInner = vec3(0.55, 0.58, 0.65); // Muted titanium silver at inner stream
+            vec3 colorMid = vec3(0.20, 0.21, 0.24);   // Charcoal gray mid-tones
+            vec3 colorDeep = vec3(0.04, 0.04, 0.05);  // Deep void black feathering smoothly into paper
 
-            vec3 diskColor = mix(colorInnerGas, colorMidGas, smoothstep(0.0, 0.42, normR));
-            diskColor = mix(diskColor, colorDeepGas, smoothstep(0.42, 1.0, normR));
-            diskColor *= (totalPattern + 0.40) * 1.35;
+            vec3 diskColor = mix(colorInner, colorMid, smoothstep(0.0, 0.35, normR));
+            diskColor = mix(diskColor, colorDeep, smoothstep(0.35, 0.85, normR));
+            diskColor *= (totalPattern + 0.35) * 1.35;
 
-            // [徹底移除] 白熱光子環透鏡強化 (Zero white photon ring / lens glare)
+            // [暫時隱藏] 白熱光子環透鏡強化 (Brilliant Superheated White Photon Ring)
+            // float photonRing = exp(-pow((normR - 0.075) * 18.0, 2.0)) * 2.8;
+            // diskColor += vec3(1.0, 1.0, 1.0) * photonRing;
 
-            // Disk alpha mask
-            float diskAlpha = smoothstep(0.0, 0.04, normR) * (1.0 - smoothstep(0.85, 1.0, normR));
-            diskAlpha *= clamp(uSinkForce * 1.6, 0.0, 1.0);
+            // Disk alpha mask: Soft linear dissipation towards the outer rim (No hard white halo ring)
+            float diskAlpha = smoothstep(0.0, 0.05, normR) * (1.0 - smoothstep(0.70, 0.98, normR));
+            diskAlpha *= clamp(uSinkForce * 1.5, 0.0, 1.0);
 
             // Composite Accretion Disk onto Canvas
             inkCol = mix(inkCol, diskColor, diskAlpha);
