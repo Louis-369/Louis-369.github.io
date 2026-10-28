@@ -283,7 +283,9 @@ body.is-loading {
   position: relative;
   width: 100vw;
   height: 100vh;
-  min-height: 640px;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -511,7 +513,7 @@ body.is-loading {
  */
 .hero-scroll-indicator {
   position: absolute;
-  bottom: 2.8rem;
+  bottom: max(2.8rem, calc(env(safe-area-inset-bottom, 0px) + 2rem));
   left: 4vw;
   display: inline-block;
   text-decoration: none;
@@ -1483,6 +1485,22 @@ body.matrix-open {
    Responsive Adaptations (< 768px)
    ========================================================================== */
 @media (max-width: 768px) {
+  /* Mobile Viewport Units (svh/dvh) & Safe Area Adaptation */
+  .hero-section {
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    min-height: 0;
+    /* Center content within safe viewport while leaving breathing room above bottom address bar */
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 3.2rem);
+  }
+
+  /* Safe Area Clamping: Lift scroll indicator well clear of iOS Safari floating URL bar */
+  .hero-scroll-indicator {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 6.2rem);
+    left: 5.5vw;
+  }
+
   .site-nav {
     padding: 1.25rem 5vw;
   }

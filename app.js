@@ -4,11 +4,11 @@
  * Initializes editorial layout, dynamic cards, WebGL fluid engine, and interactive micro-interactions.
  */
 
-import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261027_2123';
-import { Choreographer } from './choreographer.js?v=20261027_2123';
-import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261027_2123';
-import { MatrixEngine } from './matrix.js?v=20261027_2123';
-import { BlackHoleDot } from './blackhole-dot.js?v=20261027_2123';
+import { siteConfig, featuredProjects, aboutStories, capabilities } from './data/projects.js?v=20261028_1149';
+import { Choreographer } from './choreographer.js?v=20261028_1149';
+import { WebGLFluidWaterAnimation } from './fluid-engine.js?v=20261028_1149';
+import { MatrixEngine } from './matrix.js?v=20261028_1149';
+import { BlackHoleDot } from './blackhole-dot.js?v=20261028_1149';
 
 class Application {
   constructor() {

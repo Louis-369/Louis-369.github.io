@@ -79,7 +79,7 @@ export class BlackHoleDot {
       depth: false,
       stencil: false,
       antialias: true,
-      premultipliedAlpha: false
+      premultipliedAlpha: true
     });
     if (!gl) return;
     this.gl = gl;
@@ -156,23 +156,23 @@ export class BlackHoleDot {
         vec3 finalCol = vec3(0.0);
         float finalAlpha = 0.0;
 
-        // 2. Ambient Gravitational Dark Void Stage (ensures high contrast on warm oatmeal paper)
-        float shadowRadius = 0.46 * uBurst;
-        if (rPhys < shadowRadius) {
-          float shadowMask = 1.0 - smoothstep(diskInner * 0.5, shadowRadius, rPhys);
-          shadowMask = pow(shadowMask, 1.5);
+        // 2. Ambient Gravitational Dark Void Stage (following 45° tilted geometry with soft falloff)
+        float shadowRadius = diskOuter * 1.06;
+        if (r < shadowRadius) {
+          float shadowMask = 1.0 - smoothstep(diskInner * 0.5, shadowRadius, r);
+          shadowMask = pow(shadowMask, 1.4);
           if (uVariant == 0) {
             // Variant A: Deep Noir Eclipse Void
             finalCol = vec3(0.05, 0.05, 0.06);
-            finalAlpha = shadowMask * 0.92 * uBurst;
+            finalAlpha = shadowMask * 0.88 * uBurst;
           } else if (uVariant == 1) {
             // Variant B: Subtle Sumi Ink Wash Halo
             finalCol = vec3(0.07, 0.07, 0.08);
-            finalAlpha = shadowMask * 0.45 * uBurst;
+            finalAlpha = shadowMask * 0.40 * uBurst;
           } else {
             // Variant C: Gargantua Obsidian Warm Void
             finalCol = vec3(0.06, 0.04, 0.03);
-            finalAlpha = shadowMask * 0.94 * uBurst;
+            finalAlpha = shadowMask * 0.90 * uBurst;
           }
         }
 
@@ -239,7 +239,8 @@ export class BlackHoleDot {
           }
         }
 
-        gl_FragColor = vec4(finalCol, finalAlpha);
+        // Premultiplied alpha output ensures flawless iOS Safari & Desktop WebGL compositing with zero white halos
+        gl_FragColor = vec4(finalCol * finalAlpha, finalAlpha);
       }
     `;
 
