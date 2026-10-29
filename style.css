@@ -78,7 +78,7 @@ html.lenis .lenis.lenis-stopped {
   pointer-events: none;
   z-index: 999;
   opacity: 0.062;
-  background-image: url("assets/noise.png?v=20260829_08");
+  background-image: url("/assets/noise.png?v=20260829_08");
   background-repeat: repeat;
   background-size: 128px 128px;
 }
@@ -497,6 +497,14 @@ body.is-loading {
   line-height: 1.55;
   font-weight: 400;
   letter-spacing: -0.01em;
+}
+
+.dict-def-en .bh-word-particle {
+  margin-right: 0.28em;
+}
+
+.dict-def-en .bh-word-particle:last-child {
+  margin-right: 0;
 }
 
 .dict-def-tw {

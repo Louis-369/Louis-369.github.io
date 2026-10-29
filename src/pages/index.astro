@@ -39,44 +39,40 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
             <span class="bh-word-particle dict-pos">n.</span>
           </div>
           <p class="dict-def-en">
-            <span class="bh-word-particle">A</span>
-            <span class="bh-word-particle">craftsperson</span>
-            <span class="bh-word-particle">who</span>
-            <span class="bh-word-particle">bridges</span>
-            <span class="bh-word-particle">rigorous</span>
-            <span class="bh-word-particle">engineering</span>
-            <span class="bh-word-particle">and</span>
-            <span class="bh-word-particle">editorial</span>
-            <span class="bh-word-particle">sensibility;</span>
-            <span class="bh-word-particle">building</span>
-            <span class="bh-word-particle">software</span>
-            <span class="bh-word-particle">with</span>
-            <span class="bh-word-particle">kinetic</span>
-            <span class="bh-word-particle">precision,</span>
-            <span class="bh-word-particle">tactile</span>
-            <span class="bh-word-particle">presence,</span>
-            <span class="bh-word-particle">and</span>
-            <span class="bh-word-particle">quiet</span>
-            <span class="bh-word-particle">authority.</span>
+            <span class="bh-word-particle">A</span>{' '}
+            <span class="bh-word-particle">craftsperson</span>{' '}
+            <span class="bh-word-particle">architecting</span>{' '}
+            <span class="bh-word-particle">digital</span>{' '}
+            <span class="bh-word-particle">systems</span>{' '}
+            <span class="bh-word-particle">with</span>{' '}
+            <span class="bh-word-particle">engineering</span>{' '}
+            <span class="bh-word-particle">rigor</span>{' '}
+            <span class="bh-word-particle">and</span>{' '}
+            <span class="bh-word-particle">editorial</span>{' '}
+            <span class="bh-word-particle">aesthetic.</span>
           </p>
-          <p class="dict-def-zh">
-            <span class="bh-word-particle">「一位在嚴謹工程與社論美感之間架設橋樑的創造者；打造兼具動能精準、實體手感與沉穩質感的數位體驗。」</span>
+          <p class="dict-def-tw">
+            <span class="bh-word-particle">以工程之嚴謹</span><span class="bh-word-particle">鑄造系統</span><span class="bh-word-particle">，</span><span class="bh-word-particle">以編排之美感</span><span class="bh-word-particle">傳遞溫度</span><span class="bh-word-particle">。</span>
           </p>
         </div>
       </div>
 
-      <!-- Scroll Indicator Block (Monolog 1:1 Architecture with svh safe-area mobile layout) -->
-      <div class="scroll-indicator-wrap" id="hero-scroll-indicator">
-        <div class="scroll-progress-line">
-          <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+      <!-- Horizontal Bottom-Left Editorial Scroll Indicator with Pure DOM Dual-Line Corner -->
+      <a href="#works" class="hero-scroll-indicator" id="hero-scroll-indicator" aria-label="Scroll Down to Works">
+        <div class="scroll-wrap-box">
+          <span class="scroll-text">SCROLL DOWN</span>
+          <!-- Pure DOM Dual-Bar Tracks (Pure GPU Compositor) -->
+          <div class="corner-bar-top-track">
+            <div class="corner-bar-top-fill"></div>
+          </div>
+          <div class="corner-bar-right-track">
+            <div class="corner-bar-right-fill"></div>
+          </div>
         </div>
-        <div class="scroll-indicator-text">
-          <span>SCROLL TO EXPLORE</span>
-        </div>
-      </div>
+      </a>
     </section>
 
-    <!-- Works Section (Dynamic Stacking Cards Container) -->
+    <!-- Selected Works / Stories Section (bymonolog Paper-Cut Stacking Cards) -->
     <section class="works-section" id="works">
       <header class="section-header-block">
         <div class="section-header-left">
@@ -89,7 +85,9 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
       </header>
 
       <!-- Dynamic Stacking Cards Container (Populated via app.js) -->
-      <div class="works-cards-wrap" id="works-cards-container"></div>
+      <div class="works-cards-wrap" id="works-cards-container">
+        <!-- Populated via app.js -->
+      </div>
     </section>
 
     <!-- NEW Section: Recent Writings (社論文章精選) -->
@@ -159,33 +157,60 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
       </div>
     </section>
 
-    <!-- About Section (Ethos Slider & Capabilities Spotlight) -->
-    <section class="about-section" id="about">
-      <header class="section-header-block">
-        <div class="section-header-left">
-          <div class="section-eyebrow">ETHOS & PERSPECTIVE</div>
-          <h2 class="section-title section-heading-split">Philosophy</h2>
-        </div>
-        <div class="section-index-stamp">
-          <span id="story-progress-indicator">01 / 04</span>
-        </div>
-      </header>
-
-      <!-- Timed Ethos Story Slider (Auto-Progressing Monolog Architecture) -->
-      <div class="about-story-slider" id="about-story-slider">
-        <!-- Persistent 6.0s Story Progress Bar Track -->
-        <div class="story-progress-track">
-          <div class="story-progress-fill" id="story-progress-fill"></div>
-        </div>
-
-        <!-- Dynamic Staggered Flip Quotes Container -->
-        <div class="about-quotes-stage" id="about-quotes-container"></div>
+    <!-- Philosophy & About Section (1:1 bymonolog.com Dark Tactile Matrix) -->
+    <section class="about-section is-dark-surface" id="about">
+      <!-- Full-Bleed Right Half Section Video Canvas (Spans full right half of the entire section) -->
+      <div class="about-section-video-canvas" id="capabilities-video-wrap" aria-hidden="true">
+        <!-- Populated via app.js with dynamic background video elements -->
       </div>
 
-      <!-- Capabilities Grid (Interactive Spotlight Video Hover) -->
-      <div class="capabilities-block">
-        <div class="capabilities-eyebrow">DISCIPLINES & CAPABILITIES</div>
-        <div class="capabilities-grid" id="capabilities-grid-container"></div>
+      <div class="about-container">
+        <!-- Left Column: 1:1 Monolog Story & Ethos Slider -->
+        <div class="about-left-col">
+          <div class="about-slider-controls">
+            <div class="about-slider-progress">
+              <div class="slider-progress-bar" id="ethos-progress-bar"></div>
+            </div>
+            <div class="about-slider-actions">
+              <div class="slider-arrows">
+                <button class="slider-arrow-btn" id="ethos-prev-btn" aria-label="Previous story">←</button>
+                <button class="slider-arrow-btn" id="ethos-next-btn" aria-label="Next story">→</button>
+              </div>
+              <span class="slider-counter" id="ethos-counter">01/03</span>
+            </div>
+          </div>
+
+          <div class="about-section-stamp">
+            <span class="about-stamp-tag">(PHILOSOPHY & ETHOS)</span>
+          </div>
+
+          <!-- Dynamic Stories Container (Populated via app.js) -->
+          <div class="about-stories-track" id="about-stories-track">
+            <!-- Populated via app.js from data/projects.js -->
+          </div>
+
+          <div class="about-author-card">
+            <div class="author-avatar-badge">
+              <span>L.</span>
+            </div>
+            <div class="author-meta-info">
+              <div class="author-name">Louis</div>
+              <div class="author-role">Creative Developer & Builder · Taipei</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Capabilities Stack -->
+        <div class="about-right-col">
+          <div class="about-capabilities-header">
+            <span class="capabilities-dot">●</span>
+            <span class="capabilities-title">What I can help with</span>
+          </div>
+
+          <ul class="capabilities-stack-list" id="about-capabilities-list">
+            <!-- Populated via app.js from data/projects.js -->
+          </ul>
+        </div>
       </div>
     </section>
   </main>

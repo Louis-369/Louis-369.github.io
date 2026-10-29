@@ -499,6 +499,14 @@ body.is-loading {
   letter-spacing: -0.01em;
 }
 
+.dict-def-en .bh-word-particle {
+  margin-right: 0.28em;
+}
+
+.dict-def-en .bh-word-particle:last-child {
+  margin-right: 0;
+}
+
 .dict-def-tw {
   font-family: 'Noto Serif TC', 'Songti TC', serif;
   font-size: clamp(0.95rem, 1.8vw, 1.12rem);
