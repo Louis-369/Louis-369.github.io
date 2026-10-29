@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 2);
+
+const allPhotos = await getCollection('photos', ({ data }) => !data.draft);
+const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 2);
+---
+
+<BaseLayout isHome={true} currentNav="works">
+  <main class="main-wrapper">
+    <!-- Hero Section (Unified Single-Container Architecture) -->
+    <section class="hero-section" id="hero">
+      <!-- Layer 1: Warm Paper Canvas Base Background -->
+      <div class="hero-paper-bg"></div>
+
+      <!-- Layer 2: Hero Content (Louis. Title with Self-Contained Magnetic Black Hole Dot) -->
+      <div class="hero-content-wrap">
+        <div class="hero-title-container">
+          <h1 class="hero-title-line" id="hero-title-line">
+            <span class="js-grav-text">Louis</span>
+            <div class="magnetic-wrap" id="hero-magnetic-wrap">
+              <div class="js-magnetic-area magnetic-size" id="hero-magnetic-area" title="Click to trigger Black Hole"></div>
+              <div class="js-magnetic-content" id="hero-magnetic-content">
+                <span class="bh-dot-core" id="hero-title-dot"></span>
+                <canvas class="bh-shader-canvas" id="hero-bh-canvas"></canvas>
+              </div>
+            </div>
+          </h1>
+        </div>
+
+        <!-- Dictionary Entry Layout (英文字典條目版型) -->
+        <div class="hero-dictionary-entry">
+          <div class="dict-phonetic-pill">
+            <span class="bh-word-particle dict-ipa">/ˈluː.ɪs/</span>
+            <span class="bh-word-particle dict-divider">·</span>
+            <span class="bh-word-particle dict-pos">n.</span>
+          </div>
+          <p class="dict-def-en">
+            <span class="bh-word-particle">A</span>
+            <span class="bh-word-particle">craftsperson</span>
+            <span class="bh-word-particle">who</span>
+            <span class="bh-word-particle">bridges</span>
+            <span class="bh-word-particle">rigorous</span>
+            <span class="bh-word-particle">engineering</span>
+            <span class="bh-word-particle">and</span>
+            <span class="bh-word-particle">editorial</span>
+            <span class="bh-word-particle">sensibility;</span>
+            <span class="bh-word-particle">building</span>
+            <span class="bh-word-particle">software</span>
+            <span class="bh-word-particle">with</span>
+            <span class="bh-word-particle">kinetic</span>
+            <span class="bh-word-particle">precision,</span>
+            <span class="bh-word-particle">tactile</span>
+            <span class="bh-word-particle">presence,</span>
+            <span class="bh-word-particle">and</span>
+            <span class="bh-word-particle">quiet</span>
+            <span class="bh-word-particle">authority.</span>
+          </p>
+          <p class="dict-def-zh">
+            <span class="bh-word-particle">「一位在嚴謹工程與社論美感之間架設橋樑的創造者；打造兼具動能精準、實體手感與沉穩質感的數位體驗。」</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator Block (Monolog 1:1 Architecture with svh safe-area mobile layout) -->
+      <div class="scroll-indicator-wrap" id="hero-scroll-indicator">
+        <div class="scroll-progress-line">
+          <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+        </div>
+        <div class="scroll-indicator-text">
+          <span>SCROLL TO EXPLORE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Works Section (Dynamic Stacking Cards Container) -->
+    <section class="works-section" id="works">
+      <header class="section-header-block">
+        <div class="section-header-left">
+          <div class="section-eyebrow">CASE STUDIES & ARTIFACTS</div>
+          <h2 class="section-title section-heading-split">Featured Works</h2>
+        </div>
+        <div class="section-index-stamp">
+          <span>01 — 04</span>
+        </div>
+      </header>
+
+      <!-- Dynamic Stacking Cards Container (Populated via app.js) -->
+      <div class="works-cards-wrap" id="works-cards-container"></div>
+    </section>
+
+    <!-- NEW Section: Recent Writings (社論文章精選) -->
+    <section class="works-section" id="writings" style="padding-top: 5rem;">
+      <header class="home-section-header">
+        <div class="section-header-left">
+          <div class="section-eyebrow">THOUGHTS & ESSAYS</div>
+          <h2 class="section-title">Recent Writings</h2>
+        </div>
+        <a href="/blog/" class="home-section-more-link">
+          <span>VIEW ALL ESSAYS</span>
+          <span>→</span>
+        </a>
+      </header>
+
+      <div class="blog-grid">
+        {latestPosts.map((post) => (
+          <a href={`/blog/${post.id}/`} class="blog-card">
+            {post.data.cover && (
+              <div class="blog-card-cover-wrap">
+                <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="blog-card-cover" loading="lazy" />
+              </div>
+            )}
+            <div class="blog-card-meta">
+              <span class="blog-card-cat-badge">{post.data.category}</span>
+              <span>·</span>
+              <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+            </div>
+            <h3 class="blog-card-title">{post.data.title}</h3>
+            <p class="blog-card-desc">{post.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- NEW Section: Recent Snaps (最新攝影切片) -->
+    <section class="works-section" id="snaps" style="padding-top: 5rem; padding-bottom: 5rem;">
+      <header class="home-section-header">
+        <div class="section-header-left">
+          <div class="section-eyebrow">VISUAL JOURNAL</div>
+          <h2 class="section-title">Recent Snaps</h2>
+        </div>
+        <a href="/photos/" class="home-section-more-link">
+          <span>VIEW ALL PHOTOS</span>
+          <span>→</span>
+        </a>
+      </header>
+
+      <div class="photos-feed" style="gap: 3.5rem;">
+        {latestPhotos.map(async (photo) => {
+          const { Content } = await render(photo);
+          return (
+            <article class="photo-item">
+              <div class="photo-frame-wrap">
+                <img src={photo.data.photo} alt={photo.data.title} class="photo-img" loading="lazy" />
+              </div>
+              <div class="photo-info-bar">
+                <span>{photo.data.location} · {photo.data.pubDate.toISOString().slice(0, 10)}</span>
+                {photo.data.meta && <span class="photo-meta-tag">{photo.data.meta}</span>}
+              </div>
+              <div class="photo-caption-body">
+                <Content />
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- About Section (Ethos Slider & Capabilities Spotlight) -->
+    <section class="about-section" id="about">
+      <header class="section-header-block">
+        <div class="section-header-left">
+          <div class="section-eyebrow">ETHOS & PERSPECTIVE</div>
+          <h2 class="section-title section-heading-split">Philosophy</h2>
+        </div>
+        <div class="section-index-stamp">
+          <span id="story-progress-indicator">01 / 04</span>
+        </div>
+      </header>
+
+      <!-- Timed Ethos Story Slider (Auto-Progressing Monolog Architecture) -->
+      <div class="about-story-slider" id="about-story-slider">
+        <!-- Persistent 6.0s Story Progress Bar Track -->
+        <div class="story-progress-track">
+          <div class="story-progress-fill" id="story-progress-fill"></div>
+        </div>
+
+        <!-- Dynamic Staggered Flip Quotes Container -->
+        <div class="about-quotes-stage" id="about-quotes-container"></div>
+      </div>
+
+      <!-- Capabilities Grid (Interactive Spotlight Video Hover) -->
+      <div class="capabilities-block">
+        <div class="capabilities-eyebrow">DISCIPLINES & CAPABILITIES</div>
+        <div class="capabilities-grid" id="capabilities-grid-container"></div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

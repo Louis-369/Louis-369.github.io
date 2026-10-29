@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+const allPhotos = await getCollection('photos', ({ data }) => !data.draft);
+const photos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout 
+  title="Photo Log — Visual Journal & Micro-Thoughts | Louis."
+  description="A quiet visual log capturing architectural geometry, twilight moods, and tactile urban moments."
+  currentNav="photos"
+>
+  <main class="subpage-container">
+    <header class="subpage-header">
+      <div class="subpage-eyebrow">VISUAL CHRONICLE</div>
+      <h1 class="subpage-title">Photo Log</h1>
+      <p class="subpage-subtitle">
+        生活切片、幾何結構與微光觀察。每張照片搭配一小段當下的思緒沉澱。
+      </p>
+    </header>
+
+    <div class="photos-feed">
+      {photos.map(async (item) => {
+        const { Content } = await render(item);
+        const isPortrait = item.data.aspectRatio === '3:4' || item.data.aspectRatio === '4:5' || item.data.aspectRatio === '9:16';
+        return (
+          <article class="photo-item">
+            <div class="photo-frame-wrap">
+              <img 
+                src={item.data.photo} 
+                alt={item.data.title} 
+                class:list={["photo-img", { "is-portrait": isPortrait }]}
+                loading="lazy" 
+              />
+            </div>
+            <div class="photo-info-bar">
+              <span>{item.data.location} · {item.data.pubDate.toISOString().slice(0, 10)}</span>
+              {item.data.meta && <span class="photo-meta-tag">{item.data.meta}</span>}
+            </div>
+            <div class="photo-caption-body">
+              <Content />
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </main>
+</BaseLayout>

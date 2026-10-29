@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout 
+  title={`${post.data.title} | Louis.`}
+  description={post.data.description}
+  ogImage={post.data.cover}
+  currentNav="blog"
+>
+  <main class="article-container">
+    <!-- Back to Blog Link -->
+    <a href="/blog/" class="article-back-link">
+      <span>←</span>
+      <span>BACK TO ALL ESSAYS</span>
+    </a>
+
+    <!-- Article Header -->
+    <header class="article-header">
+      <div class="article-meta-row">
+        <span>{post.data.category}</span>
+        <span>·</span>
+        <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+      </div>
+
+      <h1 class="article-h1">{post.data.title}</h1>
+      <p class="article-lead">{post.data.description}</p>
+    </header>
+
+    <!-- Optional Cover Banner -->
+    {post.data.cover && (
+      <div class="article-cover-wrap">
+        <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="article-cover-img" />
+      </div>
+    )}
+
+    <!-- Prose Content Body -->
+    <article class="article-prose">
+      <Content />
+    </article>
+  </main>
+</BaseLayout>

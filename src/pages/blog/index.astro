@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Collect unique categories
+const categories = Array.from(new Set(allPosts.map((post) => post.data.category)));
+---
+
+<BaseLayout title="Blog — Thoughts, Systems & Craft | Louis." description="Essays on AI workflows, autonomous systems, creative engineering, and digital craftsmanship." currentNav="blog">
+  <main class="subpage-container">
+    <header class="subpage-header">
+      <div class="subpage-eyebrow">EDITORIAL WRITINGS</div>
+      <h1 class="subpage-title">Thoughts & Essays</h1>
+      <p class="subpage-subtitle">
+        記錄關於 AI 工作流搭建、一人公司自主運作、創意工程與數位工藝的深度思考與實踐手冊。
+      </p>
+
+      <!-- Category Filter Pills -->
+      <div class="category-pills-bar">
+        <a href="/blog/" class="cat-pill is-active">All ({posts.length})</a>
+        {categories.map((cat) => (
+          <a href={`/blog/category/${cat}/`} class="cat-pill">{cat}</a>
+        ))}
+      </div>
+    </header>
+
+    <div class="blog-grid">
+      {posts.map((post) => (
+        <a href={`/blog/${post.id}/`} class="blog-card">
+          {post.data.cover && (
+            <div class="blog-card-cover-wrap">
+              <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="blog-card-cover" loading="lazy" />
+            </div>
+          )}
+          <div class="blog-card-meta">
+            <span class="blog-card-cat-badge">{post.data.category}</span>
+            <span>·</span>
+            <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+          </div>
+          <h2 class="blog-card-title">{post.data.title}</h2>
+          <p class="blog-card-desc">{post.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

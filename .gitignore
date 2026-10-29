@@ -1,1 +1,11 @@
+# Build outputs
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# OS and tools
+.DS_Store
+*.log
 dev-server.py

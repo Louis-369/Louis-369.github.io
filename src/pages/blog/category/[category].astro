@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+  const categories = Array.from(new Set(allPosts.map((post) => post.data.category)));
+
+  return categories.map((category) => {
+    const filteredPosts = allPosts
+      .filter((post) => post.data.category === category)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    return {
+      params: { category },
+      props: { category, posts: filteredPosts, allCategories: categories },
+    };
+  });
+}
+
+interface Props {
+  category: string;
+  posts: CollectionEntry<'blog'>[];
+  allCategories: string[];
+}
+
+const { category, posts, allCategories } = Astro.props;
+---
+
+<BaseLayout 
+  title={`${category} — Blog | Louis.`}
+  description={`Articles in category: ${category}`}
+  currentNav="blog"
+>
+  <main class="subpage-container">
+    <header class="subpage-header">
+      <div class="subpage-eyebrow">CATEGORY FILTER</div>
+      <h1 class="subpage-title" style="text-transform: capitalize;">{category}</h1>
+      <p class="subpage-subtitle">
+        探索所有關於「{category}」的專題文章與實戰心得。
+      </p>
+
+      <!-- Category Filter Pills -->
+      <div class="category-pills-bar">
+        <a href="/blog/" class="cat-pill">All</a>
+        {allCategories.map((cat) => (
+          <a href={`/blog/category/${cat}/`} class:list={["cat-pill", { "is-active": cat === category }]}>
+            {cat}
+          </a>
+        ))}
+      </div>
+    </header>
+
+    <div class="blog-grid">
+      {posts.map((post) => (
+        <a href={`/blog/${post.id}/`} class="blog-card">
+          {post.data.cover && (
+            <div class="blog-card-cover-wrap">
+              <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="blog-card-cover" loading="lazy" />
+            </div>
+          )}
+          <div class="blog-card-meta">
+            <span class="blog-card-cat-badge">{post.data.category}</span>
+            <span>·</span>
+            <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+          </div>
+          <h2 class="blog-card-title">{post.data.title}</h2>
+          <p class="blog-card-desc">{post.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

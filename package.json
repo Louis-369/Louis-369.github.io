@@ -1,0 +1,25 @@
+{
+  "name": "louis-369.github.io",
+  "version": "1.0.0",
+  "description": "Louis · Creative Developer & Builder. Editorial Studio & Interactive Web Experiences.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Louis-369/Louis-369.github.io.git"
+  },
+  "author": "Louis",
+  "license": "MIT",
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "astro": "^7.4.4",
+    "typescript": "^6.0.3"
+  }
+}
