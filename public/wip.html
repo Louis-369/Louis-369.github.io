@@ -492,10 +492,9 @@
     <!-- 4 Audio Options Matrix -->
     <div class="audio-preview-grid">
       <!-- Option 1 -->
-      <div class="audio-card is-active-sound" data-sound-id="opt1">
+      <div class="audio-card" data-sound-id="opt1">
         <div class="audio-card-top">
           <span class="audio-opt-badge">OPTION 1</span>
-          <span class="audio-rec-tag">RECOMMENDED</span>
         </div>
         <div>
           <h3 class="audio-card-name">深邃重力微沉脈衝</h3>
@@ -503,7 +502,7 @@
         </div>
         <div class="audio-card-actions">
           <button class="btn-preview" data-preview-btn="opt1"><span>▶</span> 單獨試聽</button>
-          <button class="btn-select-bind" data-bind-btn="opt1">已綁定</button>
+          <button class="btn-select-bind" data-bind-btn="opt1">綁定黑洞</button>
         </div>
       </div>
 
@@ -538,17 +537,47 @@
       </div>
 
       <!-- Option 4 -->
-      <div class="audio-card" data-sound-id="opt4">
+      <div class="audio-card is-active-sound" data-sound-id="opt4" style="grid-column: 1 / -1;">
         <div class="audio-card-top">
-          <span class="audio-opt-badge">OPTION 4</span>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <span class="audio-opt-badge">OPTION 4</span>
+            <span class="audio-rec-tag" style="background:#EFF6FF; color:#2563EB; border-color:rgba(37,99,235,0.25);">USER FAVORITE · 節奏調校中</span>
+          </div>
+          <span style="font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-muted);">二段式生命週期</span>
         </div>
         <div>
-          <h3 class="audio-card-name">雙態生命週期</h3>
-          <p class="audio-card-desc">二段式：0.0s 點擊塌縮沉音；待 0.7s 單字如草木般搖曳萌生回來時，泛起柔和的 280Hz 萌生微音。</p>
+          <h3 class="audio-card-name">雙態生命週期 (Dual-Phase Rebirth)</h3>
+          <p class="audio-card-desc">0.0s 點擊瞬間塌縮沉音；經過延遲後，眼看單字在原地搖曳萌生，耳邊同步泛起柔和的 280Hz 萌生微音。</p>
         </div>
+
+        <!-- Interactive Rhythm Tuning Controls -->
+        <div style="background:#FFFFFF; border:1px solid rgba(18,19,22,0.09); border-radius:8px; padding:1.1rem 1.2rem; margin-top:0.8rem; display:flex; flex-direction:column; gap:0.8rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
+            <span style="font-family:var(--font-mono); font-size:0.76rem; font-weight:600; color:var(--ink-primary);">
+              ⏱️ 第二聲「萌生微音」延遲間隔 (REBIRTH DELAY)：
+            </span>
+            <span style="font-family:var(--font-mono); font-size:0.85rem; font-weight:700; color:#2563EB;" id="delay-val-text">2.15s (精準對齊單字破土搖曳)</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:1rem;">
+            <span style="font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-muted);">0.3s (緊湊)</span>
+            <input type="range" min="0.3" max="2.6" step="0.05" value="2.15" class="audio-slider" id="delay-slider" style="flex:1;" aria-label="Rebirth Sound Delay">
+            <span style="font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-muted);">2.6s (舒緩)</span>
+          </div>
+
+          <!-- Quick Rhythm Presets -->
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; margin-top:0.2rem;">
+            <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--ink-muted);">快速切換預設節奏：</span>
+            <button class="lab-btn" style="padding:0.25rem 0.65rem; font-size:0.7rem;" data-preset-delay="0.48">⚡ 0.48s 引力彈響 (Snap)</button>
+            <button class="lab-btn" style="padding:0.25rem 0.65rem; font-size:0.7rem;" data-preset-delay="1.20">⏳ 1.20s 半程過渡</button>
+            <button class="lab-btn is-primary" style="padding:0.25rem 0.65rem; font-size:0.7rem;" data-preset-delay="2.15" id="btn-preset-default">🌿 2.15s 視覺精準卡點 (最推薦)</button>
+            <button class="lab-btn" style="padding:0.25rem 0.65rem; font-size:0.7rem;" id="btn-tri-phase">🌌 測試三段式 (0s+1.65s+2.15s)</button>
+          </div>
+        </div>
+
         <div class="audio-card-actions">
-          <button class="btn-preview" data-preview-btn="opt4"><span>▶</span> 單獨試聽</button>
-          <button class="btn-select-bind" data-bind-btn="opt4">綁定黑洞</button>
+          <button class="btn-preview" data-preview-btn="opt4"><span>▶</span> 依當前延遲試聽 Option 4</button>
+          <button class="btn-select-bind" data-bind-btn="opt4">已綁定</button>
         </div>
       </div>
     </div>
@@ -557,7 +586,7 @@
     <div class="audio-bind-banner">
       <div class="audio-bind-state">
         <span class="active-dot-indicator"></span>
-        <span>當前黑洞點擊已綁定：<strong id="active-sound-label">Option 1 (深邃重力微沉脈衝)</strong></span>
+        <span>當前黑洞點擊已綁定：<strong id="active-sound-label">Option 4 (雙態生命週期)</strong></span>
       </div>
       <button class="btn-mute" id="mute-toggle-btn">靜音 (Mute)</button>
     </div>
@@ -650,7 +679,8 @@
         this.ctx = null;
         this.masterGain = null;
         this.volume = 0.22;
-        this.activeMode = 'opt1'; // 'opt1' | 'opt2' | 'opt3' | 'opt4' | 'mute'
+        this.activeMode = 'opt4'; // default to Option 4 per user feedback
+        this.rebirthDelay = 2.15; // default 2.15s precisely matching visual regrowth
       }
 
       ensureContext() {
@@ -775,11 +805,15 @@
       }
 
       // Option 4: Dual-Phase: Collapse & Rebirth (雙態生命週期)
-      playOption4() {
+      playOption4(delay = null) {
         const ctx = this.ensureContext();
+        // Phase 1: 0.0s immediate collapse thud
         this.playOption1(0);
 
-        const start = ctx.currentTime + 0.68;
+        // Phase 2: User calibrated delay
+        const actualDelay = (delay !== null) ? delay : this.rebirthDelay;
+        const start = ctx.currentTime + actualDelay;
+
         const shimmer = ctx.createOscillator();
         const shimmerGain = ctx.createGain();
         shimmer.type = 'sine';
@@ -787,7 +821,7 @@
         shimmer.frequency.exponentialRampToValueAtTime(440, start + 0.38);
 
         shimmerGain.gain.setValueAtTime(0.001, start);
-        shimmerGain.gain.linearRampToValueAtTime(0.15, start + 0.08);
+        shimmerGain.gain.linearRampToValueAtTime(0.16, start + 0.08);
         shimmerGain.gain.exponentialRampToValueAtTime(0.001, start + 0.42);
 
         shimmer.connect(shimmerGain);
@@ -797,11 +831,53 @@
         shimmer.stop(start + 0.45);
       }
 
+      // Option 5 (Special): Tri-Phase Cosmic Symphony (三段式宇宙交響)
+      playTriPhase() {
+        const ctx = this.ensureContext();
+        // 1. 0.0s 重力爆發沉音
+        this.playOption1(0);
+
+        // 2. 1.65s 黑洞核心坍縮氣流微吸
+        const tMid = ctx.currentTime + 1.65;
+        const midOsc = ctx.createOscillator();
+        const midGain = ctx.createGain();
+        midOsc.type = 'triangle';
+        midOsc.frequency.setValueAtTime(140, tMid);
+        midOsc.frequency.exponentialRampToValueAtTime(55, tMid + 0.45);
+
+        midGain.gain.setValueAtTime(0.001, tMid);
+        midGain.gain.linearRampToValueAtTime(0.12, tMid + 0.12);
+        midGain.gain.exponentialRampToValueAtTime(0.001, tMid + 0.48);
+
+        midOsc.connect(midGain);
+        midGain.connect(this.masterGain);
+        midOsc.start(tMid);
+        midOsc.stop(tMid + 0.5);
+
+        // 3. 2.15s 單字破土搖曳晨露空靈音
+        const tEnd = ctx.currentTime + 2.15;
+        const endOsc = ctx.createOscillator();
+        const endGain = ctx.createGain();
+        endOsc.type = 'sine';
+        endOsc.frequency.setValueAtTime(320, tEnd);
+        endOsc.frequency.exponentialRampToValueAtTime(520, tEnd + 0.45);
+
+        endGain.gain.setValueAtTime(0.001, tEnd);
+        endGain.gain.linearRampToValueAtTime(0.18, tEnd + 0.08);
+        endGain.gain.exponentialRampToValueAtTime(0.001, tEnd + 0.48);
+
+        endOsc.connect(endGain);
+        endGain.connect(this.masterGain);
+        endOsc.start(tEnd);
+        endOsc.stop(tEnd + 0.5);
+      }
+
       playById(id) {
         if (id === 'opt1') this.playOption1();
         else if (id === 'opt2') this.playOption2();
         else if (id === 'opt3') this.playOption3();
         else if (id === 'opt4') this.playOption4();
+        else if (id === 'tri') this.playTriPhase();
       }
 
       playActiveSound() {
@@ -833,6 +909,46 @@
       audio.setVolume(val);
       volValText.textContent = `${Math.round(val * 100)}%`;
     });
+
+    // Rebirth delay calibrator
+    const delaySlider = document.getElementById('delay-slider');
+    const delayValText = document.getElementById('delay-val-text');
+
+    const updateDelay = (val) => {
+      const num = parseFloat(val);
+      audio.rebirthDelay = num;
+      if (delaySlider) delaySlider.value = num;
+      if (Math.abs(num - 2.15) < 0.04) {
+        delayValText.textContent = `2.15s (精準對齊單字破土搖曳)`;
+      } else if (Math.abs(num - 0.48) < 0.04) {
+        delayValText.textContent = `0.48s (緊湊引力彈響)`;
+      } else {
+        delayValText.textContent = `${num.toFixed(2)}s`;
+      }
+    };
+
+    if (delaySlider) {
+      delaySlider.addEventListener('input', (e) => {
+        updateDelay(e.target.value);
+      });
+    }
+
+    document.querySelectorAll('[data-preset-delay]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const d = parseFloat(btn.getAttribute('data-preset-delay'));
+        updateDelay(d);
+        audio.playOption4(d);
+      });
+    });
+
+    const btnTriPhase = document.getElementById('btn-tri-phase');
+    if (btnTriPhase) {
+      btnTriPhase.addEventListener('click', (e) => {
+        e.stopPropagation();
+        audio.playTriPhase();
+      });
+    }
 
     // Preview buttons
     document.querySelectorAll('[data-preview-btn]').forEach(btn => {
