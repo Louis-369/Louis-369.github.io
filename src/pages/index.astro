@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const latestPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 2);
+const latestPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 
 const allPhotos = await getCollection('photos', ({ data }) => !data.draft);
-const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 2);
+const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
 
 <BaseLayout isHome={true} currentNav="works">
@@ -90,8 +90,8 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
       </div>
     </section>
 
-    <!-- NEW Section: Recent Writings (社論文章精選) -->
-    <section class="works-section" id="writings" style="padding-top: 5rem;">
+    <!-- Curated Section: Recent Writings (社論文章極簡索引) -->
+    <section class="works-section home-curated-section" id="writings">
       <header class="home-section-header">
         <div class="section-header-left">
           <div class="section-eyebrow">THOUGHTS & ESSAYS</div>
@@ -103,28 +103,24 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
         </a>
       </header>
 
-      <div class="blog-grid">
+      <div class="home-writing-list">
         {latestPosts.map((post) => (
-          <a href={`/blog/${post.id}/`} class="blog-card">
-            {post.data.cover && (
-              <div class="blog-card-cover-wrap">
-                <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="blog-card-cover" loading="lazy" />
-              </div>
-            )}
-            <div class="blog-card-meta">
-              <span class="blog-card-cat-badge">{post.data.category}</span>
-              <span>·</span>
-              <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+          <a href={`/blog/${post.id}/`} class="home-writing-row">
+            <div class="home-writing-left">
+              <span class="home-writing-date">{post.data.pubDate.toISOString().slice(0, 10)}</span>
+              <h3 class="home-writing-title">{post.data.title}</h3>
             </div>
-            <h3 class="blog-card-title">{post.data.title}</h3>
-            <p class="blog-card-desc">{post.data.description}</p>
+            <div class="home-writing-right">
+              <span class="home-writing-cat">{post.data.category}</span>
+              <span class="home-writing-arrow">→</span>
+            </div>
           </a>
         ))}
       </div>
     </section>
 
-    <!-- NEW Section: Recent Snaps (最新攝影切片) -->
-    <section class="works-section" id="snaps" style="padding-top: 5rem; padding-bottom: 5rem;">
+    <!-- Curated Section: Recent Snaps (橫向三聯視覺切片) -->
+    <section class="works-section home-curated-section" id="snaps">
       <header class="home-section-header">
         <div class="section-header-left">
           <div class="section-eyebrow">VISUAL JOURNAL</div>
@@ -136,24 +132,18 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
         </a>
       </header>
 
-      <div class="photos-feed" style="gap: 3.5rem;">
-        {latestPhotos.map(async (photo) => {
-          const { Content } = await render(photo);
-          return (
-            <article class="photo-item">
-              <div class="photo-frame-wrap">
-                <img src={photo.data.photo} alt={photo.data.title} class="photo-img" loading="lazy" />
-              </div>
-              <div class="photo-info-bar">
-                <span>{photo.data.location} · {photo.data.pubDate.toISOString().slice(0, 10)}</span>
-                {photo.data.meta && <span class="photo-meta-tag">{photo.data.meta}</span>}
-              </div>
-              <div class="photo-caption-body">
-                <Content />
-              </div>
-            </article>
-          );
-        })}
+      <div class="home-triptych-grid">
+        {latestPhotos.map((photo) => (
+          <a href="/photos/" class="home-triptych-item" aria-label={`View photo: ${photo.data.title}`}>
+            <div class="home-triptych-frame">
+              <img src={photo.data.photo} alt={photo.data.title} class="home-triptych-img" loading="lazy" />
+            </div>
+            <div class="home-triptych-meta">
+              <span class="home-triptych-location">{photo.data.location}</span>
+              <span class="home-triptych-date">{photo.data.pubDate.toISOString().slice(0, 7)}</span>
+            </div>
+          </a>
+        ))}
       </div>
     </section>
 

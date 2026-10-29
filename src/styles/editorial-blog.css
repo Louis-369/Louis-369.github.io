@@ -407,11 +407,19 @@
 /* -------------------------------------------------------------
    7. Homepage Embedded Preview Sections (Writings & Snaps)
 ------------------------------------------------------------- */
+.works-section.home-curated-section {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
 .home-section-header {
+  max-width: 1200px;
+  margin: 0 auto 2.5rem auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(18, 19, 22, 0.08);
+  padding-bottom: 1.5rem;
 }
 
 .home-section-more-link {
@@ -428,4 +436,166 @@
 
 .home-section-more-link:hover {
   transform: translateX(4px);
+}
+
+/* Editorial Text List (Homepage Writings Index) */
+.home-writing-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-writing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.45rem 0.5rem;
+  border-bottom: 1px solid rgba(18, 19, 22, 0.08);
+  text-decoration: none;
+  color: inherit;
+  gap: 1.5rem;
+  transition: background-color 0.25s ease, padding 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-writing-row:hover {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: rgba(18, 19, 22, 0.025);
+}
+
+.home-writing-left {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  flex: 1;
+  min-width: 0;
+}
+
+.home-writing-date {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  color: var(--ink-muted, #6E6A63);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.home-writing-title {
+  font-family: var(--font-tc-serif, "Noto Serif TC", serif);
+  font-size: clamp(1.08rem, 1.8vw, 1.3rem);
+  font-weight: 600;
+  color: var(--ink-primary, #121316);
+  line-height: 1.4;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-writing-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  white-space: nowrap;
+}
+
+.home-writing-cat {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted, #6E6A63);
+  border: 1px solid rgba(18, 19, 22, 0.14);
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+}
+
+.home-writing-arrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.95rem;
+  color: var(--ink-muted, #6E6A63);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+}
+
+.home-writing-row:hover .home-writing-arrow {
+  transform: translateX(4px);
+  color: var(--ink-primary, #121316);
+}
+
+/* Horizontal 3-Photo Triptych with Multi-Aspect Matte Frame (Homepage Snaps) */
+.home-triptych-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+}
+
+.home-triptych-item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-triptych-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(18, 19, 22, 0.03);
+  border: 1px solid rgba(18, 19, 22, 0.08);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-triptych-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(18, 19, 22, 0.06);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-triptych-item:hover .home-triptych-img {
+  transform: scale(1.035);
+}
+
+.home-triptych-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted, #6E6A63);
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .home-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .home-writing-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 1.25rem 0;
+  }
+  .home-writing-left {
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
+  }
+  .home-writing-title {
+    white-space: normal;
+  }
 }
