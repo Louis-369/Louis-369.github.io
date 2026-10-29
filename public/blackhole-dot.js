@@ -42,6 +42,12 @@ export class BlackHoleDot {
     this.isAnimating = false;
     this.startTime = performance.now();
 
+    // Procedural Tri-Phase Audio Synthesis State
+    this.soundEnabled = options.sound !== false;
+    this.audioCtx = null;
+    this.masterGain = null;
+    this.masterVolume = options.volume !== undefined ? options.volume : 0.22;
+
     this.initParticles();
     this.initWebGL();
     this.bindEvents();
@@ -317,6 +323,9 @@ export class BlackHoleDot {
     const gsap = window.gsap;
     if (!gsap) return;
 
+    // Trigger procedural Tri-Phase Cosmic Symphony
+    this.playAudioBurst();
+
     if (this.cycle) {
       this.variant = this.variants[this.variantIndex];
       this.variantIndex = (this.variantIndex + 1) % this.variants.length;
@@ -488,5 +497,74 @@ export class BlackHoleDot {
     gl.uniform1i(this.uVariant, variantIdx);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  /**
+   * Procedural Tri-Phase Cosmic Symphony (Web Audio API)
+   * 0.00s: Gravitational Thud (85Hz -> 32Hz)
+   * 1.65s: Event Horizon Collapse Whisper (140Hz -> 55Hz)
+   * 2.15s: Particle Rebirth Shimmer (320Hz -> 520Hz)
+   */
+  playAudioBurst() {
+    if (!this.soundEnabled) return;
+    const AudioCtx = window.AudioContext || window['webkitAudioContext'];
+    if (!AudioCtx) return;
+
+    if (!this.audioCtx) {
+      this.audioCtx = new AudioCtx();
+      this.masterGain = this.audioCtx.createGain();
+      this.masterGain.gain.setValueAtTime(this.masterVolume, this.audioCtx.currentTime);
+      this.masterGain.connect(this.audioCtx.destination);
+    }
+
+    if (this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume();
+    }
+
+    const ctx = this.audioCtx;
+    const start = ctx.currentTime;
+
+    // Phase 1: 0.00s 重力爆發沉音 (85Hz -> 32Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(85, start);
+    osc1.frequency.exponentialRampToValueAtTime(32, start + 0.45);
+    gain1.gain.setValueAtTime(1.0, start);
+    gain1.gain.exponentialRampToValueAtTime(0.001, start + 0.48);
+    osc1.connect(gain1);
+    gain1.connect(this.masterGain);
+    osc1.start(start);
+    osc1.stop(start + 0.5);
+
+    // Phase 2: 1.65s 黑洞核心坍縮氣流微吸 (140Hz -> 55Hz)
+    const tMid = start + 1.65;
+    const midOsc = ctx.createOscillator();
+    const midGain = ctx.createGain();
+    midOsc.type = 'triangle';
+    midOsc.frequency.setValueAtTime(140, tMid);
+    midOsc.frequency.exponentialRampToValueAtTime(55, tMid + 0.45);
+    midGain.gain.setValueAtTime(0.001, tMid);
+    midGain.gain.linearRampToValueAtTime(0.12, tMid + 0.12);
+    midGain.gain.exponentialRampToValueAtTime(0.001, tMid + 0.48);
+    midOsc.connect(midGain);
+    midGain.connect(this.masterGain);
+    midOsc.start(tMid);
+    midOsc.stop(tMid + 0.5);
+
+    // Phase 3: 2.15s 單字破土搖曳晨露空靈音 (320Hz -> 520Hz)
+    const tEnd = start + 2.15;
+    const endOsc = ctx.createOscillator();
+    const endGain = ctx.createGain();
+    endOsc.type = 'sine';
+    endOsc.frequency.setValueAtTime(320, tEnd);
+    endOsc.frequency.exponentialRampToValueAtTime(520, tEnd + 0.45);
+    endGain.gain.setValueAtTime(0.001, tEnd);
+    endGain.gain.linearRampToValueAtTime(0.18, tEnd + 0.08);
+    endGain.gain.exponentialRampToValueAtTime(0.001, tEnd + 0.48);
+    endOsc.connect(endGain);
+    endGain.connect(this.masterGain);
+    endOsc.start(tEnd);
+    endOsc.stop(tEnd + 0.5);
   }
 }
