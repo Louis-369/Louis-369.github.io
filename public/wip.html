@@ -711,7 +711,7 @@
       box-shadow: 0 0 6px rgba(18, 19, 22, 0.25);
     }
 
-    /* Mode B: Physical Book Foliation Counter & Interactive Capsule */
+    /* Mode B: Interactive Progress Capsule (★ User's Preference) */
     #indicator-mode-b {
       position: fixed;
       bottom: 2rem;
@@ -726,9 +726,9 @@
       box-shadow: 0 6px 24px rgba(18, 19, 22, 0.09);
       display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--ink-primary);
       user-select: none;
       cursor: pointer;
@@ -756,66 +756,36 @@
       50% { box-shadow: 0 0 0 2.5px var(--ink-primary), 0 12px 36px rgba(18, 19, 22, 0.22); }
     }
 
-    #indicator-mode-b .fol-page-wrap {
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      display: inline-flex;
-      align-items: baseline;
-      gap: 0.25rem;
-    }
-
-    #indicator-mode-b .fol-curr-page {
-      font-size: 0.88rem;
-      color: var(--ink-primary);
-      transition: transform 0.2s ease;
-      display: inline-block;
-    }
-
-    #indicator-mode-b .fol-curr-page.has-flipped {
-      animation: folFlip 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes folFlip {
-      0% { transform: translateY(-4px); opacity: 0.4; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-
-    #indicator-mode-b .fol-total-page {
-      color: var(--ink-muted);
-      font-size: 0.75rem;
-    }
-
     #indicator-mode-b .fol-divider {
       color: rgba(18, 19, 22, 0.2);
     }
 
     #indicator-mode-b .fol-percent-wrap {
-      color: var(--ink-secondary);
-      font-size: 0.76rem;
-      min-width: 48px;
-      text-align: right;
+      color: var(--ink-primary);
+      font-size: 0.82rem;
+      min-width: 66px;
+      text-align: center;
       position: relative;
       height: 1.25em;
       overflow: hidden;
       display: inline-flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
     }
 
     #indicator-mode-b .fol-pct-val,
     #indicator-mode-b .fol-top-hint {
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
       display: inline-block;
+      white-space: nowrap;
     }
 
     #indicator-mode-b .fol-top-hint {
       position: absolute;
-      right: 0;
       transform: translateY(100%);
       opacity: 0;
       color: var(--ink-primary);
       font-weight: 600;
-      white-space: nowrap;
     }
 
     #indicator-mode-b:hover .fol-pct-val {
@@ -830,7 +800,7 @@
 
     #indicator-mode-b .fol-ascii-bar {
       letter-spacing: 0.08em;
-      font-size: 0.76rem;
+      font-size: 0.8rem;
       color: var(--ink-primary);
       font-family: var(--font-mono);
       white-space: nowrap;
@@ -840,19 +810,6 @@
 
     #indicator-mode-b.is-completed .fol-ascii-bar {
       font-weight: 600;
-    }
-
-    #indicator-mode-b .fol-jump-arrow {
-      color: var(--ink-muted);
-      display: inline-flex;
-      align-items: center;
-      margin-left: -0.2rem;
-      transition: transform 0.2s ease, color 0.2s ease;
-    }
-
-    #indicator-mode-b:hover .fol-jump-arrow {
-      color: var(--ink-primary);
-      transform: translateY(-2px);
     }
 
     /* Mode C: Sticky Header Crossfade & Line */
@@ -1508,13 +1465,13 @@
       </h2>
       <p style="color: var(--ink-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 760px;">
         在真實 720px 社論長文模擬器中，動態切換並對照 4 種前端進度表達形態。
-        <strong>預設開啟 Mode B（實體書籍頁碼計數器）</strong>，提供純數值折頁與等寬 ASCII 步進條；向下滑動閱讀即可測試即時響應。
+        <strong>預設開啟 Mode B（懸浮膠囊進度）</strong>，結合百分比翻牌、字符解鎖顯影與一鍵平滑回頂；向下滑動長文即可測試即時響應。
       </p>
     </div>
 
     <!-- Sticky Mode Control Dock -->
     <div class="reading-control-dock" id="reading-control-dock">
-      <!-- Main Row: Mode Switcher & Telemetry -->
+      <!-- Main Row: Mode Switcher -->
       <div class="reading-control-main-row">
         <div class="mode-pills-wrap">
           <button class="mode-pill-btn" data-reading-mode="mode-a">
@@ -1523,7 +1480,7 @@
           </button>
           <button class="mode-pill-btn is-active" data-reading-mode="mode-b">
             <span style="color: #D4A373;">★</span>
-            <span>Mode B: 實體頁碼 (Foliation)</span>
+            <span>Mode B: 懸浮膠囊 (Capsule)</span>
             <span class="mode-badge-tag">推薦</span>
           </button>
           <button class="mode-pill-btn" data-reading-mode="mode-c">
@@ -1537,15 +1494,6 @@
           <button class="mode-pill-btn" data-reading-mode="all">
             <span>全部並行顯示 (Compare All)</span>
           </button>
-        </div>
-
-        <div class="reading-telemetry">
-          <span class="telemetry-dot"></span>
-          <span>進度: <strong id="telemetry-pct" style="color: var(--ink-primary);">0%</strong></span>
-          <span>·</span>
-          <span id="telemetry-page">P. 01 / 07</span>
-          <span>·</span>
-          <span>剩餘約 <strong id="telemetry-time" style="color: var(--ink-primary);">~6.0 MIN</strong></span>
         </div>
       </div>
 
@@ -1586,26 +1534,14 @@
       <div class="bar-fill"></div>
     </div>
 
-    <!-- Mode B: Physical Book Foliation Counter & Interactive Capsule (Default Active) -->
+    <!-- Mode B: Interactive Progress Capsule (Default Active) -->
     <div id="indicator-mode-b" class="indicator-element" role="button" tabindex="0" title="點擊平滑返回長文頂部 (Click to Scroll Top)" aria-live="polite">
-      <div class="fol-page-wrap">
-        <span style="color: var(--ink-muted); font-size: 0.72rem;">PAGE</span>
-        <span class="fol-curr-page" id="fol-current">01</span>
-        <span class="fol-divider">/</span>
-        <span class="fol-total-page" id="fol-total">07</span>
-      </div>
-      <span class="fol-divider">·</span>
       <div class="fol-percent-wrap">
-        <span class="fol-pct-val" id="fol-percent">0%</span>
-        <span class="fol-top-hint">TOP ↑</span>
+        <span class="fol-pct-val">[ <span id="fol-percent">0%</span> ]</span>
+        <span class="fol-top-hint">[ TOP ↑ ]</span>
       </div>
       <span class="fol-divider">·</span>
       <div class="fol-ascii-bar" id="fol-ascii">[░░░░░░░░]</div>
-      <span class="fol-jump-arrow" aria-hidden="true">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 19V5M5 12l7-7 7 7"/>
-        </svg>
-      </span>
     </div>
 
     <!-- Mode C: Sticky Header Crossfade & Underline -->
@@ -2223,11 +2159,11 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
 
       // Word theme presets (8 characters normalized)
       const wordThemes = {
-        mission: { active: 'MISSION.', done: 'CLEARED✓' },
-        reading: { active: 'READING.', done: 'FINIS. ✦' },
-        horizon: { active: 'HORIZON.', done: 'ABSORBED' },
-        inking:  { active: 'INKING..', done: 'DRIED. ✓' },
-        digest:  { active: 'DIGEST..', done: 'INSIGHT✓' }
+        mission: { active: 'MISSION.', done: 'CLEAR ↑' },
+        reading: { active: 'READING.', done: 'FINIS ✦' },
+        horizon: { active: 'HORIZON.', done: 'ABSORB↑' },
+        inking:  { active: 'INKING..', done: 'DRIED ✓' },
+        digest:  { active: 'DIGEST..', done: 'INSIGHT' }
       };
 
       // Mode Switcher Buttons
@@ -2369,7 +2305,7 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
         if (currentMechanic === 'reveal') {
           // 形式 1: 活字逐格顯影 (Block-to-Letter Reveal)
           if (isComplete) {
-            asciiString = '[✦ ' + doneWord + ' ↑]';
+            asciiString = '[✦ ' + doneWord + ']';
           } else if (progress <= 0) {
             asciiString = '[░░░░░░░░]';
           } else {
@@ -2389,7 +2325,7 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
           // 形式 2: 經典方塊 + 雙態單字交接
           const bar = '█'.repeat(filledTicks) + '░'.repeat(totalTicks - filledTicks);
           if (isComplete) {
-            asciiString = '[' + bar + '] · ✦ ' + doneWord + ' ↑';
+            asciiString = '[' + bar + '] · ✦ ' + doneWord;
           } else {
             asciiString = '[' + bar + '] · ' + activeWord;
           }
@@ -2420,18 +2356,6 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
         }
 
         // 2. Update Mode B
-        if (folCurr) {
-          if (lastReportedPage !== currentPage) {
-            folCurr.classList.remove('has-flipped');
-            void folCurr.offsetWidth; // trigger reflow
-            folCurr.classList.add('has-flipped');
-            lastReportedPage = currentPage;
-          }
-          folCurr.textContent = String(currentPage).padStart(2, '0');
-        }
-        if (folTotal) {
-          folTotal.textContent = String(totalPages).padStart(2, '0');
-        }
         if (folPercent) {
           folPercent.textContent = percentInt + '%';
         }
@@ -2465,11 +2389,6 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
         if (radialPct) {
           radialPct.textContent = percentInt + '%';
         }
-
-        // 5. Update Telemetry
-        if (telemetryPct) telemetryPct.textContent = percentInt + '%';
-        if (telemetryPage) telemetryPage.textContent = 'P. ' + String(currentPage).padStart(2, '0') + ' / ' + String(totalPages).padStart(2, '0');
-        if (telemetryTime) telemetryTime.textContent = '~' + minutesLeft + ' MIN';
 
         ticking = false;
       }
