@@ -6,6 +6,9 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+  jsonLd?: Record<string, any>;
   currentNav?: 'works' | 'blog' | 'photos' | 'about';
   isHome?: boolean;
 }
@@ -14,11 +17,15 @@ const {
   title = "Louis · Creative Developer & Builder",
   description = "Louis · Creative Developer & Builder. High-craft digital tools and interactive web experiences.",
   ogImage = "/assets/works/sunset-park.jpg",
+  ogType = "website",
+  publishedTime,
+  jsonLd,
   currentNav,
   isHome = false
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const resolvedOgImage = new URL(ogImage, Astro.site);
 ---
 
 <!DOCTYPE html>
@@ -29,14 +36,26 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="description" content={description}>
   <meta name="author" content="Louis">
   <link rel="canonical" href={canonicalURL}>
+  <link rel="alternate" type="application/rss+xml" title="Louis · Thoughts & Essays RSS Feed" href={new URL('/rss.xml', Astro.site)}>
   <title>{title}</title>
 
   <!-- Open Graph / Social Sharing -->
-  <meta property="og:type" content="website">
+  <meta property="og:type" content={ogType}>
   <meta property="og:url" content={canonicalURL}>
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
-  <meta property="og:image" content={new URL(ogImage, Astro.site)}>
+  <meta property="og:image" content={resolvedOgImage}>
+  {publishedTime && <meta property="article:published_time" content={publishedTime}>}
+
+  <!-- Twitter / X Large Image Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={resolvedOgImage}>
+
+  {jsonLd && (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  )}
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">

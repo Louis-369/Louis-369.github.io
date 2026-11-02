@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -24,6 +25,7 @@ const categories = Array.from(new Set(allPosts.map((post) => post.data.category)
         {categories.map((cat) => (
           <a href={`/blog/category/${cat}/`} class="cat-pill">{cat}</a>
         ))}
+        <a href="/rss.xml" target="_blank" rel="noopener noreferrer" class="cat-pill is-rss-pill" aria-label="RSS Feed">RSS ↗</a>
       </div>
     </header>
 
@@ -39,6 +41,8 @@ const categories = Array.from(new Set(allPosts.map((post) => post.data.category)
             <span class="blog-card-cat-badge">{post.data.category}</span>
             <span>·</span>
             <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+            <span>·</span>
+            <span>{getReadingTime(post.body || '')}</span>
           </div>
           <h2 class="blog-card-title">{post.data.title}</h2>
           <p class="blog-card-desc">{post.data.description}</p>

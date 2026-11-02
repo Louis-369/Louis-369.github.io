@@ -1,29 +1,74 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+  const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return sortedPosts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      nextPost: index > 0 ? sortedPosts[index - 1] : null,
+      prevPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
+    },
   }));
 }
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  prevPost: CollectionEntry<'blog'> | null;
+  nextPost: CollectionEntry<'blog'> | null;
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
+const readingTime = getReadingTime(post.body || '');
+const dateISO = post.data.pubDate.toISOString();
+const dateFormatted = dateISO.slice(0, 10);
+const ogImageUrl = `/og/${post.id}.png`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const blogPostingJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.data.title,
+  "description": post.data.description,
+  "image": new URL(ogImageUrl, Astro.site).toString(),
+  "datePublished": dateISO,
+  "author": {
+    "@type": "Person",
+    "name": "Louis",
+    "url": "https://louis-369.is-a.dev/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Louis"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": canonicalURL
+  },
+  "keywords": [post.data.category, ...(post.data.tags || [])].join(', ')
+};
 ---
 
 <BaseLayout 
   title={`${post.data.title} | Louis.`}
   description={post.data.description}
-  ogImage={post.data.cover}
+  ogImage={ogImageUrl}
+  ogType="article"
+  publishedTime={dateISO}
+  jsonLd={blogPostingJsonLd}
   currentNav="blog"
 >
+  <!-- Top 1.5px Pure GPU Reading Progress Bar -->
+  <div class="reading-progress-track" aria-hidden="true">
+    <div class="reading-progress-bar" id="reading-progress-bar"></div>
+  </div>
+
   <main class="article-container">
     <!-- Back to Blog Link -->
     <a href="/blog/" class="article-back-link">
@@ -34,9 +79,11 @@ const { Content } = await render(post);
     <!-- Article Header -->
     <header class="article-header">
       <div class="article-meta-row">
-        <span>{post.data.category}</span>
+        <a href={`/blog/category/${post.data.category}/`} class="article-cat-link">{post.data.category}</a>
         <span>·</span>
-        <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+        <time datetime={dateISO}>{dateFormatted}</time>
+        <span>·</span>
+        <span>{readingTime}</span>
       </div>
 
       <h1 class="article-h1">{post.data.title}</h1>
@@ -51,8 +98,99 @@ const { Content } = await render(post);
     )}
 
     <!-- Prose Content Body -->
-    <article class="article-prose">
+    <article class="article-prose" id="article-prose-body">
       <Content />
     </article>
+
+    <!-- Editorial Article Footer: Tags + Copy Link / Share + Prev/Next Navigation -->
+    <footer class="article-footer-craft">
+      <div class="article-share-bar">
+        <div class="article-tags-list">
+          <a href={`/blog/category/${post.data.category}/`} class="article-tag-pill">#{post.data.category}</a>
+          {post.data.tags && post.data.tags.map((tag) => (
+            <span class="article-tag-pill">#{tag}</span>
+          ))}
+        </div>
+
+        <div class="article-share-actions">
+          <button type="button" class="share-action-pill" id="copy-link-btn" data-url={canonicalURL}>
+            <span id="copy-link-text">COPY LINK</span>
+          </button>
+          <a 
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(canonicalURL)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="share-action-pill"
+          >
+            <span>SHARE ON X ↗</span>
+          </a>
+        </div>
+      </div>
+
+      {(prevPost || nextPost) && (
+        <nav class="article-adjacent-nav" aria-label="Adjacent essays">
+          {prevPost ? (
+            <a href={`/blog/${prevPost.id}/`} class="adjacent-card is-prev">
+              <span class="adjacent-label">← PREVIOUS ESSAY</span>
+              <span class="adjacent-title">{prevPost.data.title}</span>
+            </a>
+          ) : <div />}
+
+          {nextPost && (
+            <a href={`/blog/${nextPost.id}/`} class="adjacent-card is-next">
+              <span class="adjacent-label">NEXT ESSAY →</span>
+              <span class="adjacent-title">{nextPost.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+    </footer>
   </main>
+
+  <script is:inline>
+    (() => {
+      // 1. Pure GPU 1.5px Reading Progress Bar
+      const progressBar = document.getElementById('reading-progress-bar');
+      const articleBody = document.getElementById('article-prose-body');
+      let ticking = false;
+
+      const updateProgress = () => {
+        if (!progressBar || !articleBody) return;
+        const rect = articleBody.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const total = Math.max(1, articleBody.offsetHeight - winH * 0.4);
+        const scrolled = Math.min(Math.max(0, -rect.top + winH * 0.2), total);
+        const ratio = Math.min(1, Math.max(0, scrolled / total));
+        progressBar.style.transform = `scaleX(${ratio})`;
+        ticking = false;
+      };
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateProgress);
+          ticking = true;
+        }
+      }, { passive: true });
+      window.addEventListener('resize', updateProgress, { passive: true });
+      updateProgress();
+
+      // 2. Copy Link Micro-Interaction
+      const copyBtn = document.getElementById('copy-link-btn');
+      const copyText = document.getElementById('copy-link-text');
+      if (copyBtn && copyText) {
+        copyBtn.addEventListener('click', async () => {
+          const url = copyBtn.getAttribute('data-url') || window.location.href;
+          try {
+            await navigator.clipboard.writeText(url);
+            copyText.textContent = 'COPIED ✓';
+            copyBtn.classList.add('is-copied');
+            setTimeout(() => {
+              copyText.textContent = 'COPY LINK';
+              copyBtn.classList.remove('is-copied');
+            }, 2000);
+          } catch (_) {}
+        });
+      }
+    })();
+  </script>
 </BaseLayout>

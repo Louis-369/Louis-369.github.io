@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://louis-369.is-a.dev/sitemap.xml
