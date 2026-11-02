@@ -460,6 +460,678 @@
       will-change: transform, opacity, filter;
       transform-origin: center bottom;
     }
+
+    /* =============================================================
+       LAB 02: Reading Progress Indicator Laboratory Styles
+       ============================================================= */
+    .lab-divider {
+      max-width: 1100px;
+      margin: 6rem auto 4rem;
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(18, 19, 22, 0.15) 20%, rgba(18, 19, 22, 0.15) 80%, transparent);
+      position: relative;
+    }
+
+    .lab-divider::after {
+      content: '❖  ❖  ❖';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-canvas);
+      padding: 0 1.2rem;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.4em;
+    }
+
+    .reading-lab-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .reading-lab-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-paper);
+    }
+
+    /* Sticky Mode Switcher Deck */
+    .reading-control-dock {
+      position: sticky;
+      top: 1.2rem;
+      z-index: 1000;
+      background: rgba(249, 248, 245, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(18, 19, 22, 0.14);
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 3.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 8px 30px rgba(18, 19, 22, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .mode-pills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .mode-pill-btn {
+      appearance: none;
+      background: #FFFFFF;
+      border: 1px solid rgba(18, 19, 22, 0.14);
+      color: var(--ink-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mode-pill-btn:hover {
+      border-color: var(--ink-primary);
+      color: var(--ink-primary);
+      transform: translateY(-1px);
+    }
+
+    .mode-pill-btn.is-active {
+      background: var(--ink-primary);
+      color: var(--bg-canvas);
+      border-color: var(--ink-primary);
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(18, 19, 22, 0.18);
+    }
+
+    .mode-pill-btn .mode-badge-tag {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      background: rgba(18, 19, 22, 0.08);
+      font-weight: normal;
+    }
+
+    .mode-pill-btn.is-active .mode-badge-tag {
+      background: rgba(249, 248, 245, 0.25);
+      color: #FFFFFF;
+    }
+
+    .reading-telemetry {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      background: rgba(18, 19, 22, 0.04);
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      letter-spacing: 0.02em;
+    }
+
+    .telemetry-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      display: inline-block;
+      animation: pulseGreen 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* -------------------------------------------------------------
+       Indicator Modes (The 4 Flavors)
+       ------------------------------------------------------------- */
+    .indicator-element {
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+    }
+
+    .indicator-element.is-hidden {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* Mode A: Top 1.5px Hairline */
+    #indicator-mode-a {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(18, 19, 22, 0.08);
+      z-index: 9999;
+    }
+
+    #indicator-mode-a .bar-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--ink-primary);
+      transform-origin: left;
+      transform: scaleX(0);
+      will-change: transform;
+      box-shadow: 0 0 6px rgba(18, 19, 22, 0.25);
+    }
+
+    /* Mode B: Physical Book Foliation Counter (★ User's Preference) */
+    #indicator-mode-b {
+      position: fixed;
+      bottom: 2rem;
+      right: 2.2rem;
+      z-index: 9995;
+      background: rgba(249, 248, 245, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(18, 19, 22, 0.16);
+      border-radius: 9999px;
+      padding: 0.55rem 1.15rem;
+      box-shadow: 0 6px 24px rgba(18, 19, 22, 0.09);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--ink-primary);
+      user-select: none;
+    }
+
+    #indicator-mode-b .fol-page-wrap {
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.25rem;
+    }
+
+    #indicator-mode-b .fol-curr-page {
+      font-size: 0.88rem;
+      color: var(--ink-primary);
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+
+    #indicator-mode-b .fol-curr-page.has-flipped {
+      animation: folFlip 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes folFlip {
+      0% { transform: translateY(-4px); opacity: 0.4; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    #indicator-mode-b .fol-total-page {
+      color: var(--ink-muted);
+      font-size: 0.75rem;
+    }
+
+    #indicator-mode-b .fol-divider {
+      color: rgba(18, 19, 22, 0.2);
+    }
+
+    #indicator-mode-b .fol-percent-wrap {
+      color: var(--ink-secondary);
+      font-size: 0.76rem;
+      min-width: 44px;
+      text-align: right;
+    }
+
+    #indicator-mode-b .fol-ascii-bar {
+      letter-spacing: 0.08em;
+      font-size: 0.76rem;
+      color: var(--ink-primary);
+      font-family: var(--font-mono);
+    }
+
+    /* Mode C: Sticky Header Crossfade & Line */
+    #indicator-mode-c {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: rgba(249, 248, 245, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(18, 19, 22, 0.08);
+      z-index: 9990;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 2px 12px rgba(18, 19, 22, 0.03);
+    }
+
+    .mode-c-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .mode-c-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      background: rgba(18, 19, 22, 0.06);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: normal;
+    }
+
+    .mode-c-title {
+      font-family: var(--font-tc-serif);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink-primary);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      max-width: 500px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mode-c-title.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mode-c-right {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .mode-c-bottom-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--ink-primary);
+      width: 0%;
+      transition: width 0.05s linear;
+    }
+
+    /* Mode D: Floating Island Radial Ring */
+    #indicator-mode-d {
+      position: fixed;
+      bottom: 2rem;
+      right: 2.2rem;
+      z-index: 9995;
+      background: rgba(249, 248, 245, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(18, 19, 22, 0.16);
+      border-radius: 9999px;
+      padding: 0.4rem 0.9rem 0.4rem 0.5rem;
+      box-shadow: 0 6px 24px rgba(18, 19, 22, 0.09);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    }
+
+    #indicator-mode-d:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(18, 19, 22, 0.14);
+    }
+
+    .radial-svg-wrap {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radial-svg-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .radial-bg-circle {
+      stroke: rgba(18, 19, 22, 0.1);
+    }
+
+    .radial-meter-circle {
+      stroke: var(--ink-primary);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.05s linear;
+    }
+
+    .radial-center-arrow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.75rem;
+      color: var(--ink-primary);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    #indicator-mode-d:hover .radial-center-arrow {
+      opacity: 1;
+    }
+
+    .radial-text-wrap {
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-mono);
+      line-height: 1.1;
+    }
+
+    .radial-pct-text {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-primary);
+    }
+
+    .radial-label-text {
+      font-size: 0.65rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* -------------------------------------------------------------
+       Editorial Mock Article Container (720px)
+       ------------------------------------------------------------- */
+    .mock-article-stage {
+      max-width: 720px;
+      margin: 0 auto 6rem;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .mock-article-header {
+      border-bottom: 1px solid var(--border-paper);
+      padding-bottom: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .mock-category-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .mock-article-title {
+      font-family: var(--font-tc-serif);
+      font-size: clamp(2rem, 3.8vw, 2.65rem);
+      line-height: 1.25;
+      font-weight: 700;
+      color: var(--ink-primary);
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .mock-article-subtitle {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.45;
+      color: var(--ink-secondary);
+      margin-bottom: 1.8rem;
+    }
+
+    .mock-article-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .mock-article-body {
+      font-family: var(--font-tc-serif);
+      font-size: 1.08rem;
+      line-height: 1.95;
+      color: var(--ink-primary);
+    }
+
+    .mock-article-body p {
+      margin-bottom: 2rem;
+      text-align: justify;
+    }
+
+    .mock-article-body p.mock-lead {
+      font-size: 1.22rem;
+      line-height: 1.8;
+      color: var(--ink-primary);
+      letter-spacing: 0.02em;
+    }
+
+    .mock-article-body p.mock-lead::first-letter {
+      font-size: 3.4rem;
+      float: left;
+      line-height: 0.85;
+      margin-right: 0.6rem;
+      margin-top: 0.15rem;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .mock-article-body h2 {
+      font-family: var(--font-tc-serif);
+      font-size: 1.55rem;
+      line-height: 1.35;
+      margin: 3.5rem 0 1.2rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed rgba(18, 19, 22, 0.12);
+      color: var(--ink-primary);
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+
+    .mock-article-body h2::before {
+      content: '§';
+      font-family: var(--font-serif);
+      color: var(--ink-muted);
+      font-size: 1.2rem;
+      font-weight: normal;
+    }
+
+    .mock-article-body blockquote {
+      margin: 2.8rem 0;
+      padding: 1.5rem 2rem;
+      border-left: 2.5px solid var(--ink-primary);
+      background: rgba(18, 19, 22, 0.02);
+      font-family: var(--font-tc-serif);
+      font-style: italic;
+      font-size: 1.12rem;
+      line-height: 1.75;
+      color: var(--ink-secondary);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .mock-article-body blockquote cite {
+      display: block;
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-size: 0.75rem;
+      margin-top: 0.8rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .mock-article-body pre {
+      background: #FFFFFF;
+      border: 1px solid var(--border-paper);
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+      margin: 2.5rem 0;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      box-shadow: 0 2px 12px rgba(18, 19, 22, 0.03);
+    }
+
+    .mock-callout {
+      background: #FFFFFF;
+      border: 1px solid rgba(18, 19, 22, 0.12);
+      border-radius: 8px;
+      padding: 1.4rem 1.6rem;
+      margin: 2.5rem 0;
+      box-shadow: 0 4px 16px rgba(18, 19, 22, 0.03);
+    }
+
+    .mock-callout-header {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-primary);
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .mock-callout-body {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--ink-secondary);
+      margin: 0;
+    }
+
+    .mock-article-footer {
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border-paper);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .mock-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .mock-tag-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      background: rgba(18, 19, 22, 0.04);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+
+    .mock-share-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .mock-share-btns {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .mock-share-btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      border: 1px solid rgba(18, 19, 22, 0.15);
+      background: #FFFFFF;
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      color: var(--ink-primary);
+      cursor: pointer;
+    }
+
+    .mock-prev-next-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .mock-nav-card {
+      border: 1px solid var(--border-paper);
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .mock-nav-dir {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .mock-nav-title {
+      font-family: var(--font-tc-serif);
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--ink-primary);
+    }
+
+    @media (max-width: 640px) {
+      .mock-prev-next-grid {
+        grid-template-columns: 1fr;
+      }
+      .reading-control-dock {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .mode-pills-wrap {
+        justify-content: center;
+      }
+      .reading-telemetry {
+        justify-content: center;
+      }
+      #indicator-mode-b {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        justify-content: center;
+      }
+      #indicator-mode-d {
+        bottom: 1rem;
+        right: 1rem;
+      }
+    }
+
   </style>
 </head>
 <body class="wip-lab-body">
@@ -666,6 +1338,262 @@
       <p class="stage-subtext js-grav-sub">黑曜石暗場中翻騰的琥珀橘金開普勒等離子旋臂與白熱光子透鏡環。</p>
     </section>
   </main>
+
+  <hr class="lab-divider">
+
+  <!-- ==========================================================================
+       LAB 02: Reading Progress Indicator Laboratory
+       ========================================================================== -->
+  <section class="reading-lab-section" id="reading-lab">
+    <div class="reading-lab-header">
+      <span class="lab-eyebrow">LAB 02 · EDITORIAL PROGRESS LABORATORY</span>
+      <h2 style="font-family: var(--font-tc-serif); font-size: 1.85rem; font-weight: 700; margin: 0.4rem 0 0.6rem;">
+        社論閱讀進度指示器實驗場
+      </h2>
+      <p style="color: var(--ink-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 760px;">
+        在真實 720px 社論長文模擬器中，動態切換並對照 4 種前端進度表達形態。
+        <strong>預設開啟 Mode B（實體書籍頁碼計數器）</strong>，提供純數值折頁與等寬 ASCII 步進條；向下滑動閱讀即可測試即時響應。
+      </p>
+    </div>
+
+    <!-- Sticky Mode Control Dock -->
+    <div class="reading-control-dock" id="reading-control-dock">
+      <div class="mode-pills-wrap">
+        <button class="mode-pill-btn" data-reading-mode="mode-a">
+          <span>Mode A: 頂部極細線</span>
+          <span class="mode-badge-tag">1.5px</span>
+        </button>
+        <button class="mode-pill-btn is-active" data-reading-mode="mode-b">
+          <span style="color: #D4A373;">★</span>
+          <span>Mode B: 實體頁碼 (Foliation)</span>
+          <span class="mode-badge-tag">推薦</span>
+        </button>
+        <button class="mode-pill-btn" data-reading-mode="mode-c">
+          <span>Mode C: 導航列交接</span>
+          <span class="mode-badge-tag">Crossfade</span>
+        </button>
+        <button class="mode-pill-btn" data-reading-mode="mode-d">
+          <span>Mode D: 懸浮膠囊環</span>
+          <span class="mode-badge-tag">SVG Radial</span>
+        </button>
+        <button class="mode-pill-btn" data-reading-mode="all">
+          <span>全部並行顯示 (Compare All)</span>
+        </button>
+      </div>
+
+      <div class="reading-telemetry">
+        <span class="telemetry-dot"></span>
+        <span>進度: <strong id="telemetry-pct" style="color: var(--ink-primary);">0%</strong></span>
+        <span>·</span>
+        <span id="telemetry-page">P. 01 / 07</span>
+        <span>·</span>
+        <span>剩餘約 <strong id="telemetry-time" style="color: var(--ink-primary);">~6.0 MIN</strong></span>
+      </div>
+    </div>
+
+    <!-- 4 Progress Indicator Elements (Controlled dynamically) -->
+
+    <!-- Mode A: Top 1.5px Hairline -->
+    <div id="indicator-mode-a" class="indicator-element is-hidden" aria-hidden="true">
+      <div class="bar-fill"></div>
+    </div>
+
+    <!-- Mode B: Physical Book Foliation Counter (Default Active) -->
+    <div id="indicator-mode-b" class="indicator-element" aria-live="polite">
+      <div class="fol-page-wrap">
+        <span style="color: var(--ink-muted); font-size: 0.72rem;">PAGE</span>
+        <span class="fol-curr-page" id="fol-current">01</span>
+        <span class="fol-divider">/</span>
+        <span class="fol-total-page" id="fol-total">07</span>
+      </div>
+      <span class="fol-divider">·</span>
+      <div class="fol-percent-wrap">
+        [ <span id="fol-percent">0%</span> ]
+      </div>
+      <span class="fol-divider">·</span>
+      <div class="fol-ascii-bar" id="fol-ascii">[░░░░░░░░]</div>
+    </div>
+
+    <!-- Mode C: Sticky Header Crossfade & Underline -->
+    <header id="indicator-mode-c" class="indicator-element is-hidden" aria-hidden="true">
+      <div class="mode-c-left">
+        <span>Louis.</span>
+        <span class="mode-c-badge">ESSAY</span>
+      </div>
+      <div class="mode-c-title" id="mode-c-title">
+        論排版節奏、留白力道與數位刊物的觸感隱喻
+      </div>
+      <div class="mode-c-right" id="mode-c-status">
+        0% · ~6.0 MIN LEFT
+      </div>
+      <div class="mode-c-bottom-line" id="mode-c-bottom-line"></div>
+    </header>
+
+    <!-- Mode D: Floating Island Capsule with SVG Ring & Jump to Top -->
+    <div id="indicator-mode-d" class="indicator-element is-hidden" title="點擊平滑返回長文頂部">
+      <div class="radial-svg-wrap">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <circle class="radial-bg-circle" cx="16" cy="16" r="13" stroke-width="2.5" fill="none" />
+          <circle class="radial-meter-circle" id="radial-meter-circle" cx="16" cy="16" r="13" stroke-width="2.5" fill="none" />
+        </svg>
+        <span class="radial-center-arrow">↑</span>
+      </div>
+      <div class="radial-text-wrap">
+        <span class="radial-pct-text" id="radial-pct-text">0%</span>
+        <span class="radial-label-text">TOP ↑</span>
+      </div>
+    </div>
+
+    <!-- Editorial Mock Article Container (720px) -->
+    <article class="mock-article-stage" id="mock-article">
+      <!-- Article Header -->
+      <header class="mock-article-header">
+        <span class="mock-category-pill">DESIGN SYSTEMS & CRAFT · 720PX MOCK</span>
+        <h1 class="mock-article-title" id="mock-title-target">
+          論排版節奏、留白力道與數位刊物的觸感隱喻
+        </h1>
+        <p class="mock-article-subtitle">
+          On Typographic Rhythm, Negative Space, and the Tactile Metaphors of Digital Editorial Craft
+        </p>
+        <div class="mock-article-meta">
+          <span>LOUIS 著</span>
+          <span>·</span>
+          <span>2026.11.02</span>
+          <span>·</span>
+          <span>預估閱讀約 6 分鐘</span>
+          <span>·</span>
+          <span>2,420 字社論實驗</span>
+        </div>
+      </header>
+
+      <!-- Article Body -->
+      <div class="mock-article-body">
+        <p class="mock-lead">
+          當讀者捧起一本實體精裝書時，重量分布在左掌與右掌之間的微妙偏移，無聲地宣告著進度的流逝。那是人類數百年來習以為常的「空間體感」——手指撫過紙張邊緣的厚薄差異、折角處的微小光影，甚至是油墨乾燥後的微糙觸感，都在向大腦傳遞清晰的認知錨點。
+        </p>
+
+        <p>
+          然而，在現代無限捲動（Infinite Scroll）的數位世界裡，這層直覺的空間感被徹底剝奪了。螢幕上的像素以等速滑入又滑出視界，讀者像是行走在一條永無盡頭的黑色傳送帶上，不知道身在何處，亦不知道何時抵達終點。這種「無重量感」往往導致了現代數位閱讀的焦慮與淺層化。
+        </p>
+
+        <h2>無止境捲動帶來的空間失焦</h2>
+
+        <p>
+          許多現代網站為了解決這個問題，粗暴地在視窗頂端黏貼一條色彩刺眼的厚重進度條。那種如同檔案下載管理器一般的進度回饋，非但沒有喚起安靜的沉浸感，反而時時刻刻在催促讀者：「快點看完、往下滾動、任務尚未完成」。進度條淪為了一種壓迫感的來源，而非寧靜的指引。
+        </p>
+
+        <blockquote>
+          「優秀的編輯設計從不炫耀其存在，它如同精心調配的暖灰紙張，安靜地承載思想的重量，在讀者需要時提供清晰的尺度，在沉浸時徹底隱身於文字身後。」
+          <cite>— 摘自《社論設計手札：空間與字體的留白張力》</cite>
+        </blockquote>
+
+        <p>
+          我們在思考個人主站的社論改版時，提出了一個關鍵假設：<strong>進度指示器是否能夠從實體刊物的裝幀工藝中汲取養分？</strong>
+          例如早期書籍的側邊折頁碼（Foliation）、古騰堡時代的天頭章節註記，或是等寬排版中純粹由方塊與空格構築的字符進度條。
+        </p>
+
+        <h2>實體書頁碼：從物理折頁到等寬數值的認知錨點</h2>
+
+        <p>
+          這正是上方 <strong>Mode B（實體頁碼計數器）</strong> 的靈感來源。我們不依賴張揚的色塊，而是將整篇長文依據視窗閱讀高度動態量化為「等效頁碼（P. 01 / 07）」，並配合等寬字型（Geist Mono）的字符進度：
+        </p>
+
+        <pre><code>// 動態等效頁碼與 ASCII 字符計數演算法
+const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
+  const totalPages = Math.max(4, Math.round(articleHeight / (viewportHeight * 0.85)));
+  const currentPage = Math.min(totalPages, Math.max(1, Math.ceil(progress * totalPages) || 1));
+  
+  // 8 段式微細印刷方塊進度
+  const totalTicks = 8;
+  const filledTicks = Math.round(progress * totalTicks);
+  const asciiBar = '[' + '█'.repeat(filledTicks) + '░'.repeat(totalTicks - filledTicks) + ']';
+  
+  return { currentPage, totalPages, asciiBar };
+};</code></pre>
+
+        <p>
+          每當讀者滾動穿越一個章節段落時，頁碼數字會產生一次 0.28 秒極輕微的縱向微跳動（Micro-flip），重現如同物理翻頁般的段落儀式感。這讓讀者隨時瞄一眼右下角，便能清晰獲知：「我剛翻過第 3 頁，即將進入第 4 頁核心推論」。
+        </p>
+
+        <div class="mock-callout">
+          <div class="mock-callout-header">
+            <span>💡 總編筆記 (Editor's Memo)</span>
+          </div>
+          <div class="mock-callout-body">
+            社論排版中的 720px 寬度並非隨意設定，而是人類眼球在中文每行 38～42 字、英文每行 65～75 字符時的最佳跳行舒適距。超過此寬度，讀者換行時視線極易迷失；低於此寬度，排版則顯得過於碎裂、缺乏權威感。
+          </div>
+        </div>
+
+        <h2>進度條的四種形變：隱身、交接、對話與回流</h2>
+
+        <p>
+          在本次實驗中，我們將常見的進度設計歸納為四種獨立哲學，供你切換對照：
+        </p>
+
+        <p>
+          <strong>一、Mode A (頂部 1.5px 極細線)：</strong> 純粹的極簡主義。厚度僅 1.5px～2px，利用 GPU `scaleX` 在最邊界安靜移動。它的優點是零干擾，缺點是在視線聚焦於螢幕中央時，周邊視野較難主動感知具體剩餘頁數。
+        </p>
+
+        <p>
+          <strong>二、Mode B (實體頁碼 Foliation)：</strong> 書籍感的現代轉譯。以等寬字符呈現 `P. 03 / 08 · [ 42% ] · [████░░░░]`，結合翻頁微動效與紙感膠囊底色，給予讀者高度具象的物理掌握感。
+        </p>
+
+        <p>
+          <strong>三、Mode C (導航列標題交接 Header Crossfade)：</strong> 資訊層級無縫移轉。當讀者向下滾動、文章大標題滾出螢幕時，頂部導航列平滑淡入文章名稱，並以底部的極細墨線作為進度軌道。這在《The Verge》與頂級長篇報導中廣泛應用。
+        </p>
+
+        <p>
+          <strong>四、Mode D (懸浮膠囊環 Radial Island)：</strong> 圓環進度與「返回頂部」雙重功能結合。精巧的 SVG 圓弧隨著滾動填滿，滑鼠懸停時自動浮現向上箭頭，一鍵優雅回流。
+        </p>
+
+        <h2>結語：讓代碼擁有油墨的乾固感</h2>
+
+        <p>
+          數位世界固然瞬息萬變，但人類對「物」的眷戀是永恆的。當我們在網頁中寫下一行行 CSS 與 JavaScript 時，我們所雕琢的不僅僅是資料結構與著色器運算，更是讀者在螢幕另一端注視文字時，內心泛起的那一絲寧靜。
+        </p>
+
+        <p>
+          讓代碼擁有油墨的乾固感，讓介面學會安靜退後——這是我們持續在 WIP Lab 探索的極致工藝。
+        </p>
+
+        <div style="text-align: center; margin: 3.5rem 0; color: var(--ink-muted); font-size: 0.9rem; letter-spacing: 0.5em;">
+          ❖  ❖  ❖
+        </div>
+      </div>
+
+      <!-- Article Footer -->
+      <footer class="mock-article-footer">
+        <div class="mock-tags-row">
+          <span class="mock-tag-pill">#EDITORIAL_CRAFT</span>
+          <span class="mock-tag-pill">#TYPOGRAPHY</span>
+          <span class="mock-tag-pill">#READING_EXPERIENCE</span>
+          <span class="mock-tag-pill">#FOLIATION</span>
+        </div>
+
+        <div class="mock-share-row">
+          <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-muted);">
+            喜歡這篇思考？歡迎分享至社群：
+          </span>
+          <div class="mock-share-btns">
+            <button class="mock-share-btn">COPY LINK</button>
+            <button class="mock-share-btn">SHARE ON X ↗</button>
+          </div>
+        </div>
+
+        <div class="mock-prev-next-grid">
+          <div class="mock-nav-card">
+            <span class="mock-nav-dir">← PREVIOUS ESSAY</span>
+            <span class="mock-nav-title">黑洞奇異點與純代碼聲學合成的物理對齊</span>
+          </div>
+          <div class="mock-nav-card" style="text-align: right;">
+            <span class="mock-nav-dir">NEXT ESSAY →</span>
+            <span class="mock-nav-title">水墨流體 Navier-Stokes 著色器的紙質漫射</span>
+          </div>
+        </div>
+      </footer>
+    </article>
+  </section>
+
 
   <!-- Web Audio Synthesis & Black Hole Controller Script -->
   <script type="module">
@@ -1060,5 +1988,190 @@
       standaloneInstances.forEach((bh) => bh.triggerBurst());
     });
   </script>
+
+  <!-- ==========================================================================
+       Reading Progress Laboratory Script Controller
+       ========================================================================== -->
+  <script>
+    (function initReadingProgressLab() {
+      const mockArticle = document.getElementById('mock-article');
+      if (!mockArticle) return;
+
+      const modeA = document.getElementById('indicator-mode-a');
+      const modeB = document.getElementById('indicator-mode-b');
+      const modeC = document.getElementById('indicator-mode-c');
+      const modeD = document.getElementById('indicator-mode-d');
+
+      const barFillA = modeA ? modeA.querySelector('.bar-fill') : null;
+      const folCurr = document.getElementById('fol-current');
+      const folTotal = document.getElementById('fol-total');
+      const folPercent = document.getElementById('fol-percent');
+      const folAscii = document.getElementById('fol-ascii');
+
+      const modeCTitle = document.getElementById('mode-c-title');
+      const modeCLine = document.getElementById('mode-c-bottom-line');
+      const modeCStatus = document.getElementById('mode-c-status');
+
+      const radialCircle = document.getElementById('radial-meter-circle');
+      const radialPct = document.getElementById('radial-pct-text');
+
+      const telemetryPct = document.getElementById('telemetry-pct');
+      const telemetryPage = document.getElementById('telemetry-page');
+      const telemetryTime = document.getElementById('telemetry-time');
+
+      let currentMode = 'mode-b'; // Default: Mode B (Book Foliation)
+      let lastReportedPage = 1;
+      const totalArticleMinutes = 6.0;
+
+      // Mode Switcher Buttons
+      const pillBtns = document.querySelectorAll('[data-reading-mode]');
+      function setActiveMode(mode) {
+        currentMode = mode;
+        pillBtns.forEach(btn => {
+          if (btn.getAttribute('data-reading-mode') === mode) {
+            btn.classList.add('is-active');
+          } else {
+            btn.classList.remove('is-active');
+          }
+        });
+
+        // Update indicator visibility
+        if (mode === 'all') {
+          if (modeA) modeA.classList.remove('is-hidden');
+          if (modeB) modeB.classList.remove('is-hidden');
+          if (modeC) modeC.classList.remove('is-hidden');
+          if (modeD) modeD.classList.remove('is-hidden');
+        } else {
+          if (modeA) modeA.classList.toggle('is-hidden', mode !== 'mode-a');
+          if (modeB) modeB.classList.toggle('is-hidden', mode !== 'mode-b');
+          if (modeC) modeC.classList.toggle('is-hidden', mode !== 'mode-c');
+          if (modeD) modeD.classList.toggle('is-hidden', mode !== 'mode-d');
+        }
+      }
+
+      pillBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          setActiveMode(btn.getAttribute('data-reading-mode'));
+        });
+      });
+
+      // Mode D click -> Smooth scroll back to article top
+      if (modeD) {
+        modeD.addEventListener('click', () => {
+          mockArticle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
+      // Radial Circle circumference = 2 * PI * 13 ~= 81.68
+      const RADIUS = 13;
+      const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+      if (radialCircle) {
+        radialCircle.style.strokeDasharray = CIRCUMFERENCE + 'px';
+        radialCircle.style.strokeDashoffset = CIRCUMFERENCE + 'px';
+      }
+
+      let ticking = false;
+
+      function updateReadingProgress() {
+        const rect = mockArticle.getBoundingClientRect();
+        const articleTop = rect.top + window.scrollY;
+        const articleHeight = rect.height;
+        const windowHeight = window.innerHeight;
+        const scrollY = window.scrollY;
+
+        // Calculate progress through mock article
+        const scrollableDistance = articleHeight - windowHeight;
+        let progress = 0;
+        if (scrollableDistance > 0) {
+          progress = (scrollY - articleTop) / scrollableDistance;
+        }
+        progress = Math.min(1, Math.max(0, progress));
+        const percentInt = Math.round(progress * 100);
+
+        // Calculate pages (assuming ~650px per page)
+        const totalPages = Math.max(4, Math.round(articleHeight / 650));
+        const currentPage = Math.min(totalPages, Math.max(1, Math.ceil(progress * totalPages) || 1));
+
+        // Calculate ASCII bar (8 ticks)
+        const totalTicks = 8;
+        const filledTicks = Math.round(progress * totalTicks);
+        const asciiString = '[' + '█'.repeat(filledTicks) + '░'.repeat(totalTicks - filledTicks) + ']';
+
+        // Calculate time left
+        const minutesLeft = (Math.max(0, (1 - progress) * totalArticleMinutes)).toFixed(1);
+
+        // 1. Update Mode A
+        if (barFillA) {
+          barFillA.style.transform = 'scaleX(' + progress + ')';
+        }
+
+        // 2. Update Mode B
+        if (folCurr) {
+          if (lastReportedPage !== currentPage) {
+            folCurr.classList.remove('has-flipped');
+            void folCurr.offsetWidth; // trigger reflow
+            folCurr.classList.add('has-flipped');
+            lastReportedPage = currentPage;
+          }
+          folCurr.textContent = String(currentPage).padStart(2, '0');
+        }
+        if (folTotal) {
+          folTotal.textContent = String(totalPages).padStart(2, '0');
+        }
+        if (folPercent) {
+          folPercent.textContent = percentInt + '%';
+        }
+        if (folAscii) {
+          folAscii.textContent = asciiString;
+        }
+
+        // 3. Update Mode C
+        if (modeC) {
+          const titleEl = document.getElementById('mock-title-target');
+          if (titleEl) {
+            const titleRect = titleEl.getBoundingClientRect();
+            const titlePassed = titleRect.bottom < 50;
+            if (modeCTitle) {
+              modeCTitle.classList.toggle('is-visible', titlePassed);
+            }
+          }
+          if (modeCLine) {
+            modeCLine.style.width = percentInt + '%';
+          }
+          if (modeCStatus) {
+            modeCStatus.textContent = percentInt + '% · ~' + minutesLeft + ' MIN LEFT';
+          }
+        }
+
+        // 4. Update Mode D
+        if (radialCircle) {
+          const offset = CIRCUMFERENCE - (progress * CIRCUMFERENCE);
+          radialCircle.style.strokeDashoffset = offset + 'px';
+        }
+        if (radialPct) {
+          radialPct.textContent = percentInt + '%';
+        }
+
+        // 5. Update Telemetry
+        if (telemetryPct) telemetryPct.textContent = percentInt + '%';
+        if (telemetryPage) telemetryPage.textContent = 'P. ' + String(currentPage).padStart(2, '0') + ' / ' + String(totalPages).padStart(2, '0');
+        if (telemetryTime) telemetryTime.textContent = '~' + minutesLeft + ' MIN';
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateReadingProgress);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Initial execution
+      setActiveMode('mode-b');
+      updateReadingProgress();
+    })();
+  </script>
+
 </body>
 </html>
