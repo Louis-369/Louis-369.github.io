@@ -711,7 +711,7 @@
       box-shadow: 0 0 6px rgba(18, 19, 22, 0.25);
     }
 
-    /* Mode B: Tactile Neumorphic Button (Adapted from Uiverse.io by adamgiebl) */
+    /* Mode B: Flat-to-Elevated Neumorphic Button (平常純平面無投影，Hover 向上位移並突顯 Uiverse 凸起光影) */
     #indicator-mode-b {
       position: fixed;
       bottom: 2.2rem;
@@ -724,8 +724,9 @@
       background: #F9F8F5;
       cursor: pointer;
       border: 1px solid #F9F8F5;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0); /* 平常純平面：零投影、零位移 */
+      transform: translateY(0);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -736,25 +737,29 @@
       box-sizing: border-box;
     }
 
-    /* Hover: White perimeter outline as in Uiverse adamgiebl reference */
+    /* Hover: 純平面過渡至凸起效果（疊加 Uiverse 雙向光影、向上負位移 translateY(-2px) 與白邊框） */
     #indicator-mode-b:hover {
       border: 1px solid #FFFFFF;
-      box-shadow: 7px 7px 15px #DDD8CE, -7px -7px 15px #FFFFFF;
+      box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
+      transform: translateY(-2px);
     }
 
-    /* Active: Soft depressed relief */
+    /* Active: 按壓下沉反饋 */
     #indicator-mode-b:active {
       box-shadow: 4px 4px 12px #DDD8CE, -4px -4px 12px #FFFFFF;
-      transform: translateY(1px);
+      transform: translateY(0);
     }
 
     #indicator-mode-b.is-completed {
       border: 1px solid #F9F8F5;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      transform: translateY(0);
     }
 
     #indicator-mode-b.is-completed:hover {
       border: 1px solid #FFFFFF;
-      box-shadow: 7px 7px 15px #DDD8CE, -7px -7px 15px #FFFFFF;
+      box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
+      transform: translateY(-2px);
     }
 
     #indicator-mode-b .fol-divider {
