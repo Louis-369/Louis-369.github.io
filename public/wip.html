@@ -712,17 +712,23 @@
     }
 
     /* Mode B: Flat-to-Elevated Capsule (Default flat without shadow/displacement, elevated on :hover) */
+    /* Mode B: Button Extruded Under Cloth (布料底下按鈕微凸：無邊框、漸變迎光坡度、雙向陰陽光影) */
     #indicator-mode-b {
       position: fixed;
       bottom: 2.2rem;
       right: 2.5rem;
       z-index: 9995;
-      background: var(--bg-canvas); /* 完美融入底色 */
-      border: none; /* 零邊框 */
+      /* 迎光微坡漸變：左上方受光稍亮、右下方順著弧度微暗，與畫布底色自然連續 */
+      background: linear-gradient(145deg, #FFFDF9 0%, #F4F1EA 100%);
+      border: none;
       border-radius: 9999px;
-      padding: 0.62rem 1.25rem;
-      transform: translateY(0); /* 預設純平面：無位移 */
-      box-shadow: 0 0 0 transparent; /* 預設純平面：無投影 */
+      padding: 0.65rem 1.3rem;
+      /* 布料張力光影：左上方柔白反光坡 (-X -Y) + 右下方柔暗沉降坡 (+X +Y) */
+      box-shadow: 
+        -5px -5px 12px rgba(255, 255, 255, 0.95),
+        -2px -2px 4px rgba(255, 255, 255, 1),
+        4px 5px 14px rgba(18, 19, 22, 0.06),
+        8px 12px 26px rgba(18, 19, 22, 0.04);
       display: inline-flex;
       align-items: center;
       gap: 0.7rem;
@@ -731,35 +737,38 @@
       color: var(--ink-primary);
       user-select: none;
       cursor: pointer;
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* 懸停過渡至凸起：負位移 + 嚴格限定右方與下方定向陰影 (Bottom-Right Only) */
+    /* 懸停時：凸起感微幅加深、迎光更清亮 */
     #indicator-mode-b:hover {
-      transform: translateY(-3px);
       box-shadow: 
-        4px 5px 12px -2px rgba(18, 19, 22, 0.07),
-        8px 12px 26px -4px rgba(18, 19, 22, 0.11);
+        -6px -6px 16px rgba(255, 255, 255, 1),
+        -2px -2px 5px rgba(255, 255, 255, 1),
+        5px 7px 18px rgba(18, 19, 22, 0.08),
+        10px 14px 30px rgba(18, 19, 22, 0.05);
+      transform: translateY(-1px);
     }
 
-    /* 按壓回饋：微幅下壓收合 */
+    /* 點擊按壓：如同手指將布料與按鈕向下壓實 (Soft Inset Cloth Indent) */
     #indicator-mode-b:active {
-      transform: translateY(0) scale(0.99);
+      transform: translateY(1px) scale(0.985);
+      background: #F3F0E8;
       box-shadow: 
-        2px 2px 6px -1px rgba(18, 19, 22, 0.06),
-        4px 5px 12px -2px rgba(18, 19, 22, 0.08);
+        inset 3px 3px 7px rgba(18, 19, 22, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.9);
     }
 
     #indicator-mode-b.is-completed {
       border: none;
-      box-shadow: 0 0 0 transparent;
     }
 
     #indicator-mode-b.is-completed:hover {
-      transform: translateY(-3px);
       box-shadow: 
-        4px 5px 12px -2px rgba(18, 19, 22, 0.08),
-        9px 13px 28px -3px rgba(18, 19, 22, 0.13);
+        -6px -6px 16px rgba(255, 255, 255, 1),
+        -2px -2px 5px rgba(255, 255, 255, 1),
+        5px 7px 20px rgba(18, 19, 22, 0.09),
+        10px 15px 32px rgba(18, 19, 22, 0.06);
     }
 
     #indicator-mode-b .fol-divider {
