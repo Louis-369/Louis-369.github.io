@@ -711,22 +711,18 @@
       box-shadow: 0 0 6px rgba(18, 19, 22, 0.25);
     }
 
-    /* Mode B: Elevated Soft-Paper Progress Capsule (No border, blended canvas, convex elevation) */
+    /* Mode B: Flat-to-Elevated Capsule (Default flat without shadow/displacement, elevated on :hover) */
     #indicator-mode-b {
       position: fixed;
       bottom: 2.2rem;
       right: 2.5rem;
       z-index: 9995;
-      background: #F9F8F5; /* Matches warm ivory paper canvas */
-      border: none; /* Zero hard border */
+      background: var(--bg-canvas); /* 完美融入底色 */
+      border: none; /* 零邊框 */
       border-radius: 9999px;
       padding: 0.62rem 1.25rem;
-      /* Soft layered physical elevation shadow with subtle top light inset */
-      box-shadow: 
-        0 2px 6px rgba(18, 19, 22, 0.04),
-        0 12px 28px -4px rgba(18, 19, 22, 0.12),
-        0 24px 48px -12px rgba(18, 19, 22, 0.08),
-        0 1px 1px rgba(255, 255, 255, 0.85) inset;
+      transform: translateY(0); /* 預設純平面：無位移 */
+      box-shadow: 0 0 0 transparent; /* 預設純平面：無投影 */
       display: inline-flex;
       align-items: center;
       gap: 0.7rem;
@@ -735,45 +731,39 @@
       color: var(--ink-primary);
       user-select: none;
       cursor: pointer;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    /* 懸停過渡至凸起：負位移 (translateY) + 疊加多層物理陰影 */
     #indicator-mode-b:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: 
         0 4px 12px rgba(18, 19, 22, 0.05),
-        0 18px 36px -4px rgba(18, 19, 22, 0.15),
-        0 30px 60px -10px rgba(18, 19, 22, 0.1),
+        0 16px 36px -4px rgba(18, 19, 22, 0.13),
+        0 28px 56px -12px rgba(18, 19, 22, 0.09),
         0 1px 1px rgba(255, 255, 255, 0.9) inset;
     }
 
+    /* 按壓回饋：微幅下壓收合 */
     #indicator-mode-b:active {
-      transform: translateY(0) scale(0.98);
+      transform: translateY(-1px) scale(0.99);
       box-shadow: 
-        0 2px 5px rgba(18, 19, 22, 0.06),
-        0 6px 16px -2px rgba(18, 19, 22, 0.1);
+        0 2px 6px rgba(18, 19, 22, 0.05),
+        0 6px 16px -2px rgba(18, 19, 22, 0.08);
     }
 
     #indicator-mode-b.is-completed {
       border: none;
-      animation: capsuleElevatedGlow 2.5s infinite ease-in-out;
+      box-shadow: 0 0 0 transparent;
     }
 
-    @keyframes capsuleElevatedGlow {
-      0%, 100% {
-        box-shadow: 
-          0 4px 10px rgba(18, 19, 22, 0.05),
-          0 16px 32px -4px rgba(18, 19, 22, 0.14),
-          0 28px 52px -10px rgba(18, 19, 22, 0.09),
-          0 1px 1px rgba(255, 255, 255, 0.9) inset;
-      }
-      50% {
-        box-shadow: 
-          0 6px 16px rgba(18, 19, 22, 0.07),
-          0 22px 42px -2px rgba(18, 19, 22, 0.18),
-          0 36px 68px -8px rgba(18, 19, 22, 0.12),
-          0 1px 1px rgba(255, 255, 255, 0.95) inset;
-      }
+    #indicator-mode-b.is-completed:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 4px 12px rgba(18, 19, 22, 0.06),
+        0 18px 40px -4px rgba(18, 19, 22, 0.16),
+        0 30px 60px -10px rgba(18, 19, 22, 0.1),
+        0 1px 1px rgba(255, 255, 255, 0.95) inset;
     }
 
     #indicator-mode-b .fol-divider {
