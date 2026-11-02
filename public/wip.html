@@ -526,6 +526,80 @@
       width: 100%;
     }
 
+    .reading-control-sub-row {
+      width: 100%;
+      padding-top: 0.75rem;
+      border-top: 1px dashed rgba(18, 19, 22, 0.12);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .sub-control-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .sub-group-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      margin-right: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .sub-pill-btn {
+      appearance: none;
+      background: #FFFFFF;
+      border: 1px solid rgba(18, 19, 22, 0.14);
+      color: var(--ink-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.32rem 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sub-pill-btn:hover {
+      border-color: var(--ink-primary);
+      color: var(--ink-primary);
+    }
+
+    .sub-pill-btn.is-active {
+      background: var(--ink-primary);
+      color: #FFFFFF;
+      border-color: var(--ink-primary);
+      font-weight: 500;
+    }
+
+    .custom-word-input {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.3rem 0.65rem;
+      border: 1px solid rgba(18, 19, 22, 0.18);
+      border-radius: 6px;
+      background: #FFFFFF;
+      color: var(--ink-primary);
+      width: 125px;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .custom-word-input:focus {
+      border-color: var(--ink-primary);
+      box-shadow: 0 0 0 2px rgba(18, 19, 22, 0.08);
+    }
+
     .mode-pills-wrap {
       display: flex;
       flex-wrap: wrap;
@@ -601,81 +675,6 @@
     @keyframes pulseGreen {
       0%, 100% { opacity: 0.4; transform: scale(0.9); }
       50% { opacity: 1; transform: scale(1.2); }
-    }
-
-    /* Mode B Sub-Toolbar (Mechanics & Words) */
-    .reading-control-sub-row {
-      width: 100%;
-      padding-top: 0.75rem;
-      border-top: 1px dashed rgba(18, 19, 22, 0.12);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.8rem;
-    }
-
-    .sub-control-group {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .sub-group-label {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.06em;
-      color: var(--ink-muted);
-      text-transform: uppercase;
-      margin-right: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .sub-pill-btn {
-      appearance: none;
-      background: #FFFFFF;
-      border: 1px solid rgba(18, 19, 22, 0.14);
-      color: var(--ink-secondary);
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      padding: 0.32rem 0.7rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .sub-pill-btn:hover {
-      border-color: var(--ink-primary);
-      color: var(--ink-primary);
-    }
-
-    .sub-pill-btn.is-active {
-      background: var(--ink-primary);
-      color: #FFFFFF;
-      border-color: var(--ink-primary);
-      font-weight: 500;
-    }
-
-    .custom-word-input {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      padding: 0.3rem 0.65rem;
-      border: 1px solid rgba(18, 19, 22, 0.18);
-      border-radius: 6px;
-      background: #FFFFFF;
-      color: var(--ink-primary);
-      width: 125px;
-      text-transform: uppercase;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .custom-word-input:focus {
-      border-color: var(--ink-primary);
-      box-shadow: 0 0 0 2px rgba(18, 19, 22, 0.08);
     }
 
     /* -------------------------------------------------------------
@@ -1499,7 +1498,693 @@
   <hr class="lab-divider">
 
   <!-- ==========================================================================
-       Reading Progress Laboratory Script Controller (v1.0.6 Advanced Mode B)
+       LAB 02: Reading Progress Indicator Laboratory
+       ========================================================================== -->
+  <section class="reading-lab-section" id="reading-lab">
+    <div class="reading-lab-header">
+      <span class="lab-eyebrow">LAB 02 · EDITORIAL PROGRESS LABORATORY</span>
+      <h2 style="font-family: var(--font-tc-serif); font-size: 1.85rem; font-weight: 700; margin: 0.4rem 0 0.6rem;">
+        社論閱讀進度指示器實驗場
+      </h2>
+      <p style="color: var(--ink-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 760px;">
+        在真實 720px 社論長文模擬器中，動態切換並對照 4 種前端進度表達形態。
+        <strong>預設開啟 Mode B（實體書籍頁碼計數器）</strong>，提供純數值折頁與等寬 ASCII 步進條；向下滑動閱讀即可測試即時響應。
+      </p>
+    </div>
+
+    <!-- Sticky Mode Control Dock -->
+    <div class="reading-control-dock" id="reading-control-dock">
+      <!-- Main Row: Mode Switcher & Telemetry -->
+      <div class="reading-control-main-row">
+        <div class="mode-pills-wrap">
+          <button class="mode-pill-btn" data-reading-mode="mode-a">
+            <span>Mode A: 頂部極細線</span>
+            <span class="mode-badge-tag">1.5px</span>
+          </button>
+          <button class="mode-pill-btn is-active" data-reading-mode="mode-b">
+            <span style="color: #D4A373;">★</span>
+            <span>Mode B: 實體頁碼 (Foliation)</span>
+            <span class="mode-badge-tag">推薦</span>
+          </button>
+          <button class="mode-pill-btn" data-reading-mode="mode-c">
+            <span>Mode C: 導航列交接</span>
+            <span class="mode-badge-tag">Crossfade</span>
+          </button>
+          <button class="mode-pill-btn" data-reading-mode="mode-d">
+            <span>Mode D: 懸浮膠囊環</span>
+            <span class="mode-badge-tag">SVG Radial</span>
+          </button>
+          <button class="mode-pill-btn" data-reading-mode="all">
+            <span>全部並行顯示 (Compare All)</span>
+          </button>
+        </div>
+
+        <div class="reading-telemetry">
+          <span class="telemetry-dot"></span>
+          <span>進度: <strong id="telemetry-pct" style="color: var(--ink-primary);">0%</strong></span>
+          <span>·</span>
+          <span id="telemetry-page">P. 01 / 07</span>
+          <span>·</span>
+          <span>剩餘約 <strong id="telemetry-time" style="color: var(--ink-primary);">~6.0 MIN</strong></span>
+        </div>
+      </div>
+
+      <!-- Sub-row: Mode B Interactive Mechanics & Word Themes -->
+      <div class="reading-control-sub-row" id="fol-sub-controls">
+        <div class="sub-control-group">
+          <span class="sub-group-label">✦ 演繹形式</span>
+          <button class="sub-pill-btn is-active" data-fol-mechanic="reveal" title="隨進度轉為實心墨塊並解鎖字母，100% 翻牌完成詞">
+            活字逐格顯影
+          </button>
+          <button class="sub-pill-btn" data-fol-mechanic="hybrid" title="保留經典方塊步進條，並列單字在 100% 時變身完成態">
+            方塊 + 單字
+          </button>
+          <button class="sub-pill-btn" data-fol-mechanic="narrative" title="依閱讀深度分為四階段敘事詞 (SPARK → DIVE → ABSORB → CLEAR)">
+            階梯敘事
+          </button>
+          <button class="sub-pill-btn" data-fol-mechanic="classic" title="原版純粹等寬方塊刻度">
+            經典純方塊
+          </button>
+        </div>
+
+        <div class="sub-control-group">
+          <span class="sub-group-label">✦ 單字主題</span>
+          <button class="sub-pill-btn is-active" data-word-theme="mission">特務 MISSION</button>
+          <button class="sub-pill-btn" data-word-theme="reading">社論 READING</button>
+          <button class="sub-pill-btn" data-word-theme="horizon">黑洞 HORIZON</button>
+          <button class="sub-pill-btn" data-word-theme="inking">水墨 INKING</button>
+          <button class="sub-pill-btn" data-word-theme="digest">思維 DIGEST</button>
+          <input type="text" id="custom-word-input" class="custom-word-input" placeholder="自訂 8 字母..." maxlength="8" title="輸入任意 8 字母單字測試" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Progress Indicator Elements (Controlled dynamically) -->
+
+    <!-- Mode A: Top 1.5px Hairline -->
+    <div id="indicator-mode-a" class="indicator-element is-hidden" aria-hidden="true">
+      <div class="bar-fill"></div>
+    </div>
+
+    <!-- Mode B: Physical Book Foliation Counter & Interactive Capsule (Default Active) -->
+    <div id="indicator-mode-b" class="indicator-element" role="button" tabindex="0" title="點擊平滑返回長文頂部 (Click to Scroll Top)" aria-live="polite">
+      <div class="fol-page-wrap">
+        <span style="color: var(--ink-muted); font-size: 0.72rem;">PAGE</span>
+        <span class="fol-curr-page" id="fol-current">01</span>
+        <span class="fol-divider">/</span>
+        <span class="fol-total-page" id="fol-total">07</span>
+      </div>
+      <span class="fol-divider">·</span>
+      <div class="fol-percent-wrap">
+        <span class="fol-pct-val" id="fol-percent">0%</span>
+        <span class="fol-top-hint">TOP ↑</span>
+      </div>
+      <span class="fol-divider">·</span>
+      <div class="fol-ascii-bar" id="fol-ascii">[░░░░░░░░]</div>
+      <span class="fol-jump-arrow" aria-hidden="true">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+      </span>
+    </div>
+
+    <!-- Mode C: Sticky Header Crossfade & Underline -->
+    <header id="indicator-mode-c" class="indicator-element is-hidden" aria-hidden="true">
+      <div class="mode-c-left">
+        <span>Louis.</span>
+        <span class="mode-c-badge">ESSAY</span>
+      </div>
+      <div class="mode-c-title" id="mode-c-title">
+        論排版節奏、留白力道與數位刊物的觸感隱喻
+      </div>
+      <div class="mode-c-right" id="mode-c-status">
+        0% · ~6.0 MIN LEFT
+      </div>
+      <div class="mode-c-bottom-line" id="mode-c-bottom-line"></div>
+    </header>
+
+    <!-- Mode D: Floating Island Capsule with SVG Ring & Jump to Top -->
+    <div id="indicator-mode-d" class="indicator-element is-hidden" title="點擊平滑返回長文頂部">
+      <div class="radial-svg-wrap">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <circle class="radial-bg-circle" cx="16" cy="16" r="13" stroke-width="2.5" fill="none" />
+          <circle class="radial-meter-circle" id="radial-meter-circle" cx="16" cy="16" r="13" stroke-width="2.5" fill="none" />
+        </svg>
+        <span class="radial-center-arrow">↑</span>
+      </div>
+      <div class="radial-text-wrap">
+        <span class="radial-pct-text" id="radial-pct-text">0%</span>
+        <span class="radial-label-text">TOP ↑</span>
+      </div>
+    </div>
+
+    <!-- Editorial Mock Article Container (720px) -->
+    <article class="mock-article-stage" id="mock-article">
+      <!-- Article Header -->
+      <header class="mock-article-header">
+        <span class="mock-category-pill">DESIGN SYSTEMS & CRAFT · 720PX MOCK</span>
+        <h1 class="mock-article-title" id="mock-title-target">
+          論排版節奏、留白力道與數位刊物的觸感隱喻
+        </h1>
+        <p class="mock-article-subtitle">
+          On Typographic Rhythm, Negative Space, and the Tactile Metaphors of Digital Editorial Craft
+        </p>
+        <div class="mock-article-meta">
+          <span>LOUIS 著</span>
+          <span>·</span>
+          <span>2026.11.02</span>
+          <span>·</span>
+          <span>預估閱讀約 6 分鐘</span>
+          <span>·</span>
+          <span>2,420 字社論實驗</span>
+        </div>
+      </header>
+
+      <!-- Article Body -->
+      <div class="mock-article-body">
+        <p class="mock-lead">
+          當讀者捧起一本實體精裝書時，重量分布在左掌與右掌之間的微妙偏移，無聲地宣告著進度的流逝。那是人類數百年來習以為常的「空間體感」——手指撫過紙張邊緣的厚薄差異、折角處的微小光影，甚至是油墨乾燥後的微糙觸感，都在向大腦傳遞清晰的認知錨點。
+        </p>
+
+        <p>
+          然而，在現代無限捲動（Infinite Scroll）的數位世界裡，這層直覺的空間感被徹底剝奪了。螢幕上的像素以等速滑入又滑出視界，讀者像是行走在一條永無盡頭的黑色傳送帶上，不知道身在何處，亦不知道何時抵達終點。這種「無重量感」往往導致了現代數位閱讀的焦慮與淺層化。
+        </p>
+
+        <h2>無止境捲動帶來的空間失焦</h2>
+
+        <p>
+          許多現代網站為了解決這個問題，粗暴地在視窗頂端黏貼一條色彩刺眼的厚重進度條。那種如同檔案下載管理器一般的進度回饋，非但沒有喚起安靜的沉浸感，反而時時刻刻在催促讀者：「快點看完、往下滾動、任務尚未完成」。進度條淪為了一種壓迫感的來源，而非寧靜的指引。
+        </p>
+
+        <blockquote>
+          「優秀的編輯設計從不炫耀其存在，它如同精心調配的暖灰紙張，安靜地承載思想的重量，在讀者需要時提供清晰的尺度，在沉浸時徹底隱身於文字身後。」
+          <cite>— 摘自《社論設計手札：空間與字體的留白張力》</cite>
+        </blockquote>
+
+        <p>
+          我們在思考個人主站的社論改版時，提出了一個關鍵假設：<strong>進度指示器是否能夠從實體刊物的裝幀工藝中汲取養分？</strong>
+          例如早期書籍的側邊折頁碼（Foliation）、古騰堡時代的天頭章節註記，或是等寬排版中純粹由方塊與空格構築的字符進度條。
+        </p>
+
+        <h2>實體書頁碼：從物理折頁到等寬數值的認知錨點</h2>
+
+        <p>
+          這正是上方 <strong>Mode B（實體頁碼計數器）</strong> 的靈感來源。我們不依賴張揚的色塊，而是將整篇長文依據視窗閱讀高度動態量化為「等效頁碼（P. 01 / 07）」，並配合等寬字型（Geist Mono）的字符進度：
+        </p>
+
+        <pre><code>// 動態等效頁碼與 ASCII 字符計數演算法
+const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
+  const totalPages = Math.max(4, Math.round(articleHeight / (viewportHeight * 0.85)));
+  const currentPage = Math.min(totalPages, Math.max(1, Math.ceil(progress * totalPages) || 1));
+  
+  // 8 段式微細印刷方塊進度
+  const totalTicks = 8;
+  const filledTicks = Math.round(progress * totalTicks);
+  const asciiBar = '[' + '█'.repeat(filledTicks) + '░'.repeat(totalTicks - filledTicks) + ']';
+  
+  return { currentPage, totalPages, asciiBar };
+};</code></pre>
+
+        <p>
+          每當讀者滾動穿越一個章節段落時，頁碼數字會產生一次 0.28 秒極輕微的縱向微跳動（Micro-flip），重現如同物理翻頁般的段落儀式感。這讓讀者隨時瞄一眼右下角，便能清晰獲知：「我剛翻過第 3 頁，即將進入第 4 頁核心推論」。
+        </p>
+
+        <div class="mock-callout">
+          <div class="mock-callout-header">
+            <span>💡 總編筆記 (Editor's Memo)</span>
+          </div>
+          <div class="mock-callout-body">
+            社論排版中的 720px 寬度並非隨意設定，而是人類眼球在中文每行 38～42 字、英文每行 65～75 字符時的最佳跳行舒適距。超過此寬度，讀者換行時視線極易迷失；低於此寬度，排版則顯得過於碎裂、缺乏權威感。
+          </div>
+        </div>
+
+        <h2>進度條的四種形變：隱身、交接、對話與回流</h2>
+
+        <p>
+          在本次實驗中，我們將常見的進度設計歸納為四種獨立哲學，供你切換對照：
+        </p>
+
+        <p>
+          <strong>一、Mode A (頂部 1.5px 極細線)：</strong> 純粹的極簡主義。厚度僅 1.5px～2px，利用 GPU `scaleX` 在最邊界安靜移動。它的優點是零干擾，缺點是在視線聚焦於螢幕中央時，周邊視野較難主動感知具體剩餘頁數。
+        </p>
+
+        <p>
+          <strong>二、Mode B (實體頁碼 Foliation)：</strong> 書籍感的現代轉譯。以等寬字符呈現 `P. 03 / 08 · [ 42% ] · [████░░░░]`，結合翻頁微動效與紙感膠囊底色，給予讀者高度具象的物理掌握感。
+        </p>
+
+        <p>
+          <strong>三、Mode C (導航列標題交接 Header Crossfade)：</strong> 資訊層級無縫移轉。當讀者向下滾動、文章大標題滾出螢幕時，頂部導航列平滑淡入文章名稱，並以底部的極細墨線作為進度軌道。這在《The Verge》與頂級長篇報導中廣泛應用。
+        </p>
+
+        <p>
+          <strong>四、Mode D (懸浮膠囊環 Radial Island)：</strong> 圓環進度與「返回頂部」雙重功能結合。精巧的 SVG 圓弧隨著滾動填滿，滑鼠懸停時自動浮現向上箭頭，一鍵優雅回流。
+        </p>
+
+        <h2>結語：讓代碼擁有油墨的乾固感</h2>
+
+        <p>
+          數位世界固然瞬息萬變，但人類對「物」的眷戀是永恆的。當我們在網頁中寫下一行行 CSS 與 JavaScript 時，我們所雕琢的不僅僅是資料結構與著色器運算，更是讀者在螢幕另一端注視文字時，內心泛起的那一絲寧靜。
+        </p>
+
+        <p>
+          讓代碼擁有油墨的乾固感，讓介面學會安靜退後——這是我們持續在 WIP Lab 探索的極致工藝。
+        </p>
+
+        <div style="text-align: center; margin: 3.5rem 0; color: var(--ink-muted); font-size: 0.9rem; letter-spacing: 0.5em;">
+          ❖  ❖  ❖
+        </div>
+      </div>
+
+      <!-- Article Footer -->
+      <footer class="mock-article-footer">
+        <div class="mock-tags-row">
+          <span class="mock-tag-pill">#EDITORIAL_CRAFT</span>
+          <span class="mock-tag-pill">#TYPOGRAPHY</span>
+          <span class="mock-tag-pill">#READING_EXPERIENCE</span>
+          <span class="mock-tag-pill">#FOLIATION</span>
+        </div>
+
+        <div class="mock-share-row">
+          <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-muted);">
+            喜歡這篇思考？歡迎分享至社群：
+          </span>
+          <div class="mock-share-btns">
+            <button class="mock-share-btn">COPY LINK</button>
+            <button class="mock-share-btn">SHARE ON X ↗</button>
+          </div>
+        </div>
+
+        <div class="mock-prev-next-grid">
+          <div class="mock-nav-card">
+            <span class="mock-nav-dir">← PREVIOUS ESSAY</span>
+            <span class="mock-nav-title">黑洞奇異點與純代碼聲學合成的物理對齊</span>
+          </div>
+          <div class="mock-nav-card" style="text-align: right;">
+            <span class="mock-nav-dir">NEXT ESSAY →</span>
+            <span class="mock-nav-title">水墨流體 Navier-Stokes 著色器的紙質漫射</span>
+          </div>
+        </div>
+      </footer>
+    </article>
+  </section>
+
+
+  <!-- Web Audio Synthesis & Black Hole Controller Script -->
+  <script type="module">
+    import { BlackHoleDot } from './blackhole-dot.js';
+
+    /* ==========================================================================
+       Procedural Web Audio Engine (純代碼聲音合成引擎)
+       ========================================================================== */
+    class BlackHoleAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.volume = 0.22;
+        this.activeMode = 'opt4'; // default to Option 4 per user feedback
+        this.rebirthDelay = 2.15; // default 2.15s precisely matching visual regrowth
+      }
+
+      ensureContext() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
+          this.masterGain.connect(this.ctx.destination);
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+        return this.ctx;
+      }
+
+      setVolume(val) {
+        this.volume = Math.max(0, Math.min(1, val));
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
+        }
+      }
+
+      // Option 1: Sub-bass Gravitational Thud (深邃重力微沉脈衝)
+      playOption1(t0 = 0) {
+        const ctx = this.ensureContext();
+        const start = ctx.currentTime + t0;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(85, start);
+        osc.frequency.exponentialRampToValueAtTime(32, start + 0.45);
+
+        gain.gain.setValueAtTime(1.0, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.48);
+
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+
+        osc.start(start);
+        osc.stop(start + 0.5);
+      }
+
+      // Option 2: Event Horizon Vacuum Suction (真空視界抽吸聲)
+      playOption2(t0 = 0) {
+        const ctx = this.ensureContext();
+        const start = ctx.currentTime + t0;
+
+        const bufferSize = Math.floor(ctx.sampleRate * 0.48);
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.Q.value = 3.6;
+        filter.frequency.setValueAtTime(320, start);
+        filter.frequency.exponentialRampToValueAtTime(65, start + 0.44);
+
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.75, start);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, start + 0.46);
+
+        noise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(this.masterGain);
+
+        const sub = ctx.createOscillator();
+        const subGain = ctx.createGain();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(70, start);
+        sub.frequency.exponentialRampToValueAtTime(30, start + 0.4);
+
+        subGain.gain.setValueAtTime(0.65, start);
+        subGain.gain.exponentialRampToValueAtTime(0.001, start + 0.42);
+
+        sub.connect(subGain);
+        subGain.connect(this.masterGain);
+
+        noise.start(start);
+        noise.stop(start + 0.48);
+        sub.start(start);
+        sub.stop(start + 0.45);
+      }
+
+      // Option 3: Kinetic Cosmic Bell & Singularity (引力共鳴與星際餘音)
+      playOption3(t0 = 0) {
+        const ctx = this.ensureContext();
+        const start = ctx.currentTime + t0;
+
+        const sub = ctx.createOscillator();
+        const subGain = ctx.createGain();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(75, start);
+        sub.frequency.exponentialRampToValueAtTime(32, start + 0.45);
+        subGain.gain.setValueAtTime(0.9, start);
+        subGain.gain.exponentialRampToValueAtTime(0.001, start + 0.48);
+        sub.connect(subGain);
+        subGain.connect(this.masterGain);
+
+        const bell = ctx.createOscillator();
+        const bellGain = ctx.createGain();
+        bell.type = 'sine';
+        bell.frequency.setValueAtTime(520, start);
+        bell.frequency.exponentialRampToValueAtTime(460, start + 0.58);
+        bellGain.gain.setValueAtTime(0.18, start);
+        bellGain.gain.exponentialRampToValueAtTime(0.0005, start + 0.62);
+        bell.connect(bellGain);
+        bellGain.connect(this.masterGain);
+
+        sub.start(start);
+        sub.stop(start + 0.5);
+        bell.start(start);
+        bell.stop(start + 0.65);
+      }
+
+      // Option 4: Dual-Phase: Collapse & Rebirth (雙態生命週期)
+      playOption4(delay = null) {
+        const ctx = this.ensureContext();
+        // Phase 1: 0.0s immediate collapse thud
+        this.playOption1(0);
+
+        // Phase 2: User calibrated delay
+        const actualDelay = (delay !== null) ? delay : this.rebirthDelay;
+        const start = ctx.currentTime + actualDelay;
+
+        const shimmer = ctx.createOscillator();
+        const shimmerGain = ctx.createGain();
+        shimmer.type = 'sine';
+        shimmer.frequency.setValueAtTime(280, start);
+        shimmer.frequency.exponentialRampToValueAtTime(440, start + 0.38);
+
+        shimmerGain.gain.setValueAtTime(0.001, start);
+        shimmerGain.gain.linearRampToValueAtTime(0.16, start + 0.08);
+        shimmerGain.gain.exponentialRampToValueAtTime(0.001, start + 0.42);
+
+        shimmer.connect(shimmerGain);
+        shimmerGain.connect(this.masterGain);
+
+        shimmer.start(start);
+        shimmer.stop(start + 0.45);
+      }
+
+      // Option 5 (Special): Tri-Phase Cosmic Symphony (三段式宇宙交響)
+      playTriPhase() {
+        const ctx = this.ensureContext();
+        // 1. 0.0s 重力爆發沉音
+        this.playOption1(0);
+
+        // 2. 1.65s 黑洞核心坍縮氣流微吸
+        const tMid = ctx.currentTime + 1.65;
+        const midOsc = ctx.createOscillator();
+        const midGain = ctx.createGain();
+        midOsc.type = 'triangle';
+        midOsc.frequency.setValueAtTime(140, tMid);
+        midOsc.frequency.exponentialRampToValueAtTime(55, tMid + 0.45);
+
+        midGain.gain.setValueAtTime(0.001, tMid);
+        midGain.gain.linearRampToValueAtTime(0.12, tMid + 0.12);
+        midGain.gain.exponentialRampToValueAtTime(0.001, tMid + 0.48);
+
+        midOsc.connect(midGain);
+        midGain.connect(this.masterGain);
+        midOsc.start(tMid);
+        midOsc.stop(tMid + 0.5);
+
+        // 3. 2.15s 單字破土搖曳晨露空靈音
+        const tEnd = ctx.currentTime + 2.15;
+        const endOsc = ctx.createOscillator();
+        const endGain = ctx.createGain();
+        endOsc.type = 'sine';
+        endOsc.frequency.setValueAtTime(320, tEnd);
+        endOsc.frequency.exponentialRampToValueAtTime(520, tEnd + 0.45);
+
+        endGain.gain.setValueAtTime(0.001, tEnd);
+        endGain.gain.linearRampToValueAtTime(0.18, tEnd + 0.08);
+        endGain.gain.exponentialRampToValueAtTime(0.001, tEnd + 0.48);
+
+        endOsc.connect(endGain);
+        endGain.connect(this.masterGain);
+        endOsc.start(tEnd);
+        endOsc.stop(tEnd + 0.5);
+      }
+
+      playById(id) {
+        if (id === 'opt1') this.playOption1();
+        else if (id === 'opt2') this.playOption2();
+        else if (id === 'opt3') this.playOption3();
+        else if (id === 'opt4') this.playOption4();
+        else if (id === 'tri') this.playTriPhase();
+      }
+
+      playActiveSound() {
+        if (this.activeMode === 'mute') return;
+        this.playById(this.activeMode);
+      }
+    }
+
+    const audio = new BlackHoleAudioEngine();
+
+    /* ==========================================================================
+       Audio Lab UI Interactivity
+       ========================================================================== */
+    const soundNames = {
+      'opt1': 'Option 1 (深邃重力微沉脈衝)',
+      'opt2': 'Option 2 (真空視界抽吸聲)',
+      'opt3': 'Option 3 (引力共鳴與星際餘音)',
+      'opt4': 'Option 4 (雙態生命週期)',
+      'mute': '已靜音 (Muted)'
+    };
+
+    const activeSoundLabel = document.getElementById('active-sound-label');
+    const muteToggleBtn = document.getElementById('mute-toggle-btn');
+    const volSlider = document.getElementById('vol-slider');
+    const volValText = document.getElementById('vol-val-text');
+
+    volSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      audio.setVolume(val);
+      volValText.textContent = `${Math.round(val * 100)}%`;
+    });
+
+    // Rebirth delay calibrator
+    const delaySlider = document.getElementById('delay-slider');
+    const delayValText = document.getElementById('delay-val-text');
+
+    const updateDelay = (val) => {
+      const num = parseFloat(val);
+      audio.rebirthDelay = num;
+      if (delaySlider) delaySlider.value = num;
+      if (Math.abs(num - 2.15) < 0.04) {
+        delayValText.textContent = `2.15s (精準對齊單字破土搖曳)`;
+      } else if (Math.abs(num - 0.48) < 0.04) {
+        delayValText.textContent = `0.48s (緊湊引力彈響)`;
+      } else {
+        delayValText.textContent = `${num.toFixed(2)}s`;
+      }
+    };
+
+    if (delaySlider) {
+      delaySlider.addEventListener('input', (e) => {
+        updateDelay(e.target.value);
+      });
+    }
+
+    document.querySelectorAll('[data-preset-delay]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const d = parseFloat(btn.getAttribute('data-preset-delay'));
+        updateDelay(d);
+        audio.playOption4(d);
+      });
+    });
+
+    const btnTriPhase = document.getElementById('btn-tri-phase');
+    if (btnTriPhase) {
+      btnTriPhase.addEventListener('click', (e) => {
+        e.stopPropagation();
+        audio.playTriPhase();
+      });
+    }
+
+    // Preview buttons
+    document.querySelectorAll('[data-preview-btn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-preview-btn');
+        audio.playById(id);
+      });
+    });
+
+    // Sound binding selection
+    const audioCards = document.querySelectorAll('.audio-card');
+    const updateActiveSoundUI = (newMode) => {
+      audio.activeMode = newMode;
+      activeSoundLabel.textContent = soundNames[newMode] || newMode;
+
+      if (newMode === 'mute') {
+        muteToggleBtn.classList.add('is-muted');
+        muteToggleBtn.textContent = '取消靜音';
+        audioCards.forEach(c => c.classList.remove('is-active-sound'));
+      } else {
+        muteToggleBtn.classList.remove('is-muted');
+        muteToggleBtn.textContent = '靜音 (Mute)';
+        audioCards.forEach(card => {
+          const id = card.getAttribute('data-sound-id');
+          const bindBtn = card.querySelector('.btn-select-bind');
+          if (id === newMode) {
+            card.classList.add('is-active-sound');
+            if (bindBtn) bindBtn.textContent = '已綁定';
+          } else {
+            card.classList.remove('is-active-sound');
+            if (bindBtn) bindBtn.textContent = '綁定黑洞';
+          }
+        });
+      }
+    };
+
+    document.querySelectorAll('[data-bind-btn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-bind-btn');
+        updateActiveSoundUI(id);
+      });
+    });
+
+    muteToggleBtn.addEventListener('click', () => {
+      if (audio.activeMode === 'mute') {
+        updateActiveSoundUI('opt1');
+      } else {
+        updateActiveSoundUI('mute');
+      }
+    });
+
+    /* ==========================================================================
+       Black Hole Dot Instances with Audio Hook
+       ========================================================================== */
+    const attachAudioBurst = (bhInstance) => {
+      const originalBurst = bhInstance.triggerBurst.bind(bhInstance);
+      bhInstance.triggerBurst = () => {
+        originalBurst();
+        audio.playActiveSound();
+      };
+    };
+
+    // 1. Cycle card matching homepage
+    const cycleCard = document.getElementById('card-cycle');
+    const cycleBadge = document.getElementById('cycle-badge');
+    const variantNames = {
+      'A': 'Option A (日蝕黑金／銀白光暈)',
+      'B': 'Option B (純粹濃墨流體環)',
+      'C': 'Option C (星際效應暖橘金光環)'
+    };
+
+    if (cycleCard) {
+      const cycleBH = new BlackHoleDot(cycleCard.querySelector('.magnetic-wrap'), {
+        cycle: true,
+        variants: ['A', 'B', 'C'],
+        movement: 0.55,
+        gravTextEl: cycleCard.querySelector('.js-grav-text'),
+        gravSubEl: cycleCard.querySelector('.js-grav-sub'),
+        onVariantChange: (activeVariant) => {
+          const nextIdx = (['A', 'B', 'C'].indexOf(activeVariant) + 1) % 3;
+          const nextVariant = ['A', 'B', 'C'][nextIdx];
+          cycleBadge.textContent = `🔥 首頁同款 · 目前觸發: ${variantNames[activeVariant]} → 下次切換為: Option ${nextVariant}`;
+        }
+      });
+      attachAudioBurst(cycleBH);
+    }
+
+    // 2. Standalone cards for individual inspection
+    const standaloneInstances = [];
+    document.querySelectorAll('.lab-stage-card[data-variant]').forEach((card) => {
+      const variant = card.getAttribute('data-variant') || 'A';
+      const wrap = card.querySelector('.magnetic-wrap');
+      const gravText = card.querySelector('.js-grav-text');
+      const gravSub = card.querySelector('.js-grav-sub');
+
+      const bh = new BlackHoleDot(wrap, {
+        variant,
+        movement: 0.55,
+        gravTextEl: gravText,
+        gravSubEl: gravSub
+      });
+      attachAudioBurst(bh);
+      standaloneInstances.push(bh);
+    });
+
+    document.getElementById('trigger-all-btn').addEventListener('click', () => {
+      standaloneInstances.forEach((bh) => bh.triggerBurst());
+    });
+  </script>
+
+  <!-- ==========================================================================
+       Reading Progress Laboratory Script Controller
        ========================================================================== -->
   <script>
     (function initReadingProgressLab() {
@@ -1528,8 +2213,6 @@
       const telemetryPage = document.getElementById('telemetry-page');
       const telemetryTime = document.getElementById('telemetry-time');
 
-      const customWordInput = document.getElementById('custom-word-input');
-
       let currentMode = 'mode-b'; // Default: Mode B (Book Foliation)
       let currentMechanic = 'reveal'; // Default: 活字逐格顯影
       let currentWordTheme = 'mission'; // Default: 特務 MISSION
@@ -1547,7 +2230,7 @@
         digest:  { active: 'DIGEST..', done: 'INSIGHT✓' }
       };
 
-      // 1. Mode Switcher (Mode A / B / C / D / All)
+      // Mode Switcher Buttons
       const pillBtns = document.querySelectorAll('[data-reading-mode]');
       function setActiveMode(mode) {
         currentMode = mode;
@@ -1591,6 +2274,7 @@
 
       // 3. Word Theme Switcher
       const themeBtns = document.querySelectorAll('[data-word-theme]');
+      const customWordInput = document.getElementById('custom-word-input');
       themeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           currentWordTheme = btn.getAttribute('data-word-theme');
@@ -1622,6 +2306,7 @@
         });
       }
 
+      // Mode D click -> Smooth scroll back to article top
       if (modeD) {
         modeD.addEventListener('click', () => {
           mockArticle.scrollIntoView({ behavior: 'smooth', block: 'start' });
