@@ -711,49 +711,69 @@
       box-shadow: 0 0 6px rgba(18, 19, 22, 0.25);
     }
 
-    /* Mode B: Interactive Progress Capsule (★ User's Preference) */
+    /* Mode B: Elevated Soft-Paper Progress Capsule (No border, blended canvas, convex elevation) */
     #indicator-mode-b {
       position: fixed;
-      bottom: 2rem;
-      right: 2.2rem;
+      bottom: 2.2rem;
+      right: 2.5rem;
       z-index: 9995;
-      background: rgba(249, 248, 245, 0.95);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(18, 19, 22, 0.16);
+      background: #F9F8F5; /* Matches warm ivory paper canvas */
+      border: none; /* Zero hard border */
       border-radius: 9999px;
-      padding: 0.55rem 1.15rem;
-      box-shadow: 0 6px 24px rgba(18, 19, 22, 0.09);
+      padding: 0.62rem 1.25rem;
+      /* Soft layered physical elevation shadow with subtle top light inset */
+      box-shadow: 
+        0 2px 6px rgba(18, 19, 22, 0.04),
+        0 12px 28px -4px rgba(18, 19, 22, 0.12),
+        0 24px 48px -12px rgba(18, 19, 22, 0.08),
+        0 1px 1px rgba(255, 255, 255, 0.85) inset;
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.7rem;
       font-family: var(--font-mono);
       font-size: 0.82rem;
       color: var(--ink-primary);
       user-select: none;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     #indicator-mode-b:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(18, 19, 22, 0.14);
-      border-color: rgba(18, 19, 22, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 4px 12px rgba(18, 19, 22, 0.05),
+        0 18px 36px -4px rgba(18, 19, 22, 0.15),
+        0 30px 60px -10px rgba(18, 19, 22, 0.1),
+        0 1px 1px rgba(255, 255, 255, 0.9) inset;
     }
 
     #indicator-mode-b:active {
       transform: translateY(0) scale(0.98);
+      box-shadow: 
+        0 2px 5px rgba(18, 19, 22, 0.06),
+        0 6px 16px -2px rgba(18, 19, 22, 0.1);
     }
 
     #indicator-mode-b.is-completed {
-      border-color: var(--ink-primary);
-      box-shadow: 0 0 0 1.5px var(--ink-primary), 0 8px 30px rgba(18, 19, 22, 0.15);
-      animation: capsuleCompleteGlow 2.5s infinite ease-in-out;
+      border: none;
+      animation: capsuleElevatedGlow 2.5s infinite ease-in-out;
     }
 
-    @keyframes capsuleCompleteGlow {
-      0%, 100% { box-shadow: 0 0 0 1.5px var(--ink-primary), 0 8px 30px rgba(18, 19, 22, 0.12); }
-      50% { box-shadow: 0 0 0 2.5px var(--ink-primary), 0 12px 36px rgba(18, 19, 22, 0.22); }
+    @keyframes capsuleElevatedGlow {
+      0%, 100% {
+        box-shadow: 
+          0 4px 10px rgba(18, 19, 22, 0.05),
+          0 16px 32px -4px rgba(18, 19, 22, 0.14),
+          0 28px 52px -10px rgba(18, 19, 22, 0.09),
+          0 1px 1px rgba(255, 255, 255, 0.9) inset;
+      }
+      50% {
+        box-shadow: 
+          0 6px 16px rgba(18, 19, 22, 0.07),
+          0 22px 42px -2px rgba(18, 19, 22, 0.18),
+          0 36px 68px -8px rgba(18, 19, 22, 0.12),
+          0 1px 1px rgba(255, 255, 255, 0.95) inset;
+      }
     }
 
     #indicator-mode-b .fol-divider {
