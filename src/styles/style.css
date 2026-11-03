@@ -169,7 +169,7 @@ body.is-loading {
   align-items: center;
 }
 
-/* Unified Link Item with Difference Inversion */
+/* Unified Link Item with Difference Inversion (Non-Obstructive Transparent Baseline) */
 .navbar-link {
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -178,49 +178,50 @@ body.is-loading {
   text-decoration: none;
   letter-spacing: 0.03em;
   position: relative;
-  padding: 0.45rem 1.15rem;
+  padding: 0.45rem 0.95rem;
   border-radius: 0px;
   border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  background: transparent;
-  overflow: hidden;
-  transition: color 0.3s cubic-bezier(0.16, 1, 0.35, 1);
+  background: transparent !important;
+  overflow: visible;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.35, 1);
   z-index: 1;
 }
 
-/* Monolog Exact [data-link-hover]::before Block Wipe */
+/* Subtle Underline Indicator instead of Solid Blocking Fill */
 .navbar-link::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 0px;
+  bottom: 0.15rem;
+  left: 0.95rem;
+  right: 0.95rem;
+  height: 1.5px;
   background-color: #FFFFFF;
   transform-origin: right;
   transform: scaleX(0);
-  transition: transform 600ms cubic-bezier(0.2, 1, 0.36, 1);
-  z-index: -1;
+  transition: transform 320ms cubic-bezier(0.2, 1, 0.36, 1);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .navbar-link-text {
   position: relative;
   z-index: 2;
-  color: #FFFFFF;
-  transition: color 0.3s cubic-bezier(0.16, 1, 0.35, 1);
+  color: #FFFFFF !important;
+  opacity: 0.65;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.35, 1);
+}
+
+.navbar-link:hover .navbar-link-text {
+  opacity: 1;
 }
 
 .navbar-link:hover::before {
   transform-origin: left;
   transform: scaleX(1);
-}
-
-.navbar-link:hover .navbar-link-text {
-  color: #000000;
 }
 
 .navbar-link.is-current::before,
@@ -231,7 +232,7 @@ body.is-loading {
 
 .navbar-link.is-current .navbar-link-text,
 .navbar-link.is-active .navbar-link-text {
-  color: #000000;
+  opacity: 1;
 }
 
 /* GitHub 45° Vector Flying Arrow Inside Unified Bar */

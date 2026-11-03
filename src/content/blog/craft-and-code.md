@@ -6,8 +6,7 @@ category: "engineering"
 tags: ["Creative Engineering", "WebGL", "Typography"]
 cover: "/assets/works/brutalist-building.jpg"
 coverAlt: "粗獷主義幾何結構"
-capsuleWord: "CRAFT"
-capsuleDone: "✦MASTER↑"
+capsule: "CRAFT"
 draft: false
 ---
 

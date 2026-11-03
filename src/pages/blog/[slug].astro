@@ -31,40 +31,10 @@ const dateFormatted = dateISO.slice(0, 10);
 const ogImageUrl = `/og/${post.id}.png`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
-// Format custom capsule words with 8-character zero-jitter guarantee
-function formatCapsuleWords(rawWord?: string, rawDone?: string) {
-  // 1. Active Word (8 chars)
-  const baseActive = (rawWord || 'READING').trim();
-  const activeWord = baseActive.length >= 8 
-    ? baseActive.slice(0, 8) 
-    : baseActive.padEnd(8, '.');
-
-  // 2. Done Word (8 chars)
-  let doneWord = (rawDone || 'FINIS').trim();
-  if (doneWord.includes('↑')) {
-    if (doneWord.length < 8) doneWord = doneWord.padEnd(8, ' ');
-    else if (doneWord.length > 8) doneWord = doneWord.slice(0, 8);
-  } else {
-    const clean = doneWord.replace(/^✦\s*/, '').replace(/\s*↑$/, '');
-    if (clean.length === 6) {
-      doneWord = `✦${clean}↑`;
-    } else if (clean.length === 5) {
-      doneWord = `✦${clean} ↑`;
-    } else if (clean.length === 4) {
-      doneWord = `✦ ${clean} ↑`;
-    } else if (clean.length === 3) {
-      doneWord = `✦  ${clean} ↑`;
-    } else if (clean.length >= 7) {
-      doneWord = `✦${clean.slice(0, 6)}↑`;
-    } else {
-      doneWord = `✦${clean}↑`.padEnd(8, ' ');
-    }
-  }
-
-  return { activeWord, doneWord };
-}
-
-const { activeWord, doneWord } = formatCapsuleWords(post.data.capsuleWord, post.data.capsuleDone);
+// Minimalist Mode: 1 core word for reading, uniform "Back to Top" upon completion
+const rawCore = (post.data.capsule || post.data.capsuleWord || 'READING').trim();
+const activeWord = rawCore.length >= 8 ? rawCore.slice(0, 8) : rawCore.padEnd(8, '.');
+const doneWord = '✦TOP ↑  '; // 8-char zero-jitter Back to Top indicator
 
 const blogPostingJsonLd = {
   "@context": "https://schema.org",
