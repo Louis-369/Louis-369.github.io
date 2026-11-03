@@ -24,6 +24,7 @@ const photos = defineCollection({
     location: z.string(),
     photo: z.string(),
     meta: z.string().optional(),
+    exif: z.string().optional(),
     aspectRatio: z.string().default('auto'),
     draft: z.boolean().default(false),
   }),

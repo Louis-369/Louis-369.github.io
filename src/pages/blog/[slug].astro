@@ -147,21 +147,90 @@ const blogPostingJsonLd = {
     </footer>
   </main>
 
+  <!-- Mode B: Tactile Reading Progress Capsule (Foliation) -->
+  <div id="article-progress-capsule" class="article-progress-capsule is-hidden" role="button" tabindex="0" title="點擊平滑返回長文頂部 (Click to Scroll Top)" aria-live="polite">
+    <div class="fol-percent-wrap">
+      <span class="fol-pct-val">[ <span id="fol-percent">  0%</span> ]</span>
+      <span class="fol-top-hint">[ TOP ↑]</span>
+    </div>
+    <span class="fol-divider">·</span>
+    <div class="fol-ascii-bar" id="fol-ascii">[░░░░░░░░]</div>
+  </div>
+
+  <!-- Editorial Fullscreen Lightbox -->
+  <div class="editorial-lightbox-overlay" id="editorial-lightbox" aria-hidden="true" role="dialog" aria-label="Image Zoom Lightbox">
+    <button class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Close Lightbox">ESC ✕</button>
+    <div class="lightbox-content-box">
+      <img src="" alt="" class="lightbox-img" id="lightbox-img" />
+      <div class="lightbox-caption-bar" id="lightbox-caption"></div>
+    </div>
+  </div>
+
   <script is:inline>
     (() => {
-      // 1. Pure GPU 1.5px Reading Progress Bar
+      // 1. Dual Reading Progress: Top Hairline & Mode B Tactile Capsule
       const progressBar = document.getElementById('reading-progress-bar');
+      const capsule = document.getElementById('article-progress-capsule');
+      const folPercent = document.getElementById('fol-percent');
+      const folAscii = document.getElementById('fol-ascii');
       const articleBody = document.getElementById('article-prose-body');
+
+      const wordTheme = { active: 'READING.', done: '✦FINIS ↑' };
+      const totalTicks = 8;
       let ticking = false;
 
       const updateProgress = () => {
-        if (!progressBar || !articleBody) return;
+        if (!articleBody) return;
         const rect = articleBody.getBoundingClientRect();
         const winH = window.innerHeight;
         const total = Math.max(1, articleBody.offsetHeight - winH * 0.4);
         const scrolled = Math.min(Math.max(0, -rect.top + winH * 0.2), total);
         const ratio = Math.min(1, Math.max(0, scrolled / total));
-        progressBar.style.transform = `scaleX(${ratio})`;
+        const percentInt = Math.round(ratio * 100);
+
+        // Update Top Hairline
+        if (progressBar) {
+          progressBar.style.transform = `scaleX(${ratio})`;
+        }
+
+        // Update Mode B Capsule
+        if (capsule) {
+          // Reveal capsule once user scrolls into article body (> 120px)
+          const isScrolled = window.scrollY > 120;
+          capsule.classList.toggle('is-hidden', !isScrolled);
+
+          const isComplete = ratio >= 0.99;
+          capsule.classList.toggle('is-completed', isComplete);
+
+          if (folPercent) {
+            const pctPadded = (percentInt < 10 ? '   ' : (percentInt < 100 ? '  ' : ' ')) + percentInt + '%';
+            folPercent.textContent = pctPadded;
+          }
+
+          if (folAscii) {
+            let asciiStr = '';
+            const filledTicks = Math.round(ratio * totalTicks);
+            if (isComplete) {
+              asciiStr = '[' + wordTheme.done + ']'; // Exactly 10 chars
+            } else if (ratio <= 0) {
+              asciiStr = '[░░░░░░░░]';
+            } else {
+              let chars = [];
+              for (let i = 0; i < totalTicks; i++) {
+                if (i < filledTicks - 1) {
+                  chars.push(wordTheme.active[i] || '█');
+                } else if (i === filledTicks - 1) {
+                  chars.push('█');
+                } else {
+                  chars.push('░');
+                }
+              }
+              asciiStr = '[' + chars.join('') + ']';
+            }
+            folAscii.textContent = asciiStr;
+          }
+        }
+
         ticking = false;
       };
 
@@ -174,7 +243,88 @@ const blogPostingJsonLd = {
       window.addEventListener('resize', updateProgress, { passive: true });
       updateProgress();
 
-      // 2. Copy Link Micro-Interaction
+      // Smooth scroll back to top when capsule is clicked
+      if (capsule) {
+        capsule.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // 2. Code Block Copy Button Injection
+      const prose = document.getElementById('article-prose-body');
+      if (prose) {
+        const pres = prose.querySelectorAll('pre');
+        pres.forEach((pre) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'code-block-wrapper';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+
+          const copyBtn = document.createElement('button');
+          copyBtn.type = 'button';
+          copyBtn.className = 'code-copy-btn';
+          copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+          copyBtn.innerHTML = '<span>COPY</span>';
+
+          copyBtn.addEventListener('click', async () => {
+            const code = pre.querySelector('code')?.innerText || pre.innerText;
+            try {
+              await navigator.clipboard.writeText(code);
+              copyBtn.classList.add('is-copied');
+              copyBtn.innerHTML = '<span>COPIED ✓</span>';
+              setTimeout(() => {
+                copyBtn.classList.remove('is-copied');
+                copyBtn.innerHTML = '<span>COPY</span>';
+              }, 2000);
+            } catch (_) {}
+          });
+
+          wrapper.appendChild(copyBtn);
+        });
+      }
+
+      // 3. Editorial Lightbox for Images
+      const lightbox = document.getElementById('editorial-lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const lightboxClose = document.getElementById('lightbox-close-btn');
+
+      const openLightbox = (src, alt) => {
+        if (!lightbox || !lightboxImg) return;
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || '';
+        if (lightboxCaption) lightboxCaption.textContent = alt || '';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      };
+
+      const closeLightbox = () => {
+        if (!lightbox) return;
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      };
+
+      if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+          if (e.target !== lightboxImg) closeLightbox();
+        });
+        if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeLightbox();
+        });
+      }
+
+      // Attach click listeners to all prose images and cover image
+      const articleImages = document.querySelectorAll('.article-cover-img, .article-prose img');
+      articleImages.forEach((img) => {
+        img.addEventListener('click', () => {
+          openLightbox(img.src, img.alt);
+        });
+      });
+
+      // 4. Share Bar Copy Link
       const copyBtn = document.getElementById('copy-link-btn');
       const copyText = document.getElementById('copy-link-text');
       if (copyBtn && copyText) {

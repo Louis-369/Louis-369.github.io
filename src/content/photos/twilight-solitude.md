@@ -4,6 +4,7 @@ pubDate: 2026-10-28
 location: "TAICHUNG · #10"
 photo: "/assets/works/sunset-park.jpg"
 meta: "35mm · f/2.0 · Dusk"
+exif: "Ricoh GR IIIx · 40mm · f/2.8 · 1/125s · ISO 400"
 aspectRatio: "3:2"
 draft: false
 ---

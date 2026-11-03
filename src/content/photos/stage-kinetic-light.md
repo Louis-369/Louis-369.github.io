@@ -4,6 +4,7 @@ pubDate: 2026-10-20
 location: "TAIPEI · #08"
 photo: "/assets/works/concert-stage.jpg"
 meta: "28mm · f/1.4 · ISO 1600"
+exif: "Leica Q2 · 28mm · f/1.4 · 1/500s · ISO 1600"
 aspectRatio: "16:9"
 draft: false
 ---
