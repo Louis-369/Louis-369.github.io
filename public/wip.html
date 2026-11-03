@@ -737,29 +737,42 @@
       box-sizing: border-box;
     }
 
-    /* Hover: 純平面過渡至凸起效果（疊加 Uiverse 雙向光影、向上負位移 translateY(-2px) 與白邊框） */
-    #indicator-mode-b:hover {
-      border: 1px solid #FFFFFF;
-      box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
-      transform: translateY(-2px);
+    /* Hover: 純平面過渡至凸起效果（僅在支援 hover 的滑鼠/軌跡板觸發，避免行動觸控端殘留 hover 狀態） */
+    @media (hover: hover) and (pointer: fine) {
+      #indicator-mode-b:hover {
+        border: 1px solid #FFFFFF;
+        box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
+        transform: translateY(-2px);
+      }
+
+      #indicator-mode-b.is-completed:hover {
+        border: 1px solid #FFFFFF;
+        box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
+        transform: translateY(-2px);
+      }
+
+      #indicator-mode-b:hover .fol-pct-val {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      #indicator-mode-b:hover .fol-top-hint {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
-    /* Active: 按壓下沉反饋 */
+    /* Active: 按壓下沉反饋（桌機與行動端 Tap 皆支援） */
     #indicator-mode-b:active {
       box-shadow: 4px 4px 12px #DDD8CE, -4px -4px 12px #FFFFFF;
-      transform: translateY(0);
+      transform: translateY(0) scale(0.99);
+      border: 1px solid #FFFFFF;
     }
 
     #indicator-mode-b.is-completed {
       border: 1px solid #F9F8F5;
       box-shadow: 0 0 0 rgba(0, 0, 0, 0);
       transform: translateY(0);
-    }
-
-    #indicator-mode-b.is-completed:hover {
-      border: 1px solid #FFFFFF;
-      box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
-      transform: translateY(-2px);
     }
 
     #indicator-mode-b .fol-divider {
@@ -799,15 +812,6 @@
       font-weight: 600;
     }
 
-    #indicator-mode-b:hover .fol-pct-val {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-
-    #indicator-mode-b:hover .fol-top-hint {
-      transform: translateY(0);
-      opacity: 1;
-    }
 
     #indicator-mode-b .fol-ascii-bar {
       letter-spacing: 0.04em;
@@ -1242,22 +1246,50 @@
       .reading-control-dock {
         flex-direction: column;
         align-items: stretch;
+        gap: 0.8rem;
+        padding: 0.9rem 1rem;
       }
       .mode-pills-wrap {
-        justify-content: center;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+        -webkit-overflow-scrolling: touch;
       }
       .reading-telemetry {
         justify-content: center;
       }
       #indicator-mode-b {
-        bottom: 1rem;
+        bottom: max(1rem, calc(env(safe-area-inset-bottom) + 0.6rem));
         right: 1rem;
-        left: 1rem;
-        justify-content: center;
+        left: auto;
+        padding: 0.55rem 1.05rem;
+        font-size: 0.76rem;
+        min-width: 228px;
+        gap: 0.5rem;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      }
+      #indicator-mode-b .fol-percent-wrap {
+        font-size: 0.76rem;
+        width: 8ch;
+        min-width: 8ch;
+      }
+      #indicator-mode-b .fol-ascii-bar {
+        font-size: 0.76rem;
+        min-width: 10ch;
       }
       #indicator-mode-d {
-        bottom: 1rem;
+        bottom: max(1rem, calc(env(safe-area-inset-bottom) + 0.6rem));
         right: 1rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      #indicator-mode-b {
+        right: 0.6rem;
+        padding: 0.5rem 0.85rem;
+        font-size: 0.72rem;
+        min-width: 212px;
+        gap: 0.4rem;
       }
     }
 
