@@ -9,7 +9,7 @@ const allPhotos = await getCollection('photos', ({ data }) => !data.draft);
 const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
 
-<BaseLayout isHome={true} currentNav="works">
+<BaseLayout isHome={true}>
   <main class="main-wrapper">
     <!-- Hero Section (Unified Single-Container Architecture) -->
     <section class="hero-section" id="hero">
