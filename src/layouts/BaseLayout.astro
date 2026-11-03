@@ -152,15 +152,67 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
   <!-- Page Content Slot -->
   <slot />
 
-  <!-- Editorial Site Footer -->
+  <!-- Editorial Site Footer (Made by Pan + Louis High-Craft Architecture) -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <div class="footer-cta-block">
-        <h2 class="footer-big-heading">Let's craft the next breakthrough.</h2>
+
+      <!-- Layer 1: Consultation & Service Capabilities Card (Dark Tactile Housing) -->
+      <div class="footer-consult-card">
+        <div class="footer-consult-left">
+          <span class="footer-consult-tag">(WHAT I CRAFT & CONSULT)</span>
+          <p class="footer-consult-desc">
+            創意工程 · 互動著色器與物理模擬 · 高工藝社論排版 · AI 自動化工作流 · 本地 Agent 系統整合
+          </p>
+          <div class="footer-consult-pills">
+            <span class="consult-pill">Creative Engineering</span>
+            <span class="consult-pill">Interactive WebGL</span>
+            <span class="consult-pill">Editorial Typography</span>
+            <span class="consult-pill">AI Workflow Tools</span>
+            <span class="consult-pill">Solo Business</span>
+          </div>
+        </div>
+        <div class="footer-consult-right">
+          <a href="mailto:hello@louis-369.github.io" class="footer-consult-btn">
+            <span>諮詢合作 Inquiries</span>
+            <span class="consult-arrow">→</span>
+          </a>
+        </div>
       </div>
 
+      <!-- Layer 2: Heroic Brand Wordmark (Made by Pan style, massive Serif Italic "Louis.") -->
+      <div class="footer-brand-hero">
+        <span class="footer-brand-title">Louis.</span>
+      </div>
+
+      <!-- Layer 3: Middle Two-Column Grid (Collaborate & Location/Mission) -->
+      <div class="footer-middle-grid">
+        <div class="footer-col-collaborate">
+          <span class="footer-col-label">COLLABORATE</span>
+          <a href="mailto:hello@louis-369.github.io" class="footer-email-link">
+            hello@louis-369.github.io
+          </a>
+        </div>
+        <div class="footer-col-mission">
+          <span class="footer-col-label">TAIPEI / REMOTE</span>
+          <p class="footer-mission-text">
+            以工程之嚴謹鑄造系統，以編排之美感傳遞溫度。專注於現代客戶端速度、流體物理模擬與歷久彌新的數位工藝。
+          </p>
+        </div>
+      </div>
+
+      <hr class="footer-hairline" />
+
+      <!-- Layer 4: Bottom Bar (Socials Left, Spoon Easter Egg Center, Copyright Right) -->
       <div class="footer-bottom-row">
-        <span>© 2026 LOUIS · ALL RIGHTS RESERVED</span>
+        <div class="footer-social-links">
+          <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="footer-social-link">GitHub</a>
+          <span class="footer-social-dot">·</span>
+          <a href="/blog/" class="footer-social-link" data-astro-prefetch="hover">Blog</a>
+          <span class="footer-social-dot">·</span>
+          <a href="/photos/" class="footer-social-link" data-astro-prefetch="hover">Photos</a>
+          <span class="footer-social-dot">·</span>
+          <a href="/rss.xml" target="_blank" rel="noopener noreferrer" class="footer-social-link">RSS ↗</a>
+        </div>
         
         <!-- Psychic Silver Spoon Easter Egg Trigger -->
         <div class="footer-spoon-easter-egg" id="footer-spoon-trigger" role="button" tabindex="0" aria-label="There is no spoon">
@@ -188,7 +240,9 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
           </svg>
         </div>
 
-        <span>DESIGNED WITH EDITORIAL CRAFT</span>
+        <div class="footer-copyright-text">
+          <span>© 2026 LOUIS · ALL RIGHTS RESERVED</span>
+        </div>
       </div>
     </div>
   </footer>
