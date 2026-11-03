@@ -11,7 +11,7 @@ export const siteConfig = {
   tagline: "Building digital tools that think & craft that moves people.",
   bio: "Specializing in high-performance web applications, interactive creative media, and seamless digital utility tools. Combining engineering rigor with award-winning editorial aesthetic.",
   githubUrl: "https://github.com/Louis-369",
-  email: "mailto:hello@louis-369.github.io"
+  email: "mailto:contact.louis369@gmail.com"
 };
 
 export const featuredProjects = [
