@@ -770,9 +770,9 @@
   right: 2.2rem;
   z-index: 9995;
   color: var(--ink-primary, #121316);
-  padding: 0.65em 1.4em;
+  padding: 0.7em 1.7em;
   font-size: 0.85rem;
-  border-radius: 0.5em;
+  border-radius: 9999px;
   background: var(--bg-canvas, #F9F8F5);
   cursor: pointer;
   border: 1px solid var(--bg-canvas, #F9F8F5);
