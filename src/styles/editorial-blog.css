@@ -773,13 +773,16 @@
   padding: 0.7em 1.7em;
   font-size: 0.85rem;
   border-radius: 9999px;
-  background: var(--bg-canvas, #F9F8F5);
+  background: rgba(249, 248, 245, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   cursor: pointer;
-  border: 1px solid var(--bg-canvas, #F9F8F5);
+  border: 1px solid rgba(18, 19, 22, 0.08);
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.28s ease,
               visibility 0.3s;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   transform: translateY(0);
@@ -802,8 +805,9 @@
 
 @media (hover: hover) and (pointer: fine) {
   .article-progress-capsule:hover {
+    background: rgba(255, 255, 255, 0.92);
     border: 1px solid #FFFFFF;
-    box-shadow: 6px 6px 12px #DDD8CE, -6px -6px 12px #FFFFFF;
+    box-shadow: 6px 6px 14px rgba(221, 216, 206, 0.6), -6px -6px 14px rgba(255, 255, 255, 0.8);
     transform: translateY(-2px);
   }
 

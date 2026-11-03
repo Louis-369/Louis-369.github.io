@@ -158,7 +158,7 @@ const blogPostingJsonLd = {
     class="article-progress-capsule is-hidden" 
     role="button" 
     tabindex="0" 
-    title="點擊平滑返回長文頂部 (Click to Scroll Top)" 
+    aria-label="Scroll back to top" 
     aria-live="polite"
     data-active-word={activeWord}
     data-done-word={doneWord}
@@ -188,10 +188,11 @@ const blogPostingJsonLd = {
       const folPercent = document.getElementById('fol-percent');
       const folAscii = document.getElementById('fol-ascii');
       const articleBody = document.getElementById('article-prose-body');
+      const siteFooter = document.querySelector('.site-footer');
 
       const wordTheme = { 
         active: capsule?.dataset.activeWord || 'READING.', 
-        done: capsule?.dataset.doneWord || '✦FINIS ↑' 
+        done: capsule?.dataset.doneWord || '✦TOP ↑  ' 
       };
       const totalTicks = 8;
       let ticking = false;
@@ -212,9 +213,14 @@ const blogPostingJsonLd = {
 
         // Update Mode B Capsule
         if (capsule) {
-          // Reveal capsule once user scrolls into article body (> 120px)
+          // Reveal once scrolled (> 120px) AND auto-dismiss when footer is reached to avoid collision
+          let isCollidingWithFooter = false;
+          if (siteFooter) {
+            const footerRect = siteFooter.getBoundingClientRect();
+            isCollidingWithFooter = footerRect.top < winH;
+          }
           const isScrolled = window.scrollY > 120;
-          capsule.classList.toggle('is-hidden', !isScrolled);
+          capsule.classList.toggle('is-hidden', !isScrolled || isCollidingWithFooter);
 
           const isComplete = ratio >= 0.99;
           capsule.classList.toggle('is-completed', isComplete);
