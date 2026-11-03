@@ -1293,23 +1293,577 @@
       }
     }
 
+    /* =============================================================
+       LAB 03: 404 Not Found Experimental Laboratory Styles
+       ============================================================= */
+    .notfound-lab-section {
+      max-width: 1100px;
+      margin: 0 auto 6rem;
+      position: relative;
+    }
+
+    .notfound-lab-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-paper);
+    }
+
+    /* Sticky Mode Switcher Dock for 404 Lab */
+    .notfound-control-dock {
+      position: sticky;
+      top: 1.2rem;
+      z-index: 1000;
+      background: rgba(249, 248, 245, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(18, 19, 22, 0.14);
+      border-radius: 14px;
+      padding: 0.85rem 1.25rem;
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: 0 8px 30px rgba(18, 19, 22, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .notfound-stage-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    /* Common Card Surface */
+    .nf-stage-card {
+      border: 1px solid var(--border-paper);
+      border-radius: 20px;
+      padding: clamp(2rem, 5vw, 4rem);
+      background: var(--bg-canvas);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 24px rgba(18, 19, 22, 0.03);
+    }
+
+    .nf-stage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(18, 19, 22, 0.06);
+      color: var(--ink-secondary);
+      margin-bottom: 2rem;
+    }
+
+    /* Dark Theme Surface for 404 Cards */
+    .notfound-stage-deck.is-dark-theme .nf-stage-card {
+      background: #121316;
+      color: #F9F8F5;
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-stage-badge {
+      background: rgba(255, 255, 255, 0.1);
+      color: #A3A8B3;
+    }
+
+    /* -------------------------------------------------------------
+       OPTION A: Editorial Lexicon & Singularity Collapse
+    ------------------------------------------------------------- */
+    .nf-title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .nf-big-num {
+      font-family: var(--font-serif);
+      font-size: clamp(4rem, 11vw, 8rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      color: var(--ink-primary);
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-big-num {
+      color: #FFFFFF;
+    }
+
+    /* Micro Black Hole Dot Singularity */
+    .nf-dot-singularity {
+      display: inline-block;
+      width: clamp(20px, 3.5vw, 36px);
+      height: clamp(20px, 3.5vw, 36px);
+      border-radius: 50%;
+      background: #121316;
+      position: relative;
+      cursor: pointer;
+      vertical-align: baseline;
+      margin-left: 0.1em;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-dot-singularity {
+      background: #050507;
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.35);
+    }
+
+    .nf-dot-singularity::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(18, 19, 22, 0.25);
+      animation: singularityPulse 3s ease-in-out infinite alternate;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-dot-singularity::before {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .nf-dot-singularity::after {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(18, 19, 22, 0.2);
+      transform: rotate(45deg);
+      animation: singularitySpin 14s linear infinite;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-dot-singularity::after {
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .nf-dot-singularity:hover {
+      transform: scale(1.35);
+    }
+
+    @keyframes singularityPulse {
+      0% { transform: scale(0.92); opacity: 0.35; }
+      100% { transform: scale(1.15); opacity: 0.9; }
+    }
+
+    @keyframes singularitySpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .nf-phonetic-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+      color: var(--ink-muted);
+      margin: 1.4rem 0 2rem;
+      flex-wrap: wrap;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-phonetic-bar {
+      color: #9499A3;
+    }
+
+    .nf-phonetic-pill {
+      background: rgba(18, 19, 22, 0.05);
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      letter-spacing: 0.04em;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-phonetic-pill {
+      background: rgba(255, 255, 255, 0.08);
+      color: #CBD5E1;
+    }
+
+    .nf-def-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      max-width: 760px;
+      font-family: var(--font-tc-serif);
+      line-height: 1.75;
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      color: var(--ink-secondary);
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-def-list {
+      color: #D1D5DB;
+    }
+
+    .nf-def-item {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+    }
+
+    .nf-def-num {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--ink-primary);
+      opacity: 0.75;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-def-num {
+      color: #FFFFFF;
+    }
+
+    .nf-def-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      opacity: 0.65;
+      margin-right: 0.35rem;
+    }
+
+    /* Escape Actions Bar with Neumorphic Tactile Buttons */
+    .nf-escape-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2.8rem;
+      align-items: center;
+    }
+
+    .nf-escape-btn {
+      color: #090909;
+      padding: 0.7em 1.6em;
+      font-size: 0.84rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+      border-radius: 0.6em;
+      background: #e8e8e8;
+      cursor: pointer;
+      border: 1px solid #e8e8e8;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 5px 5px 12px #c5c5c5, -5px -5px 12px #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .nf-escape-btn:hover {
+      border: 1px solid #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 14px #bcbcbc, -6px -6px 14px #ffffff;
+    }
+
+    .nf-escape-btn:active {
+      box-shadow: 3px 3px 8px #c5c5c5, -3px -3px 8px #ffffff;
+      transform: translateY(0);
+    }
+
+    /* Dark Mode Neumorphic Button variant */
+    .notfound-stage-deck.is-dark-theme .nf-escape-btn {
+      color: #F3F4F6;
+      background: #1C1E23;
+      border: 1px solid #282C34;
+      box-shadow: 5px 5px 12px #0B0C0E, -5px -5px 12px #2A2E36;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-escape-btn:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 6px 6px 14px #07080A, -6px -6px 14px #323742;
+    }
+
+    .notfound-stage-deck.is-dark-theme .nf-escape-btn:active {
+      box-shadow: 2px 2px 6px #0B0C0E, -2px -2px 6px #2A2E36;
+    }
+
+    .nf-telemetry-foot {
+      margin-top: 2.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px dashed var(--border-paper);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+    }
+
+    /* -------------------------------------------------------------
+       OPTION B: The Matrix & Spoon Truth
+    ------------------------------------------------------------- */
+    .stage-spoon-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      padding: 1.5rem 0;
+    }
+
+    .matrix-mini-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      border-radius: 16px;
+      z-index: 1;
+    }
+
+    .matrix-mini-canvas.is-active {
+      opacity: 0.28;
+    }
+
+    .spoon-focal-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: rgba(18, 19, 22, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      margin: 1.5rem 0 2rem;
+      box-shadow: 0 4px 18px rgba(18, 19, 22, 0.03);
+    }
+
+    .notfound-stage-deck.is-dark-theme .spoon-focal-circle {
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .spoon-focal-circle:hover {
+      background: rgba(18, 19, 22, 0.08);
+      transform: scale(1.06);
+    }
+
+    .notfound-stage-deck.is-dark-theme .spoon-focal-circle:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .stage-spoon-svg {
+      width: 68px;
+      height: 68px;
+      overflow: visible;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stage-spoon-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+      max-width: 640px;
+      line-height: 1.55;
+      color: var(--ink-primary);
+      position: relative;
+      z-index: 2;
+      margin-bottom: 1rem;
+    }
+
+    .notfound-stage-deck.is-dark-theme .stage-spoon-quote {
+      color: #F3F4F6;
+    }
+
+    .spoon-punchline-box {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+      color: #00FF66;
+      background: #080A09;
+      padding: 0.5rem 1.4rem;
+      border-radius: 999px;
+      margin: 1rem 0 2rem;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.4s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .spoon-punchline-box.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* -------------------------------------------------------------
+       OPTION C: Deep Space Radar & Lost Coordinates
+    ------------------------------------------------------------- */
+    .stage-radar-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .stage-radar-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+
+    .radar-canvas-wrap {
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 1px solid rgba(18, 19, 22, 0.2);
+      position: relative;
+      overflow: hidden;
+      background: #090B0E;
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .radar-canvas-elem {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .radar-telemetry-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .radar-telemetry-table {
+      width: 100%;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      border-collapse: collapse;
+    }
+
+    .radar-telemetry-table td {
+      padding: 0.45rem 0;
+      border-bottom: 1px dashed var(--border-paper);
+    }
+
+    .radar-label {
+      color: var(--ink-muted);
+      width: 38%;
+    }
+
+    .radar-val {
+      font-weight: 500;
+      color: var(--ink-primary);
+    }
+
+    .notfound-stage-deck.is-dark-theme .radar-val {
+      color: #E2E8F0;
+    }
+
+    .radar-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #EF4444;
+      font-weight: 600;
+    }
+
+    .radar-blip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EF4444;
+      animation: blipFade 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes blipFade {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* Auto Warp Jump Bar */
+    .auto-warp-card {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      background: rgba(18, 19, 22, 0.04);
+      border: 1px solid var(--border-paper);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .notfound-stage-deck.is-dark-theme .auto-warp-card {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .warp-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(18, 19, 22, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .notfound-stage-deck.is-dark-theme .warp-progress-track {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .warp-progress-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--ink-primary);
+      transform-origin: left center;
+      transition: transform 0.1s linear;
+    }
+
+    .notfound-stage-deck.is-dark-theme .warp-progress-fill {
+      background: #00FF66;
+    }
+
+    /* Mode Filtering for LAB 03 Deck */
+    .notfound-stage-deck[data-active-mode="mode-a"] #stage-card-b,
+    .notfound-stage-deck[data-active-mode="mode-a"] #stage-card-c {
+      display: none;
+    }
+
+    .notfound-stage-deck[data-active-mode="mode-b"] #stage-card-a,
+    .notfound-stage-deck[data-active-mode="mode-b"] #stage-card-c {
+      display: none;
+    }
+
+    .notfound-stage-deck[data-active-mode="mode-c"] #stage-card-a,
+    .notfound-stage-deck[data-active-mode="mode-c"] #stage-card-b {
+      display: none;
+    }
+
+    .notfound-stage-deck[data-active-mode="all"] .nf-stage-card {
+      display: block;
+    }
   </style>
 </head>
 <body class="wip-lab-body">
 
   <header class="lab-header">
     <div>
-      <div class="lab-eyebrow">EXPERIMENTAL LAB · 黑洞與聲學實驗室</div>
-      <h1 class="lab-title">WebGL Singularity & Audio Lab</h1>
+      <div class="lab-eyebrow">EXPERIMENTAL LAB · 綜合前端實驗室</div>
+      <h1 class="lab-title">Creative Engineering Lab</h1>
     </div>
     <div class="lab-actions">
-      <button class="lab-btn is-primary" id="trigger-all-btn">⚡ 同步觸發全黑洞</button>
+      <a href="#blackhole-lab" class="lab-btn">01 黑洞聲學</a>
+      <a href="#reading-lab" class="lab-btn">02 閱讀進度</a>
+      <a href="#notfound-lab" class="lab-btn is-primary">03 404 實驗室</a>
       <a href="/" class="lab-btn">← 返回首頁</a>
     </div>
   </header>
 
   <!-- Audio Lab Interactive Control Center -->
-  <section class="audio-lab-panel">
+  <section class="audio-lab-panel" id="blackhole-lab">
     <div class="audio-panel-header">
       <div class="audio-panel-title-wrap">
         <h2>🎧 Web Audio 純代碼音效實驗室</h2>
@@ -1770,6 +2324,250 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
         </div>
       </footer>
     </article>
+  </section>
+
+  <hr class="lab-divider">
+
+  <!-- ==========================================================================
+       LAB 03: 404 Not Found Experimental Laboratory
+       ========================================================================== -->
+  <section class="notfound-lab-section" id="notfound-lab">
+    <div class="notfound-lab-header">
+      <span class="lab-eyebrow">LAB 03 · 404 NOT FOUND EXPERIMENTAL LABORATORY</span>
+      <h2 style="font-family: var(--font-tc-serif); font-size: 1.85rem; font-weight: 700; margin: 0.4rem 0 0.6rem;">
+        404 頁面設計與物理互動實驗場
+      </h2>
+      <p style="color: var(--ink-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 760px;">
+        探索 3 款深度對齊米白紙感社論、黑洞奇異點與銀湯匙世界觀的 404 形態。點擊頂部中控台可即時切換單一模式、變更畫布色調或三者並行對照。
+      </p>
+    </div>
+
+    <!-- Sticky 404 Control Deck -->
+    <div class="notfound-control-dock" id="notfound-control-dock">
+      <div class="reading-control-main-row">
+        <div class="mode-pills-wrap" id="nf-mode-tabs">
+          <button class="mode-pill is-active" data-nf-mode="mode-a">
+            <span class="pill-dot">●</span>
+            <span>OPTION A · 字典詞條 × 奇異點</span>
+          </button>
+          <button class="mode-pill" data-nf-mode="mode-b">
+            <span class="pill-dot">●</span>
+            <span>OPTION B · 駭客任務 × 湯匙真理</span>
+          </button>
+          <button class="mode-pill" data-nf-mode="mode-c">
+            <span class="pill-dot">●</span>
+            <span>OPTION C · 深空雷達 × 訊號遺失</span>
+          </button>
+          <button class="mode-pill" data-nf-mode="all">
+            <span class="pill-dot">●</span>
+            <span>❖ 三款並列對照</span>
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button class="lab-btn" id="nf-theme-toggle-btn" style="padding: 0.45rem 1rem; font-size: 0.76rem;">
+            🌓 畫布切換：墨黑虛空
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 404 Stages Deck -->
+    <div class="notfound-stage-deck" id="nf-stage-deck" data-active-mode="mode-a">
+
+      <!-- STAGE A: Editorial Lexicon & Singularity Collapse -->
+      <article class="nf-stage-card" id="stage-card-a">
+        <div class="nf-stage-badge">
+          <span>● OPTION A · EDITORIAL LEXICON & SINGULARITY COLLAPSE</span>
+        </div>
+
+        <div class="nf-title-wrap">
+          <h1 class="nf-big-num">404</h1>
+          <span class="nf-dot-singularity" id="nf-singularity-dot" title="Click to trigger Singularity Warp"></span>
+        </div>
+
+        <div class="nf-phonetic-bar">
+          <span class="nf-phonetic-pill">/ˌfɔːr.oʊˈfɔːr/</span>
+          <span>·</span>
+          <span class="nf-phonetic-pill">adj.</span>
+          <span>·</span>
+          <span>[HTTP SPEC 1996 · SINGULARITY_STABLE]</span>
+        </div>
+
+        <div class="nf-def-list">
+          <div class="nf-def-item">
+            <span class="nf-def-num">1.</span>
+            <p>
+              <span class="nf-def-tag">[Cosmology]</span>
+              Lost beyond the cosmic event horizon; unmapped, unwritten, or collapsed into the central gravitational singularity.
+            </p>
+          </div>
+          <div class="nf-def-item">
+            <span class="nf-def-num">2.</span>
+            <p>
+              <span class="nf-def-tag">[Editorial]</span>
+              所尋之處已坍縮為奇異點，或尚未被鑄造。文字與光影在此處暫停流動。
+            </p>
+          </div>
+          <div class="nf-def-item">
+            <span class="nf-def-num">3.</span>
+            <p>
+              <span class="nf-def-tag">[Telemetry]</span>
+              Spacetime coordinates out of bounds: <code style="font-family: var(--font-mono); font-size: 0.88em; background: rgba(18,19,22,0.06); padding: 0.15em 0.4em; border-radius: 4px;">GET /lost-dimension → 404_PAGE_NOT_FOUND</code>
+            </p>
+          </div>
+        </div>
+
+        <!-- Tactile Neumorphic Escape Capsules -->
+        <div class="nf-escape-bar">
+          <a href="/" class="nf-escape-btn">
+            <span>←</span>
+            <span>RETURN TO ORBIT (回首頁)</span>
+          </a>
+          <a href="/blog/" class="nf-escape-btn">
+            <span>READ ESSAYS (閱讀社論)</span>
+          </a>
+          <a href="/photos/" class="nf-escape-btn">
+            <span>PHOTO LOG (攝影切片)</span>
+          </a>
+        </div>
+
+        <div class="nf-telemetry-foot">
+          <span>EVENT_HORIZON_DIAMETER: 24.8 KM</span>
+          <span>GRAVITY: 9.81G</span>
+          <span>SYSTEM_STATE: NOMINAL · ZERO_LEAKAGE</span>
+        </div>
+      </article>
+
+      <!-- STAGE B: The Matrix & Spoon Truth -->
+      <article class="nf-stage-card" id="stage-card-b">
+        <canvas class="matrix-mini-canvas" id="stage-b-matrix-canvas"></canvas>
+        <div class="nf-stage-badge">
+          <span>● OPTION B · THE MATRIX & SPOON TRUTH</span>
+        </div>
+
+        <div class="stage-spoon-wrap">
+          <div class="nf-title-wrap" style="justify-content: center; margin-bottom: 0.5rem;">
+            <h1 class="nf-big-num">404.</h1>
+          </div>
+
+          <blockquote class="stage-spoon-quote">
+            “Do not try and find the page. That's impossible. Instead... only try to realize the truth.”
+          </blockquote>
+
+          <!-- Interactive Psychic Spoon Focal Frame -->
+          <div class="spoon-focal-circle" id="stage-spoon-trigger" title="Hover to bend spoon · Click to kink and trigger Matrix Rain">
+            <svg class="stage-spoon-svg" id="stage-spoon-svg" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="stageSpoonBowlGrad" x1="16" y1="4" x2="34" y2="18" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#121316"/>
+                  <stop offset="60%" stop-color="#2D3039"/>
+                  <stop offset="100%" stop-color="#121316"/>
+                </linearGradient>
+                <linearGradient id="stageSpoonCavityGrad" x1="18" y1="5" x2="30" y2="16" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#0F1013"/>
+                  <stop offset="40%" stop-color="#4A5568"/>
+                  <stop offset="100%" stop-color="#CBD5E1"/>
+                </linearGradient>
+              </defs>
+              <g id="stage-spoon-group" transform="rotate(-45 25 25)">
+                <ellipse cx="25" cy="11.5" rx="7.5" ry="9.5" fill="url(#stageSpoonBowlGrad)"/>
+                <ellipse cx="25" cy="11.5" rx="5.8" ry="7.8" fill="url(#stageSpoonCavityGrad)"/>
+                <path d="M 19.8 11.5 C 19.8 7.5, 22 4.5, 25 4.5 C 28 4.5, 30.2 7.5, 30.2 11.5" stroke="#FFFFFF" stroke-width="0.8" opacity="0.65" stroke-linecap="round" fill="none"/>
+                <path id="stage-spoon-handle" d="M 25 19.5 Q 25 31.5 25 44" stroke="#121316" stroke-width="2.6" stroke-linecap="round"/>
+                <circle cx="25" cy="43.5" r="1.6" fill="#121316"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="spoon-punchline-box" id="stage-punchline-box">
+            <span style="color: #00FF66;">●</span>
+            <span id="stage-punchline-text">There is no page.</span>
+          </div>
+
+          <div class="nf-escape-bar" style="justify-content: center; margin-top: 1rem;">
+            <a href="/" class="nf-escape-btn">
+              <span>✦</span>
+              <span>WAKE UP & RETURN TO REALITY (醒來並返回)</span>
+            </a>
+            <button class="nf-escape-btn" id="stage-b-reset-btn" style="background: transparent;">
+              <span>↺</span>
+              <span>RE-BEND SPOON (重試念力)</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- STAGE C: Deep Space Radar & Lost Coordinates -->
+      <article class="nf-stage-card" id="stage-card-c">
+        <div class="nf-stage-badge">
+          <span>● OPTION C · DEEP SPACE RADAR & LOST COORDINATES</span>
+        </div>
+
+        <div class="stage-radar-grid">
+          <!-- Canvas Polar Radar Sweeper -->
+          <div class="radar-canvas-wrap">
+            <canvas class="radar-canvas-elem" id="stage-radar-canvas" width="270" height="270"></canvas>
+          </div>
+
+          <!-- Telemetry Column -->
+          <div class="radar-telemetry-col">
+            <div class="nf-title-wrap">
+              <h1 class="nf-big-num" style="font-size: clamp(2.5rem, 6vw, 4.2rem);">HTTP 404</h1>
+              <span class="radar-status-badge">
+                <span class="radar-blip-dot"></span>
+                <span>SIGNAL_LOST</span>
+              </span>
+            </div>
+
+            <p style="font-family: var(--font-tc-serif); font-size: 1.05rem; line-height: 1.6; color: var(--ink-secondary);">
+              深空脈衝探測儀未截獲有效反射信號。目標空間座標可能處於未坍縮態、已遷移或已被黑洞事件視界吞噬。
+            </p>
+
+            <table class="radar-telemetry-table">
+              <tbody>
+                <tr>
+                  <td class="radar-label">COORDINATES</td>
+                  <td class="radar-val">RA 18h 36m 56s · DEC -36° 27′ 33″</td>
+                </tr>
+                <tr>
+                  <td class="radar-label">FREQUENCY</td>
+                  <td class="radar-val">1420.405 MHz (Hydrogen Line)</td>
+                </tr>
+                <tr>
+                  <td class="radar-label">PACKET LOSS</td>
+                  <td class="radar-val" style="color: #EF4444;">100.0% (0 / 64 packets received)</td>
+                </tr>
+                <tr>
+                  <td class="radar-label">CARRIER STATUS</td>
+                  <td class="radar-val">DISCONNECTED · TIMEOUT 4000ms</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Auto Warp Bar -->
+            <div class="auto-warp-card">
+              <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.76rem;">
+                <span id="auto-warp-label">AUTO-WARP JUMP IN 5.0s</span>
+                <span id="auto-warp-pct">100%</span>
+              </div>
+              <div class="warp-progress-track">
+                <div class="warp-progress-fill" id="auto-warp-fill"></div>
+              </div>
+              <div style="display: flex; gap: 0.6rem; margin-top: 0.4rem;">
+                <button class="nf-escape-btn" id="warp-pause-btn" style="padding: 0.5em 1.1em; font-size: 0.76rem;">
+                  ⏸ PAUSE COUNTDOWN
+                </button>
+                <a href="/" class="nf-escape-btn" style="padding: 0.5em 1.1em; font-size: 0.76rem;">
+                  ⚡ WARP NOW (立即折躍)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
   </section>
 
 
@@ -2452,6 +3250,333 @@ const calculateEditorialPage = (progress, articleHeight, viewportHeight) => {
       // Initial execution
       setActiveMode('mode-b');
       updateReadingProgress();
+    })();
+
+    /* ==========================================================================
+       LAB 03: 404 Not Found Interactive Controller
+       ========================================================================== */
+    (function init404Lab() {
+      const stageDeck = document.getElementById('nf-stage-deck');
+      const modeTabs = document.getElementById('nf-mode-tabs');
+      const themeToggleBtn = document.getElementById('nf-theme-toggle-btn');
+      if (!stageDeck || !modeTabs) return;
+
+      // 1. Mode Switching
+      modeTabs.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-nf-mode]');
+        if (!btn) return;
+        const mode = btn.getAttribute('data-nf-mode');
+        modeTabs.querySelectorAll('[data-nf-mode]').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        stageDeck.setAttribute('data-active-mode', mode);
+
+        // If switched to Option C, ensure radar is rendering
+        if (mode === 'mode-c' || mode === 'all') {
+          startRadar();
+        }
+      });
+
+      // 2. Theme Switching (Paper Canvas vs Obsidian Void)
+      let isDark = false;
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          isDark = !isDark;
+          stageDeck.classList.toggle('is-dark-theme', isDark);
+          themeToggleBtn.textContent = isDark ? '🌓 畫布切換：米白紙感' : '🌓 畫布切換：墨黑虛空';
+        });
+      }
+
+      // 3. Option A: Singularity Dot Interactive
+      const singularityDot = document.getElementById('nf-singularity-dot');
+      if (singularityDot && window.gsap) {
+        singularityDot.addEventListener('click', () => {
+          window.gsap.fromTo(singularityDot, 
+            { scale: 0.6, rotate: -45 }, 
+            { scale: 1.45, rotate: 180, duration: 0.6, ease: 'back.out(2)', onComplete: () => {
+              window.gsap.to(singularityDot, { scale: 1, rotate: 0, duration: 0.5, ease: 'power2.out' });
+            }}
+          );
+        });
+      }
+
+      // 4. Option B: Psychic Spoon & Mini Matrix Rain
+      const spoonTrigger = document.getElementById('stage-spoon-trigger');
+      const spoonHandle = document.getElementById('stage-spoon-handle');
+      const spoonSvg = document.getElementById('stage-spoon-svg');
+      const punchlineBox = document.getElementById('stage-punchline-box');
+      const resetBtn = document.getElementById('stage-b-reset-btn');
+      const matrixCanvas = document.getElementById('stage-b-matrix-canvas');
+
+      let isSpoonBending = false;
+      let spoonTriggerRect = null;
+      let matrixRaf = null;
+
+      if (spoonTrigger && spoonHandle && spoonSvg) {
+        spoonTrigger.addEventListener('mouseenter', () => {
+          spoonTriggerRect = spoonTrigger.getBoundingClientRect();
+        });
+
+        spoonTrigger.addEventListener('mousemove', (e) => {
+          if (isSpoonBending) return;
+          if (!spoonTriggerRect) spoonTriggerRect = spoonTrigger.getBoundingClientRect();
+          const relX = (e.clientX - spoonTriggerRect.left) / spoonTriggerRect.width - 0.5;
+          const bend = relX * 24;
+
+          if (window.gsap) {
+            window.gsap.to(spoonHandle, {
+              attr: { d: `M 25 19.5 Q ${25 + bend} 31.5 25 44` },
+              duration: 0.2,
+              ease: 'power2.out',
+              overwrite: 'auto'
+            });
+            window.gsap.to(spoonSvg, {
+              rotation: relX * 16,
+              duration: 0.2,
+              ease: 'power2.out',
+              overwrite: 'auto'
+            });
+          }
+        });
+
+        spoonTrigger.addEventListener('mouseleave', () => {
+          spoonTriggerRect = null;
+          if (isSpoonBending) return;
+          if (window.gsap) {
+            window.gsap.to(spoonHandle, {
+              attr: { d: 'M 25 19.5 Q 25 31.5 25 44' },
+              duration: 0.7,
+              ease: 'elastic.out(1.2, 0.4)',
+              overwrite: 'auto'
+            });
+            window.gsap.to(spoonSvg, {
+              rotation: 0,
+              duration: 0.7,
+              ease: 'elastic.out(1.2, 0.4)',
+              overwrite: 'auto'
+            });
+          }
+        });
+
+        const triggerSpoonKink = () => {
+          if (isSpoonBending) return;
+          isSpoonBending = true;
+
+          if (window.gsap) {
+            const tl = window.gsap.timeline({
+              onComplete: () => {
+                isSpoonBending = false;
+                if (punchlineBox) punchlineBox.classList.add('is-revealed');
+                startMiniMatrixRain();
+              }
+            });
+
+            // 1. Extreme 90-degree kink
+            tl.to(spoonHandle, {
+              attr: { d: 'M 25 19.5 Q 52 26 25 44' },
+              duration: 0.22,
+              ease: 'power4.in'
+            });
+            tl.to(spoonSvg, {
+              rotation: 45,
+              scale: 1.25,
+              duration: 0.22,
+              ease: 'power4.in'
+            }, '<');
+
+            // 2. Electric glitch
+            tl.to(spoonSvg, {
+              opacity: 0.3,
+              duration: 0.08,
+              repeat: 3,
+              yoyo: true
+            });
+          }
+        };
+
+        spoonTrigger.addEventListener('click', triggerSpoonKink);
+
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            isSpoonBending = false;
+            if (window.gsap) {
+              window.gsap.to(spoonHandle, { attr: { d: 'M 25 19.5 Q 25 31.5 25 44' }, duration: 0.4 });
+              window.gsap.to(spoonSvg, { rotation: 0, scale: 1, opacity: 1, duration: 0.4 });
+            }
+            if (punchlineBox) punchlineBox.classList.remove('is-revealed');
+            stopMiniMatrixRain();
+          });
+        }
+      }
+
+      // Mini Matrix Rain implementation for Option B
+      function startMiniMatrixRain() {
+        if (!matrixCanvas) return;
+        matrixCanvas.classList.add('is-active');
+        const ctx = matrixCanvas.getContext('2d');
+        if (!ctx) return;
+
+        const rect = matrixCanvas.parentElement.getBoundingClientRect();
+        matrixCanvas.width = rect.width;
+        matrixCanvas.height = rect.height;
+
+        const chars = '01ｱｶｻﾀﾅﾊﾏﾔﾗﾜ真實虛擬夢境覺醒MATRIX';
+        const fontSize = 14;
+        const columns = Math.floor(matrixCanvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+          ctx.fillStyle = 'rgba(8, 10, 9, 0.12)';
+          ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+          ctx.fillStyle = '#00FF66';
+          ctx.font = `${fontSize}px monospace`;
+
+          for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+              drops[i] = 0;
+            }
+            drops[i]++;
+          }
+
+          matrixRaf = requestAnimationFrame(drawMatrix);
+        }
+
+        if (matrixRaf) cancelAnimationFrame(matrixRaf);
+        drawMatrix();
+      }
+
+      function stopMiniMatrixRain() {
+        if (matrixRaf) {
+          cancelAnimationFrame(matrixRaf);
+          matrixRaf = null;
+        }
+        if (matrixCanvas) {
+          matrixCanvas.classList.remove('is-active');
+          const ctx = matrixCanvas.getContext('2d');
+          if (ctx) ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        }
+      }
+
+      // 5. Option C: Deep Space Radar Sweeper Canvas
+      let radarRunning = false;
+      function startRadar() {
+        if (radarRunning) return;
+        const canvas = document.getElementById('stage-radar-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        radarRunning = true;
+        const w = canvas.width;
+        const h = canvas.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const radius = w / 2 - 10;
+        let angle = 0;
+
+        function renderRadar() {
+          ctx.fillStyle = 'rgba(9, 11, 14, 0.15)';
+          ctx.fillRect(0, 0, w, h);
+
+          // Range rings
+          ctx.strokeStyle = 'rgba(0, 255, 102, 0.2)';
+          ctx.lineWidth = 1;
+          for (let r = radius / 4; r <= radius; r += radius / 4) {
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          // Crosshairs
+          ctx.beginPath();
+          ctx.moveTo(cx, cy - radius);
+          ctx.lineTo(cx, cy + radius);
+          ctx.moveTo(cx - radius, cy);
+          ctx.lineTo(cx + radius, cy);
+          ctx.stroke();
+
+          // Sweeping radar beam
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(angle);
+          const grad = ctx.createLinearGradient(0, 0, radius, 0);
+          grad.addColorStop(0, 'rgba(0, 255, 102, 0.6)');
+          grad.addColorStop(1, 'rgba(0, 255, 102, 0.0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.arc(0, 0, radius, 0, -0.4, true);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+
+          // Target Blip (Unreachable destination blip)
+          const blipX = cx + Math.cos(Math.PI * 0.25) * (radius * 0.78);
+          const blipY = cy + Math.sin(Math.PI * 0.25) * (radius * 0.78);
+          const diff = Math.abs(angle % (Math.PI * 2) - Math.PI * 0.25);
+          const alpha = diff < 0.3 ? 1 : Math.max(0.2, 1 - diff * 0.5);
+
+          ctx.fillStyle = `rgba(239, 68, 68, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(blipX, blipY, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          angle += 0.035;
+          if (angle > Math.PI * 2) angle -= Math.PI * 2;
+
+          requestAnimationFrame(renderRadar);
+        }
+
+        renderRadar();
+      }
+
+      // 6. Option C: Auto-warp countdown timer
+      const warpFill = document.getElementById('auto-warp-fill');
+      const warpLabel = document.getElementById('auto-warp-label');
+      const warpPct = document.getElementById('auto-warp-pct');
+      const warpPauseBtn = document.getElementById('warp-pause-btn');
+
+      if (warpFill && warpLabel && warpPct) {
+        let totalTime = 5.0;
+        let timeLeft = totalTime;
+        let isPaused = false;
+        let lastTime = performance.now();
+
+        function tickWarp(now) {
+          const dt = (now - lastTime) / 1000;
+          lastTime = now;
+
+          if (!isPaused && timeLeft > 0) {
+            timeLeft = Math.max(0, timeLeft - dt);
+            const ratio = timeLeft / totalTime;
+            warpFill.style.transform = `scaleX(${ratio})`;
+            warpLabel.textContent = `AUTO-WARP JUMP IN ${timeLeft.toFixed(1)}s`;
+            warpPct.textContent = `${Math.round(ratio * 100)}%`;
+
+            if (timeLeft <= 0) {
+              warpLabel.textContent = 'WARP READY · HOLDING POSITION';
+              warpPct.textContent = '0%';
+            }
+          }
+
+          requestAnimationFrame(tickWarp);
+        }
+
+        requestAnimationFrame(tickWarp);
+
+        if (warpPauseBtn) {
+          warpPauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            warpPauseBtn.textContent = isPaused ? '▶ RESUME COUNTDOWN' : '⏸ PAUSE COUNTDOWN';
+          });
+        }
+      }
+
+      // Initialize radar if page starts on Option C
+      startRadar();
     })();
   </script>
 
