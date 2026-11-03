@@ -90,12 +90,10 @@ const blogPostingJsonLd = {
       <p class="article-lead">{post.data.description}</p>
     </header>
 
-    <!-- Optional Cover Banner -->
-    {post.data.cover && (
-      <div class="article-cover-wrap">
-        <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="article-cover-img" />
-      </div>
-    )}
+    <!-- Cover Banner (Custom Cover or Auto-Generated Satori Editorial Poster) -->
+    <div class="article-cover-wrap">
+      <img src={post.data.cover || `/og/${post.id}.png`} alt={post.data.coverAlt || post.data.title} class="article-cover-img" />
+    </div>
 
     <!-- Prose Content Body -->
     <article class="article-prose" id="article-prose-body">

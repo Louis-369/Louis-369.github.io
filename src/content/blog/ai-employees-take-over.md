@@ -4,8 +4,8 @@ description: "記下我怎麼讓 AI 從「一個指令一個動作」，走到�
 pubDate: 2026-10-27
 category: "solo-business"
 tags: ["AI Workflow", "System Architecture", "Solo Business"]
-cover: "/assets/works/sunset-park.jpg"
-coverAlt: "黃昏暮色中的專注時刻"
+cover: "/assets/blog/ai-autonomous-system.svg"
+coverAlt: "AI 自主閉環系統與共用記憶庫架構圖"
 capsule: "COMPUTE"
 draft: false
 ---

@@ -4,8 +4,8 @@ description: "探討真實物理模擬、社論排版字體學與客戶端極致
 pubDate: 2026-10-25
 category: "engineering"
 tags: ["Creative Engineering", "WebGL", "Typography"]
-cover: "/assets/works/brutalist-building.jpg"
-coverAlt: "粗獷主義幾何結構"
+cover: "/assets/blog/craft-and-physics.svg"
+coverAlt: "GLSL 克卜勒流體軌道與 720px 社論字體學"
 capsule: "CRAFT"
 draft: false
 ---

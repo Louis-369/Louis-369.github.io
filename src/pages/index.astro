@@ -31,7 +31,7 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
           </h1>
         </div>
 
-        <!-- Dictionary Entry Layout (英文字典條目版型) -->
+        <!-- Dictionary Entry Layout (英文字典條目版型 — 方案 5D 口語化三棲宣言) -->
         <div class="hero-dictionary-entry">
           <div class="dict-phonetic-pill">
             <span class="bh-word-particle dict-ipa">/ˈluː.ɪs/</span>
@@ -39,20 +39,24 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
             <span class="bh-word-particle dict-pos">n.</span>
           </div>
           <p class="dict-def-en">
-            <span class="bh-word-particle">A</span>{' '}
-            <span class="bh-word-particle">craftsperson</span>{' '}
-            <span class="bh-word-particle">architecting</span>{' '}
+            <span class="bh-word-particle">I</span>{' '}
+            <span class="bh-word-particle">build</span>{' '}
             <span class="bh-word-particle">digital</span>{' '}
-            <span class="bh-word-particle">systems</span>{' '}
-            <span class="bh-word-particle">with</span>{' '}
-            <span class="bh-word-particle">engineering</span>{' '}
-            <span class="bh-word-particle">rigor</span>{' '}
+            <span class="bh-word-particle">tools,</span>{' '}
+            <span class="bh-word-particle">write</span>{' '}
+            <span class="bh-word-particle">about</span>{' '}
+            <span class="bh-word-particle">how</span>{' '}
+            <span class="bh-word-particle">things</span>{' '}
+            <span class="bh-word-particle">work,</span>{' '}
             <span class="bh-word-particle">and</span>{' '}
-            <span class="bh-word-particle">editorial</span>{' '}
-            <span class="bh-word-particle">aesthetic.</span>
+            <span class="bh-word-particle">take</span>{' '}
+            <span class="bh-word-particle">photos</span>{' '}
+            <span class="bh-word-particle">along</span>{' '}
+            <span class="bh-word-particle">the</span>{' '}
+            <span class="bh-word-particle">way.</span>
           </p>
           <p class="dict-def-tw">
-            <span class="bh-word-particle">以工程之嚴謹</span><span class="bh-word-particle">鑄造系統</span><span class="bh-word-particle">，</span><span class="bh-word-particle">以編排之美感</span><span class="bh-word-particle">傳遞溫度</span><span class="bh-word-particle">。</span>
+            <span class="bh-word-particle">寫點實用的程式</span><span class="bh-word-particle">，</span><span class="bh-word-particle">記下值得深思的想法</span><span class="bh-word-particle">，</span><span class="bh-word-particle">拍點喜歡的風景</span><span class="bh-word-particle">。</span>
           </p>
         </div>
       </div>
@@ -72,16 +76,17 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
       </a>
     </section>
 
-    <!-- Selected Works / Stories Section (bymonolog Paper-Cut Stacking Cards) -->
+    <!-- Selected Works / Systems Section (Developer Identity Preview) -->
     <section class="works-section" id="works">
-      <header class="section-header-block">
+      <header class="home-section-header">
         <div class="section-header-left">
-          <div class="section-eyebrow">CASE STUDIES & ARTIFACTS</div>
+          <div class="section-eyebrow">SYSTEMS &amp; PRODUCTS</div>
           <h2 class="section-title section-heading-split">Featured Works</h2>
         </div>
-        <div class="section-index-stamp">
-          <span>01 — 04</span>
-        </div>
+        <a href="/works/" class="home-section-more-link" data-astro-prefetch="hover">
+          <span>VIEW ALL WORKS</span>
+          <span>→</span>
+        </a>
       </header>
 
       <!-- Dynamic Stacking Cards Container (Populated via app.js) -->
@@ -90,11 +95,11 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
       </div>
     </section>
 
-    <!-- Curated Section: Recent Writings (社論文章極簡索引) -->
+    <!-- Curated Section: Recent Writings (Thinker Identity Preview) -->
     <section class="works-section home-curated-section" id="writings">
       <header class="home-section-header">
         <div class="section-header-left">
-          <div class="section-eyebrow">THOUGHTS & ESSAYS</div>
+          <div class="section-eyebrow">THOUGHTS &amp; ESSAYS</div>
           <h2 class="section-title">Recent Writings</h2>
         </div>
         <a href="/blog/" class="home-section-more-link" data-astro-prefetch="hover">
@@ -119,7 +124,7 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
       </div>
     </section>
 
-    <!-- Curated Section: Recent Snaps (橫向三聯視覺切片) -->
+    <!-- Curated Section: Recent Snaps (Visual Observer Identity Preview) -->
     <section class="works-section home-curated-section" id="snaps">
       <header class="home-section-header">
         <div class="section-header-left">
@@ -144,63 +149,6 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
             </div>
           </a>
         ))}
-      </div>
-    </section>
-
-    <!-- Philosophy & About Section (1:1 bymonolog.com Dark Tactile Matrix) -->
-    <section class="about-section is-dark-surface" id="about">
-      <!-- Full-Bleed Right Half Section Video Canvas (Spans full right half of the entire section) -->
-      <div class="about-section-video-canvas" id="capabilities-video-wrap" aria-hidden="true">
-        <!-- Populated via app.js with dynamic background video elements -->
-      </div>
-
-      <div class="about-container">
-        <!-- Left Column: 1:1 Monolog Story & Ethos Slider -->
-        <div class="about-left-col">
-          <div class="about-slider-controls">
-            <div class="about-slider-progress">
-              <div class="slider-progress-bar" id="ethos-progress-bar"></div>
-            </div>
-            <div class="about-slider-actions">
-              <div class="slider-arrows">
-                <button class="slider-arrow-btn" id="ethos-prev-btn" aria-label="Previous story">←</button>
-                <button class="slider-arrow-btn" id="ethos-next-btn" aria-label="Next story">→</button>
-              </div>
-              <span class="slider-counter" id="ethos-counter">01/03</span>
-            </div>
-          </div>
-
-          <div class="about-section-stamp">
-            <span class="about-stamp-tag">(PHILOSOPHY & ETHOS)</span>
-          </div>
-
-          <!-- Dynamic Stories Container (Populated via app.js) -->
-          <div class="about-stories-track" id="about-stories-track">
-            <!-- Populated via app.js from data/projects.js -->
-          </div>
-
-          <div class="about-author-card">
-            <div class="author-avatar-badge">
-              <span>L.</span>
-            </div>
-            <div class="author-meta-info">
-              <div class="author-name">Louis</div>
-              <div class="author-role">Creative Developer & Builder · Taipei</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Interactive Capabilities Stack -->
-        <div class="about-right-col">
-          <div class="about-capabilities-header">
-            <span class="capabilities-dot">●</span>
-            <span class="capabilities-title">What I can help with</span>
-          </div>
-
-          <ul class="capabilities-stack-list" id="about-capabilities-list">
-            <!-- Populated via app.js from data/projects.js -->
-          </ul>
-        </div>
       </div>
     </section>
   </main>

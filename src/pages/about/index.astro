@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { aboutStories, capabilities } from '../../../public/data/projects.js';
+
+const totalStories = aboutStories.length;
+---
+
+<BaseLayout 
+  title="About — Philosophy, Ethos & Capabilities | Louis." 
+  description="Creative Developer & Builder based in Taipei. I build digital tools, write about how things work, and take photos along the way."
+  currentNav="about"
+>
+  <main class="main-wrapper">
+    <div class="subpage-container" style="padding-bottom: 3rem;">
+      <header class="subpage-header" style="margin-bottom: 1rem;">
+        <div class="subpage-eyebrow">IDENTITY &amp; ETHOS</div>
+        <h1 class="subpage-title">About Louis.</h1>
+        <p class="subpage-subtitle">
+          寫點實用的程式，記下值得深思的想法，拍點喜歡的風景。游走於台北與數位邊境，將工程的嚴謹度、物理模擬的觸感與社論排版的秩序感融為一體。
+        </p>
+
+        <div class="category-pills-bar">
+          <a href="/works/" class="cat-pill" data-astro-prefetch="hover">01. Builder (Works) →</a>
+          <a href="/blog/" class="cat-pill" data-astro-prefetch="hover">02. Thinker (Blog) →</a>
+          <a href="/photos/" class="cat-pill" data-astro-prefetch="hover">03. Observer (Photos) →</a>
+        </div>
+      </header>
+    </div>
+
+    <!-- Philosophy & Capabilities Section (1:1 Dark Tactile Matrix) -->
+    <section class="about-section is-dark-surface" id="about">
+      <!-- Full-Bleed Right Half Section Video Canvas -->
+      <div class="about-section-video-canvas" id="capabilities-video-wrap" aria-hidden="true">
+        {capabilities.map((cap, idx) => (
+          <video 
+            class={`capability-bg-video ${idx === 0 ? 'active' : ''}`}
+            data-video-index={idx}
+            src={cap.video}
+            muted 
+            loop 
+            playsinline 
+            preload="auto"
+            autoplay
+          />
+        ))}
+      </div>
+
+      <div class="about-container">
+        <!-- Left Column: Story & Ethos Slider -->
+        <div class="about-left-col">
+          <div class="about-slider-controls">
+            <div class="about-slider-progress">
+              <div class="slider-progress-bar" id="ethos-progress-bar"></div>
+            </div>
+            <div class="about-slider-actions">
+              <div class="slider-arrows">
+                <button class="slider-arrow-btn" id="ethos-prev-btn" aria-label="Previous story">←</button>
+                <button class="slider-arrow-btn" id="ethos-next-btn" aria-label="Next story">→</button>
+              </div>
+              <span class="slider-counter" id="ethos-counter">01/0{totalStories}</span>
+            </div>
+          </div>
+
+          <div class="about-section-stamp">
+            <span class="about-stamp-tag" id="ethos-current-tag">{aboutStories[0].tag}</span>
+          </div>
+
+          <div class="about-stories-track" id="about-stories-track">
+            {aboutStories.map((story, idx) => (
+              <div class={`ethos-story-slide ${idx === 0 ? 'active' : ''}`} data-slide={idx} data-tag={story.tag}>
+                <blockquote class="about-lead-quote">
+                  “{story.quote}”
+                </blockquote>
+                <p class="about-body-text">
+                  {story.body}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div class="about-author-card">
+            <div class="author-avatar-badge">
+              <span>L.</span>
+            </div>
+            <div class="author-meta-info">
+              <div class="author-name">Louis</div>
+              <div class="author-role">Creative Developer &amp; Builder · Taipei</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Capabilities Stack -->
+        <div class="about-right-col">
+          <div class="about-capabilities-header">
+            <span class="capabilities-dot">●</span>
+            <span class="capabilities-title">What I can help with</span>
+          </div>
+
+          <ul class="capabilities-stack-list" id="about-capabilities-list">
+            {capabilities.map((cap, idx) => (
+              <li class={`capability-item ${idx === 0 ? 'active' : ''}`} data-cap-index={idx}>
+                <span class="capability-name">{cap.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script is:inline>
+    (() => {
+      // 1. Capabilities Hover & Video Switching
+      const capList = document.getElementById('about-capabilities-list');
+      const videoWrap = document.getElementById('capabilities-video-wrap');
+      if (capList) {
+        const capItems = capList.querySelectorAll('.capability-item');
+        const videoItems = videoWrap ? videoWrap.querySelectorAll('.capability-bg-video') : [];
+
+        const switchCapability = (idx) => {
+          capItems.forEach((item, i) => item.classList.toggle('active', i === idx));
+          videoItems.forEach((video, i) => {
+            if (i === idx) {
+              video.classList.add('active');
+              video.play().catch(() => {});
+            } else {
+              video.classList.remove('active');
+            }
+          });
+        };
+
+        capList.addEventListener('mouseover', (e) => {
+          const item = e.target.closest('.capability-item');
+          if (item) {
+            const idx = parseInt(item.getAttribute('data-cap-index'), 10);
+            if (!isNaN(idx) && !item.classList.contains('active')) {
+              switchCapability(idx);
+            }
+          }
+        });
+      }
+
+      // 2. Ethos Story Slider
+      const slides = document.querySelectorAll('.ethos-story-slide');
+      const prevBtn = document.getElementById('ethos-prev-btn');
+      const nextBtn = document.getElementById('ethos-next-btn');
+      const counterEl = document.getElementById('ethos-counter');
+      const progressBar = document.getElementById('ethos-progress-bar');
+      const tagEl = document.getElementById('ethos-current-tag');
+      const totalSlides = slides.length;
+      if (!totalSlides || !prevBtn || !nextBtn || !progressBar) return;
+
+      let currentSlide = 0;
+      let progressTween = null;
+
+      const startProgress = () => {
+        if (progressTween) progressTween.kill();
+        if (window.gsap) {
+          window.gsap.set(progressBar, { scaleX: 0 });
+          progressTween = window.gsap.to(progressBar, {
+            scaleX: 1,
+            duration: 6.0,
+            ease: 'none',
+            onComplete: () => goToSlide(currentSlide + 1)
+          });
+        }
+      };
+
+      const goToSlide = (newIndex) => {
+        const nextIdx = (newIndex + totalSlides) % totalSlides;
+        if (nextIdx === currentSlide) return;
+        slides[currentSlide].classList.remove('active');
+        slides[nextIdx].classList.add('active');
+        currentSlide = nextIdx;
+        if (counterEl) counterEl.textContent = `0${currentSlide + 1}/0${totalSlides}`;
+        const newTag = slides[currentSlide].getAttribute('data-tag');
+        if (tagEl && newTag) tagEl.textContent = newTag;
+        startProgress();
+      };
+
+      nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+      prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+      startProgress();
+    })();
+  </script>
+</BaseLayout>

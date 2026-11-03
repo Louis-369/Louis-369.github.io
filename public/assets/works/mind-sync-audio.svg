@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" fill="none">
+  <defs>
+    <linearGradient id="darkAcousticBg" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#121316"/>
+      <stop offset="100%" stop-color="#1B1D24"/>
+    </linearGradient>
+    <linearGradient id="waveGrad" x1="140" y1="0" x2="1060" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#EF4444"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="750" fill="url(#darkAcousticBg)"/>
+
+  <!-- Grid Lines -->
+  <g stroke="#FAF7F0" stroke-opacity="0.06" stroke-width="1">
+    <line x1="80" y1="0" x2="80" y2="750"/>
+    <line x1="1120" y1="0" x2="1120" y2="750"/>
+    <line x1="0" y1="88" x2="1200" y2="88"/>
+    <line x1="0" y1="375" x2="1200" y2="375" stroke-dasharray="4 6"/>
+    <line x1="0" y1="662" x2="1200" y2="662"/>
+  </g>
+
+  <!-- Header -->
+  <g font-family="monospace" font-size="14" fill="#9CA3AF" letter-spacing="2">
+    <text x="108" y="54">PROCEDURAL AUDIO // PENTATONIC SYNTHESIS &amp; ASCII GLITCH</text>
+    <text x="1092" y="54" text-anchor="end" fill="#D4AF37">0 KB EXTERNAL AUDIO ASSETS</text>
+  </g>
+
+  <!-- Pentatonic Scale Ascending Frequency Bars (宮 商 角 徵 羽) -->
+  <g transform="translate(140, 150)">
+    <!-- Note 1: 宮 (C4 - 261.6Hz) -->
+    <g transform="translate(0, 190)">
+      <rect width="140" height="180" rx="8" fill="#1E222D" stroke="#D4AF37" stroke-opacity="0.45" stroke-width="1.5"/>
+      <text x="70" y="55" text-anchor="middle" font-family="serif" font-size="36" fill="#FAF7F0" font-weight="700">宮</text>
+      <text x="70" y="92" text-anchor="middle" font-family="monospace" font-size="14" fill="#D4AF37">261.6 Hz</text>
+      <text x="70" y="130" text-anchor="middle" font-family="monospace" font-size="12" fill="#9CA3AF">REVEAL #01</text>
+    </g>
+
+    <!-- Note 2: 商 (D4 - 293.7Hz) -->
+    <g transform="translate(190, 145)">
+      <rect width="140" height="225" rx="8" fill="#1E222D" stroke="#D4AF37" stroke-opacity="0.6" stroke-width="1.5"/>
+      <text x="70" y="65" text-anchor="middle" font-family="serif" font-size="36" fill="#FAF7F0" font-weight="700">商</text>
+      <text x="70" y="102" text-anchor="middle" font-family="monospace" font-size="14" fill="#D4AF37">293.7 Hz</text>
+      <text x="70" y="145" text-anchor="middle" font-family="monospace" font-size="12" fill="#9CA3AF">REVEAL #02</text>
+    </g>
+
+    <!-- Note 3: 角 (E4 - 329.6Hz) -->
+    <g transform="translate(380, 100)">
+      <rect width="140" height="270" rx="8" fill="#1E222D" stroke="#F59E0B" stroke-opacity="0.75" stroke-width="1.5"/>
+      <text x="70" y="75" text-anchor="middle" font-family="serif" font-size="36" fill="#FAF7F0" font-weight="700">角</text>
+      <text x="70" y="112" text-anchor="middle" font-family="monospace" font-size="14" fill="#F59E0B">329.6 Hz</text>
+      <text x="70" y="160" text-anchor="middle" font-family="monospace" font-size="12" fill="#9CA3AF">REVEAL #03</text>
+    </g>
+
+    <!-- Note 4: 徵 (G4 - 392.0Hz) -->
+    <g transform="translate(570, 50)">
+      <rect width="140" height="320" rx="8" fill="#1E222D" stroke="#F59E0B" stroke-width="2"/>
+      <text x="70" y="85" text-anchor="middle" font-family="serif" font-size="36" fill="#FAF7F0" font-weight="700">徵</text>
+      <text x="70" y="122" text-anchor="middle" font-family="monospace" font-size="14" fill="#F59E0B">392.0 Hz</text>
+      <text x="70" y="175" text-anchor="middle" font-family="monospace" font-size="12" fill="#9CA3AF">REVEAL #04</text>
+    </g>
+
+    <!-- Note 5: 羽 / 破綻 Glitch (A4 / Shamisen Clash) -->
+    <g transform="translate(760, 0)">
+      <rect width="160" height="370" rx="8" fill="#2A161B" stroke="#EF4444" stroke-width="2"/>
+      <text x="80" y="65" text-anchor="middle" font-family="monospace" font-size="12" fill="#EF4444" letter-spacing="2">! ORDER BREACH !</text>
+      <text x="80" y="115" text-anchor="middle" font-family="serif" font-size="38" fill="#FCA5A5" font-weight="700">破綻</text>
+      <text x="80" y="155" text-anchor="middle" font-family="monospace" font-size="13" fill="#EF4444">ASCII GLITCH FX</text>
+      <text x="80" y="195" text-anchor="middle" font-family="monospace" font-size="12" fill="#F87171">▓▒░ 73 &lt; 68 ░▒▓</text>
+      <circle cx="80" cy="285" r="32" fill="#DC2626"/>
+      <text x="80" y="295" text-anchor="middle" font-family="serif" font-size="28" fill="#FAF7F0" font-weight="700">確</text>
+    </g>
+  </g>
+
+  <!-- Continuous Harmonic Sine Envelope Curve -->
+  <path d="M 140 560 Q 260 490, 380 540 T 620 480 T 860 430 T 1060 390" stroke="url(#waveGrad)" stroke-width="3" fill="none"/>
+
+  <!-- Footer -->
+  <g font-family="monospace" font-size="13" fill="#9CA3AF" letter-spacing="1.5">
+    <text x="108" y="706">WEB AUDIO API OSCILLATOR SYNTHESIS · SHAMISEN TRANSIENT CLASH</text>
+    <text x="1092" y="706" text-anchor="end" fill="#D4AF37">MIND SYNC ARCHITECTURE 03/03</text>
+  </g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" fill="none">
+  <defs>
+    <linearGradient id="darkCraftBg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#111216"/>
+      <stop offset="100%" stop-color="#191B22"/>
+    </linearGradient>
+    <linearGradient id="accretionRing" x1="350" y1="200" x2="850" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="50%" stop-color="#FAF7F0"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#darkCraftBg)"/>
+  <rect x="36" y="36" width="1128" height="558" rx="10" stroke="#FAF7F0" stroke-opacity="0.14" stroke-width="1.5"/>
+
+  <!-- Golden Ratio & Editorial 720px Grid Guides -->
+  <g stroke="#FAF7F0" stroke-opacity="0.07" stroke-width="1">
+    <line x1="36" y1="110" x2="1164" y2="110"/>
+    <line x1="36" y1="520" x2="1164" y2="520"/>
+    <line x1="240" y1="110" x2="240" y2="520" stroke-dasharray="4 4"/>
+    <line x1="960" y1="110" x2="960" y2="520" stroke-dasharray="4 4"/>
+    <line x1="600" y1="110" x2="600" y2="520"/>
+  </g>
+
+  <!-- Header -->
+  <g font-family="monospace" font-size="14" fill="#9CA3AF" letter-spacing="2">
+    <text x="72" y="80" fill="#FAF7F0" font-weight="700">[ CRAFT // CREATIVE ENGINEERING ]</text>
+    <text x="1128" y="80" text-anchor="end">GLSL KEPLERIAN OPTICS &amp; EDITORIAL TYPOGRAPHY</text>
+  </g>
+
+  <!-- Left Label: 720px Measure -->
+  <g font-family="monospace" font-size="12" fill="#9CA3AF">
+    <text x="256" y="142">← 720PX EDITORIAL MEASURE</text>
+    <text x="944" y="142" text-anchor="end">60FPS GPU SHADER →</text>
+  </g>
+
+  <!-- Central Black Hole Relativistic Accretion Orbits -->
+  <g transform="translate(600, 315) rotate(-18)">
+    <ellipse cx="0" cy="0" rx="280" ry="72" stroke="url(#accretionRing)" stroke-width="2.5" stroke-opacity="0.85"/>
+    <ellipse cx="0" cy="0" rx="210" ry="52" stroke="#FAF7F0" stroke-width="1.2" stroke-opacity="0.4" stroke-dasharray="8 6"/>
+    <ellipse cx="0" cy="0" rx="145" ry="34" stroke="#F59E0B" stroke-width="1.8" stroke-opacity="0.7"/>
+  </g>
+
+  <!-- Event Horizon Shadow & Photon Ring -->
+  <circle cx="600" cy="315" r="58" fill="#08090C" stroke="#FAF7F0" stroke-width="2.2"/>
+  <circle cx="600" cy="315" r="66" stroke="#F59E0B" stroke-opacity="0.45" stroke-width="1"/>
+
+  <!-- Typography Specimen Overlay -->
+  <text x="330" y="332" font-family="serif" font-size="56" font-style="italic" fill="#FAF7F0" opacity="0.9">Aa</text>
+  <text x="815" y="330" font-family="monospace" font-size="22" fill="#38BDF8" opacity="0.9">ds² = g_μν</text>
+
+  <!-- Footer -->
+  <g font-family="monospace" font-size="13" fill="#9CA3AF" letter-spacing="1.5">
+    <text x="72" y="562">FIG 02. COMPUTING IS TACTILE — PHYSICS AS INTERFACE</text>
+    <text x="1128" y="562" text-anchor="end" fill="#FAF7F0" font-weight="700">Louis. Editorial</text>
+  </g>
+</svg>

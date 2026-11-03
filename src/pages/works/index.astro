@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { featuredProjects } from '../../../public/data/projects.js';
+
+const totalFormatted = String(featuredProjects.length).padStart(2, '0');
+---
+
+<BaseLayout 
+  title="Works — Systems, UI Engineering & Products | Louis." 
+  description="Software products, multiplayer web architectures, procedural audio engines, and interactive digital tools built by Louis."
+  ogImage="/assets/works/mind-sync-arch.svg"
+  currentNav="works"
+>
+  <main class="subpage-container">
+    <header class="subpage-header">
+      <div class="subpage-eyebrow">SYSTEMS &amp; ENGINEERING</div>
+      <h1 class="subpage-title">Selected Works</h1>
+      <p class="subpage-subtitle">
+        專注於打造真正能解決問題與帶來樂趣的軟體產品——涵蓋即時多人狀態同步、確定性密碼學洗牌、純代碼程序化聲學與流體互動介面。
+      </p>
+
+      <div class="category-pills-bar">
+        <span class="cat-pill is-active">Featured Systems ({featuredProjects.length})</span>
+        <a href="https://mind-sync-sigma.vercel.app" target="_blank" rel="noopener noreferrer" class="cat-pill">Live Demo: Mind Sync ↗</a>
+        <a href="/wip.html" class="cat-pill">Interactive Physics Lab ↗</a>
+      </div>
+    </header>
+
+    <div class="works-cards-wrap" id="works-subpage-list">
+      {featuredProjects.map((project, idx) => {
+        const indexFormatted = String(idx + 1).padStart(2, '0');
+        return (
+          <div class="works-home-item" data-project-index={idx}>
+            <a 
+              href={project.url} 
+              class="works-home-link" 
+              target={project.isExternal ? "_blank" : undefined}
+              rel={project.isExternal ? "noopener noreferrer" : undefined}
+            >
+              <div class="works-visual-column">
+                <div class="works-image-mask">
+                  <img src={project.image} alt={project.title} class="works-home-image" loading="lazy" />
+                </div>
+              </div>
+
+              <div class="works-content-column">
+                <div class="works-content-header">
+                  <div class="works-meta-stamp">
+                    <span class="meta-index-pill">SS / {indexFormatted}/{totalFormatted}</span>
+                    <span>{project.category}</span>
+                  </div>
+                  <h2 class="works-project-title">{project.title}</h2>
+                  <p class="works-project-desc">{project.desc}</p>
+                </div>
+
+                <div class="works-result-block">
+                  <div class="result-number">{project.metrics[0].value}</div>
+                  <div class="result-label">{project.metrics[0].label} · {project.summary}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        );
+      })}
+    </div>
+  </main>
+</BaseLayout>

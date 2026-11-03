@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" fill="none">
+  <defs>
+    <linearGradient id="paperBg" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F6F4EE"/>
+      <stop offset="100%" stop-color="#EAE6DC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tactile Blueprint Ivory Background -->
+  <rect width="1200" height="750" fill="url(#paperBg)"/>
+
+  <!-- Blueprint Grid -->
+  <g stroke="#121316" stroke-opacity="0.07" stroke-width="1">
+    <line x1="80" y1="0" x2="80" y2="750"/>
+    <line x1="400" y1="88" x2="400" y2="662" stroke-dasharray="4 6"/>
+    <line x1="800" y1="88" x2="800" y2="662" stroke-dasharray="4 6"/>
+    <line x1="1120" y1="0" x2="1120" y2="750"/>
+    <line x1="0" y1="88" x2="1200" y2="88"/>
+    <line x1="0" y1="662" x2="1200" y2="662"/>
+  </g>
+
+  <!-- Header -->
+  <g font-family="monospace" font-size="14" fill="#5A564F" letter-spacing="2">
+    <text x="108" y="54">PROTOCOL SPEC // DETERMINISTIC SEEDED SHUFFLE</text>
+    <text x="1092" y="54" text-anchor="end" fill="#121316" font-weight="600">ZERO-LEAKAGE CRYPTOGRAPHIC DECK</text>
+  </g>
+
+  <!-- Stage 1: Emoji Cipher Room Key -->
+  <g transform="translate(120, 175)">
+    <rect width="240" height="390" rx="12" fill="#FFFFFF" stroke="#121316" stroke-width="1.8"/>
+    <text x="28" y="42" font-family="monospace" font-size="12" fill="#6E6A63" letter-spacing="2">01 / CIPHER ROOM</text>
+    <text x="28" y="72" font-family="serif" font-size="22" fill="#121316" font-weight="700">三組 Emoji 暗號配對</text>
+    <rect x="28" y="102" width="184" height="68" rx="8" fill="#F3F0EA" stroke="#121316" stroke-opacity="0.2"/>
+    <text x="120" y="146" text-anchor="middle" font-size="30">🦊 · 🏮 · 🌊</text>
+    <g font-family="monospace" font-size="12" fill="#4B5563">
+      <text x="28" y="210">entropy: 64^3 combinations</text>
+      <text x="28" y="234">auth: passwordless join</text>
+      <text x="28" y="258">roundId: #RND_0492</text>
+    </g>
+    <rect x="28" y="306" width="184" height="52" rx="6" fill="#121316"/>
+    <text x="120" y="337" text-anchor="middle" font-family="monospace" font-size="12" fill="#F9F8F5" letter-spacing="1.5">SEED: 0x8F4A...9C21</text>
+  </g>
+
+  <!-- Connecting Arrow 1 -> 2 -->
+  <g stroke="#121316" stroke-width="2">
+    <line x1="360" y1="370" x2="465" y2="370" stroke-dasharray="5 5"/>
+    <polygon points="472,370 462,364 462,376" fill="#121316"/>
+  </g>
+
+  <!-- Stage 2: Deterministic Fisher-Yates Engine -->
+  <g transform="translate(480, 175)">
+    <rect width="240" height="390" rx="12" fill="#121316" stroke="#121316" stroke-width="1.8"/>
+    <text x="28" y="42" font-family="monospace" font-size="12" fill="#D4AF37" letter-spacing="2">02 / SEEDED PRNG</text>
+    <text x="28" y="72" font-family="serif" font-size="22" fill="#FAF7F0" font-weight="700">確定性洗牌演算法</text>
+    <!-- Permutation Matrix Box -->
+    <rect x="28" y="102" width="184" height="148" rx="8" fill="#1C1F26" stroke="#D4AF37" stroke-opacity="0.4"/>
+    <g font-family="monospace" font-size="12" fill="#E5E7EB">
+      <text x="44" y="132" fill="#D4AF37">fn shuffle(seed):</text>
+      <text x="44" y="158">deck = [1 .. 100]</text>
+      <text x="44" y="182">i = 99..1 swap(j)</text>
+      <text x="44" y="206" fill="#38BDF8">P1 ➔ deck[0]</text>
+      <text x="44" y="230" fill="#F59E0B">P2 ➔ deck[1]</text>
+    </g>
+    <text x="28" y="286" font-family="monospace" font-size="11" fill="#9CA3AF">PAYLOAD OVERHEAD:</text>
+    <text x="28" y="314" font-family="monospace" font-size="26" fill="#FAF7F0" font-weight="700">&lt; 1.2 KB</text>
+    <text x="28" y="348" font-family="monospace" font-size="11" fill="#34D399">● 0% HAND STATE ON WIRE</text>
+  </g>
+
+  <!-- Connecting Arrow 2 -> 3 -->
+  <g stroke="#121316" stroke-width="2">
+    <line x1="720" y1="370" x2="825" y2="370" stroke-dasharray="5 5"/>
+    <polygon points="832,370 822,364 822,376" fill="#121316"/>
+  </g>
+
+  <!-- Stage 3: Client Isolation & Idle Guard -->
+  <g transform="translate(840, 175)">
+    <rect width="240" height="390" rx="12" fill="#FFFFFF" stroke="#121316" stroke-width="1.8"/>
+    <text x="28" y="42" font-family="monospace" font-size="12" fill="#6E6A63" letter-spacing="2">03 / CLIENT SYNC</text>
+    <text x="28" y="72" font-family="serif" font-size="22" fill="#121316" font-weight="700">手牌隔離與離線防死鎖</text>
+    <g transform="translate(28, 102)" font-family="monospace" font-size="12">
+      <rect width="184" height="54" rx="6" fill="#F3F0EA"/>
+      <text x="16" y="24" fill="#121316" font-weight="700">CLIENT A (LOCAL)</text>
+      <text x="16" y="42" fill="#059669">Hand: [14] Verified ✓</text>
+
+      <rect y="68" width="184" height="54" rx="6" fill="#F3F0EA"/>
+      <text x="16" y="92" fill="#121316" font-weight="700">CLIENT B (LOCAL)</text>
+      <text x="16" y="110" fill="#059669">Hand: [39] Verified ✓</text>
+
+      <rect y="136" width="184" height="54" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.4"/>
+      <text x="16" y="160" fill="#DC2626" font-weight="700">IDLE TIMEOUT GUARD</text>
+      <text x="16" y="178" fill="#7F1D1D">5m Auto-Evict CCU</text>
+    </g>
+    <text x="28" y="346" font-family="monospace" font-size="12" fill="#121316" font-weight="600">VITEST COVERAGE: 100%</text>
+  </g>
+
+  <!-- Footer -->
+  <g font-family="monospace" font-size="13" fill="#5A564F" letter-spacing="1.5">
+    <text x="108" y="706">UBIQUITOUS LANGUAGE DOMAIN MODEL · SEEDED SHUFFLE ENGINE</text>
+    <text x="1092" y="706" text-anchor="end" fill="#121316" font-weight="600">MIND SYNC ARCHITECTURE 02/03</text>
+  </g>
+</svg>

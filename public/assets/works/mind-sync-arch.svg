@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" fill="none">
+  <defs>
+    <linearGradient id="bgNight" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0D0F14"/>
+      <stop offset="50%" stop-color="#13161F"/>
+      <stop offset="100%" stop-color="#0B0C10"/>
+    </linearGradient>
+    <linearGradient id="spectrumBar" x1="200" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="35%" stop-color="#818CF8"/>
+      <stop offset="68%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#EF4444"/>
+    </linearGradient>
+    <linearGradient id="washiCard" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAF7F0"/>
+      <stop offset="100%" stop-color="#EAE3D2"/>
+    </linearGradient>
+    <linearGradient id="goldFoil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.65"/>
+      <stop offset="50%" stop-color="#FFF3C4" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#AA8220" stop-opacity="0.5"/>
+    </linearGradient>
+    <radialGradient id="stageGlow" cx="50%" cy="48%" r="48%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#38BDF8" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#0D0F14" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Base Dark Night Stage -->
+  <rect width="1200" height="750" fill="url(#bgNight)"/>
+  <rect width="1200" height="750" fill="url(#stageGlow)"/>
+
+  <!-- Architectural Swiss Grid Lines -->
+  <g stroke="#F3EFE6" stroke-opacity="0.06" stroke-width="1">
+    <line x1="80" y1="0" x2="80" y2="750"/>
+    <line x1="600" y1="0" x2="600" y2="750" stroke-dasharray="4 6"/>
+    <line x1="1120" y1="0" x2="1120" y2="750"/>
+    <line x1="0" y1="88" x2="1200" y2="88"/>
+    <line x1="0" y1="662" x2="1200" y2="662"/>
+  </g>
+
+  <!-- Top HUD Header -->
+  <g font-family="monospace" font-size="14" fill="#9CA3AF" letter-spacing="2">
+    <text x="108" y="54">MIND SYNC // KOKORO TENBIN v0.7.0</text>
+    <text x="600" y="54" text-anchor="middle" fill="#D4AF37">ROOM: 🦊 · 🏮 · 🌊 [4/4 ONLINE]</text>
+    <text x="1092" y="54" text-anchor="end">NEXT.JS · REALTIME STATE</text>
+  </g>
+
+  <!-- Topic Scroll Banner -->
+  <g transform="translate(310, 118)">
+    <rect width="580" height="64" rx="8" fill="#181C26" stroke="url(#goldFoil)" stroke-width="1.5"/>
+    <text x="290" y="27" text-anchor="middle" font-family="monospace" font-size="11" fill="#D4AF37" letter-spacing="3">ACTIVE VALUE SPECTRUM TOPIC</text>
+    <text x="290" y="49" text-anchor="middle" font-family="serif" font-size="18" fill="#FAF7F0" font-weight="600">「孤島求生必備品：極致廢物 ❄️ 1 ─── 100 🔥 絕對神器」</text>
+  </g>
+
+  <!-- Safety Threshold Waterline Bar -->
+  <g transform="translate(200, 224)">
+    <text x="0" y="-12" font-family="monospace" font-size="12" fill="#38BDF8" letter-spacing="1.5">❄️ COLD / LOW (01)</text>
+    <text x="400" y="-12" text-anchor="middle" font-family="monospace" font-size="12" fill="#D4AF37" letter-spacing="2">THRESHOLD WATERLINE · 78% SYNC</text>
+    <text x="800" y="-12" text-anchor="end" font-family="monospace" font-size="12" fill="#EF4444" letter-spacing="1.5">WARM / HIGH (100) 🔥</text>
+    <rect width="800" height="8" rx="4" fill="#1F2430"/>
+    <rect width="640" height="8" rx="4" fill="url(#spectrumBar)"/>
+    <circle cx="640" cy="4" r="8" fill="#FAF7F0" stroke="#F59E0B" stroke-width="3"/>
+  </g>
+
+  <!-- 4 Spectrum Card Slots on Table -->
+  <!-- Slot 1 (Revealed: 14) -->
+  <g transform="translate(190, 280)">
+    <rect width="175" height="250" rx="10" fill="url(#washiCard)" stroke="url(#goldFoil)" stroke-width="2"/>
+    <rect x="10" y="10" width="155" height="230" rx="6" stroke="#121316" stroke-opacity="0.12" stroke-width="1"/>
+    <text x="24" y="36" font-family="monospace" font-size="13" fill="#0284C7" font-weight="700">SLOT 01 · ❄️14</text>
+    <text x="87.5" y="138" text-anchor="middle" font-family="serif" font-size="64" fill="#121316" font-weight="700">14</text>
+    <text x="87.5" y="185" text-anchor="middle" font-family="serif" font-size="15" fill="#4B5563">「過期的折價券」</text>
+    <!-- Vermilion Seal -->
+    <circle cx="138" cy="212" r="16" fill="#DC2626"/>
+    <text x="138" y="217" text-anchor="middle" font-family="serif" font-size="14" fill="#FAF7F0" font-weight="700">確</text>
+  </g>
+
+  <!-- Slot 2 (Revealed: 39) -->
+  <g transform="translate(405, 280)">
+    <rect width="175" height="250" rx="10" fill="url(#washiCard)" stroke="url(#goldFoil)" stroke-width="2"/>
+    <rect x="10" y="10" width="155" height="230" rx="6" stroke="#121316" stroke-opacity="0.12" stroke-width="1"/>
+    <text x="24" y="36" font-family="monospace" font-size="13" fill="#4F46E5" font-weight="700">SLOT 02 · 39</text>
+    <text x="87.5" y="138" text-anchor="middle" font-family="serif" font-size="64" fill="#121316" font-weight="700">39</text>
+    <text x="87.5" y="185" text-anchor="middle" font-family="serif" font-size="15" fill="#4B5563">「半捲封箱膠帶」</text>
+    <circle cx="138" cy="212" r="16" fill="#DC2626"/>
+    <text x="138" y="217" text-anchor="middle" font-family="serif" font-size="14" fill="#FAF7F0" font-weight="700">確</text>
+  </g>
+
+  <!-- Slot 3 (Revealed: 68) -->
+  <g transform="translate(620, 280)">
+    <rect width="175" height="250" rx="10" fill="url(#washiCard)" stroke="url(#goldFoil)" stroke-width="2"/>
+    <rect x="10" y="10" width="155" height="230" rx="6" stroke="#121316" stroke-opacity="0.12" stroke-width="1"/>
+    <text x="24" y="36" font-family="monospace" font-size="13" fill="#D97706" font-weight="700">SLOT 03 · 68</text>
+    <text x="87.5" y="138" text-anchor="middle" font-family="serif" font-size="64" fill="#121316" font-weight="700">68</text>
+    <text x="87.5" y="185" text-anchor="middle" font-family="serif" font-size="15" fill="#4B5563">「瑞士萬用刀」</text>
+    <circle cx="138" cy="212" r="16" fill="#DC2626"/>
+    <text x="138" y="217" text-anchor="middle" font-family="serif" font-size="14" fill="#FAF7F0" font-weight="700">確</text>
+  </g>
+
+  <!-- Slot 4 (Active Lock-in: 92) -->
+  <g transform="translate(835, 268)">
+    <rect x="-4" y="-4" width="183" height="258" rx="13" stroke="#EF4444" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect width="175" height="250" rx="10" fill="url(#washiCard)" stroke="#EF4444" stroke-width="2.5"/>
+    <rect x="10" y="10" width="155" height="230" rx="6" stroke="#121316" stroke-opacity="0.12" stroke-width="1"/>
+    <text x="24" y="36" font-family="monospace" font-size="13" fill="#DC2626" font-weight="700">SLOT 04 · 🔥92</text>
+    <text x="87.5" y="138" text-anchor="middle" font-family="serif" font-size="64" fill="#121316" font-weight="700">92</text>
+    <text x="87.5" y="185" text-anchor="middle" font-family="serif" font-size="15" fill="#4B5563">「太陽能淨水器」</text>
+    <circle cx="138" cy="212" r="16" fill="#DC2626"/>
+    <text x="138" y="217" text-anchor="middle" font-family="serif" font-size="14" fill="#FAF7F0" font-weight="700">確</text>
+  </g>
+
+  <!-- Bottom Telemetry & Architecture Spec Bar -->
+  <g font-family="monospace" font-size="13" fill="#9CA3AF" letter-spacing="1.5">
+    <text x="108" y="706">WASABI GOLD FOIL 3D PARALLAX · THERMAL SPECTRUM DOCK</text>
+    <text x="1092" y="706" text-anchor="end" fill="#D4AF37">HARMONY RATE: 98.4% ✦</text>
+  </g>
+</svg>

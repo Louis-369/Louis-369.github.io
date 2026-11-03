@@ -8,76 +8,63 @@ export const siteConfig = {
   role: "Creative Developer & Builder",
   location: "Taipei · Earth",
   status: "Available for innovative projects",
-  tagline: "Building digital tools that think & craft that moves people.",
-  bio: "Specializing in high-performance web applications, interactive creative media, and seamless digital utility tools. Combining engineering rigor with award-winning editorial aesthetic.",
+  tagline: "I build digital tools, write about how things work, and take photos along the way.",
+  bio: "寫點實用的程式，記下值得深思的想法，拍點喜歡的風景。結合工程嚴謹度與高工藝社論美學，打造流暢且耐看的數位產品。",
   githubUrl: "https://github.com/Louis-369",
   email: "mailto:contact.louis369@gmail.com"
 };
 
 export const featuredProjects = [
   {
-    id: "mind-sync",
-    title: "Brutalist Urban Matrix",
-    category: "Architecture / Structural Study",
+    id: "mind-sync-core",
+    title: "Mind Sync · 心天秤",
+    category: "Multiplayer Web App / Game System",
     year: "2026",
-    summary: "粗獷主義集合住宅與幾何結構光影",
-    desc: "探索現代粗獷主義建築的幾何立面與深邃灰階張力。透過高對比立體切面與實體質感，捕捉都會巨型結構中的秩序與永恆。",
+    summary: "現代和風多人即時價值觀卡牌桌遊",
+    desc: "玩家抽取標有 1 至 100 的天然和紙卡牌，透過直覺與默契在冷暖色溫光譜插槽上達成價值觀與數字平衡。內建 3D 金箔視差反光、即時安全水位線與全舞台沉浸 HUD。",
     metrics: [
-      { label: "Location", value: "Taichung · #10" },
-      { label: "Style", value: "Brutalism" }
+      { label: "Architecture", value: "Next.js · v0.7" },
+      { label: "Experience", value: "Realtime Sync" }
     ],
-    tags: ["Architecture", "Brutalism", "Urban", "Structure"],
-    image: "assets/works/brutalist-building.jpg",
-    url: "/mind-sync/",
-    isExternal: false
-  },
-  {
-    id: "sticker-to-gif",
-    title: "Twilight Solitude",
-    category: "Atmospheric Photography / Mood",
-    year: "2026",
-    summary: "黃昏城市綠洲中的微光與靜謐",
-    desc: "在暮色垂降的都會邊際草坪，記錄一束溫暖地燈打在休憩身影上的寧靜切片。暖黃聚光與冷調天色形成極具電影感的詩意對比。",
-    metrics: [
-      { label: "Atmosphere", value: "Twilight Light" },
-      { label: "Tone", value: "Cinematic" }
-    ],
-    tags: ["Photography", "Cinematic", "Dusk", "Moment"],
-    image: "assets/works/sunset-park.jpg",
-    url: "/sticker-to-gif/",
-    isExternal: false
-  },
-  {
-    id: "fitstepsync",
-    title: "Electric Pulse Concert",
-    category: "Live Performance / Stage Lighting",
-    year: "2026",
-    summary: "萬人體育館的霓虹紫色光瀑與舞台聚焦",
-    desc: "捕捉演唱會現場強烈紫光探照燈與聚焦背影的震撼瞬間。黑壓壓的看台人潮與舞台螢光綠焦點交織出極具張力的現場能量感。",
-    metrics: [
-      { label: "Arena", value: "Live Stage" },
-      { label: "Lighting", value: "Neon Purple" }
-    ],
-    tags: ["Live Stage", "Concert", "Energy", "Visual"],
-    image: "assets/works/concert-stage.jpg",
-    url: "https://github.com/Louis-369/FitStepSync",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Game Design"],
+    image: "/assets/works/mind-sync-arch.svg",
+    url: "https://mind-sync-sigma.vercel.app",
+    repoUrl: "https://github.com/Louis-369/mind-sync",
     isExternal: true
   },
   {
-    id: "next-matrix",
-    title: "Next Innovation Matrix",
-    category: "AI Tools / In Development",
+    id: "mind-sync-protocol",
+    title: "Mind Sync · Seeded Shuffle",
+    category: "Cryptographic Deck / Network Protocol",
     year: "2026",
-    summary: "次世代智慧工作流矩陣 · 黑洞視覺實驗室 (WIP Lab)",
-    desc: "結合本地端輕量化模型推理與互動物理實驗室，點擊進入預覽三種『磁力黑洞句點』光學色調方案。",
+    summary: "零狀態洩漏確定性洗牌與 Emoji 暗號配對",
+    desc: "以三組 Emoji 生成免密碼暗號房間，結合 Fisher-Yates 確定性種子洗牌演算法（Seeded PRNG），在不傳輸完整牌組狀態的前提下達成跨端手牌隱私隔離與極致頻寬節省。",
     metrics: [
-      { label: "Status", value: "WIP / 施工中" },
-      { label: "Stage", value: "Interactive Lab" }
+      { label: "Payload", value: "< 1.2 KB / 局" },
+      { label: "Test Coverage", value: "Vitest 100%" }
     ],
-    tags: ["AI Agent", "Black Hole Lab", "WIP"],
-    image: null,
-    url: "wip.html",
-    isExternal: false
+    tags: ["Seeded Shuffle", "Ubiquitous Language", "Vitest", "Zero-Leakage"],
+    image: "/assets/works/mind-sync-shuffle.svg",
+    url: "https://mind-sync-sigma.vercel.app",
+    repoUrl: "https://github.com/Louis-369/mind-sync",
+    isExternal: true
+  },
+  {
+    id: "mind-sync-audio",
+    title: "Mind Sync · Tactile Audio HUD",
+    category: "Procedural Web Audio / Interactive UI",
+    year: "2026",
+    summary: "純代碼五聲音階合成與 ASCII 破綻特效",
+    desc: "0 KB 外部音訊依賴，以純 Web Audio API 實時合成和風五聲音階（宮商角徵羽）翻牌遞增結算與三味線撞席瞬態警示音，搭配雙階段 ASCII Glitch 破綻抽搐與離線防死鎖代翻機制。",
+    metrics: [
+      { label: "Audio Assets", value: "0 KB Pure Synth" },
+      { label: "Topic Deck", value: "30+ 價值主題" }
+    ],
+    tags: ["Web Audio API", "Procedural Synth", "ASCII Glitch", "3D Foil"],
+    image: "/assets/works/mind-sync-audio.svg",
+    url: "https://mind-sync-sigma.vercel.app",
+    repoUrl: "https://github.com/Louis-369/mind-sync",
+    isExternal: true
   }
 ];
 
@@ -112,26 +99,26 @@ export const capabilities = [
   {
     id: "arch",
     name: "Web Architecture",
-    video: "assets/videos/architecture.mp4"
+    video: "/assets/videos/architecture.mp4"
   },
   {
     id: "webgl",
     name: "Interactive WebGL",
-    video: "assets/videos/webgl.mp4"
+    video: "/assets/videos/webgl.mp4"
   },
   {
     id: "uiux",
     name: "Fluid UI/UX Design",
-    video: "assets/videos/uiux.mp4"
+    video: "/assets/videos/uiux.mp4"
   },
   {
     id: "ai",
     name: "AI Workflow Tools",
-    video: "assets/videos/ai.mp4"
+    video: "/assets/videos/ai.mp4"
   },
   {
     id: "eng",
     name: "Creative Engineering",
-    video: "assets/videos/engineering.mp4"
+    video: "/assets/videos/engineering.mp4"
   }
 ];

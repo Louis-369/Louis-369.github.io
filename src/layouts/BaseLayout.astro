@@ -113,7 +113,7 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
       <!-- Seamless Links Bar (Works + Blog + Photos + About + GitHub) -->
       <ul class="navbar-links-ul">
         <li class="navbar-links-li">
-          <a href={isHome ? "#works" : "/#works"} class:list={["navbar-link", { "is-active": currentNav === 'works' }]} data-astro-prefetch="hover">
+          <a href="/works/" class:list={["navbar-link", { "is-active": currentNav === 'works' }]} data-astro-prefetch="hover">
             <span class="navbar-link-text">Works</span>
           </a>
         </li>
@@ -128,7 +128,7 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
           </a>
         </li>
         <li class="navbar-links-li">
-          <a href={isHome ? "#about" : "/#about"} class:list={["navbar-link", { "is-active": currentNav === 'about' }]} data-astro-prefetch="hover">
+          <a href="/about/" class:list={["navbar-link", { "is-active": currentNav === 'about' }]} data-astro-prefetch="hover">
             <span class="navbar-link-text">About</span>
           </a>
         </li>
@@ -195,7 +195,7 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
         <div class="footer-col-mission">
           <span class="footer-col-label">TAIPEI / REMOTE</span>
           <p class="footer-mission-text">
-            以工程之嚴謹鑄造系統，以編排之美感傳遞溫度。專注於現代客戶端速度、流體物理模擬與歷久彌新的數位工藝。
+            寫點實用的程式，記下值得深思的想法，拍點喜歡的風景。專注於現代客戶端速度、流體物理模擬與歷久彌新的數位工藝。
           </p>
         </div>
       </div>
@@ -205,11 +205,15 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
       <!-- Layer 4: Bottom Bar (Socials Left, Spoon Easter Egg Center, Copyright Right) -->
       <div class="footer-bottom-row">
         <div class="footer-social-links">
-          <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="footer-social-link">GitHub</a>
+          <a href="/works/" class="footer-social-link" data-astro-prefetch="hover">Works</a>
           <span class="footer-social-dot">·</span>
           <a href="/blog/" class="footer-social-link" data-astro-prefetch="hover">Blog</a>
           <span class="footer-social-dot">·</span>
           <a href="/photos/" class="footer-social-link" data-astro-prefetch="hover">Photos</a>
+          <span class="footer-social-dot">·</span>
+          <a href="/about/" class="footer-social-link" data-astro-prefetch="hover">About</a>
+          <span class="footer-social-dot">·</span>
+          <a href="https://github.com/Louis-369" target="_blank" rel="noopener noreferrer" class="footer-social-link">GitHub</a>
           <span class="footer-social-dot">·</span>
           <a href="/rss.xml" target="_blank" rel="noopener noreferrer" class="footer-social-link">RSS ↗</a>
         </div>
