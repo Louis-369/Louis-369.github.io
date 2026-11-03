@@ -52,6 +52,57 @@ a {
   text-decoration: none;
 }
 
+/* ==========================================================================
+   Global Micro-Typography & CJK Progressive Enhancement Switches
+   ========================================================================== */
+:lang(zh) {
+  text-autospace: normal;
+  text-spacing-trim: trim-start;
+}
+
+code, pre, kbd, samp, input, textarea, .font-mono, .hero-dictionary-entry {
+  text-autospace: no-autospace;
+}
+
+h1, h2, h3,
+.section-title,
+.work-card-title,
+.home-writing-title {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+p, li, blockquote,
+.work-card-desc,
+.footer-mission-text,
+.footer-consult-desc {
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+td, th,
+.slider-counter,
+.section-index-stamp,
+.home-writing-date,
+.home-triptych-date,
+.work-metric-val {
+  font-variant-numeric: tabular-nums;
+}
+
+button,
+.ui-btn,
+.navbar-link,
+.footer-consult-btn,
+.consult-pill,
+.home-section-more-link {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.home-writing-left {
+  min-width: 0;
+}
+
 /* Lenis Smooth Scroll Core Rules (Standard Specificity) */
 html.lenis, html.lenis body {
   height: auto;

@@ -1073,3 +1073,51 @@
   gap: 0.35rem;
   letter-spacing: 0.02em;
 }
+
+/* -------------------------------------------------------------
+   8. Editorial Micro-Typography Switches
+------------------------------------------------------------- */
+.subpage-title,
+.blog-card-title,
+.article-h1,
+.article-prose h2,
+.article-prose h3,
+.prev-next-title {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.subpage-subtitle,
+.blog-card-desc,
+.article-lead,
+.article-prose p,
+.article-prose li,
+.article-prose blockquote p,
+.photo-caption-body p {
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+:lang(zh) .article-prose p,
+:lang(zh) .photo-caption-body p {
+  text-align: justify;
+  max-width: 40em;
+}
+
+.blog-card-meta,
+.article-meta-row,
+.radial-pct,
+.photo-info-left,
+.photo-exif-pill,
+#photo-lb-counter {
+  font-variant-numeric: tabular-nums;
+}
+
+.cat-pill,
+.share-btn,
+.code-copy-btn,
+.reading-radial-island,
+.photo-exif-pill {
+  white-space: nowrap;
+  flex-shrink: 0;
+}

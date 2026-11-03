@@ -23,5 +23,5 @@ export function getReadingTime(markdownBody: string = ''): string {
 
   // 350 CJK chars/min, 200 English words/min
   const minutes = Math.max(1, Math.ceil(cjkCount / 350 + wordCount / 200));
-  return `${minutes} MIN READ`;
+  return `${minutes}\u00A0MIN\u00A0READ`;
 }
