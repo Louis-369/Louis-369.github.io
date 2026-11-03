@@ -85,11 +85,13 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
   }
   </script>
 
+  <!-- GSAP Core for Micro-interactions & Spoon Easter Egg -->
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
   {isHome && (
     <>
-      <!-- External Libraries (Lenis, GSAP, Three.js) for Interactive Experience -->
+      <!-- External Libraries (Lenis, Three.js, ScrollTrigger) for Interactive Experience -->
       <script is:inline src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-      <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
       <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
       <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     </>
@@ -206,6 +208,9 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
       <p class="matrix-hud-quote">"Do not try and bend the spoon. That's impossible. Instead... only try to realize the truth."</p>
     </div>
   </div>
+
+  <!-- Universal Psychic Silver Spoon & Matrix Easter Egg -->
+  <script is:inline type="module" src="/spoon-easter-egg.js?v=20261103_1530"></script>
 
   {isHome && (
     <script is:inline type="module" src="/app.js?v=20261030_0052"></script>
