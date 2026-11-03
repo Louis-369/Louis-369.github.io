@@ -31,11 +31,6 @@ const dateFormatted = dateISO.slice(0, 10);
 const ogImageUrl = `/og/${post.id}.png`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
-// Minimalist Mode: 1 core word for reading, uniform "Back to Top" upon completion
-const rawCore = (post.data.capsule || post.data.capsuleWord || 'READING').trim();
-const activeWord = rawCore.length >= 8 ? rawCore.slice(0, 8) : rawCore.padEnd(8, '.');
-const doneWord = '✦TOP ↑  '; // 8-char zero-jitter Back to Top indicator
-
 const blogPostingJsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -152,23 +147,25 @@ const blogPostingJsonLd = {
     </footer>
   </main>
 
-  <!-- Mode B: Tactile Reading Progress Capsule (Foliation) -->
+  <!-- Mode D: Floating Island Radial Ring -->
   <div 
-    id="article-progress-capsule" 
-    class="article-progress-capsule is-hidden" 
+    id="article-radial-indicator" 
+    class="article-radial-island is-hidden" 
     role="button" 
     tabindex="0" 
-    aria-label="Scroll back to top" 
-    aria-live="polite"
-    data-active-word={activeWord}
-    data-done-word={doneWord}
+    aria-label="返回長文頂部 (Scroll back to top)"
   >
-    <div class="fol-percent-wrap">
-      <span class="fol-pct-val">[ <span id="fol-percent">  0%</span> ]</span>
-      <span class="fol-top-hint">[ TOP ↑]</span>
+    <div class="radial-svg-wrap">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle class="radial-bg-circle" cx="16" cy="16" r="13" stroke-width="2.2" fill="none" />
+        <circle class="radial-meter-circle" id="radial-meter-circle" cx="16" cy="16" r="13" stroke-width="2.2" fill="none" />
+      </svg>
+      <span class="radial-center-arrow">↑</span>
     </div>
-    <span class="fol-divider">·</span>
-    <div class="fol-ascii-bar" id="fol-ascii">[░░░░░░░░]</div>
+    <div class="radial-text-wrap">
+      <span class="radial-pct-text" id="radial-pct-text">0%</span>
+      <span class="radial-label-text">TOP ↑</span>
+    </div>
   </div>
 
   <!-- Editorial Fullscreen Lightbox -->
@@ -182,19 +179,21 @@ const blogPostingJsonLd = {
 
   <script is:inline>
     (() => {
-      // 1. Dual Reading Progress: Top Hairline & Mode B Tactile Capsule
+      // 1. Dual Reading Progress: Top Hairline & Mode D Radial Island
       const progressBar = document.getElementById('reading-progress-bar');
-      const capsule = document.getElementById('article-progress-capsule');
-      const folPercent = document.getElementById('fol-percent');
-      const folAscii = document.getElementById('fol-ascii');
+      const radialIndicator = document.getElementById('article-radial-indicator');
+      const radialMeter = document.getElementById('radial-meter-circle');
+      const radialPct = document.getElementById('radial-pct-text');
       const articleBody = document.getElementById('article-prose-body');
       const siteFooter = document.querySelector('.site-footer');
 
-      const wordTheme = { 
-        active: capsule?.dataset.activeWord || 'READING.', 
-        done: capsule?.dataset.doneWord || '✦TOP ↑  ' 
-      };
-      const totalTicks = 8;
+      const RADIUS = 13;
+      const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+      if (radialMeter) {
+        radialMeter.style.strokeDasharray = `${CIRCUMFERENCE}px`;
+        radialMeter.style.strokeDashoffset = `${CIRCUMFERENCE}px`;
+      }
+
       let ticking = false;
 
       const updateProgress = () => {
@@ -211,8 +210,8 @@ const blogPostingJsonLd = {
           progressBar.style.transform = `scaleX(${ratio})`;
         }
 
-        // Update Mode B Capsule
-        if (capsule) {
+        // Update Mode D Radial Island
+        if (radialIndicator) {
           // Reveal once scrolled (> 120px) AND auto-dismiss when footer is reached to avoid collision
           let isCollidingWithFooter = false;
           if (siteFooter) {
@@ -220,37 +219,15 @@ const blogPostingJsonLd = {
             isCollidingWithFooter = footerRect.top < winH;
           }
           const isScrolled = window.scrollY > 120;
-          capsule.classList.toggle('is-hidden', !isScrolled || isCollidingWithFooter);
+          radialIndicator.classList.toggle('is-hidden', !isScrolled || isCollidingWithFooter);
 
-          const isComplete = ratio >= 0.99;
-          capsule.classList.toggle('is-completed', isComplete);
-
-          if (folPercent) {
-            const pctPadded = (percentInt < 10 ? '   ' : (percentInt < 100 ? '  ' : ' ')) + percentInt + '%';
-            folPercent.textContent = pctPadded;
+          if (radialMeter) {
+            const offset = CIRCUMFERENCE - (ratio * CIRCUMFERENCE);
+            radialMeter.style.strokeDashoffset = `${offset}px`;
           }
 
-          if (folAscii) {
-            let asciiStr = '';
-            const filledTicks = Math.round(ratio * totalTicks);
-            if (isComplete) {
-              asciiStr = '[' + wordTheme.done + ']'; // Exactly 10 chars
-            } else if (ratio <= 0) {
-              asciiStr = '[░░░░░░░░]';
-            } else {
-              let chars = [];
-              for (let i = 0; i < totalTicks; i++) {
-                if (i < filledTicks - 1) {
-                  chars.push(wordTheme.active[i] || '█');
-                } else if (i === filledTicks - 1) {
-                  chars.push('█');
-                } else {
-                  chars.push('░');
-                }
-              }
-              asciiStr = '[' + chars.join('') + ']';
-            }
-            folAscii.textContent = asciiStr;
+          if (radialPct) {
+            radialPct.textContent = `${percentInt}%`;
           }
         }
 
@@ -266,9 +243,9 @@ const blogPostingJsonLd = {
       window.addEventListener('resize', updateProgress, { passive: true });
       updateProgress();
 
-      // Smooth scroll back to top when capsule is clicked
-      if (capsule) {
-        capsule.addEventListener('click', () => {
+      // Smooth scroll back to top when radial indicator is clicked
+      if (radialIndicator) {
+        radialIndicator.addEventListener('click', () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
