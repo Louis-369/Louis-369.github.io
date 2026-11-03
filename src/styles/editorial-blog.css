@@ -766,22 +766,22 @@
    ========================================================================== */
 .article-progress-capsule {
   position: fixed;
-  bottom: 2.2rem;
-  right: 2.5rem;
+  bottom: 2rem;
+  right: 2.2rem;
   z-index: 9995;
-  color: #090909;
-  padding: 0.65em 1.5em;
+  color: var(--ink-primary, #121316);
+  padding: 0.65em 1.4em;
   font-size: 0.85rem;
   border-radius: 0.5em;
   background: var(--bg-canvas, #F9F8F5);
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 6px 6px 14px #DDD8CE, -6px -6px 14px #FFFFFF;
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.3s;
+  border: 1px solid #FFFFFF;
+  box-shadow: 5px 5px 12px #DDD8CE, -5px -5px 12px #FFFFFF;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease,
+              opacity 0.25s ease,
+              visibility 0.25s;
   transform: translateY(0);
   display: inline-flex;
   align-items: center;
@@ -803,8 +803,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .article-progress-capsule:hover {
-    border: 1px solid #FFFFFF;
-    box-shadow: 8px 8px 18px #D2CCC1, -8px -8px 18px #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: 7px 7px 16px #D2CCC1, -7px -7px 16px #FFFFFF;
     transform: translateY(-2px);
   }
 
@@ -820,19 +820,19 @@
 }
 
 .article-progress-capsule:active {
-  box-shadow: 3px 3px 8px #DDD8CE, -3px -3px 8px #FFFFFF;
-  transform: translateY(1px) scale(0.99);
-  border: 1px solid #FFFFFF;
+  box-shadow: 2px 2px 6px #DDD8CE, -2px -2px 6px #FFFFFF;
+  transform: translateY(1px);
+  border-color: #FFFFFF;
 }
 
 .article-progress-capsule .fol-divider {
-  color: rgba(18, 19, 22, 0.25);
+  color: rgba(18, 19, 22, 0.2);
   flex-shrink: 0;
   user-select: none;
 }
 
 .article-progress-capsule .fol-percent-wrap {
-  color: #090909;
+  color: var(--ink-primary, #121316);
   font-size: 0.85rem;
   width: 8ch;
   min-width: 8ch;
@@ -858,13 +858,13 @@
   position: absolute;
   transform: translateY(100%);
   opacity: 0;
-  color: #090909;
+  color: var(--ink-primary, #121316);
 }
 
 .article-progress-capsule .fol-ascii-bar {
   letter-spacing: 0.04em;
   font-size: 0.85rem;
-  color: #090909;
+  color: var(--ink-primary, #121316);
   font-family: var(--font-mono, monospace);
   white-space: nowrap;
   display: inline-flex;
