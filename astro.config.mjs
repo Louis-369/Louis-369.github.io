@@ -4,6 +4,10 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://louis-369.is-a.dev',
   trailingSlash: 'always',
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'hover'
+  },
   build: {
     format: 'directory'
   }

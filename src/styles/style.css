@@ -223,12 +223,14 @@ body.is-loading {
   color: #000000;
 }
 
-.navbar-link.is-current::before {
+.navbar-link.is-current::before,
+.navbar-link.is-active::before {
   transform-origin: left;
   transform: scaleX(1);
 }
 
-.navbar-link.is-current .navbar-link-text {
+.navbar-link.is-current .navbar-link-text,
+.navbar-link.is-active .navbar-link-text {
   color: #000000;
 }
 

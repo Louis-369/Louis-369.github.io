@@ -130,14 +130,14 @@ const blogPostingJsonLd = {
       {(prevPost || nextPost) && (
         <nav class="article-adjacent-nav" aria-label="Adjacent essays">
           {prevPost ? (
-            <a href={`/blog/${prevPost.id}/`} class="adjacent-card is-prev">
+            <a href={`/blog/${prevPost.id}/`} class="adjacent-card is-prev" data-astro-prefetch="hover">
               <span class="adjacent-label">← PREVIOUS ESSAY</span>
               <span class="adjacent-title">{prevPost.data.title}</span>
             </a>
           ) : <div />}
 
           {nextPost && (
-            <a href={`/blog/${nextPost.id}/`} class="adjacent-card is-next">
+            <a href={`/blog/${nextPost.id}/`} class="adjacent-card is-next" data-astro-prefetch="hover">
               <span class="adjacent-label">NEXT ESSAY →</span>
               <span class="adjacent-title">{nextPost.data.title}</span>
             </a>

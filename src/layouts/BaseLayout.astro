@@ -65,6 +65,26 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
+  <!-- High-Performance Speculation Rules (Instant 0ms Page Transitions on Hover) -->
+  <script is:inline type="speculationrules">
+  {
+    "prefetch": [
+      {
+        "source": "document",
+        "where": {
+          "and": [
+            { "href_matches": "/*" },
+            { "not": { "href_matches": ["/assets/*", "/_astro/*", "/*\\?(.+)"] } },
+            { "not": { "selector_matches": "a[rel~=\"nofollow\"]" } },
+            { "not": { "selector_matches": "a[target=\"_blank\"]" } }
+          ]
+        },
+        "eagerness": "moderate"
+      }
+    ]
+  }
+  </script>
+
   {isHome && (
     <>
       <!-- External Libraries (Lenis, GSAP, Three.js) for Interactive Experience -->
@@ -82,7 +102,7 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
   <!-- Persistent Site Navigation (1:1 Monolog Header Architecture) -->
   <header class="site-nav">
     <div class="navbar-brand-wrap">
-      <a href="/" class="nav-brand" id="nav-brand-logo" aria-label="Back to top">
+      <a href="/" class="nav-brand" id="nav-brand-logo" aria-label="Back to top" data-astro-prefetch="hover">
         <span class="nav-brand-text">Louis.</span>
       </a>
     </div>
@@ -91,22 +111,22 @@ const resolvedOgImage = new URL(ogImage, Astro.site);
       <!-- Seamless Links Bar (Works + Blog + Photos + About + GitHub) -->
       <ul class="navbar-links-ul">
         <li class="navbar-links-li">
-          <a href={isHome ? "#works" : "/#works"} class:list={["navbar-link", { "is-active": currentNav === 'works' }]}>
+          <a href={isHome ? "#works" : "/#works"} class:list={["navbar-link", { "is-active": currentNav === 'works' }]} data-astro-prefetch="hover">
             <span class="navbar-link-text">Works</span>
           </a>
         </li>
         <li class="navbar-links-li">
-          <a href="/blog/" class:list={["navbar-link", { "is-active": currentNav === 'blog' }]}>
+          <a href="/blog/" class:list={["navbar-link", { "is-active": currentNav === 'blog' }]} data-astro-prefetch="hover">
             <span class="navbar-link-text">Blog</span>
           </a>
         </li>
         <li class="navbar-links-li">
-          <a href="/photos/" class:list={["navbar-link", { "is-active": currentNav === 'photos' }]}>
+          <a href="/photos/" class:list={["navbar-link", { "is-active": currentNav === 'photos' }]} data-astro-prefetch="hover">
             <span class="navbar-link-text">Photos</span>
           </a>
         </li>
         <li class="navbar-links-li">
-          <a href={isHome ? "#about" : "/#about"} class:list={["navbar-link", { "is-active": currentNav === 'about' }]}>
+          <a href={isHome ? "#about" : "/#about"} class:list={["navbar-link", { "is-active": currentNav === 'about' }]} data-astro-prefetch="hover">
             <span class="navbar-link-text">About</span>
           </a>
         </li>

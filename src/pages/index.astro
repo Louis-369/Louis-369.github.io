@@ -97,7 +97,7 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
           <div class="section-eyebrow">THOUGHTS & ESSAYS</div>
           <h2 class="section-title">Recent Writings</h2>
         </div>
-        <a href="/blog/" class="home-section-more-link">
+        <a href="/blog/" class="home-section-more-link" data-astro-prefetch="hover">
           <span>VIEW ALL ESSAYS</span>
           <span>→</span>
         </a>
@@ -105,7 +105,7 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
 
       <div class="home-writing-list">
         {latestPosts.map((post) => (
-          <a href={`/blog/${post.id}/`} class="home-writing-row">
+          <a href={`/blog/${post.id}/`} class="home-writing-row" data-astro-prefetch="hover">
             <div class="home-writing-left">
               <span class="home-writing-date">{post.data.pubDate.toISOString().slice(0, 10)}</span>
               <h3 class="home-writing-title">{post.data.title}</h3>
@@ -126,7 +126,7 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
           <div class="section-eyebrow">VISUAL JOURNAL</div>
           <h2 class="section-title">Recent Snaps</h2>
         </div>
-        <a href="/photos/" class="home-section-more-link">
+        <a href="/photos/" class="home-section-more-link" data-astro-prefetch="hover">
           <span>VIEW ALL PHOTOS</span>
           <span>→</span>
         </a>
@@ -134,7 +134,7 @@ const latestPhotos = allPhotos.sort((a, b) => b.data.pubDate.valueOf() - a.data.
 
       <div class="home-triptych-grid">
         {latestPhotos.map((photo) => (
-          <a href="/photos/" class="home-triptych-item" aria-label={`View photo: ${photo.data.title}`}>
+          <a href="/photos/" class="home-triptych-item" data-astro-prefetch="hover" aria-label={`View photo: ${photo.data.title}`}>
             <div class="home-triptych-frame">
               <img src={photo.data.photo} alt={photo.data.title} class="home-triptych-img" loading="lazy" />
             </div>

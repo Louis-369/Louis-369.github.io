@@ -31,7 +31,7 @@ const categories = Array.from(new Set(allPosts.map((post) => post.data.category)
 
     <div class="blog-grid">
       {posts.map((post) => (
-        <a href={`/blog/${post.id}/`} class="blog-card">
+        <a href={`/blog/${post.id}/`} class="blog-card" data-astro-prefetch="hover">
           {post.data.cover && (
             <div class="blog-card-cover-wrap">
               <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} class="blog-card-cover" loading="lazy" />
