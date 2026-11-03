@@ -31,6 +31,41 @@ const dateFormatted = dateISO.slice(0, 10);
 const ogImageUrl = `/og/${post.id}.png`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
+// Format custom capsule words with 8-character zero-jitter guarantee
+function formatCapsuleWords(rawWord?: string, rawDone?: string) {
+  // 1. Active Word (8 chars)
+  const baseActive = (rawWord || 'READING').trim();
+  const activeWord = baseActive.length >= 8 
+    ? baseActive.slice(0, 8) 
+    : baseActive.padEnd(8, '.');
+
+  // 2. Done Word (8 chars)
+  let doneWord = (rawDone || 'FINIS').trim();
+  if (doneWord.includes('↑')) {
+    if (doneWord.length < 8) doneWord = doneWord.padEnd(8, ' ');
+    else if (doneWord.length > 8) doneWord = doneWord.slice(0, 8);
+  } else {
+    const clean = doneWord.replace(/^✦\s*/, '').replace(/\s*↑$/, '');
+    if (clean.length === 6) {
+      doneWord = `✦${clean}↑`;
+    } else if (clean.length === 5) {
+      doneWord = `✦${clean} ↑`;
+    } else if (clean.length === 4) {
+      doneWord = `✦ ${clean} ↑`;
+    } else if (clean.length === 3) {
+      doneWord = `✦  ${clean} ↑`;
+    } else if (clean.length >= 7) {
+      doneWord = `✦${clean.slice(0, 6)}↑`;
+    } else {
+      doneWord = `✦${clean}↑`.padEnd(8, ' ');
+    }
+  }
+
+  return { activeWord, doneWord };
+}
+
+const { activeWord, doneWord } = formatCapsuleWords(post.data.capsuleWord, post.data.capsuleDone);
+
 const blogPostingJsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -148,7 +183,16 @@ const blogPostingJsonLd = {
   </main>
 
   <!-- Mode B: Tactile Reading Progress Capsule (Foliation) -->
-  <div id="article-progress-capsule" class="article-progress-capsule is-hidden" role="button" tabindex="0" title="點擊平滑返回長文頂部 (Click to Scroll Top)" aria-live="polite">
+  <div 
+    id="article-progress-capsule" 
+    class="article-progress-capsule is-hidden" 
+    role="button" 
+    tabindex="0" 
+    title="點擊平滑返回長文頂部 (Click to Scroll Top)" 
+    aria-live="polite"
+    data-active-word={activeWord}
+    data-done-word={doneWord}
+  >
     <div class="fol-percent-wrap">
       <span class="fol-pct-val">[ <span id="fol-percent">  0%</span> ]</span>
       <span class="fol-top-hint">[ TOP ↑]</span>
@@ -175,7 +219,10 @@ const blogPostingJsonLd = {
       const folAscii = document.getElementById('fol-ascii');
       const articleBody = document.getElementById('article-prose-body');
 
-      const wordTheme = { active: 'READING.', done: '✦FINIS ↑' };
+      const wordTheme = { 
+        active: capsule?.dataset.activeWord || 'READING.', 
+        done: capsule?.dataset.doneWord || '✦FINIS ↑' 
+      };
       const totalTicks = 8;
       let ticking = false;
 

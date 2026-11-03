@@ -6,6 +6,8 @@ category: "solo-business"
 tags: ["AI Workflow", "System Architecture", "Solo Business"]
 cover: "/assets/works/sunset-park.jpg"
 coverAlt: "黃昏暮色中的專注時刻"
+capsuleWord: "COMPUTE"
+capsuleDone: "✦SYNCED↑"
 draft: false
 ---
 
